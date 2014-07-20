@@ -116,21 +116,57 @@ $successGreen: #0a942a;
 
 // Width variables
 $siteWidth: 1180px;
-$gutter: 24px;
-$gridGutter: 24px; // can be a %, but nested grids will have smaller margins because of it
+$gutter: 16px;
+$gridGutter: 32px; // can be a %, but nested grids will have smaller margins because of it
 
 // Radius
 $radius: 3px;
 
 /*================ Typography ================*/
 
+@font-face {
+  font-family: 'HelveticaNeueLT';
+  src: url('{{ "HelveticaNeueLTPro-Roman.eot" | asset_url }}'); /* IE9 Compat Modes */
+  src: url('{{ "HelveticaNeueLTPro-Roman.eot?#iefix" | asset_url }}') format('embedded-opentype'), /* IE6-IE8 */
+       url('{{ "HelveticaNeueLTPro-Roman.woff" | asset_url }}') format('woff'), /* Modern Browsers */
+       url('{{ "HelveticaNeueLTPro-Roman.ttf" | asset_url }}')  format('truetype'), /* Safari, Android, iOS */
+       url('{{ "HelveticaNeueLTPro-Roman.svg#d1a2c6b6bbb42f642f25c6a2c64a65d0" | asset_url }}') format('svg'); /* Legacy iOS */
+       
+  font-style:   normal;
+  font-weight:  400;
+}
+
+@font-face {
+  font-family: 'HelveticaNeueLT';
+  src: url('{{ "HelveticaNeueLTPro-Lt.eot" | asset_url }}'); /* IE9 Compat Modes */
+  src: url('{{ "HelveticaNeueLTPro-Lt.eot?#iefix" | asset_url }}') format('embedded-opentype'), /* IE6-IE8 */
+       url('{{ "HelveticaNeueLTPro-Lt.woff" | asset_url }}') format('woff'), /* Modern Browsers */
+       url('{{ "HelveticaNeueLTPro-Lt.ttf" | asset_url }}')  format('truetype'), /* Safari, Android, iOS */
+       url('{{ "HelveticaNeueLTPro-Lt.svg#3162d512a0b0767ee94e99606f47da13" | asset_url }}') format('svg'); /* Legacy iOS */
+       
+  font-style:   normal;
+  font-weight:  300;
+}
+
+@font-face {
+  font-family: 'HelveticaNeueLT';
+  src: url('{{ "HelveticaNeueLTPro-UltLt.eot" | asset_url }}'); /* IE9 Compat Modes */
+  src: url('{{ "HelveticaNeueLTPro-UltLt.eot?#iefix" | asset_url }}') format('embedded-opentype'), /* IE6-IE8 */
+       url('{{ "HelveticaNeueLTPro-UltLt.woff" | asset_url }}') format('woff'), /* Modern Browsers */
+       url('{{ "HelveticaNeueLTPro-UltLt.ttf" | asset_url }}')  format('truetype'), /* Safari, Android, iOS */
+       url('{{ "HelveticaNeueLTPro-UltLt.svg#5e071cd36a8e5464e30383b8a529a115" | asset_url }}') format('svg'); /* Legacy iOS */
+       
+  font-style:   normal;
+  font-weight:  100;
+}
+
 // Header Font
-$headerFontStack: "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
-$headerFontWeight: 700;
+$headerFontStack: "HelveticaNeueLT", "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
+$headerFontWeight: 100;
 
 // Body Font
-$bodyFontStack: "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
-$baseFontSize: 87.5%; // Henseforth known as 1em (assumed at 14px)
+$bodyFontStack: "HelveticaNeueLT", "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
+$baseFontSize: 100%; // Henseforth known as 1em (assumed at 16px)
 
 // Icons
 @font-face {
@@ -146,15 +182,16 @@ $baseFontSize: 87.5%; // Henseforth known as 1em (assumed at 14px)
 $socialIconFontStack: 'icons';
 
 
+
 /*============================================================================
   #Sass Mixins
 ==============================================================================*/
 .clearfix {
-  &:after {
-    content: "";
-    display: table;
-    clear: both; }
-  *zoom: 1;
+    &:after {
+        content: "";
+        display: table;
+        clear: both;
+    }
 }
 @mixin clearfix() {
   @extend .clearfix;
@@ -167,6 +204,22 @@ $socialIconFontStack: 'icons';
   -o-#{$property}: #{$value};
   #{$property}: #{$value};
 }
+
+@mixin keyframes-prefix($animation-name) {
+  @-webkit-keyframes $animation-name {
+      @content;
+  }
+  @-moz-keyframes $animation-name {
+      @content;
+  }
+  @-o-keyframes $animation-name {
+      @content;
+  }
+  @keyframes $animation-name {
+      @content;
+  }
+}
+
 
 @mixin transition($transition: 0.1s all) {
   @include prefix('transition', #{$transition});
@@ -652,10 +705,7 @@ $class-type: unquote(".");
 /*============================================================================
   #Basic Styles
 ==============================================================================*/
-html {
-  background-color: $colorFooterBg;
-}
-
+html,
 body {
   background-color: $colorBody;
 }
@@ -672,9 +722,17 @@ body {
 }
 
 .main-content {
+    @include clearfix();
   display: block;
   margin-top: $gutter;
   padding-bottom: $gutter*2;
+}
+
+.main-content--simplified {
+    @include clearfix();
+  display: block;
+  text-align: center;
+  overflow-y: visible;
 }
 
 /*============================================================================
@@ -718,8 +776,8 @@ h1, h2, h3, h4, h5, h6,
   display: block;
   font-family: $headerFontStack;
   font-weight: $headerFontWeight;
-  margin-bottom: 0.5em;
-  line-height: 1.4;
+  margin: 0.5em 0;
+  line-height: 1.5;
 
   a {
     text-decoration: none;
@@ -733,12 +791,12 @@ h1 a, h2 a, h3 a, h4 a, h5 a, h6 a,
   Pixel to EM conversion tool
     - http://pxtoem.com/
 ==============================================================================*/
-h1, .h1 { font-size: 3em; }       // 42px
-h2, .h2 { font-size: 2em; }       // 28px
-h3, .h3 { font-size: 1.571em; }   // 21px
-h4, .h4 { font-size: 1.429em; }   // 20px
-h5, .h5 { font-size: 1.143em; }   // 16px
-h6, .h6 { font-size: 1em; }       // 14px
+h1, .h1 { font-size: 3em; }       // 48px
+h2, .h2 { font-size: 3.75em; }    // 60px
+h3, .h3 { font-size: 2.25em; }    // 36px
+h4, .h4 { font-size: 1.5em; }     // 24px
+h5, .h5 { font-size: 1.143em; }   // ? get these values from the PSD
+h6, .h6 { font-size: 1em; }       // ?
 
 p { margin: 0 0 $gutter/2 0; }
 p img { margin: 0; }
@@ -1571,7 +1629,8 @@ label.error {
 /*============================================================================
   #Site Header
 ==============================================================================*/
-.site-header {
+$module: 'header';
+.#{$module} {
   padding: $gutter/2 0;
 
   @include at-query ($min, $large) {
@@ -1590,9 +1649,15 @@ label.error {
       }
     }
   }
+
 }
 
-.header-logo {
+.#{$module}--simplified {
+  padding: $gutter * 2 0 $gutter;
+}
+
+$module: 'header-logo';
+.#{$module} {
   text-align: center;
   margin: 0 auto $gutter/2;
   max-width: {{ settings.logo_max_width }};
@@ -1613,7 +1678,24 @@ label.error {
 
   img {
     margin: 0 auto;
+    height: 41px;
+    width: 154px;
   }
+
+  .#{$module}__img--svg {
+      display: none;
+  }
+
+  .supports-svg & {
+      .#{$module}__img--png {
+          display: none;
+      }
+
+      .#{$module}__img--svg {
+          display: block;
+      }
+  }
+
 }
 
 .site-header--text-links {
@@ -1631,7 +1713,7 @@ label.error {
 /*============================================================================
   #Site Nav and Dropdowns
 ==============================================================================*/
-.nav-bar {
+.main-menu {
   background-color: $colorNav;
 
   a {
@@ -1743,6 +1825,9 @@ label.error {
     padding: $gutter*2 0;
   }
 }
+
+
+
 
 /*============================================================================
   #Product Grid and List Views
@@ -1937,15 +2022,76 @@ label.error {
   display: inline;
 }
 
-/*============================================================================
-  #Demo Styles - for empty store state
-==============================================================================*/
-.demo-image {
-  background: url('//cdn.shopify.com/s/files/1/0383/9765/t/1/assets/blankslate-producticon.png?4') no-repeat center center #eee;
-  display: block;
-  text-align: center;
-  padding: 100px 0;
-  color: #aaa;
-  font-size: 0.875em;
-  text-decoration: none;
+/*================================================================================
+  # Blocks
+================================================================================*/
+
+/* Heros */
+
+.hero-404 {
+    background: #fff url({{ '404-hero-bg.jpg' | asset_url }}) no-repeat center top;
+    height: 400px;
+    position: relative;
+
+    .supports-boxshadow & {
+        @include prefix('box-shadow', 'inset 0 -7px 9px -7px rgba(0,0,0,0.4)');
+    }
+    .supports-csstransforms.supports-cssanimations & {
+        @include prefix('animation', 'fadein 2s ease');
+    }
 }
+
+.hero-404__overlay {
+    height: 250px;
+    width: 560px;
+    margin: 0 auto;
+    font-size: 362px;
+    font-weight: 100;
+    font-family: $headerFontStack;
+    line-height: 1;
+    position: relative;
+    top: 100px;
+    left: -14px;
+    color: #f2f2f2;
+    letter-spacing: -8px;
+
+    span {
+        opacity: 0.3;
+    }
+
+    .supports-csstransforms.supports-cssanimations & {
+        @include prefix('animation', 'scaledown 1s ease-out');
+    }
+
+}
+
+/*================================================================================
+# Animations
+================================================================================*/
+
+@include keyframes-prefix('scaledown'){
+    0% {
+        opacity: 0;
+        @include prefix('transform', 'scale(12)');
+    }
+
+    40% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+        @include prefix('transform', 'scale(1)');
+    }
+}
+
+@include keyframes-prefix('fadein'){
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
