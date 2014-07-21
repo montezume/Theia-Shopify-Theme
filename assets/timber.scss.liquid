@@ -78,6 +78,10 @@ $breakpoint-has-pull:  ('medium', 'medium-down', 'large');
 $colorPrimary: {{ settings.color_primary }};
 $colorSecondary: {{ settings.color_secondary }};
 
+// Theia Colors
+$colorWarmGray: #797778;
+$colorGold: #c19946;
+
 // Button colors
 $colorBtnPrimary: $colorPrimary;
 $colorBtnPrimaryHover: darken($colorBtnPrimary, 10%);
@@ -1714,15 +1718,15 @@ $module: 'header-logo';
   #Site Nav and Dropdowns
 ==============================================================================*/
 .main-menu {
-  background-color: $colorNav;
 
   a {
-    color: $colorNavText;
+    color: $colorWarmGray;
+    text-decoration: none;
 
     &:hover,
     &:active,
     &:focus {
-      color: darken($colorNavText, 15%);
+      color: $colorGold;
     }
   }
 
