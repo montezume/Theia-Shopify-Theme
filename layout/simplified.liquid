@@ -18,31 +18,35 @@
   {% endcomment %}
   <body {% include 'html-body-attributes' %}>
 
-    <header class="header" role="banner">
+    <header class="site-header" role="banner">
 
       {% include 'header-logo' %}
 
     </header>
 
-    <main class="main-content" role="main">
+    <main class="site-content" role="main">
 
       {{ content_for_layout }}
 
     </main>
 
 
-    <footer class="site-footer--simplified" role="contentinfo">
+    <footer class="site-footer" role="contentinfo">
+      <div class="left-column">
 
-      <nav class="main-menu" role="navigation">
-        <ul class="site-nav">
-          {% for link in linklists.main-menu.links %}
-            <li><a href="{{ link.url }}">{{ link.title }}</a></li>
-          {% endfor %}
-        </ul>
-      </nav>
+        <nav class="main-menu" role="navigation">
+          <ul>
+            {% for link in linklists.main-menu.links %}
+              <li><a href="{{ link.url }}">{{ link.title }}</a></li>
+            {% endfor %}
+          </ul>
+        </nav>
+        
+      </div>
+      <div class="right-column">
 
-      <div class="nav-search">
         {% include 'search-bar' %}
+
       </div>
 
     </footer>

@@ -74,13 +74,24 @@ $breakpoint-has-pull:  ('medium', 'medium-down', 'large');
   #General Variables
   ==============================================================================*/
 
-// Timber Colors
-$colorPrimary: {{ settings.color_primary }};
-$colorSecondary: {{ settings.color_secondary }};
-
 // Theia Colors
+$colorLighterGray: #f2f2f2;
+$colorLightGray: #d8d8d8;
+$colorGray: #8d8d8d;
+
+$colorWarmLightGray: #a5a2a4;
 $colorWarmGray: #797778;
+$colorWarmGrayDark: #4d4c4c;
 $colorGold: #c19946;
+
+// Timber Colors
+/* $colorPrimary: {{ settings.color_primary }}; */
+/* $colorSecondary: {{ settings.color_secondary }}; */
+
+// 
+$colorPrimary: $colorWarmGrayDark;
+$colorSecondary: $colorGold;
+
 
 // Button colors
 $colorBtnPrimary: $colorPrimary;
@@ -97,11 +108,12 @@ $colorLinkHover: #333;
 
 // Text colors
 $colorBody: #fff;
-$colorTextBody: {{ settings.color_body_text }};
-$colorHeaders: #999;
+/* $colorTextBody: {{ settings.color_body_text }}; */
+$colorTextBody: $colorWarmGray;
+$colorHeaders: $colorWarmGray;
 
 // Border colors
-$borderColor: #e5e5e5;
+$borderColor: $colorWarmLightGray;
 
 // Nav and dropdown link background
 $colorNav: #f2f2f2;
@@ -164,12 +176,16 @@ $radius: 3px;
     font-weight:  100;
 }
 
+// Font Stacks
+$helveticaFontStack: "HelveticaNeueLT", "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
+$arialFontStack: Arial, sans-serif;
+
 // Header Font
-$headerFontStack: "HelveticaNeueLT", "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
+$headerFontStack: $helveticaFontStack;
 $headerFontWeight: 100;
 
 // Body Font
-$bodyFontStack: "HelveticaNeueLT", "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
+$bodyFontStack: $helveticaFontStack;
 $baseFontSize: 100%; // Henseforth known as 1em (assumed at 16px)e
 
 // Icons
@@ -282,7 +298,9 @@ $max: max-width;
 /*============================================================================
   #Reset
   ==============================================================================*/
-html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td,article,aside,canvas,details,embed,figure,figcaption,footer,header,hgroup,menu,nav,output,ruby,section,summary,time,mark,audio,video{border:0;font-size:100%;font:inherit;vertical-align:baseline;margin:0;padding:0;}article,aside,details,figcaption,figure,footer,header,hgroup,menu,nav,section{display:block;}ol,ul{list-style:none;}blockquote,q{quotes:none;}blockquote:before,blockquote:after,q:before,q:after{content:none;}table{border-collapse:collapse;border-spacing:0;}code,pre{background-color:#faf7f5;font-family:Consolas,monospace;border:0 none;padding:0 2px;color:#51ab62;}pre{overflow:auto;padding:0.5em;margin:0 0 1em;}
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td,article,aside,canvas,details,embed,figure,figcaption,footer,header,main,hgroup,menu,nav,output,ruby,section,summary,time,mark,audio,video,button{border:0;font-size:100%;font:inherit;vertical-align:baseline;margin:0;padding:0;}article,aside,details,figcaption,figure,footer,header,hgroup,menu,nav,section{display:block;}ol,ul{list-style:none;}blockquote,q{quotes:none;}blockquote:before,blockquote:after,q:before,q:after{content:none;}table{border-collapse:collapse;border-spacing:0;}code,pre{background-color:#faf7f5;font-family:Consolas,monospace;border:0 none;padding:0 2px;color:#51ab62;}pre{overflow:auto;padding:0.5em;margin:0 0 1em;}
+
+
 
 *, input, :before, :after {
     @include box-sizing();
@@ -743,7 +761,7 @@ textarea,
 button,
 select {
     font-size: $baseFontSize;
-    line-height: 1.6;
+    line-height: 1.4375; // ~23px with a font size of 16px
     font-family: $bodyFontStack;
     color: $colorTextBody;
     font-weight: 300;
@@ -888,7 +906,6 @@ hr {
 .collection-view {
     display: inline-block;
     border: 1px solid $borderColor;
-    border-radius: $radius;
     padding: 11px;
     height: 37px; // same as form elements
 
@@ -984,7 +1001,6 @@ a:focus {
     @include prefix('user-select', 'none');
     -webkit-appearance: none;
     -moz-appearance: none;
-    border-radius: $radius;
 
     &.btn--small {
         padding: 4px 5px;
@@ -1138,13 +1154,16 @@ input[type="submit"],
 textarea {
     -webkit-appearance: none;
     -moz-appearance: none;
+
+    &:focus {
+        outline: none;
+    }
 }
 
 input,
 textarea,
 select,
 fieldset {
-    border-radius: $radius;
     max-width: 100%;
 
     &.input-full {
@@ -1180,7 +1199,6 @@ input[type="submit"] {
 
 /*================ Input width and border ================*/
 input[type="text"],
-input[type="search"],
 input[type="password"],
 input[type="email"],
 input[type="file"],
@@ -1189,6 +1207,7 @@ input[type="tel"],
 textarea,
 select {
     border: 1px solid $borderColor;
+    background: $colorLighterGray;
     width: 100%;
     max-width: 100%;
     display: block;
@@ -1330,19 +1349,6 @@ label.error {
     position: relative;
     display: table;
     border-collapse: separate;
-
-    .input-group-field:first-child,
-    .input-group-btn:first-child,
-    .input-group-btn:first-child > .btn,
-    input[type="hidden"]:first-child + .input-group-field,
-    input[type="hidden"]:first-child + .input-group-btn > .btn {
-        border-radius: $radius 0 0 $radius;
-    }
-
-    .input-group-field:last-child,
-    .input-group-btn:last-child > .btn {
-        border-radius: 0 $radius $radius 0;
-    }
 
     input {
         // Nasty Firefox hack for inputs http://davidwalsh.name/firefox-buttons
@@ -1508,7 +1514,6 @@ label.error {
     display: inline-block;
     padding-left: 0;
     margin: 0 0 $gutter;
-    border-radius: $radius;
 }
 
 .pagination-custom > li {
@@ -1610,66 +1615,6 @@ label.error {
   #Site Header
   ==============================================================================*/
 
-/*============================================================================
-  #Site Nav and Dropdowns
-  ==============================================================================*/
-.main-menu {
-
-    a {
-        color: $colorWarmGray;
-        text-decoration: none;
-
-        &:hover,
-        &:active,
-        &:focus {
-            color: $colorGold;
-        }
-    }
-
-    ul {
-        margin: 0;
-    }
-
-    li {
-        margin: 0;
-    }
-}
-
-.site-nav {
-    font-size: 1.2em;
-    cursor: default;
-
-    li {
-        margin: 0;
-        display: block;
-    }
-
-    & > li {
-        position: relative;
-        display: inline-block;
-
-        &:first-child a {
-            padding-left: 0;
-        }
-    }
-
-    a {
-        display: block;
-        text-decoration: none;
-        padding: $gutter/2;
-        white-space: nowrap;
-    }
-
-    @include at-query ($max, $medium) {
-        margin: 0 auto;
-        text-align: center;
-    }
-}
-
-.site-nav--active > a {
-    font-weight: bold;
-}
-
 /*================ Dropdowns ================*/
 .site-nav--dropdown {
     display: none;
@@ -1693,39 +1638,6 @@ label.error {
         }
     }
 }
-
-/*================ Search bar in header ================*/
-.nav-search {
-    position: relative;
-    padding: 7px 0;
-
-    @include at-query ($max, $medium) {
-        padding: 0 0 $gutter/2;
-        margin: 0 auto;
-        text-align: center;
-    }
-
-    .input-group,
-    .input-group-field {
-        margin-bottom: 0;
-    }
-}
-
-
-/*============================================================================
-  #Site Footer
-  ==============================================================================*/
-.site-footer {
-    background-color: $colorFooterBg;
-    border-top: 1px solid $borderColor;
-    padding: $gutter 0;
-    color: $colorFooterText;
-
-    @include at-query ($min, $large) {
-        padding: $gutter*2 0;
-    }
-}
-
 
 
 
@@ -1838,7 +1750,6 @@ label.error {
   ==============================================================================*/
 .note,
 .errors {
-    border-radius: $radius;
     padding: $gutter/2;
     margin-bottom: $gutter/2;
     border: 1px solid transparent;
@@ -1940,7 +1851,7 @@ label.error {
 
 /* Header */
 
-.header {
+.site-header {
     padding: $gutter/2 0;
 
     @include at-query ($min, $large) {
@@ -1971,11 +1882,9 @@ label.error {
 
 /* Main Content Layout */
 
-.main-content {
+.site-content {
     @include clearfix();
     display: block;
-    margin-top: $gutter;
-    padding-bottom: $gutter*2;
 
     .layout-simplified & {
         text-align: center;
@@ -1986,18 +1895,30 @@ label.error {
 /* footer */
 
 .site-footer {
-    background-color: $colorFooterBg;
-    border-top: 1px solid $borderColor;
-    padding: $gutter 0;
-    color: $colorFooterText;
 
     @include at-query ($min, $large) {
         padding: $gutter*2 0;
     }
-}
 
-.site-footer--simplified {
+    .layout-simplified & {
+        text-align: center;
 
+        > div {
+            display: inline-block;
+            height: 40px;
+            vertical-align: middle;
+            
+            &.left-column {
+                padding-top: 8px;
+                border-right: 1px solid $colorLighterGray;
+            }
+
+            &.right-column {
+                padding-left: $gutter * 1.25;
+                padding-top: 4px;
+            }
+        }
+    }
 }
 
 
@@ -2054,16 +1975,18 @@ label.error {
     background: #fff url({{ '404-hero-bg.jpg' | asset_url }}) no-repeat center top;
     height: 400px;
     position: relative;
+    border-bottom: 1px solid #f6f6f6;
 
     .supports-boxshadow & {
-        @include prefix('box-shadow', 'inset 0 -7px 9px -7px rgba(0,0,0,0.4)');
+        border-bottom: 0;
+        @include prefix('box-shadow', 'inset 0 -10px 9px -6px rgba(0,0,0,0.04)');
     }
     .supports-csstransforms.supports-cssanimations & {
         @include prefix('animation', 'fadein 2s ease');
     }
 }
 
-.hero-404__overlay {
+.overlay-404 {
     height: 250px;
     width: 560px;
     margin: 0 auto;
@@ -2084,15 +2007,82 @@ label.error {
     .supports-csstransforms.supports-cssanimations & {
         @include prefix('animation', 'scaledown 1s ease-out');
     }
-
 }
 
 .main-menu {
-    
+
+    a {
+        display: block;
+        padding: $gutter/4 $gutter * 1.25;
+        line-height: 1;
+        color: $colorGray;
+        text-decoration: none;
+        text-transform: uppercase;
+        font-family: $arialFontStack;
+        font-size: 0.8125em;
+        font-weight: bold;
+        white-space: nowrap;
+
+        &:hover,
+        &:active,
+        &:focus {
+            color: $colorGold;
+        }
+    }
+
+    ul {
+        margin: 0;
+    }
+
+    li {
+        position: relative;
+        display: inline-block;
+        margin: 0;
+        border-left: 1px solid $colorLighterGray;
+
+        &:first-child {
+            border-left: 0;
+        }
+    }
 }
 
+
+/*================ Search bar in header ================*/
 .search-bar {
-    max-width: 100%;
+    width: 220px;
+    height: 30px;
+    border-bottom: 1px solid $colorLightGray;
+    margin-bottom: 0;
+    position: relative;
+
+    button, input {
+        background: none;
+        height: 29px;
+        position: absolute;
+        display: block;
+        bottom: 0;
+    }
+
+    button {
+        width: 20px;
+        left: 0;
+        font-size: 16px;
+        line-height: 1;
+        color: $colorGray;
+    }
+
+    input {
+        border: none;
+        left: 20px;
+        width: 200px;
+        margin: 0;
+        padding: 0;
+        font-size: 0.8125em;
+        font-family: $arialFontStack;
+        font-weight: 700;
+        line-height: 1.2;
+        color: $colorWarmLightGray;
+    }
 
     @include at-query ($max, $medium) {
         margin: 0 auto;
