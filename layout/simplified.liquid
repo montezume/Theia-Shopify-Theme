@@ -18,13 +18,13 @@
   {% endcomment %}
   <body {% include 'html-body-attributes' %}>
 
-    <header class="header--simplified" role="banner">
+    <header class="header" role="banner">
 
       {% include 'header-logo' %}
 
     </header>
 
-    <main class="main-content--simplified" role="main">
+    <main class="main-content" role="main">
 
       {{ content_for_layout }}
 
@@ -41,7 +41,7 @@
         </ul>
       </nav>
 
-      <div class="nav-search--simplified">
+      <div class="nav-search">
         {% include 'search-bar' %}
       </div>
 
