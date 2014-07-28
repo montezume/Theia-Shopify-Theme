@@ -19,28 +19,15 @@
   <body {% include 'html-body-attributes' %}>
 
     <header class="site-header" role="banner">
+
       <div class="wrapper">
 
-        <div class="grid--full">
-          <div class="grid-item large--one-half">
-            {% comment %}
-            Use the uploaded logo from theme settings if enabled
-            {% endcomment %}
-            <h1 class="header-logo large--left">
-              {% if settings.use_logo %}
-                <a href="/">
-                  {{ 'logo.png' | asset_url | img_tag: shop.name }}
-                </a>
-              {% else %}
-                <a href="/">{{ shop.name }}</a>
-              {% endif %}
-            </h1>
-            
-            <nav class="nav-bar" role="navigation">
-              {% include 'site-nav' %}
-            </nav>
+        {% include 'header-logo' %}
 
-          </div>
+        {% include 'main-menu' %}
+
+
+        <div class="grid--full">
           <div class="grid-item large--one-half text-center large--text-right">
 
             {% comment %}
