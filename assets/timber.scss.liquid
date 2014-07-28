@@ -206,15 +206,19 @@ $socialIconFontStack: 'icons';
 /*============================================================================
   #Sass Mixins
   ==============================================================================*/
-.clearfix {
-    &:after {
-        content: "";
-        display: table;
-        clear: both;
+@mixin clearfix($extend: true) {
+    @if $extend {
+        @extend .clearfix;
+    } @else {
+        &:after {
+            content: "";
+            display: table;
+            clear: both;
+        }
     }
 }
-@mixin clearfix() {
-    @extend .clearfix;
+.clearfix {
+    @include clearfix(false);
 }
 
 @mixin prefix($property, $value) {
@@ -764,7 +768,7 @@ select {
     line-height: 1.4375; // ~23px with a font size of 16px
     font-family: $bodyFontStack;
     color: $colorTextBody;
-    font-weight: 300;
+    font-weight: 400;
     -webkit-font-smoothing: antialiased;
     -webkit-text-size-adjust: 100%;
 }
@@ -775,7 +779,7 @@ h1, h2, h3, h4, h5, h6,
     font-family: $headerFontStack;
     font-weight: $headerFontWeight;
     margin: 0.5em 0;
-    line-height: 1.5;
+    line-height: 1.1;
 
     a {
         text-decoration: none;
@@ -789,6 +793,7 @@ h1 a, h2 a, h3 a, h4 a, h5 a, h6 a,
   Pixel to EM conversion tool
   - http://pxtoem.com/
   ==============================================================================*/
+
 h1, .h1 { font-size: 3em; }       // 48px
 h2, .h2 { font-size: 3.75em; }    // 60px
 h3, .h3 { font-size: 2.25em; }    // 36px
@@ -797,6 +802,23 @@ h5, .h5 { font-size: 1.143em; }   // ? get these values from the PSD
 h6, .h6 { font-size: 1em; }       // ?
 
 p { margin: 0 0 $gutter/2 0; }
+
+@include at-query ($max, $small) {
+
+    p {
+        font-size: 0.75em;
+        margin: 0 0 $gutter/2 0;
+    }
+
+    h1, .h1 { font-size: 1.625em; }   // 26px
+    h2, .h2 { font-size: 2.1875em; }  // 35px
+    h3, .h3 { font-size: 2.25em; }    // 36px
+    h4, .h4 { font-size: 1.5em; }     // 24px
+    h5, .h5 { font-size: 1.143em; }   // ? get these values from the PSD
+    h6, .h6 { font-size: 1em; }       // ?
+}
+
+
 p img { margin: 0; }
 
 em { font-style: italic; }
@@ -1841,7 +1863,7 @@ label.error {
     @include clearfix();
     max-width: $siteWidth;
     margin: 0 auto;
-    padding: 0 $gutter/2;
+    padding: 0 $gutter;
 
     @include at-query ($min, $small) {
         padding: 0 $gutter;
@@ -1882,6 +1904,7 @@ label.error {
 
 /* Main Content Layout */
 
+/* This contains all the blocks that are not the header, footer, cart, or slide out side bar. */
 .site-content {
     @include clearfix();
     display: block;
@@ -1892,30 +1915,51 @@ label.error {
     }
 }
 
+/* Just a wrapper for hooking onto the page content and styling it. */
+.page-content {
+    @extend .wrapper;
+}
+
 /* footer */
 
-.site-footer {
+@mixin verticalCenterChildDivs() {
+    &:before {
+        content: '';
+        display: inline-block;
+        height: 100%;
+        vertical-align: middle;
+        margin-right: -0.25em; /* Spacing Fix for inline-block */
+    }
 
+    > div {
+        display: inline-block;
+        vertical-align: middle;
+        margin: 0 -0.125em; /* Spacing Fix for inline-block */
+    }
+}
+
+.site-footer {
     @include at-query ($min, $large) {
         padding: $gutter*2 0;
     }
 
     .layout-simplified & {
-        text-align: center;
+        @include at-query ($min, $postSmall) {
+            @include verticalCenterChildDivs();
+            text-align: center;
 
-        > div {
-            display: inline-block;
-            height: 40px;
-            vertical-align: middle;
-            
-            &.left-column {
-                padding-top: 8px;
+             .first-column {
                 border-right: 1px solid $colorLighterGray;
             }
 
-            &.right-column {
+            .last-column {
                 padding-left: $gutter * 1.25;
-                padding-top: 4px;
+            }
+        }
+
+        @include at-query ($max, $small) {
+            > div {
+                display: block;
             }
         }
     }
@@ -1973,75 +2017,142 @@ label.error {
 
 .hero-404 {
     background: #fff url({{ '404-hero-bg.jpg' | asset_url }}) no-repeat center top;
-    height: 400px;
     position: relative;
     border-bottom: 1px solid #f6f6f6;
 
     .supports-boxshadow & {
         border-bottom: 0;
-        @include prefix('box-shadow', 'inset 0 -10px 9px -6px rgba(0,0,0,0.04)');
     }
+
     .supports-csstransforms.supports-cssanimations & {
         @include prefix('animation', 'fadein 2s ease');
     }
-}
 
-.overlay-404 {
-    height: 250px;
-    width: 560px;
-    margin: 0 auto;
-    font-size: 362px;
-    font-weight: 100;
-    font-family: $headerFontStack;
-    line-height: 1;
-    position: relative;
-    top: 100px;
-    left: -14px;
-    color: #f2f2f2;
-    letter-spacing: -8px;
+    > div {
+        position: relative;
+        margin: 0 auto;
+        font-weight: 100;
+        font-family: $headerFontStack;
+        line-height: 1;
+        color: #f2f2f2;
+        letter-spacing: -8px;
 
-    span {
-        opacity: 0.3;
+        span {
+            opacity: 0.3;
+        }
+
+        .supports-csstransforms.supports-cssanimations & {
+            @include prefix('animation', 'scaledown 1s ease-out');
+        }
     }
 
-    .supports-csstransforms.supports-cssanimations & {
-        @include prefix('animation', 'scaledown 1s ease-out');
+    @include at-query ($min, $postSmall) {
+        height: 400px;
+
+        .supports-boxshadow & {
+            @include prefix('box-shadow', 'inset 0 -10px 9px -6px rgba(0,0,0,0.04)');
+        }
+
+        > div {
+            top: 100px;
+            left: -5px;
+            height: 264px;
+            width: 582px;
+            font-size: 362px;
+            overflow: hidden;
+        }
+    }
+
+    @include at-query ($max, $small) {
+        height: 218px;
+        background-size: 76px;
+
+        .supports-boxshadow & {
+            @include prefix('box-shadow', 'inset 0 -5px 4px -3px rgba(0,0,0,0.04)');
+        }
+
+        > div {
+            top: 42px;
+            left: -5px;
+            height: 111px;
+            width: 247px;
+            font-size: 164px;
+        }
+    }
+}
+
+.nav-link {
+    display: block;
+    line-height: 1;
+    color: $colorGray;
+    text-decoration: none;
+    text-transform: uppercase;
+    font-family: $arialFontStack;
+    font-weight: bold;
+    white-space: nowrap;
+
+    &:hover,
+    &:active,
+    &:focus {
+        color: $colorGold;
+    }
+
+    @include at-query ($min, $postSmall) {
+        font-size: 0.8125em;
+        padding: $gutter/4 $gutter * 1.25;
+    }
+
+    @include at-query ($max, $small) {
+        font-size: 0.625em;
+        padding: $gutter/2 0;
     }
 }
 
 .main-menu {
-
-    a {
-        display: block;
-        padding: $gutter/4 $gutter * 1.25;
-        line-height: 1;
-        color: $colorGray;
-        text-decoration: none;
-        text-transform: uppercase;
-        font-family: $arialFontStack;
-        font-size: 0.8125em;
-        font-weight: bold;
-        white-space: nowrap;
-
-        &:hover,
-        &:active,
-        &:focus {
-            color: $colorGold;
-        }
-    }
-
     ul {
         margin: 0;
     }
 
     li {
-        position: relative;
-        display: inline-block;
         margin: 0;
-        border-left: 1px solid $colorLighterGray;
+        display: inline-block;
 
-        &:first-child {
-            border-left: 0;
+        @include at-query ($min, $postSmall) {
+            border-left: 1px solid $colorLighterGray;
+
+            &:first-child {
+                border-left: 0;
+            }
+        }
+    }
+
+    .site-footer & {
+        @include at-query ($max, $small) {
+            ul {
+                @include clearfix(false);
+            }
+            
+            li {
+                display: block;
+                width: 50%;
+                float: left;
+                padding: 0 $gutter/2;
+            }
+        }
+    }
+}
+
+.template-404 {
+    .page-content {
+        padding-top: 16px;
+        padding-bottom: 16px;
+
+        h2 {
+
+        }
+
+        p {
+            color: $colorLightGray;
         }
     }
 }
@@ -2049,43 +2160,67 @@ label.error {
 
 /*================ Search bar in header ================*/
 .search-bar {
-    width: 220px;
-    height: 30px;
     border-bottom: 1px solid $colorLightGray;
     margin-bottom: 0;
     position: relative;
 
     button, input {
         background: none;
-        height: 29px;
+        height: 100%;
         position: absolute;
         display: block;
         bottom: 0;
+        left: 0;
     }
 
     button {
-        width: 20px;
-        left: 0;
-        font-size: 16px;
         line-height: 1;
         color: $colorGray;
     }
 
     input {
-        border: none;
-        left: 20px;
-        width: 200px;
         margin: 0;
+        border: none;
         padding: 0;
-        font-size: 0.8125em;
+        width: 100%;
         font-family: $arialFontStack;
         font-weight: 700;
         line-height: 1.2;
         color: $colorWarmLightGray;
     }
 
-    @include at-query ($max, $medium) {
-        margin: 0 auto;
+    @include at-query ($min, $postSmall) {
+        $buttonWidth: 20px;
+
+        width: 220px;
+        height: 30px;
+
+        button {
+            font-size: 1em;
+            width: $buttonWidth;
+        }
+
+        input {
+            font-size: 0.8125em;
+            padding-left: $buttonWidth;
+        }
+    }
+
+    @include at-query ($max, $small) {
+        $buttonWidth: 16px;
+
+        height: 27px;
+        margin: 0 $gutter/2;
+
+        button {
+            font-size: 0.8125em;
+            width: $buttonWidth;
+        }
+
+        input {
+            font-size: 0.625em;
+            padding-left: $buttonWidth;
+        }
     }
 }
 
