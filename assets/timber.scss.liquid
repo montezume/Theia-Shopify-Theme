@@ -188,6 +188,8 @@ $headerFontWeight: 100;
 $bodyFontStack: $helveticaFontStack;
 $baseFontSize: 100%; // Henseforth known as 1em (assumed at 16px)e
 
+
+
 // Icons
 @font-face {
     font-family: "icons";
@@ -276,6 +278,26 @@ $socialIconFontStack: 'icons';
         @return #fff;
     }
 }
+
+
+/* Vertical Centering Mixin - now 100% table free!
+   http://css-tricks.com/centering-in-the-unknown/ */
+@mixin verticalCenterChildElements() {
+    &:before {
+        content: '';
+        display: inline-block;
+        height: 100%;
+        vertical-align: middle;
+        margin-right: -0.25em; /* Spacing Fix for inline-block */
+    }
+
+    > * {
+        display: inline-block;
+        vertical-align: middle;
+        margin: 0 -0.125em; /* Spacing Fix for inline-block */
+    }
+}
+
 
 /*============================================================================
   Dependency-free breakpoint mixin
@@ -773,8 +795,10 @@ select {
     -webkit-text-size-adjust: 100%;
 }
 
-h1, h2, h3, h4, h5, h6,
-.h1, .h2, .h3, .h4, .h5, .h6 {
+/* h1 tags have been excluded from this list. The h1 tag is used for the site header. */
+
+h2, h3, h4, h5, h6,
+.h2, .h3, .h4, .h5, .h6 {
     display: block;
     font-family: $headerFontStack;
     font-weight: $headerFontWeight;
@@ -786,15 +810,14 @@ h1, h2, h3, h4, h5, h6,
     }
 }
 
-h1 a, h2 a, h3 a, h4 a, h5 a, h6 a,
-.h1 a, .h2 a, .h3 a, .h4 a, .h5 a, .h6 a { font-weight: inherit; }
+h2 a, h3 a, h4 a, h5 a, h6 a,
+.h2 a, .h3 a, .h4 a, .h5 a, .h6 a { font-weight: inherit; }
 
 /*============================================================================
   Pixel to EM conversion tool
   - http://pxtoem.com/
   ==============================================================================*/
 
-h1, .h1 { font-size: 3em; }       // 48px
 h2, .h2 { font-size: 3.75em; }    // 60px
 h3, .h3 { font-size: 2.25em; }    // 36px
 h4, .h4 { font-size: 1.5em; }     // 24px
@@ -810,7 +833,6 @@ p { margin: 0 0 $gutter/2 0; }
         margin: 0 0 $gutter/2 0;
     }
 
-    h1, .h1 { font-size: 1.625em; }   // 26px
     h2, .h2 { font-size: 2.1875em; }  // 35px
     h3, .h3 { font-size: 2.25em; }    // 36px
     h4, .h4 { font-size: 1.5em; }     // 24px
@@ -1463,13 +1485,13 @@ label.error {
 .icon-dk:before { content: "\64"; }
 .icon-facebook:before { content: "\66"; }
 .icon-fancy:before { content: "\46"; }
-.icon-google:before { content: "\67"; }
+.icon-google-plus:before { content: "\67"; }
 .icon-google_wallet:before { content: "\47"; }
 .icon-instagram:before { content: "\69"; }
 .icon-interac:before { content: "\49"; }
 .icon-jcb:before { content: "\4a"; }
 .icon-maestro:before { content: "\6d"; }
-.icon-master:before { content: "\4d"; }
+.icon-mastercard:before { content: "\4d"; }
 .icon-paypal:before { content: "\50"; }
 .icon-pinterest:before { content: "\70"; }
 .icon-rss:before { content: "\72"; }
@@ -1893,8 +1915,20 @@ label.error {
         }
     }
 
+    .layout-theme & {
+        .wrapper {
+            @include verticalCenterChildElements();
+        }
+    }
+
     .layout-simplified & {
         padding: $gutter * 2 0 $gutter;
+
+        /* center child elements */
+        > * {
+            margin-left: auto;
+            margin-right: auto;
+        }
 
         @include at-query ($max, $small) {
             padding: ( $gutter * 1.5 ) 0 ( $gutter * 2 )
@@ -1922,22 +1956,6 @@ label.error {
 
 /* footer */
 
-@mixin verticalCenterChildDivs() {
-    &:before {
-        content: '';
-        display: inline-block;
-        height: 100%;
-        vertical-align: middle;
-        margin-right: -0.25em; /* Spacing Fix for inline-block */
-    }
-
-    > div {
-        display: inline-block;
-        vertical-align: middle;
-        margin: 0 -0.125em; /* Spacing Fix for inline-block */
-    }
-}
-
 .site-footer {
     @include at-query ($min, $large) {
         padding: $gutter*2 0;
@@ -1945,10 +1963,12 @@ label.error {
 
     .layout-simplified & {
         @include at-query ($min, $postSmall) {
-            @include verticalCenterChildDivs();
+            @include verticalCenterChildElements();
             text-align: center;
 
-             .first-column {
+            .first-column {
+                @include verticalCenterChildElements();
+                height: 40px;
                 border-right: 1px solid $colorLighterGray;
             }
 
@@ -1970,9 +1990,9 @@ label.error {
   # Blocks
   ================================================================================*/
 
-.header-logo {
+.site-logo {
     text-align: center;
-    margin: 0 auto;
+    margin: 0;
     height: 40px;
     width: 154px;
 
