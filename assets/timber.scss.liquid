@@ -2000,6 +2000,39 @@ label.error {
     display: inline;
 }
 
+
+/*================================================================================
+  # Extends - these are for common text and block styles
+  ================================================================================*/
+
+%small-arial-text {
+    font-family: $arialFontStack;
+    font-weight: 700;
+
+    @include at-query ($min, $postSmall) {
+        font-size: 0.8125em;
+    }
+
+    @include at-query ($max, $small) {
+        font-size: 0.625em;
+    }
+}    
+
+%base-link-text {
+    @extend %small-arial-text;
+
+    line-height: 1;
+    color: $colorGray;
+    text-decoration: none;
+    white-space: nowrap;
+
+    &:hover,
+    &:active,
+    &:focus {
+        color: $colorGold;
+    }
+}
+
 /*================================================================================
   # Layouts
   ================================================================================*/
@@ -2039,8 +2072,44 @@ label.error {
     }
 
     .layout-theme & {
+
+        $headerHeight: 85px;
+
+        height: $headerHeight;
+
         .wrapper {
+            position: relative;
+        }
+
+        %header-column {
             @include verticalCenterChildElements();
+            position: absolute;
+            display: inline-block;
+            height: $headerHeight - $gridGutter;
+        }
+
+        .logo-column {
+            @extend %header-column;
+            left: 0px;
+        }
+
+        .menu-column {
+            @extend %header-column;
+            left: 154px + $gutter * 1.5;
+            width: 480px;
+            text-align: right;
+        }
+
+        .customer-column {
+            @extend %header-column;
+            right: 216px + $gridGutter;
+            width: 258px;
+            text-align: right;
+        }
+        
+        .search-column {
+            @extend %header-column;
+            right: 0px;
         }
     }
 
@@ -2225,28 +2294,15 @@ label.error {
 }
 
 .nav-link {
+    @extend %base-link-text;
     display: block;
-    line-height: 1;
-    color: $colorGray;
-    text-decoration: none;
     text-transform: uppercase;
-    font-family: $arialFontStack;
-    font-weight: bold;
-    white-space: nowrap;
-
-    &:hover,
-    &:active,
-    &:focus {
-        color: $colorGold;
-    }
 
     @include at-query ($min, $postSmall) {
-        font-size: 0.8125em;
         padding: $gutter/4 $gutter * 1.25;
     }
 
     @include at-query ($max, $small) {
-        font-size: 0.625em;
         padding: $gutter/2 0;
     }
 }
@@ -2283,6 +2339,27 @@ label.error {
             }
         }
     }
+}
+
+.customer-profile-link {
+    a {
+        @extend %base-link-text;
+    }
+
+    @include at-query ($min, $postSmall) {
+
+    }
+    
+    @include at-query ($max, $small) {
+        
+    }
+}
+
+.cart-count-link {
+    a {
+        @extend %base-link-text;
+    }
+
 }
 
 .template-404 {
@@ -2322,12 +2399,12 @@ label.error {
     }
 
     input {
+        @extend %small-arial-text;
         margin: 0;
         border: none;
         padding: 0;
         width: 100%;
-        font-family: $arialFontStack;
-        font-weight: 700;
+
         line-height: 1.2;
         color: $colorWarmLightGray;
     }
@@ -2344,7 +2421,6 @@ label.error {
         }
 
         input {
-            font-size: 0.8125em;
             padding-left: $buttonWidth;
         }
     }
@@ -2361,7 +2437,6 @@ label.error {
         }
 
         input {
-            font-size: 0.625em;
             padding-left: $buttonWidth;
         }
     }
