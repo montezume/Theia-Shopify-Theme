@@ -390,7 +390,7 @@ var ajaxifyShopify = (function(module, $) {
     $flipContainer = $('.flip');
 
     if (!$cssTransforms3d) {
-      $flipContainer.addClass('no-transforms')
+      $flipContainer.addClass('no-transforms');
     }
 
     // Setup extra selectors once appended
@@ -405,7 +405,7 @@ var ajaxifyShopify = (function(module, $) {
     // Reset the button if a user changes a variation
     $('input[type="checkbox"], input[type="radio"], select', $formContainer).on('click', function() {
       revertFlipButton();
-    })
+    });
   };
 
   revertFlipButton = function () {
@@ -435,7 +435,7 @@ var ajaxifyShopify = (function(module, $) {
 
     // Add a class if CSS translate isn't available
     if (!$cssTransforms) {
-      $modalContainer.addClass('no-transforms')
+      $modalContainer.addClass('no-transforms');
     }
 
     // Update modal position on screen changes
@@ -480,7 +480,7 @@ var ajaxifyShopify = (function(module, $) {
     // Position close button relative to title
     $closeCart.css({
       'top': 10 + ( $cartContainer.find('h1').height() / 2 )
-    })
+    });
 
     $modalContainer.addClass('is-visible');
 
@@ -663,7 +663,7 @@ var ajaxifyShopify = (function(module, $) {
     var data = eval('(' + XMLHttpRequest.responseText + ')');
     if (!!data.message) {
       if (data.status == 422) {
-        $formContainer.after('<div class="errors qty-error">'+ data.description +'</div>')
+        $formContainer.after('<div class="errors qty-error">'+ data.description +'</div>');
       }
     }
   };
@@ -805,7 +805,7 @@ var ajaxifyShopify = (function(module, $) {
       items: items,
       totalPrice: Shopify.formatMoney(cart.total_price, settings.moneyFormat),
       btnClass: $btnClass
-    }
+    };
     $cartContainer.append(template(data));
 
     // With new elements we need to relink the adjust cart functions
@@ -858,7 +858,7 @@ var ajaxifyShopify = (function(module, $) {
       // Mark the cart as built
       cartInit = true;
     });
-  }
+  };
 
   adjustCart = function () {
     // This function runs on load, and when the cart is reprinted
@@ -993,7 +993,7 @@ var ajaxifyShopify = (function(module, $) {
     // Reprint cart on short timeout so you don't see the content being removed
     setTimeout(function() {
       Shopify.getCart(buildCart);
-    }, 150)
+    }, 150);
   };
 
   createQtySelectors = function() {
