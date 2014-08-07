@@ -299,18 +299,19 @@ $socialIconFontStack: 'theia-icons';
 /* Vertical Centering Mixin - now 100% table free!
    http://css-tricks.com/centering-in-the-unknown/ */
 @mixin verticalCenterChildElements() {
+    font-size: 0; /* set to remove the spacing from the :before element */
+
     &:before {
         content: '';
         display: inline-block;
         height: 100%;
         vertical-align: middle;
-        margin-right: -0.25em; /* Spacing Fix for inline-block */
     }
 
     > * {
+        font-size: 16px; /* ratchet up the font-size to the default base hight; */
         display: inline-block;
         vertical-align: middle;
-        margin: 0 -0.125em; /* Spacing Fix for inline-block */
     }
 }
 
@@ -1465,8 +1466,8 @@ label.error {
 }
 
 
-
-[class^="icon-"], [class*=" icon-"] {
+$iconSelector: '[class^="icon-"], [class*=" icon-"]';
+#{$iconSelector} {
 
     .icon-fallback-text & {
         display: none;
@@ -2018,19 +2019,36 @@ label.error {
     }
 }    
 
-%base-link-text {
-    @extend %small-arial-text;
+%smaller-arial-text {
+    font-family: $arialFontStack;
+    font-weight: 700;
 
-    line-height: 1;
-    color: $colorGray;
+    @include at-query ($min, $postSmall) {
+        font-size: 0.6875em;
+    }
+}
+
+%base-link {
     text-decoration: none;
     white-space: nowrap;
+    color: $colorGray;
 
     &:hover,
     &:active,
     &:focus {
         color: $colorGold;
     }
+}
+
+%base-link-inline {
+    @extend %base-link;
+    @extend %small-arial-text;
+
+    line-height: 1;
+}
+
+%base-link-block {
+    @extend %base-link;
 }
 
 /*================================================================================
@@ -2052,26 +2070,9 @@ label.error {
 /* Header */
 
 .site-header {
-    padding: $gutter/2 0;
-
-    @include at-query ($min, $large) {
-        padding: $gutter 0;
-    }
-
-    @include at-query ($min, $large) {
-        .grid {
-            display: table;
-            width: 100%;
-
-            & > .grid-item {
-                float: none;
-                display: table-cell;
-                vertical-align: middle;
-            }
-        }
-    }
-
     .layout-theme & {
+
+        padding: $gutter 0;
 
         $headerHeight: 85px;
 
@@ -2079,38 +2080,47 @@ label.error {
 
         .wrapper {
             position: relative;
+            @extend .clearfix;
         }
 
         %header-column {
             @include verticalCenterChildElements();
-            position: absolute;
-            display: inline-block;
+            position: relative;
+            display: block;
+            float: left;
             height: $headerHeight - $gridGutter;
+            margin-left: $gridGutter;
+
+            &:first-child {
+                margin-left: 0;
+            }
         }
 
         .logo-column {
             @extend %header-column;
-            left: 0px;
         }
 
-        .menu-column {
+        .main-menu-column {
             @extend %header-column;
-            left: 154px + $gutter * 1.5;
-            width: 480px;
+            width: 460px;
             text-align: right;
+
+            ul {
+                padding-top: 2px;
+            }
         }
 
-        .customer-column {
+        .customer-menu-column {
             @extend %header-column;
-            right: 216px + $gridGutter;
-            width: 258px;
             text-align: right;
+            width: 218px;
         }
         
         .search-column {
             @extend %header-column;
-            right: 0px;
+            width: 220px;
         }
+
     }
 
     .layout-simplified & {
@@ -2293,27 +2303,16 @@ label.error {
     }
 }
 
-.nav-link {
-    @extend %base-link-text;
-    display: block;
-    text-transform: uppercase;
-
-    @include at-query ($min, $postSmall) {
-        padding: $gutter/4 $gutter * 1.25;
-    }
-
-    @include at-query ($max, $small) {
-        padding: $gutter/2 0;
-    }
-}
-
 .main-menu {
-    ul {
+    ul, li {
         margin: 0;
+    }
+
+    ul {
+        height: 21px;
     }
 
     li {
-        margin: 0;
         display: inline-block;
 
         @include at-query ($min, $postSmall) {
@@ -2341,23 +2340,113 @@ label.error {
     }
 }
 
-.customer-profile-link {
-    a {
-        @extend %base-link-text;
-    }
+.main-menu-link {
+    @extend %base-link-inline;
+
+    display: block;
+    text-transform: uppercase;
 
     @include at-query ($min, $postSmall) {
-
+        padding: $gutter/4 $gutter * 1.25;
     }
-    
+
     @include at-query ($max, $small) {
-        
+        padding: $gutter/2 0;
     }
 }
 
+.customer-menu {
+    @include verticalCenterChildElements();
+
+    border-left: 1px solid #f2f2f2;
+    padding: 0 $gutter/2;
+    height: 41px;
+
+    ul {
+        margin: 0;
+        height: 21px;
+    }
+
+    li {
+        display: inline-block;
+        margin: 0 -3px; /* inline-block spacing fix */
+    }
+}
+
+.customer-menu-link {
+    @extend %base-link-block;
+    @extend .clearfix;
+
+    display: block;
+    position: relative;
+
+    #{$iconSelector} {
+        height: 1em;
+        width: 1em;
+        display: block;
+        float: left;
+        margin-right: $gutter/3;
+    }
+
+    .label {
+        @extend %small-arial-text;
+        display: block;
+        float: left;
+        padding-top: 1px;
+        line-height: 15px;
+
+        max-width: 105px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    @include at-query ($min, $postSmall) {
+        padding: 3px $gutter/2 2px;
+    }
+
+    @include at-query ($max, $small) {
+
+    }
+}
+
+.customer-login-link {
+/* **todo** add some styles here for the logged in customer avatar. */
+}
+
 .cart-count-link {
-    a {
-        @extend %base-link-text;
+
+    #{$iconSelector} {
+        position: relative;
+    }
+
+    .count {
+        @extend %smaller-arial-text;
+
+        display: block;
+        position: absolute;
+        top: -10px;
+        left: 4px;
+        background-color: $colorGold;
+        color: #fff;
+        height: 16px;
+        width: 16px;
+        padding-top: 1px;
+        line-height: 15px;
+        @include prefix(border-radius, 2px);
+        text-align: center;
+
+        &:before {
+            content: '';
+            display: block;
+            border: 1px solid #fff;
+            height: 14px;
+            width: 14px;
+            position: absolute;
+            top: 1px;
+            left: 1px;
+            @include prefix(border-radius, 1px);
+        }
     }
 
 }
@@ -2366,10 +2455,6 @@ label.error {
     .page-content {
         padding-top: 16px;
         padding-bottom: 16px;
-
-        h2 {
-
-        }
 
         p {
             color: $colorLightGray;

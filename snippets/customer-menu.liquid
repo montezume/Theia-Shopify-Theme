@@ -1,0 +1,39 @@
+<nav class="customer-menu" role="navigation">
+  <ul>
+    <li>
+      {% if shop.customer_accounts_enabled %}
+        {% if customer %}
+
+          <a class="customer-menu-link customer-profile-link" href="/account">
+            <!-- need to find a way to associated customer photos to the  -->
+            <img src="#" alt="{{ customer.first_name }}s avatar photo" height="30" width="30" />
+
+            {{ customer.first_name }}
+          </a>
+          <!-- {{ 'Log out' | customer_logout_link }} -->
+
+        {% else %}
+
+          <a class="customer-menu-link customer-login-link" href="/account/login">
+            <span class="icon-safe"></span>
+            <span class="label">Login</span>
+          </a>
+
+        {% endif %}
+      {% endif %}
+    </li>
+    <li>
+
+      {% comment %}
+      Documentation:  http://shopify.com/timber#ajax-cart
+      {% endcomment %}
+      <a id="cartToggle" class="customer-menu-link cart-count-link" href="/cart">
+        <span class="icon-store">
+          <span id="cartCount" class="count">{{ cart.item_count }}</span>          
+        </span>
+        <span class="label">Cart</span>
+      </a>
+
+    </li>
+  </ul>
+</nav>
