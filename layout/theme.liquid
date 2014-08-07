@@ -26,19 +26,12 @@
           {% include 'site-logo' %}
         </div>
 
-        <div class="menu-column">
+        <div class="main-menu-column">
           {% include 'main-menu' %}
         </div>
 
-        <div class="customer-column">
-          {% comment %}
-          If customer accounts are enabled, provide login and create account links
-          {% endcomment %}
-          {% if shop.customer_accounts_enabled %}
-            {% include 'customer-profile-link' %}
-          {% endif %}
-
-          {% include 'cart-count-link' %}
+        <div class="customer-menu-column">
+          {% include 'customer-menu' %}
         </div>
 
         <div class="search-column">
