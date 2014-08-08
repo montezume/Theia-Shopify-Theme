@@ -2362,9 +2362,12 @@ $iconSelector: '[class^="icon-"], [class*=" icon-"]';
     padding: 0 $gutter/2;
     height: 41px;
 
+    ul, li {
+        height: 21px;
+    }        
+
     ul {
         margin: 0;
-        height: 21px;
     }
 
     li {
@@ -2380,12 +2383,27 @@ $iconSelector: '[class^="icon-"], [class*=" icon-"]';
     display: block;
     position: relative;
 
-    #{$iconSelector} {
-        height: 1em;
-        width: 1em;
+    img, #{$iconSelector} {
         display: block;
         float: left;
         margin-right: $gutter/3;
+    }
+
+    #{$iconSelector} {
+        height: 1em;
+        width: 1em;
+    }
+
+    /* used for the avatar */
+    img {
+        $radius: 11px;
+
+        position: relative;
+        top: -2px;
+        height: $radius * 2;
+        width: $radius * 2;
+        @include prefix(border-radius, $radius);
+        border: 2px solid $colorWarmGray;
     }
 
     .label {
@@ -2413,6 +2431,11 @@ $iconSelector: '[class^="icon-"], [class*=" icon-"]';
 .customer-login-link {
 /* **todo** add some styles here for the logged in customer avatar. */
 }
+
+.customer-profile-link {
+
+}
+
 
 .cart-count-link {
 
