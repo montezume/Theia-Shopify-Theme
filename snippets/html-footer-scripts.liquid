@@ -17,7 +17,6 @@ Ajaxify Cart Documentation:
   {{ 'ajaxify.js' | asset_url | script_tag }}
   <script>
 
-      console.log('htis is in the ajax settings');
       jQuery(function($) {
           ajaxifyShopify.init({
               method: '{{ settings.ajax_cart_method }}', // Method options are drawer, modal, and flip. Default is drawer.
