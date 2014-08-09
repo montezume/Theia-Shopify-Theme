@@ -2026,6 +2026,10 @@ $iconSelector: '[class^="icon-"], [class*=" icon-"]';
     @include at-query ($min, $postSmall) {
         font-size: 0.6875em;
     }
+
+    @include at-query ($max, $small) {
+        font-size: 0.6875em;
+    }
 }
 
 %base-link {
@@ -2070,63 +2074,114 @@ $iconSelector: '[class^="icon-"], [class*=" icon-"]';
 /* Header */
 
 .site-header {
+
+    /* Using a mixin here since this is shared between media queries */
+    @mixin header-column($height) {
+        @include verticalCenterChildElements();
+        position: relative;
+        display: block;
+        float: left;
+        height: $height - $gridGutter;
+        margin-left: $gridGutter;
+
+        &:first-child {
+            margin-left: 0;
+        }
+    }
+
     .layout-theme & {
 
-        padding: $gutter 0;
+        /* Desktop */
+        @include at-query ($min, $postSmall) {
 
-        $headerHeight: 85px;
+            $headerHeight: 85px;
 
-        height: $headerHeight;
+            padding: $gutter 0;
 
-        .wrapper {
-            position: relative;
-            @extend .clearfix;
-        }
+            height: $headerHeight;
 
-        %header-column {
-            @include verticalCenterChildElements();
-            position: relative;
-            display: block;
-            float: left;
-            height: $headerHeight - $gridGutter;
-            margin-left: $gridGutter;
-
-            &:first-child {
-                margin-left: 0;
+            .wrapper {
+                position: relative;
+                @extend .clearfix;
             }
-        }
 
-        .logo-column {
-            @extend %header-column;
-        }
-
-        .main-menu-column {
-            @extend %header-column;
-            width: 460px;
-            text-align: right;
-
-            ul {
-                padding-top: 2px;
+            %header-column {
+                @include header-column($headerHeight);
             }
-        }
 
-        .customer-menu-column {
-            @extend %header-column;
-            text-align: right;
-            width: 218px;
+            .logo-column {
+                @extend %header-column;
+            }
+
+            .main-menu-column {
+                @extend %header-column;
+                width: 460px;
+                text-align: right;
+
+                ul {
+                    padding-top: 2px;
+                }
+            }
+
+            .customer-menu-column {
+                @extend %header-column;
+                text-align: right;
+                width: 218px;
+            }
+
+            .search-column {
+                @extend %header-column;
+                width: 220px;
+            }
+
         }
         
-        .search-column {
-            @extend %header-column;
-            width: 220px;
-        }
+        /* Mobile */
+        @include at-query ($max, $small) {
+            $headerHeight: 44px;
 
+            padding: $gutter/2 0;
+
+            height: $headerHeight;
+
+            .wrapper {
+                position: relative;
+                @extend .clearfix;
+            }
+
+            %header-column {
+                @include verticalCenterChildElements();
+                position: relative;
+                display: block;
+                float: left;
+                height: $headerHeight - $gridGutter/2;
+                margin-left: $gridGutter/2;
+
+                &:first-child {
+                    margin-left: 0;
+                }
+            }
+
+            .logo-column {
+                @extend %header-column;
+            }
+
+            .customer-menu-column {
+                @extend  %header-column;
+                float: right;
+            }
+
+            .main-menu-column,
+            .search-column {
+                display: none;
+            }
+        }
     }
 
     .layout-simplified & {
         padding: $gutter * 2 0 $gutter;
 
-        /* center child elements */
+        /* center all child elements */
         > * {
             margin-left: auto;
             margin-right: auto;
@@ -2356,15 +2411,6 @@ $iconSelector: '[class^="icon-"], [class*=" icon-"]';
 }
 
 .customer-menu {
-    @include verticalCenterChildElements();
-
-    border-left: 1px solid #f2f2f2;
-    padding: 0 $gutter/2;
-    height: 41px;
-
-    ul, li {
-        height: 21px;
-    }        
 
     ul {
         margin: 0;
@@ -2372,7 +2418,43 @@ $iconSelector: '[class^="icon-"], [class*=" icon-"]';
 
     li {
         display: inline-block;
-        margin: 0 -3px; /* inline-block spacing fix */
+    }
+
+    /* Desktop */
+    @include at-query ($min, $postSmall) {
+        @include verticalCenterChildElements();
+
+        height: 41px;
+        padding: 0 $gutter/2;
+        border-left: 1px solid #f2f2f2;
+
+        ul, li {
+            height: 21px;
+        }
+
+        li {
+            margin: 0 -2px; /* inline-block spacing fix */
+        }
+
+        .side-menu-toggle-block {
+            display: none;
+        }
+    }
+
+    /* Mobile */
+    @include at-query ($max, $small) {
+
+        &, ul, li {
+            height: 22px;
+        }
+
+        li {
+            margin: 0 0 0 6px; /* inline-block spacing fix, 10px between li with the 2px per side whitespace */
+        }
+
+        .profile-login-links-block {
+            display: none;
+        }
     }
 }
 
@@ -2383,59 +2465,71 @@ $iconSelector: '[class^="icon-"], [class*=" icon-"]';
     display: block;
     position: relative;
 
-    img, #{$iconSelector} {
-        display: block;
-        float: left;
-        margin-right: $gutter/3;
-    }
-
-    #{$iconSelector} {
-        height: 1em;
-        width: 1em;
-    }
-
-    /* used for the avatar */
-    img {
-        $radius: 11px;
-
-        position: relative;
-        top: -2px;
-        height: $radius * 2;
-        width: $radius * 2;
-        @include prefix(border-radius, $radius);
-        border: 2px solid $colorWarmGray;
-    }
-
     .label {
         @extend %small-arial-text;
-        display: block;
-        float: left;
-        padding-top: 1px;
-        line-height: 15px;
-
-        max-width: 105px;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
     }
 
+    /* Desktop */
     @include at-query ($min, $postSmall) {
         padding: 3px $gutter/2 2px;
+
+        img, #{$iconSelector}, .label {
+            display: block;
+            float: left;
+        }
+
+        img, #{$iconSelector} {
+            margin-right: $gutter/3;
+        }
+
+        #{$iconSelector} {
+            height: 1em;
+            width: 1em;
+        }
+
+        /* used for the avatar */
+        img {
+            $radius: 11px;
+
+            position: relative;
+            top: -2px;
+            height: $radius * 2;
+            width: $radius * 2;
+            @include prefix(border-radius, $radius);
+            border: 2px solid $colorWarmGray;
+        }
+
+        .label {
+            padding-top: 1px;
+            line-height: 15px;
+            max-width: 105px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
     }
 
+    /* Mobile */
     @include at-query ($max, $small) {
+        height: 22px;
+        width: 22px;
+        border: 1px solid $colorGray;
+        @include prefix(border-radius, 2px);
+        text-align: center;
 
+        #{$iconSelector} {
+            display: inline-block;
+            height: 1em;
+            width: 1em;
+            font-size: 0.75em;
+            padding-top: 4px;
+        }
+
+        .label {
+            display: none;
+        }
     }
 }
-
-.customer-login-link {
-/* **todo** add some styles here for the logged in customer avatar. */
-}
-
-.customer-profile-link {
-
-}
-
 
 .cart-count-link {
 
@@ -2474,6 +2568,7 @@ $iconSelector: '[class^="icon-"], [class*=" icon-"]';
 
 }
 
+/*================ Page Specific Styles ================*/
 .template-404 {
     .page-content {
         padding-top: 16px;
@@ -2579,4 +2674,3 @@ $iconSelector: '[class^="icon-"], [class*=" icon-"]';
         opacity: 1;
     }
 }
-

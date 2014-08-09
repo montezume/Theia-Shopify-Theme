@@ -4,7 +4,7 @@
 {% endcapture %}
 <nav class="customer-menu" role="navigation">
   <ul>
-    <li>
+    <li class="profile-login-links-block">
       {% if shop.customer_accounts_enabled %}
         {% if customer %}
 
@@ -37,6 +37,13 @@
           <span id="cartCount" class="count">{{ cart.item_count }}</span>          
         </span>
         <span class="label">Cart</span>
+      </a>
+
+    </li>
+    <li class="side-menu-toggle-block">
+
+      <a id="sideNavToggle" class="customer-menu-link side-menu-toggle-link" href="#">
+        <span class="icon-menu"></span>
       </a>
 
     </li>
