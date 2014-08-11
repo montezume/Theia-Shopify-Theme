@@ -1,0 +1,7 @@
+<nav class="meta-menu" role="navigation">
+  <ul>
+    {% for link in linklists[settings.footer_quicklinks_linklist].links %}
+      <li><a class="meta-menu-link" href="{{ link.url }}">{{ link.title }}</a></li>
+    {% endfor %}
+  </ul>
+</nav>

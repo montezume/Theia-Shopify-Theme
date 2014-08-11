@@ -131,7 +131,9 @@ $errorRedBg: lighten($errorRed, 55%);
 $successGreen: #0a942a;
 
 // Width variables
-$siteWidth: 1180px;
+$siteWidth: 1152px;
+$siteWidth10Col: 960px;
+$siteWidth8Col: 768px;
 $gutter: 16px;
 $gridGutter: 32px; // can be a %, but nested grids will have smaller margins because of it
 
@@ -2044,14 +2046,12 @@ $iconSelector: '[class^="icon-"], [class*=" icon-"]';
     }
 }
 
-%base-link-inline {
+%base-link-block {
     @extend %base-link;
-    @extend %small-arial-text;
-
-    line-height: 1;
+    display: block;
 }
 
-%base-link-block {
+%base-link-inline {
     @extend %base-link;
 }
 
@@ -2059,15 +2059,33 @@ $iconSelector: '[class^="icon-"], [class*=" icon-"]';
   # Layouts
   ================================================================================*/
 
-.wrapper {
+%wrapper-base {
     @include clearfix();
-    max-width: $siteWidth;
-    margin: 0 auto;
-    padding: 0 $gutter;
 
-    @include at-query ($min, $small) {
-        padding: 0 $gutter;
-    }
+    margin: 0 auto;
+}
+
+.wrapper {
+    @extend %wrapper-base;
+
+    max-width: $siteWidth;
+}
+
+.wrapper-10-col {
+    @extend %wrapper-base;
+
+    max-width: $siteWidth10Col;
+}
+
+.wrapper-8-col {
+    @extend %wrapper-base;
+
+    max-width: $siteWidth8Col;
+}
+
+%column-base {
+    padding-right: $gutter;
+    padding-left: $gutter;
 }
 
 
@@ -2214,29 +2232,73 @@ $iconSelector: '[class^="icon-"], [class*=" icon-"]';
 /* footer */
 
 .site-footer {
-    @include at-query ($min, $large) {
-        padding: $gutter*2 0;
+
+    /* Desktop */
+    @include at-query ($min, $postSmall) {
+        .first-column {
+            @include verticalCenterChildElements();
+        }
+    }
+
+    /* Mobile */
+    @include at-query ($max, $small) {
+        > div {
+            display: block;
+            padding: 0 $gutter;
+        }
+    }
+
+    .layout-theme & {
+        padding: $gutter * 2 0;
+
+        /* Desktop */
+        @include at-query ($min, $postSmall) {
+
+            border-top: 1px solid $borderColor;
+
+            > div {
+                @include verticalCenterChildElements();
+                float: left;
+            }
+
+            .first-column {
+                width: 672px;
+            }
+
+            .last-column {
+                width: 288px;
+                text-align: right;
+            }
+        }
+
+        /* Mobile */
+        @include at-query ($max, $small) {
+            padding: 0;
+
+            .first-column,
+            .last-column {
+                border-top: 1px solid $borderColor;
+                margin: 0 16px;
+                padding: 20px 0;
+            }
+        }
     }
 
     .layout-simplified & {
+        /* Desktop */
         @include at-query ($min, $postSmall) {
             @include verticalCenterChildElements();
+
+            padding: $gutter*2 0;
             text-align: center;
 
             .first-column {
-                @include verticalCenterChildElements();
                 height: 40px;
                 border-right: 1px solid $colorLighterGray;
             }
 
             .last-column {
                 padding-left: $gutter * 1.25;
-            }
-        }
-
-        @include at-query ($max, $small) {
-            > div {
-                display: block;
             }
         }
     }
@@ -2358,24 +2420,22 @@ $iconSelector: '[class^="icon-"], [class*=" icon-"]';
     }
 }
 
-.main-menu {
+%inline-list-base {
     ul, li {
         margin: 0;
     }
 
-    ul {
-        height: 21px;
-    }
-
     li {
         display: inline-block;
+    }
+}
 
-        @include at-query ($min, $postSmall) {
-            border-left: 1px solid $colorLighterGray;
+%nav-menu-base {
+    @extend %inline-list-base;
 
-            &:first-child {
-                border-left: 0;
-            }
+    @include at-query ($min, $postSmall) {
+        ul {
+            height: 21px;
         }
     }
 
@@ -2395,10 +2455,25 @@ $iconSelector: '[class^="icon-"], [class*=" icon-"]';
     }
 }
 
-.main-menu-link {
-    @extend %base-link-inline;
+.main-menu {
+    @extend %nav-menu-base;
 
-    display: block;
+    li {
+        @include at-query ($min, $postSmall) {
+            border-left: 1px solid $colorLighterGray;
+
+            &:first-child {
+                border-left: 0;
+            }
+        }
+    }
+}
+
+.main-menu-link {
+    @extend %base-link-block;
+    @extend %small-arial-text;
+
+    line-height: 1;
     text-transform: uppercase;
 
     @include at-query ($min, $postSmall) {
@@ -2411,14 +2486,7 @@ $iconSelector: '[class^="icon-"], [class*=" icon-"]';
 }
 
 .customer-menu {
-
-    ul {
-        margin: 0;
-    }
-
-    li {
-        display: inline-block;
-    }
+    @extend %inline-list-base;
 
     /* Desktop */
     @include at-query ($min, $postSmall) {
@@ -2462,7 +2530,6 @@ $iconSelector: '[class^="icon-"], [class*=" icon-"]';
     @extend %base-link-block;
     @extend .clearfix;
 
-    display: block;
     position: relative;
 
     .label {
@@ -2565,7 +2632,40 @@ $iconSelector: '[class^="icon-"], [class*=" icon-"]';
             @include prefix(border-radius, 1px);
         }
     }
+}
 
+.meta-menu {
+    @extend %nav-menu-base;
+}
+
+.meta-menu-link {
+    @extend %base-link-block;
+    @extend %small-arial-text;
+
+    text-transform: uppercase;
+    padding: 4px 12px;
+
+    &:first-child {
+        padding-left: 0;
+    }
+
+    &:after {
+        content: '\203A';
+        display: inline-block;
+        position: relative;
+        padding-left: 3px;
+    }
+}
+
+.language-menu {
+    @extend %nav-menu-base;
+}
+
+.language-menu-link {
+    @extend %base-link-block;
+    @extend %small-arial-text;
+
+    text-transform: uppercase;
 }
 
 /*================ Page Specific Styles ================*/
