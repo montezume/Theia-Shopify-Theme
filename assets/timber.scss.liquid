@@ -2094,13 +2094,13 @@ $iconSelector: '[class^="icon-"], [class*=" icon-"]';
 .site-header {
 
     /* Using a mixin here since this is shared between media queries */
-    @mixin header-column($height) {
+    @mixin header-column() {
         @include verticalCenterChildElements();
+        @include box-sizing( content-box );
+
         position: relative;
         display: block;
         float: left;
-        height: $height - $gridGutter;
-        margin-left: $gridGutter;
 
         &:first-child {
             margin-left: 0;
@@ -2108,6 +2108,10 @@ $iconSelector: '[class^="icon-"], [class*=" icon-"]';
     }
 
     .layout-theme & {
+
+        .wrapper > div {
+            @extend %column-base;
+        }
 
         /* Desktop */
         @include at-query ($min, $postSmall) {
@@ -2124,8 +2128,11 @@ $iconSelector: '[class^="icon-"], [class*=" icon-"]';
             }
 
             %header-column {
-                @include header-column($headerHeight);
+                @include header-column();
+
+                height: $headerHeight - $gridGutter;
             }
+
 
             .logo-column {
                 @extend %header-column;
@@ -2133,7 +2140,7 @@ $iconSelector: '[class^="icon-"], [class*=" icon-"]';
 
             .main-menu-column {
                 @extend %header-column;
-                width: 460px;
+                width: 432px;
                 text-align: right;
 
                 ul {
@@ -2168,16 +2175,9 @@ $iconSelector: '[class^="icon-"], [class*=" icon-"]';
             }
 
             %header-column {
-                @include verticalCenterChildElements();
-                position: relative;
-                display: block;
-                float: left;
-                height: $headerHeight - $gridGutter/2;
-                margin-left: $gridGutter/2;
+                @include header-column();
 
-                &:first-child {
-                    margin-left: 0;
-                }
+                height: $headerHeight - $gridGutter/2;
             }
 
             .logo-column {
