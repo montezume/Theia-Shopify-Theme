@@ -371,7 +371,7 @@ var ajaxifyShopify = (function(module, $) {
 
     // Stop if there is no add to cart button
     if ( !$addToCart.length ) {
-      return
+      return;
     }
 
     // Wrap the add to cart button in a div
