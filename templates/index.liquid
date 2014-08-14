@@ -6,6 +6,76 @@
     - http://docs.shopify.com/themes/liquid-variables/global
 {% endcomment %}
 
+{% if linklists.featured-collections.links.size > 0 %}
+<div class="homepage-hero">
+  <h2>Theia, Let your inner godess shine.</h2>
+
+  <a href="{{ linklists.featured-collections.links.first.url }}">View Latest Collection</a>
+
+  <div class="latest-collections">
+    {% for link in linklists.featured-collections.links offset:1 %}
+
+      {% assign collection = link.object %}
+
+      {% comment %}
+      Use capture to put the collection title in a variable that is used in liquid filters
+      {% endcomment %}
+      {% capture collection_title %}{{ collection.title | escape }}{% endcapture %}
+
+      <a href="{{ collection.url }}" title="Browse our {{ collection_title }} collection">
+        {{ collection_title }}
+        {% if collection.image %}
+          {{ collection.image.src | collection_img_url: 'large' | img_tag: collection_title }}
+        {% else %}
+          {{ collection.products.first.featured_image | product_img_url: 'large' | img_tag: collection_title }}
+        {% endif %}
+      </a>
+
+    {% endfor %}
+  </div>
+
+</div>
+{% endif %}
+
+<div class="press-hero">
+  <div class="wrapper">
+    <div>
+      <h4>As seen in:</h4>
+    </div>
+    <div>
+      <div class="usa-today-logo">
+        {{ 'usa-today-logo.svg' | asset_url | img_tag }}
+        {{ 'usa-today-logo.png' | asset_url | img_tag }}
+      </div>
+    </div>
+    <div>
+      <div class="people-logo">
+        {{ 'people-logo.svg' | asset_url | img_tag }}
+        {{ 'people-logo.png' | asset_url | img_tag }}
+      </div>
+    </div>
+    <div>
+      <div class="womens-wear-daily-logo">
+        {{ 'womens-wear-daily-logo.svg' | asset_url | img_tag }}
+        {{ 'womens-wear-daily-logo.png' | asset_url | img_tag }}
+      </div>
+    </div>
+    <div>
+      <div class="martha-stewart-weddings-logo">
+        {{ 'martha-stewart-weddings-logo.svg' | asset_url | img_tag }}
+        {{ 'martha-stewart-weddings-logo.png' | asset_url | img_tag }}
+      </div>
+    </div>
+    <div>
+      <div class="the-oprah-magazine-logo">
+        {{ 'the-oprah-magazine-logo.svg' | asset_url | img_tag }}
+        {{ 'the-oprah-magazine-logo.png' | asset_url | img_tag }}
+      </div>
+    </div>
+  </div>
+</div>
+
+
 <h2>Frontpage Collection</h2>
 
 {% comment %}

@@ -2309,16 +2309,9 @@ $iconSelector: '[class^="icon-"], [class*=" icon-"]';
   # Blocks
   ================================================================================*/
 
-.site-logo {
+%logo-base {
     text-align: center;
     margin: 0;
-    height: 40px;
-    width: 154px;
-
-    @include at-query ( $max, $small ) {
-        height: 22px;
-        width: 84px;
-    }
 
     a,
     a:hover,
@@ -2352,7 +2345,78 @@ $iconSelector: '[class^="icon-"], [class*=" icon-"]';
     }
 }
 
+.site-logo {
+    @extend %logo-base;
+
+    height: 40px;
+    width: 154px;
+
+    @include at-query ( $max, $small ) {
+        height: 22px;
+        width: 84px;
+    }
+
+}
+
+.usa-today-logo {
+    @extend %logo-base;
+
+    height: 85px;
+    width: 163px;
+}
+
+.people-logo {
+    @extend %logo-base;
+
+    height: 65px;
+    width: 157px;
+}
+
+.womens-wear-daily-logo {
+    @extend %logo-base;
+
+    height: 58px;
+    width: 128px;
+}
+
+.martha-stewart-weddings-logo {
+    @extend %logo-base;
+
+    height: 59px;
+    width: 216px;
+}
+
+.the-oprah-magazine-logo {
+    @extend %logo-base;
+
+    height: 86px;
+    width: 64px;
+}
+
+
 /* Heros */
+
+
+.homepage-hero {
+    /* uploaded through the settings page. */
+    background: url({{ 'homepage-hero-img.jpg' | asset_url }});
+}
+
+.press-hero {
+    padding: 3.125em 0;
+
+    .wrapper {
+        @include verticalCenterChildElements();
+        text-align: center;
+
+        > div {
+            @extend %column-base;
+
+        }
+
+    }
+}
+
 
 .hero-404 {
     background: #fff url({{ '404-hero-bg.jpg' | asset_url }}) no-repeat center top;
@@ -2419,6 +2483,8 @@ $iconSelector: '[class^="icon-"], [class*=" icon-"]';
         }
     }
 }
+
+/* Naviation Menus */
 
 %inline-list-base {
     ul, li {
