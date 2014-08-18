@@ -75,6 +75,8 @@ $breakpoint-has-pull:  ('medium', 'medium-down', 'large');
   ==============================================================================*/
 
 // Theia Colors
+$colorOffWhite: #fefefe;
+
 $colorLighterGray: #f2f2f2;
 $colorLightGray: #d8d8d8;
 $colorGray: #8d8d8d;
@@ -821,7 +823,7 @@ h2, h3, h4, h5, h6,
     font-family: $headerFontStack;
     font-weight: $headerFontWeight;
     margin: 0.5em 0;
-    line-height: 1.1;
+    line-height: 1;
 
     a {
         text-decoration: none;
@@ -1038,16 +1040,6 @@ hr {
 /*============================================================================
   #Links and Buttons
   ==============================================================================*/
-a {
-    color: $colorLink;
-    text-decoration: underline;
-}
-
-a:hover,
-a:focus {
-    color: $colorLinkHover;
-}
-
 .btn {
     display: inline-block;
     padding: 8px 10px;
@@ -2007,16 +1999,31 @@ $iconSelector: '[class^="icon-"], [class*=" icon-"]';
   # Extends - these are for common text and block styles
   ================================================================================*/
 
+%content-block-base {
+}
+
+%medium-arial-text {
+    font-family: $arialFontStack;
+
+    @include at-query ($min, $postSmall) {
+        font-size: 1.125em; /* ~18px */
+    }
+
+    @include at-query ($max, $small) {
+        font-size: 0.9375em; /* ~15px */
+    }
+}
+
 %small-arial-text {
     font-family: $arialFontStack;
     font-weight: 700;
 
     @include at-query ($min, $postSmall) {
-        font-size: 0.8125em;
+        font-size: 0.8125em; /* ~13px */
     }
 
     @include at-query ($max, $small) {
-        font-size: 0.625em;
+        font-size: 0.625em; /* ~10px */
     }
 }    
 
@@ -2025,12 +2032,62 @@ $iconSelector: '[class^="icon-"], [class*=" icon-"]';
     font-weight: 700;
 
     @include at-query ($min, $postSmall) {
-        font-size: 0.6875em;
+        font-size: 0.6875em; /* ~11px */
     }
 
     @include at-query ($max, $small) {
-        font-size: 0.6875em;
+        font-size: 0.6875em; /* ~11px */
     }
+}
+
+%medium-helvetica-text {
+    font-family: $helveticaFontStack;
+
+    @include at-query ($min, $postSmall) {
+        font-size: 0.875em; /* ~20px */
+    }
+
+    @include at-query ($max, $small) {
+        font-size: 0.9375em; /* ~15px */
+    }
+}
+
+%small-helvetica-text {
+    font-family: $helveticaFontStack;
+
+    @include at-query ($min, $postSmall) {
+        font-size: 1.125em; /* ~18px */
+    }
+
+    @include at-query ($max, $small) {
+        font-size: 0.9375em; /* ~15px */
+    }
+}
+
+%smaller-helvetica-text {
+    font-family: $helveticaFontStack;
+
+    @include at-query ($min, $postSmall) {
+        font-size: 0.875em; /* ~14px */
+    }
+
+    @include at-query ($max, $small) {
+        font-size: 0.78125em; /* ~12.5px */
+    }
+}
+
+%rsaquo {
+    &:after {
+        content: '\203A';
+        display: inline-block;
+        position: relative;
+        padding-left: 3px;
+    }
+}
+
+
+%link-base {
+    white-space: nowrap;
 }
 
 %base-link {
@@ -2045,13 +2102,95 @@ $iconSelector: '[class^="icon-"], [class*=" icon-"]';
     }
 }
 
-%base-link-block {
-    @extend %base-link;
-    display: block;
+/* link text styles */
+
+/* gray link base */
+
+/* gray, gold on hover */
+%gray-hover-gold-link {
+    @extend %link-base;
+
+    color: $colorGray;
+    text-decoration: none;
+
+    &:hover,
+    &:active,
+    &:focus {
+        color: $colorGold;
+    }
 }
 
-%base-link-inline {
-    @extend %base-link;
+/* gray, gold and underline on hover */
+%gray-hover-gold-underline-link {
+    @extend %link-base;
+
+    color: $colorGray;
+    text-decoration: none;
+
+    &:hover,
+    &:active,
+    &:focus {
+        text-decoration: underline;
+        color: $colorGold;
+    }
+}
+
+/* gray, underline on hover */
+%gray-hover-underline-link {
+    @extend %link-base;
+
+    color: $colorGray;
+    text-decoration: none;
+
+    &:hover,
+    &:active,
+    &:focus {
+        text-decoration: underline;
+    }
+}
+
+
+/* gray underline, gold on hover */
+%gray-underline-hover-gold-link {
+    @extend %link-base;
+
+    color: $colorGray;
+    text-decoration: underline;
+
+    &:hover,
+    &:active,
+    &:focus {
+        color: $colorGold;
+    }
+}
+
+/* gold, underline on hover */
+%gold-hover-underline-link {
+    @extend %link-base;
+
+    color: $colorGold;
+    text-decoration: none;
+
+    &:hover,
+    &:active,
+    &:focus {
+        text-decoration: underline;
+    }
+}
+
+/* gold, underline on hover */
+%white-hover-gray-link {
+    @extend %link-base;
+    @include prefix('transition', 'all 0.4s ease');
+
+    color: #fff;
+    text-decoration: none;
+
+    &:hover,
+    &:active,
+    &:focus {
+        color: $colorWarmGrayDark;
+    }
 }
 
 /*================================================================================
@@ -2059,7 +2198,7 @@ $iconSelector: '[class^="icon-"], [class*=" icon-"]';
   ================================================================================*/
 
 %wrapper-base {
-    @include clearfix();
+    @extend .clearfix;
 
     margin: 0 auto;
 }
@@ -2214,7 +2353,7 @@ $iconSelector: '[class^="icon-"], [class*=" icon-"]';
 
 /* This contains all the blocks that are not the header, footer, cart, or slide out side bar. */
 .site-content {
-    @include clearfix();
+    @extend .clearfix;
     display: block;
 
     .layout-simplified & {
@@ -2395,13 +2534,55 @@ $iconSelector: '[class^="icon-"], [class*=" icon-"]';
 
 /* Heros */
 
+.collections-hero {
+    background: #000;
 
-.homepage-hero {
-    /* uploaded through the settings page. */
-    background: url({{ 'homepage-hero-img.jpg' | asset_url }});
+    > div {
+        height: 616px;
+        /* uploaded through the settings page. */
+        background: url({{ 'homepage-hero-img.jpg' | asset_url }}) right 29px no-repeat;
+        position: relative;
+    }
+
+    .collections-hero-block {
+        @extend %column-base;
+
+        position: absolute;
+        top: 176px;
+        left: 0;
+        width: 576px;
+    }
+
+    .latest-collections-menu-row {
+        position: absolute;
+        top: 450px;
+        left: 0;
+        right: 0;
+    }
 }
 
-.press-hero {
+.collections-hero-content {
+    @extend %content-block-base;
+
+    h2 {
+        color: $colorOffWhite;
+        margin-top: 0;
+        margin-bottom: 24px;
+    }
+
+    a {
+        @extend %small-arial-text;
+        @extend %rsaquo;
+        @extend %gold-hover-underline-link;
+
+        text-transform: uppercase;
+    }
+
+}
+
+
+
+.featured-press-hero {
     padding: 3.125em 0;
 
     .wrapper {
@@ -2412,7 +2593,6 @@ $iconSelector: '[class^="icon-"], [class*=" icon-"]';
             @extend %column-base;
 
         }
-
     }
 }
 
@@ -2507,7 +2687,7 @@ $iconSelector: '[class^="icon-"], [class*=" icon-"]';
     .site-footer & {
         @include at-query ($max, $small) {
             ul {
-                @include clearfix(false);
+                @include clearfix();
             }
             
             li {
@@ -2535,9 +2715,10 @@ $iconSelector: '[class^="icon-"], [class*=" icon-"]';
 }
 
 .main-menu-link {
-    @extend %base-link-block;
+    @extend %gray-hover-gold-link;
     @extend %small-arial-text;
 
+    display: block;
     line-height: 1;
     text-transform: uppercase;
 
@@ -2592,9 +2773,10 @@ $iconSelector: '[class^="icon-"], [class*=" icon-"]';
 }
 
 .customer-menu-link {
-    @extend %base-link-block;
+    @extend %gray-hover-gold-link;
     @extend .clearfix;
 
+    display: block;
     position: relative;
 
     .label {
@@ -2704,21 +2886,16 @@ $iconSelector: '[class^="icon-"], [class*=" icon-"]';
 }
 
 .meta-menu-link {
-    @extend %base-link-block;
+    @extend %gray-hover-underline-link;
     @extend %small-arial-text;
+    @extend %rsaquo;
 
+    display: block;
     text-transform: uppercase;
     padding: 4px 12px;
 
     &:first-child {
         padding-left: 0;
-    }
-
-    &:after {
-        content: '\203A';
-        display: inline-block;
-        position: relative;
-        padding-left: 3px;
     }
 }
 
@@ -2727,11 +2904,111 @@ $iconSelector: '[class^="icon-"], [class*=" icon-"]';
 }
 
 .language-menu-link {
-    @extend %base-link-block;
+    @extend %gray-hover-underline-link;
     @extend %small-arial-text;
 
+    display: block;
     text-transform: uppercase;
 }
+
+
+.latest-collections-menu {
+    @extend %inline-list-base;
+
+    text-align: center;
+
+    li {
+        margin: 0 5px - 2px; /* taking off the 2px for the extra spacing from the inline-block display type. */
+        text-align: left;   /* undo the centering for child elements */
+    }
+}
+
+.latest-collections-link {
+    @extend %white-hover-gray-link;
+    @extend %small-arial-text;
+
+    $height: 117px;
+    $width: 173px;
+
+    text-transform: uppercase;
+    display: block;
+    position: relative;
+
+    height: $height;
+    width: $width;
+
+    /* contains the background image for the transparent border outline */
+    &:before {
+        content: '';
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        width: 100%;
+
+        background-color: #fff;
+        background-position: left top;
+        background-repeat: no-repeat;
+        background-size: $width $height;
+
+        transition: all 0.4s;
+    }
+
+    span {
+        @extend %rsaquo;
+
+        line-height: 1.15;
+        position: absolute;
+        top: 46px;
+        left: 20px;
+        width: 64px;
+        white-space: normal;
+    }
+
+    img {
+        height: $height;
+        width: $width;
+        position: absolute;
+        top: 0;
+        left: 0;
+        display: block;
+
+        filter: url("data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\'><filter id=\'desaturate\'><feColorMatrix type=\'saturate\' values=\'0.43\'/></filter></svg>#desaturate"); /* Firefox 10+, Firefox on Android */
+        filter: gray; /* IE6-9 */
+        -webkit-filter: grayscale(43%); /* Chrome 19+, Safari 6+, Safari 6+ iOS */
+
+        @include prefix('transition', 'all 0.4s ease');
+
+        clip: rect(5px, $width - 5px, $height - 5px, 5px);
+    }
+
+    .overlay {
+        @include prefix('box-shadow', 'inset 0px 0px 76px 0px rgba(50, 50, 50, 0.75)');
+
+        background: rgba(black, 0.20);
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        width: 100%;
+        @include prefix('transition', 'box-shadow 0.4s, opacity 0.4s');
+    }
+
+    &:hover {
+        img {
+            filter: none;
+            -webkit-filter: none;
+        }
+
+        .overlay {
+            opacity: 0;
+            @include prefix('box-shadow', 'inset 0px 0px 0px 0px rgba(50, 50, 50, 0.75)');
+        }
+
+        &:before {
+            opacity: 0.6;
+        }
+    }
+}
+
 
 /*================ Page Specific Styles ================*/
 .template-404 {
