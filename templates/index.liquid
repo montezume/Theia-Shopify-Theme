@@ -42,7 +42,7 @@
 
                   #collection-{{ collection.id }}:before {
                     background-image: url('{{ collection.image.src | collection_img_url: 'large' }}');
-                 }
+                  }
 
                 </style>
                 <a id="collection-{{ collection.id }}" class="latest-collections-link" href="{{ collection.url }}" title="Browse our {{ collection_title }} collection">
@@ -62,58 +62,25 @@
   </div>
 {% endif %}
 
-<div class="featured-press-hero">
-  <div class="wrapper">
-    <div>
-      <h4>As seen in:</h4>
-    </div>
-    <div>
-      <div class="usa-today-logo">
-        {{ 'usa-today-logo.svg' | asset_url | img_tag }}
-        {{ 'usa-today-logo.png' | asset_url | img_tag }}
-      </div>
-    </div>
-    <div>
-      <div class="people-logo">
-        {{ 'people-logo.svg' | asset_url | img_tag }}
-        {{ 'people-logo.png' | asset_url | img_tag }}
-      </div>
-    </div>
-    <div>
-      <div class="womens-wear-daily-logo">
-        {{ 'womens-wear-daily-logo.svg' | asset_url | img_tag }}
-        {{ 'womens-wear-daily-logo.png' | asset_url | img_tag }}
-      </div>
-    </div>
-    <div>
-      <div class="martha-stewart-weddings-logo">
-        {{ 'martha-stewart-weddings-logo.svg' | asset_url | img_tag }}
-        {{ 'martha-stewart-weddings-logo.png' | asset_url | img_tag }}
-      </div>
-    </div>
-    <div>
-      <div class="the-oprah-magazine-logo">
-        {{ 'the-oprah-magazine-logo.svg' | asset_url | img_tag }}
-        {{ 'the-oprah-magazine-logo.png' | asset_url | img_tag }}
-      </div>
-    </div>
-  </div>
-</div>
-
+{% include 'featured-press-hero' %}
 
 <div class="celebrity-gallery">
   <div class="main">
-    <div id="carrieUnderwood" class="celebrity-main">
+    <div id="carrieUnderwood" class="celebrity-slide">
+      {{ 'carrie-underwood.jpg' | asset_url | img_tag }}
+      <img src="" alt="" />
       <h2>Carrie Underwood</h2>
       <p>Worn at the Grammy Awards</p>
       <p><a href="#">Shop this look</a></p>
     </div>
-    <div id="taylorSwift" class="celebrity-main">
+    <div id="taylorSwift" class="celebrity-slide">
+      {{ 'taylor-swift.jpg' | asset_url | img_tag }}
       <h2>Taylor Swift</h2>
       <p>Worn at the MTV Awards</p>
       <p><a href="#">Shop this look</a></p>
     </div>
-    <div id="oprahWinfrey" class="celebrity-main">
+    <div id="oprahWinfrey" class="celebrity-slide">
+      {{ 'oprah-winfrey.jpg' | asset_url | img_tag }}
       <h2>Oprah Winfrey</h2>
       <p>Worn on her show</p>
       <p><a href="#">Shop this look</a></p>
@@ -132,6 +99,8 @@
   </div>
 </div>
 
+
+<h2>Events and Press Releases</h2>
 
 <div class="homepage-press-releases">
   {% for article in blogs['press-releases'].articles limit:5 %}
