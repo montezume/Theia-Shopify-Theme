@@ -133,7 +133,8 @@ $errorRedBg: lighten($errorRed, 55%);
 $successGreen: #0a942a;
 
 // Width variables
-$siteWidth: 1152px;
+$siteWidth14col: 1344px;
+$siteWidth: 1152px; // 12 col width standard
 $siteWidth10Col: 960px;
 $siteWidth8Col: 768px;
 $gutter: 16px;
@@ -2203,6 +2204,12 @@ $iconSelector: '[class^="icon-"], [class*=" icon-"]';
     margin: 0 auto;
 }
 
+.wrapper-14-col {
+    @extend %wrapper-base;
+
+    max-width: $siteWidth14col;
+}
+
 .wrapper {
     @extend %wrapper-base;
 
@@ -2596,40 +2603,81 @@ $iconSelector: '[class^="icon-"], [class*=" icon-"]';
     }
 }
 
+.celebrity-gallery-hero {
+    background: #000;
+}
+
 .celebrity-gallery {
     background: #000;
+
+    /* these are based off the PSD, not what we are using for the max-width. That's ok, we're only using them for calculated, relative percentage values. */
+    $totalWidth: 1350px;
+    $totalHeight: 660px;
+    $mainWidth: 968px;
+    $sideWidth: 382px;
+    $mainLeftMargin: 115px;
+    $mainContentTop: 272px;
 
     /* http://wemadeyoulook.at/en/blog/proportional-scaling-responsive-boxes-using-just-css/ */
     position: relative;
     width: 100%;
     height: 0;
-    padding-bottom: 660px / 1350px * 100%;
+    padding-bottom: percentage( $totalHeight / $totalWidth );
+
+    /* for slides and the thumb links */
+    %img-container {
+        position: relative;
+    }
+
+    img {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: 0;
+    }
 
     .main {
         background: #666;
 
-        width: 66%;
+        width: percentage( $mainWidth / $totalWidth );
         height: 100%;
         position: absolute;
         left: 0;
+
+        > div {
+            @extend %img-container;
+            @extend .clearfix;
+
+            height: 100%;
+        }
+
+        .content {
+            position: absolute;
+            z-index: 1;
+            top: percentage( $mainContentTop / $totalHeight );
+            left: percentage( $mainLeftMargin / $mainWidth );
+        }
     }
 
     .side {
         background: #999;
 
-        width: 34%;
+        width: percentage(382/1350);
         height: 100%;
         position: absolute;
-        left: 66%;
+        right: 0;
 
         > a {
+            @extend %img-container;
+            @extend .clearfix;
+
             display: block;
             height: 33.3333%;
-            @extend .clearfix;
         }
     }
 }
-
 
 .hero-404 {
     background: #fff url({{ '404-hero-bg.jpg' | asset_url }}) no-repeat center top;
