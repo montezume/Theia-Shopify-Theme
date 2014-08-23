@@ -64,38 +64,50 @@
 
 {% include 'featured-press-hero' %}
 
-<div class="celebrity-gallery">
-  <div class="main">
-    <div id="carrieUnderwood" class="celebrity-slide">
-      {{ 'carrie-underwood.jpg' | asset_url | img_tag }}
-      <img src="" alt="" />
-      <h2>Carrie Underwood</h2>
-      <p>Worn at the Grammy Awards</p>
-      <p><a href="#">Shop this look</a></p>
+<div class="celebrity-gallery-hero">
+  <div class="wrapper-14-col">
+    <div class="celebrity-gallery">
+      <div class="main">
+        <div id="carrieUnderwood" class="slide">
+          {{ 'carrie-underwood.jpg' | asset_url | img_tag }}
+          <div class="content">
+            <h3>Carrie Underwood</h3>
+            <p>Worn at the Grammy Awards</p>
+            <p><a href="#">Shop this look</a></p>
+          </div>
+        </div>
+        <div id="taylorSwift" class="slide hide">
+          {{ 'taylor-swift.jpg' | asset_url | img_tag }}
+          <div class="content">
+            <h3>Taylor Swift</h3>
+            <p>Worn at the MTV Awards</p>
+            <p><a href="#">Shop this look</a></p>
+          </div>
+        </div>
+        <div id="oprahWinfrey" class="slide hide">
+          {{ 'oprah-winfrey.jpg' | asset_url | img_tag }}
+          <div class="content">
+            <h3>Oprah Winfrey</h3>
+            <p>Worn on her show</p>
+            <p><a href="#">Shop this look</a></p>
+          </div>
+        </div>
+      </div>
+      <div class="side">
+        <a href="#carrieUnderwood" class="thumb">
+          {{ 'carrie-underwood-thumb.jpg' | asset_url | img_tag }}
+          <h3>Carrie Underwood</h3>
+        </a>
+        <a href="#taylorSwift" class="thumb">
+          {{ 'taylor-swift-thumb.jpg' | asset_url | img_tag }}
+          <h3>Taylor Swift</h3>
+        </a>
+        <a href="#oprahWinfrey" class="thumb">
+          {{ 'oprah-winfrey-thumb.jpg' | asset_url | img_tag }}
+          <h3>Oprah Winfrey</h3>
+        </a>
+      </div>
     </div>
-    <div id="taylorSwift" class="celebrity-slide">
-      {{ 'taylor-swift.jpg' | asset_url | img_tag }}
-      <h2>Taylor Swift</h2>
-      <p>Worn at the MTV Awards</p>
-      <p><a href="#">Shop this look</a></p>
-    </div>
-    <div id="oprahWinfrey" class="celebrity-slide">
-      {{ 'oprah-winfrey.jpg' | asset_url | img_tag }}
-      <h2>Oprah Winfrey</h2>
-      <p>Worn on her show</p>
-      <p><a href="#">Shop this look</a></p>
-    </div>
-  </div>
-  <div class="side">
-    <a href="#carrieUnderwood" class="celebrity-link">
-      <h3>Carrie Underwood</h3>
-    </a>
-    <a href="#taylorSwift" class="celebrity-link">
-      <h3>Taylor Swift</h3>
-    </a>
-    <a href="#oprahWinfrey" class="celebrity-link">
-      <h3>Oprah Winfrey</h3>
-    </a>
   </div>
 </div>
 
