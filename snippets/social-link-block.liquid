@@ -1,0 +1,12 @@
+<div class="social-link-block">
+  <ul>
+    {% for link in linklists.social-links.links %}
+      {% capture socialNetwork %}{{ link.title | downcase }}{% endcapture %}
+      <li>
+        <a href="{{ link.url }}">
+          {% include 'social-icon' %}
+        </a>
+      </li>
+    {% endfor %}
+  </ul>
+</div>

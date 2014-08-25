@@ -79,7 +79,9 @@ $colorOffWhite: #fefefe;
 
 $colorLighterGray: #f2f2f2;
 $colorLightGray: #d8d8d8;
+$colorMidGray: #bcbbbb;
 $colorGray: #8d8d8d;
+$colorDarkGray: #616161;
 
 $colorWarmLightGray: #a5a2a4;
 $colorWarmGray: #797778;
@@ -1461,7 +1463,7 @@ label.error {
 
 
 $iconSelector: '[class^="icon-"], [class*=" icon-"]';
-#{$iconSelector} {
+#{$iconSelector}, %icon-base {
 
     .icon-fallback-text & {
         display: none;
@@ -1620,6 +1622,79 @@ $iconSelector: '[class^="icon-"], [class*=" icon-"]';
 	content: "\e621";
 }
 
+%social-icon-base {
+    @extend %icon-base;
+
+    $circumfrence: 3.375em;
+
+    height: $circumfrence;
+    width: $circumfrence;
+
+    @include prefix( 'border-radius', 3.375em / 2 );
+    position: absolute;
+    border-width: 0.15626em;
+    border-style: solid;
+    text-align: center;
+}
+
+.pinterest-icon {
+    @extend %social-icon-base;
+    @extend .icon-pinterest-p;
+
+    padding-top: 0.625em;
+    padding-right: 0.125em;
+
+    &:before {
+        font-size: 2.5em;
+    }
+}
+
+.twitter-icon {
+    @extend %social-icon-base;
+    @extend .icon-twitter;
+
+    padding-top: 0.5em;
+    padding-left: 0.125em;
+
+    &:before {
+        font-size: 1.9375em;
+    }
+}
+
+.instagram-icon {
+    @extend %social-icon-base;
+    @extend .icon-instagram;
+
+    padding-top: 0.75em;
+
+    &:before {
+        font-size: 1.5625em;
+    }
+}
+
+.tumblr-icon {
+    @extend %social-icon-base;
+    @extend .icon-tumblr;
+
+    padding-top: 0.375em;
+    padding-left: 0.0625em;
+
+    &:before {
+        font-size: 2.0625em;
+    }
+}
+
+.facebook-icon {
+    @extend %social-icon-base;
+    @extend .icon-facebook-f;
+
+    padding-top: 0.4375em;
+    padding-right: 0.0625em;
+
+    &:before {
+        font-size: 2.125em;
+    }
+}
 
 /* **todo** update or remove these icons since the icon sets have changed now. */
 .payment-icons {
@@ -2233,6 +2308,42 @@ $iconSelector: '[class^="icon-"], [class*=" icon-"]';
     padding-left: $gutter;
 }
 
+%inline-list-base {
+    ul, li {
+        margin: 0;
+    }
+
+    li {
+        display: inline-block;
+    }
+}
+
+%nav-menu-base {
+    @extend %inline-list-base;
+
+    @include at-query ($min, $postSmall) {
+        ul {
+            height: 21px;
+        }
+    }
+
+    .site-footer & {
+        @include at-query ($max, $small) {
+            ul {
+                @include clearfix();
+            }
+
+            li {
+                display: block;
+                width: 50%;
+                float: left;
+                padding: 0 $gutter/2;
+            }
+        }
+    }
+}
+
+
 
 /* Header */
 
@@ -2617,6 +2728,9 @@ $iconSelector: '[class^="icon-"], [class*=" icon-"]';
     $sideWidth: 382px;
     $mainLeftMargin: 115px;
     $mainContentTop: 272px;
+    $thumbHeaderTop: 152px;
+    $thumbHeight: 220px;
+    $thumbLeftMargin: 16px;
 
     /* http://wemadeyoulook.at/en/blog/proportional-scaling-responsive-boxes-using-just-css/ */
     position: relative;
@@ -2676,8 +2790,87 @@ $iconSelector: '[class^="icon-"], [class*=" icon-"]';
             display: block;
             height: 33.3333%;
         }
+
+        h3 {
+            position: absolute;
+            bottom: percentage( 24px / $thumbHeight );
+            left: percentage( $thumbLeftMargin / $sideWidth );
+        }
     }
 }
+
+.social-hero {
+    h2 {
+        text-align: center;
+    }
+}
+
+.social-link-block {
+    @extend %inline-list-base;
+
+    text-align: center;
+
+    li {
+        margin: 8px;
+    }
+
+    a {
+        $circumfrence: 3.375em;
+
+        height: $circumfrence;
+        width: $circumfrence;
+        position: relative;
+        display: block;
+        text-decoration: none;
+
+        [class$='-icon'] {
+            height: 100%;
+            width: 100%;
+            border-color: $colorMidGray;
+            color: $colorMidGray;
+            transition: all 0.3s;
+
+            &:hover {
+                color: $colorGold;
+                border-color: $colorGold;
+                transform: scale( 1.1 );
+            }
+        }
+    }
+}
+
+.social-media-feed-block {
+
+}
+
+.social-media-feed-item {
+    position: relative;
+    height: 238px;
+    width: 348px;
+    overflow: hidden;
+    background: $colorDarkGray;
+    display: inline-block;
+    margin: -1px 1px;
+
+    img {
+        width: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+    }
+
+    [class$=-icon] {
+        font-size: 0.7408em;
+
+        bottom: 20px;
+        right: 20px;
+        color: #fff;
+        border-color: #fff;
+        border-width: 2px;
+    }
+}
+
+
 
 .hero-404 {
     background: #fff url({{ '404-hero-bg.jpg' | asset_url }}) no-repeat center top;
@@ -2745,42 +2938,9 @@ $iconSelector: '[class^="icon-"], [class*=" icon-"]';
     }
 }
 
+
+
 /* Naviation Menus */
-
-%inline-list-base {
-    ul, li {
-        margin: 0;
-    }
-
-    li {
-        display: inline-block;
-    }
-}
-
-%nav-menu-base {
-    @extend %inline-list-base;
-
-    @include at-query ($min, $postSmall) {
-        ul {
-            height: 21px;
-        }
-    }
-
-    .site-footer & {
-        @include at-query ($max, $small) {
-            ul {
-                @include clearfix();
-            }
-            
-            li {
-                display: block;
-                width: 50%;
-                float: left;
-                padding: 0 $gutter/2;
-            }
-        }
-    }
-}
 
 .main-menu {
     @extend %nav-menu-base;

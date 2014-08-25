@@ -1,0 +1,30 @@
+<div class="social-media-feed-block">
+  <div class="social-media-feed-item">
+    {{ 'pinterest-img-DELETE.jpg' | asset_url | img_tag: 'pinterest image' }}
+    {% assign socialNetwork = 'pinterest' %}
+    {% include 'social-icon' %}
+  </div>
+  <div class="social-media-feed-item">
+    {% assign socialNetwork = 'twitter' %}
+    {% include 'social-icon' %}
+  </div>
+  <div class="social-media-feed-item">
+    {{ 'instagram-img-DELETE.jpg' | asset_url | img_tag: 'instagram image' }}
+    {% assign socialNetwork = 'instagram' %}
+    {% include 'social-icon' %}
+  </div>
+  <div class="social-media-feed-item">
+    {% assign socialNetwork = 'twitter' %}
+    {% include 'social-icon' %}
+  </div>
+  <div class="social-media-feed-item">
+    {{ 'tumblr-img-DELETE.jpg' | asset_url | img_tag: 'tumblr image' }}
+    {% assign socialNetwork = 'tumblr' %}
+    {% include 'social-icon' %}
+  </div>
+  <div class="social-media-feed-item">
+    {{ 'facebook-img-DELETE.jpg' | asset_url | img_tag: 'facebook image' }}
+    {% assign socialNetwork = 'facebook' %}
+    {% include 'social-icon' %}
+  </div>
+</div>
