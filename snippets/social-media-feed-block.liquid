@@ -6,14 +6,29 @@
   </div>
   <div class="social-media-feed-item">
     {% assign socialNetwork = 'twitter' %}
+    <div class="content">
+      <p>Huge shout out to <a href="#">#TheiaDresses</a> for making me feel like a goddess tonight at the <a href="#">#TonyAwards</a>!</p>
+    </div>
+    <div class="source">
+      <a href="#">#TheiaDresses</a>
+    </div>
     {% include 'social-icon' %}
   </div>
   <div class="social-media-feed-item">
     {{ 'instagram-img-DELETE.jpg' | asset_url | img_tag: 'instagram image' }}
+    <div class="source">
+      <a href="#">theiacouture</a>
+    </div>
     {% assign socialNetwork = 'instagram' %}
     {% include 'social-icon' %}
   </div>
   <div class="social-media-feed-item">
+    <div class="content">
+      <p>Fabulously Spotted: Shalita Grant Wearing <a href="#">@THEIAprChick</a> - 2013 Tony Awards <a href="#">http://wp.me/p24o5d-l8X </a></p>
+    </div>
+    <div class="source">
+      <a href="#">@THEIAprChick</a>
+    </div>
     {% assign socialNetwork = 'twitter' %}
     {% include 'social-icon' %}
   </div>
@@ -24,6 +39,12 @@
   </div>
   <div class="social-media-feed-item">
     {{ 'facebook-img-DELETE.jpg' | asset_url | img_tag: 'facebook image' }}
+    <div class="content">
+      <p>Shalita Grant and Don at our showroom for the final fitting before the Tony Awards.</p>
+    </div>
+    <div class="source">
+      <a href="https://www.facebook.com/THEIACOUTURE">facebook.com/THEIACOUTURE</a>
+    </div>
     {% assign socialNetwork = 'facebook' %}
     {% include 'social-icon' %}
   </div>
