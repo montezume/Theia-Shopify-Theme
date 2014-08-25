@@ -83,10 +83,15 @@ $colorMidGray: #bcbbbb;
 $colorGray: #8d8d8d;
 $colorDarkGray: #616161;
 
+
 $colorWarmLightGray: #a5a2a4;
 $colorWarmGray: #797778;
 $colorWarmGrayDark: #4d4c4c;
+
+$colorLightGold: #c8a45a;
 $colorGold: #c19946;
+$colorDarkGold: #a98741;
+$colorDarkerGold: #896e35;
 
 // Timber Colors
 /* $colorPrimary: {{ settings.color_primary }}; */
@@ -2840,7 +2845,7 @@ $iconSelector: '[class^="icon-"], [class*=" icon-"]';
 }
 
 .social-media-feed-block {
-
+    text-align: center;
 }
 
 .social-media-feed-item {
@@ -2852,16 +2857,28 @@ $iconSelector: '[class^="icon-"], [class*=" icon-"]';
     display: inline-block;
     margin: -1px 1px;
 
+    > * {
+        position: absolute;
+    }
+
+    .content {
+        padding: $gutter * 2;
+    }
+
+    .source {
+        bottom: 0;
+        padding: ( $gutter * 1.75 ) ( $gutter * 2 );
+
+    }
+
     img {
         width: 100%;
-        position: absolute;
         top: 0;
         left: 0;
     }
 
     [class$=-icon] {
         font-size: 0.7408em;
-
         bottom: 20px;
         right: 20px;
         color: #fff;
@@ -3250,6 +3267,68 @@ $iconSelector: '[class^="icon-"], [class*=" icon-"]';
         }
     }
 }
+
+
+.newsletter-signup-block {
+    width: 608px;
+    margin: 0 auto;
+    text-align: center;
+
+    outline: 2px solid $colorGold;
+    border: 5px solid #fff;
+    background: $colorGold;
+    padding: $gutter * 1.75;
+
+    form {
+        @extend .clearfix;
+
+        position: relative;
+        width: 352px;
+        margin: 0 auto;
+        border: 1px solid $colorDarkerGold;
+        border-bottom: 1px solid $colorLightGold;
+
+        > * {
+            background: $colorDarkGold;
+            display: block;
+            float: left;
+            height: 48px;
+        }
+    }
+
+    input {
+        border: 0;
+        margin: 0;
+    }
+
+    button {
+        position: absolute;
+        top: 0;
+        right: 0;
+    }
+}
+
+
+.events-press-releases-hero {
+    h2 {
+        text-align: center;
+    }
+
+    [class^=wrapper] > div {
+        float: left;
+        width: 50%;
+    }
+
+    .media-events-contact-column {
+        
+    }
+
+    .press-releases-column {
+        
+    }
+
+}
+
 
 
 /*================ Page Specific Styles ================*/
