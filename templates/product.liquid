@@ -13,8 +13,6 @@
   <meta itemprop="url" content="{{ shop.url }}{{ product.url }}">
   <meta itemprop="image" content="{{ product.featured_image.src | product_img_url: 'grande' }}">
 
-  {% include 'breadcrumb' %}
-
   <div class="grid">
     <div class="grid-item large--one-half">
 
@@ -80,6 +78,25 @@
         <form action="/cart/add" method="post" enctype="multipart/form-data" id="addToCartForm">
 
           {% comment %}
+            Optionally show the 'compare at' or original price of the product.
+          {% endcomment %}
+          <span id="productPrice" class="h2{% if product.compare_at_price > product.price %} on-sale{% endif %}" itemprop="price">
+            US {{ product.price | money }}
+          </span>
+
+          {% if product.compare_at_price > product.price %}
+            <span id="comparePrice" class="h5">
+              Compare at:
+              {{ product.compare_at_price_max | money }}
+            </span>
+          {% endif %}
+
+          <span>Style #: {{ product.variants.first.sku }}</span>
+
+
+          <hr />
+
+          {% comment %}
             Add product variants as a dropdown.
               - By default, each variant (or combination of variants) will display as its own <option>
               - To separate these into multiple steps, which we suggest, use option_selection.js (see below)
@@ -112,61 +129,109 @@
             {% endfor %}
           </select>
 
-          {% comment %}
-            Optionally show the 'compare at' or original price of the product.
-          {% endcomment %}
-          <span id="productPrice" class="h2{% if product.compare_at_price > product.price %} on-sale{% endif %}" itemprop="price">
-            {{ product.price | money }}
-          </span>
 
-          {% if product.compare_at_price > product.price %}
-            <span id="comparePrice" class="h5">
-              Compare at:
-              {{ product.compare_at_price_max | money }}
-            </span>
-          {% endif %}
-
-          <label for="quantity">Quantity</label>
-          <input type="number" id="quantity" name="quantity" value="1" min="1">
+          <!-- <label for="quantity">Quantity</label>
+          <input type="number" id="quantity" name="quantity" value="1" min="1"> -->
 
           <input type="submit" name="add" class="btn" id="addToCart" value="Add to Cart">
         </form>
 
-        <div class="product-description rte" itemprop="description">
-          {{ product.description }}
+        <span>Free shipping on int'l orders $1,000+</span>
+
+        <div class="product-share-block">
+          sharing buttons
         </div>
 
+        <div class="product-description rte" itemprop="description">
+          <h5>Details:</h5>
+          <p>{{ product.description }}</p>
+        </div>
+
+        <a href="#">More Details</a>
+
       </div>
-
-      {% comment %}
-        If the user is on a collection product page (ie with /collections/collection-handle/products/product-handle)
-        in the URL, we can show next/previous links to other products in the collection.
-      {% endcomment %}
-      {% if collection %}
-        {% if collection.previous_product or collection.next_product %}
-          <p>
-
-          {% if collection.previous_product %}
-            {% capture prev_url %}{{ collection.previous_product}}#content{% endcapture %}
-            <span class="left">
-              {{ '&larr; Previous Product' | link_to: prev_url }}
-            </span>
-          {% endif %}
-
-          {% if collection.next_product %}
-            {% capture next_url %}{{ collection.next_product}}#content{% endcapture %}
-            <span class="right">
-              {{ 'Next Product &rarr;' | link_to: next_url }}
-            </span>
-          {% endif %}
-
-          </p>
-        {% endif %}
-      {% endif %}
 
     </div>
   </div>
 
+</div>
+
+
+{% comment %}
+If the user is on a collection product page (ie with /collections/collection-handle/products/product-handle)
+in the URL, we can show next/previous links to other products in the collection.
+{% endcomment %}
+{% if collection %}
+
+  <div class="related-products-block">
+    <h2>Other styles you might like:</h2>
+
+    <div class="collection-carousel-block">
+
+    {% paginate collection.products by 4 %}
+
+    {% comment %}
+    Use class grid-uniform to have evenly sized columns clear
+    each other properly at each breakpoint.
+    {% endcomment %}
+
+    {% comment %}
+    Loop through our products in the current collection.
+    See the snippet 'product-grid-item' for the layout.
+    {% endcomment %}
+
+
+      {% comment %}
+      Capture the current product for this page. This allows the loop to use the name 'product'
+      {% endcomment %}
+      {% assign this_product = product %}
+
+    {% for product in collection.products %}
+
+      {% if product.id != this_product.id %}
+
+      {% include 'product-grid-item' %}
+
+        {% endif %}
+
+      {% else %}
+
+      <div class="grid-item">
+        <p>Sorry, there are no products matching your search.</p>
+      </div>
+
+    {% endfor %}
+
+
+    {% if paginate.pages > 1 %}
+      <div class="text-center">
+        {% include 'pagination-custom' %}
+      </div>
+    {% endif %}
+
+
+    {% comment %}
+    Restore the currnt page product.
+    {% endcomment %}
+    {% assign product = this_product %}
+
+    {% endpaginate %}
+      
+
+    </div>
+    
+  </div>
+
+
+
+{% endif %}
+
+
+
+<div class="social-hero">
+  <h2>Keep in Touch:</h2>
+  {% include 'newsletter-signup-block' %}
+  {% include 'social-link-block' %}
 </div>
 
 

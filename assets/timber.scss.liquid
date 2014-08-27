@@ -88,10 +88,12 @@ $colorWarmLightGray: #a5a2a4;
 $colorWarmGray: #797778;
 $colorWarmGrayDark: #4d4c4c;
 
+$colorLighterGold: #ddc28a;
 $colorLightGold: #c8a45a;
 $colorGold: #c19946;
 $colorDarkGold: #a98741;
 $colorDarkerGold: #896e35;
+
 
 // Timber Colors
 /* $colorPrimary: {{ settings.color_primary }}; */
@@ -250,6 +252,12 @@ $socialIconFontStack: 'theia-icons';
     @include clearfix();
 }
 
+@mixin overflowEllipsis() {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
 @mixin prefix($property, $value) {
     -webkit-#{$property}: #{$value};
     -moz-#{$property}: #{$value};
@@ -323,6 +331,25 @@ $socialIconFontStack: 'theia-icons';
         font-size: 16px; /* ratchet up the font-size to the default base hight; */
         display: inline-block;
         vertical-align: middle;
+    }
+}
+
+/* http://stackoverflow.com/questions/17181849/placeholder-mixin-scss-css */
+@mixin placeholder() {
+    &::-webkit-input-placeholder {
+        @content
+    }
+
+    &:-moz-placeholder {
+        @content
+    }
+
+    &::-moz-placeholder {
+        @content
+    }
+
+    &:-ms-input-placeholder {
+        @content
     }
 }
 
@@ -2125,7 +2152,7 @@ $iconSelector: '[class^="icon-"], [class*=" icon-"]';
     font-family: $helveticaFontStack;
 
     @include at-query ($min, $postSmall) {
-        font-size: 0.875em; /* ~20px */
+        font-size: 1.25em; /* ~20px */
     }
 
     @include at-query ($max, $small) {
@@ -2259,7 +2286,7 @@ $iconSelector: '[class^="icon-"], [class*=" icon-"]';
     }
 }
 
-/* gold, underline on hover */
+/* white, gray on hover */
 %white-hover-gray-link {
     @extend %link-base;
     @include prefix('transition', 'all 0.4s ease');
@@ -2271,6 +2298,19 @@ $iconSelector: '[class^="icon-"], [class*=" icon-"]';
     &:active,
     &:focus {
         color: $colorWarmGrayDark;
+    }
+}
+
+/* white, gray on hover */
+%white-underline-hover-gold-link {
+    @extend %link-base;
+
+    color: #fff;
+
+    &:hover,
+    &:active,
+    &:focus {
+        color: $colorGold;
     }
 }
 
@@ -2657,6 +2697,40 @@ $iconSelector: '[class^="icon-"], [class*=" icon-"]';
 
 /* Heros */
 
+%hero-base {
+    color: #fff;
+}
+
+%hero-large {
+    @extend %hero-base;
+
+    height: 588px;
+}
+
+%hero-medium {
+    @extend %hero-base;
+
+    height: 338px;
+}
+
+%hero-small {
+    @extend %hero-base;
+
+    height: 168px;
+}
+
+.collections-list-hero {
+    @extend %hero-large;
+
+    background: url({{ 'collections-list-hero-bg.jpg' | asset_url }}) top center repeat-x;
+}
+
+.collection-page-hero {
+    @extend %hero-large;
+
+    background: url({{ 'collection-page-hero-bg-DELETE.jpg' | asset_url}}) top center repeat-x;
+}
+
 .collections-hero {
     background: #000;
 
@@ -2703,10 +2777,13 @@ $iconSelector: '[class^="icon-"], [class*=" icon-"]';
 
 }
 
-
-
 .featured-press-hero {
     padding: 3.125em 0;
+
+    h3 {
+        font-size: 1.875em;
+        font-weight: 300;
+    }
 
     .wrapper {
         @include verticalCenterChildElements();
@@ -2742,6 +2819,15 @@ $iconSelector: '[class^="icon-"], [class*=" icon-"]';
     width: 100%;
     height: 0;
     padding-bottom: percentage( $totalHeight / $totalWidth );
+    color: #fff;
+    background: #000;
+
+    h2 {
+        position: absolute;
+        z-index: 1;
+        top: percentage( 156px / $totalHeight );
+        left: percentage( $mainLeftMargin / $mainWidth );
+    }
 
     /* for slides and the thumb links */
     %img-container {
@@ -2758,8 +2844,6 @@ $iconSelector: '[class^="icon-"], [class*=" icon-"]';
     }
 
     .main {
-        background: #666;
-
         width: percentage( $mainWidth / $totalWidth );
         height: 100%;
         position: absolute;
@@ -2772,17 +2856,40 @@ $iconSelector: '[class^="icon-"], [class*=" icon-"]';
             height: 100%;
         }
 
-        .content {
-            position: absolute;
-            z-index: 1;
-            top: percentage( $mainContentTop / $totalHeight );
-            left: percentage( $mainLeftMargin / $mainWidth );
+    }
+
+    .content {
+        position: absolute;
+        z-index: 1;
+        top: percentage( $mainContentTop / $totalHeight );
+        left: percentage( $mainLeftMargin / $mainWidth );
+
+        > * {
+            margin: 20px 0;
+            line-height: 1;
+        }
+
+        h3 {
+            font-size: 2.5em;
+            font-weight: 300;
+        }
+
+        p {
+            font-size: 1.25em;
+            font-weight: 100;
+            letter-spacing: 0.0625em
+        }
+
+        a {
+            @extend %gold-hover-underline-link;
+            @extend %rsaquo;
+            @extend %small-arial-text;
+
+            text-transform: uppercase;
         }
     }
 
     .side {
-        background: #999;
-
         width: percentage(382/1350);
         height: 100%;
         position: absolute;
@@ -2794,12 +2901,23 @@ $iconSelector: '[class^="icon-"], [class*=" icon-"]';
 
             display: block;
             height: 33.3333%;
+            color: #fff;
         }
 
         h3 {
             position: absolute;
             bottom: percentage( 24px / $thumbHeight );
             left: percentage( $thumbLeftMargin / $sideWidth );
+            line-height: 1;
+            margin: 0;
+        }
+
+        img {
+            opacity: 0.3;
+        }
+
+        .active img {
+            opacity: 1;
         }
     }
 }
@@ -2856,6 +2974,8 @@ $iconSelector: '[class^="icon-"], [class*=" icon-"]';
     background: $colorDarkGray;
     display: inline-block;
     margin: -1px 1px;
+    color: #fff;
+    text-align: left;
 
     > * {
         position: absolute;
@@ -2863,12 +2983,29 @@ $iconSelector: '[class^="icon-"], [class*=" icon-"]';
 
     .content {
         padding: $gutter * 2;
+
+        p {
+            @extend %medium-helvetica-text;
+
+            line-height: 1.25;
+        }
+
+        a {
+            @extend %gold-hover-underline-link;
+        }
     }
 
     .source {
-        bottom: 0;
-        padding: ( $gutter * 1.75 ) ( $gutter * 2 );
+        @include overflowEllipsis();
 
+        bottom: 0;
+        padding: ( $gutter * 1.5 ) ( $gutter * 2 );
+        width: 288px;
+
+        a {
+            @extend %white-underline-hover-gold-link;
+            @extend %small-helvetica-text;
+        }
     }
 
     img {
@@ -2886,8 +3023,6 @@ $iconSelector: '[class^="icon-"], [class*=" icon-"]';
         border-width: 2px;
     }
 }
-
-
 
 .hero-404 {
     background: #fff url({{ '404-hero-bg.jpg' | asset_url }}) no-repeat center top;
@@ -3073,12 +3208,11 @@ $iconSelector: '[class^="icon-"], [class*=" icon-"]';
         }
 
         .label {
+            @include overflowEllipsis();
+
             padding-top: 1px;
             line-height: 15px;
             max-width: 105px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
         }
     }
 
@@ -3273,11 +3407,19 @@ $iconSelector: '[class^="icon-"], [class*=" icon-"]';
     width: 608px;
     margin: 0 auto;
     text-align: center;
-
     outline: 2px solid $colorGold;
     border: 5px solid #fff;
     background: $colorGold;
     padding: $gutter * 1.75;
+
+    h4 {
+        color: #fff;
+        font-size: 1.75em;
+        font-weight: 300;
+        width: 416px;
+        margin: 0 auto ( $gutter / 2 );
+        line-height: 1.25;
+    }
 
     form {
         @extend .clearfix;
@@ -3293,18 +3435,39 @@ $iconSelector: '[class^="icon-"], [class*=" icon-"]';
             display: block;
             float: left;
             height: 48px;
+            color: $colorLighterGold;
         }
     }
 
+    @mixin myInputStyle(){
+        font-family: $arialFontStack;
+        font-size: 1.125em; /* ~18px */
+        color: $colorLighterGold;
+    }
+
     input {
+        @include myInputStyle;
+
+        line-height: 1;
+
+        @include placeholder {
+            color: $colorLighterGold;
+            line-height: 1.2;
+        }
+
         border: 0;
         margin: 0;
+        padding: 9px 20px 11px;
     }
 
     button {
         position: absolute;
         top: 0;
         right: 0;
+        font-size: 0.6875em;
+        width: 48px;
+        text-align: center;
+        padding-top: 2px;
     }
 }
 

@@ -5,62 +5,74 @@
 
 {% endcomment %}
 
-{% paginate collection.products by 12 %}
+<div class="collection-page-hero">
 
-{% include 'breadcrumb' %}
-
-<div class="grid">
-
-  <div class="grid-item large--one-third">
-    {% include 'collection-sidebar' %}
+  <div class="wrapper">
+    <h2>
+      Theia.
+      <br />
+      {{ collection.title }}
+      <br />
+      Collection.
+    </h2>
+    {{ 'usa-today-logo.svg' | asset_url | img_tag }}
+    {{ 'usa-today-logo.png' | asset_url | img_tag }}
   </div>
 
-  <div class="grid-item large--two-thirds">
+</div>
 
-    <header class="section-header">
-      <h1 class="section-header--left">{{ collection.title }}</h1>
-      <div class="section-header--right">
+<h3>In this collection:</h3>
 
-        {% include 'collection-sorting' %}
-        {% include 'collection-views' %}
-
-      </div>
-    </header>
+<div class="collection-block">
+  
+  <div class="wrapper">
+    {% paginate collection.products by 12 %}
 
     {% comment %}
-      Use class grid-uniform to have evenly sized columns clear
-      each other properly at each breakpoint.
+    Use class grid-uniform to have evenly sized columns clear
+    each other properly at each breakpoint.
     {% endcomment %}
-    <div class="grid-uniform">
 
-      {% comment %}
-        Loop through our products in the current collection.
-        See the snippet 'product-grid-item' for the layout.
-      {% endcomment %}
-      {% for product in collection.products %}
+    {% comment %}
+    Loop through our products in the current collection.
+    See the snippet 'product-grid-item' for the layout.
+    {% endcomment %}
+    {% for product in collection.products %}
 
-        {% include 'product-grid-item' %}
+      {% include 'product-grid-item' %}
 
       {% else %}
 
-        <div class="grid-item">
-          <p>Sorry, there are no products matching your search.</p>
-        </div>
+      <div class="grid-item">
+        <p>Sorry, there are no products matching your search.</p>
+      </div>
 
-      {% endfor %}
+    {% endfor %}
 
-    </div>
 
     {% if paginate.pages > 1 %}
-      <hr>
-
       <div class="text-center">
         {% include 'pagination-custom' %}
       </div>
     {% endif %}
 
-  </div>
 
+    {% endpaginate %}
+  </div>
 </div>
 
-{% endpaginate %}
+<hr />
+
+<h3>Other collections from Theia:</h3>
+
+<div class="collections-block">
+  <div class="wrapper">
+
+    {% for collection in collections limit:4 %}
+
+      {% include 'collection-grid-item' %}
+
+    {% endfor %}
+    
+  </div>
+</div>
