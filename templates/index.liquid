@@ -68,14 +68,18 @@
   <div class="wrapper-14-col">
     <div class="celebrity-gallery">
       <div class="main">
+
+        <h2>Celebs in Theia</h2>
+
         <div id="carrieUnderwood" class="slide">
           {{ 'carrie-underwood.jpg' | asset_url | img_tag }}
           <div class="content">
             <h3>Carrie Underwood</h3>
             <p>Worn at the Grammy Awards</p>
-            <p><a href="#">Shop this look</a></p>
+            <a href="#">Shop this look</a>
           </div>
         </div>
+
         <div id="taylorSwift" class="slide hide">
           {{ 'taylor-swift.jpg' | asset_url | img_tag }}
           <div class="content">
@@ -84,6 +88,7 @@
             <p><a href="#">Shop this look</a></p>
           </div>
         </div>
+
         <div id="oprahWinfrey" class="slide hide">
           {{ 'oprah-winfrey.jpg' | asset_url | img_tag }}
           <div class="content">
@@ -92,20 +97,25 @@
             <p><a href="#">Shop this look</a></p>
           </div>
         </div>
+
       </div>
       <div class="side">
-        <a href="#carrieUnderwood" class="thumb">
+
+        <a href="#carrieUnderwood" class="thumb active">
           {{ 'carrie-underwood-thumb.jpg' | asset_url | img_tag }}
           <h3>Carrie Underwood</h3>
         </a>
+
         <a href="#taylorSwift" class="thumb">
           {{ 'taylor-swift-thumb.jpg' | asset_url | img_tag }}
           <h3>Taylor Swift</h3>
         </a>
+
         <a href="#oprahWinfrey" class="thumb">
           {{ 'oprah-winfrey-thumb.jpg' | asset_url | img_tag }}
           <h3>Oprah Winfrey</h3>
         </a>
+
       </div>
     </div>
   </div>

@@ -8,19 +8,32 @@
 
 {% endcomment %}
 
-{% include 'breadcrumb' %}
+<div class="collections-list-hero">
+  <div class="wrapper">
+    <h2>Theia Collections</h2>
+    <p>&ldquo;Any dress in any of Theia&rsquo;s collections are worthy of your attention. It&rsquo;s not just a dress, it&rsquo;s an attitude.&rdquo;</p>
 
-{% comment %}
-  Loop through each collection, except 'frontpage'
-{% endcomment %}
-{% for collection in collections %}
+    {{ 'the-oprah-magazine-logo.svg' | asset_url | img_tag }}
+    {{ 'the-oprah-magazine-logo.png' | asset_url | img_tag }}
+  </div>
+</div>
 
-  {% unless collection.handle == 'frontpage' %}
+<div class="collections-block">
+  <div class="wrapper">
 
-    {% include 'collection-list-item' %}
+    {% for collection in collections %}
 
-    {% unless forloop.last %}<hr>{% endunless %}
+      {% include 'collection-grid-item' %}
 
-  {% endunless %}
+    {% endfor %}
+    
+  </div>
+</div>
 
-{% endfor %}
+<div class="social-hero">
+  <h2>Keep in touch:</h2>
+  {% include 'newsletter-signup-block' %}
+  {% include 'social-link-block' %}
+</div>
+
+
