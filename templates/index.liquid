@@ -126,11 +126,17 @@
 
     <h2>Keep in touch:</h2>
 
-    {% include 'social-link-block' %}
+    <div class="social-link-row">
+      {% include 'social-link-block' %}
+    </div>
 
-    {% include 'social-media-feed-block' %}
+    <div class="social-media-feed-row">
+      {% include 'social-media-feed-block' %}
+    </div>
 
-    {% include 'newsletter-signup-block' %}
+    <div class="newsletter-signup-row">
+      {% include 'newsletter-signup-block' %}
+    </div>
 
   </div>
 </div>
@@ -141,60 +147,55 @@
     <h2>Events and Press Releases</h2>
 
     <div class="press-releases-column">
-      <div class="homepage-press-releases">
-        {% for article in blogs['press-releases'].articles limit:5 %}
-
-          <h3><a href="{{ article.url }}">{{ article.title }}</a></h3>
-          <time pubdate datetime="{{ article.published_at | date: '%Y-%m-%d' }}">
-            [{{ article.published_at | date: '%B %Y' }}]
-          </time>
-
-        {% endfor %}
-
-        <a href="{{ blogs['press-releases'].url }}">See all press releases</a>
-      </div>
+      {% include 'homepage-press-releases' %}
     </div>
 
     <div class="media-events-contact-column">
       <div class="media-events-contact-block">
-        {% if settings.contact_media_full_name %}
-          <address>
+
+        <div class="contact-block">
+          {% if settings.contact_media_full_name %}
             <p>For any media enquiries, please contact {{ settings.contact_media_full_name }}</p>
-            <div class="email">
-              <a href="mailto:{{ settings.contact_media_email }}">{{ settings.contact_media_email }}</a>
-            </div>
-            <div class="address">
-              {{ settings.contact_media_address1 }}
-              {% if settings.contact_media_address2 %}
-                <br />
-                {{ settings.contact_media_address2 }}
-              {% endif %}
-            </div>
-            <div class="phone">
-              {{ settings.contact_media_phone }}
-            </div>
-          </address>
-        {% endif %}
-        {% if settings.contact_events_full_name %}
-          <address>
+            <address>
+              <div class="email">
+                <a href="mailto:{{ settings.contact_media_email }}">{{ settings.contact_media_email }}</a>
+              </div>
+              <div class="address">
+                {{ settings.contact_media_address1 }}
+                {% if settings.contact_media_address2 %}
+                  <br />
+                  {{ settings.contact_media_address2 }}
+                {% endif %}
+              </div>
+              <div class="phone">
+                {{ settings.contact_media_phone }}
+              </div>
+            </address>
+          {% endif %}
+        </div>
+
+        <div class="contact-block">
+          {% if settings.contact_events_full_name %}
             <p>For any events enquiries, please contact {{ settings.contact_events_full_name }}</p>
-            <div class="email">
-              <a href="mailto:{{ settings.contact_events_email }}">{{ settings.contact_events_email }}</a>
-            </div>
-            <div class="address">
-              {{ settings.contact_events_address1 }}
-              {% if settings.contact_events_address2 %}
-                <br />
-                {{ settings.contact_events_address2 }}
-              {% endif %}
-            </div>
-            <div class="phone">
-              {{ settings.contact_events_phone }}
-            </div>
-          </address>
-        {% endif %}
+            <address>
+              <div class="email">
+                <a href="mailto:{{ settings.contact_events_email }}">{{ settings.contact_events_email }}</a>
+              </div>
+              <div class="address">
+                {{ settings.contact_events_address1 }}
+                {% if settings.contact_events_address2 %}
+                  <br />
+                  {{ settings.contact_events_address2 }}
+                {% endif %}
+              </div>
+              <div class="phone">
+                {{ settings.contact_events_phone }}
+              </div>
+            </address>
+          {% endif %}
+        </div>
+
       </div>
     </div>
-
   </div>
 </div>

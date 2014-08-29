@@ -8,18 +8,25 @@
 
 {% endcomment %}
 
-<div class="collections-list-hero">
+<div class="collections-list-page-hero">
   <div class="wrapper">
-    <h2>Theia Collections</h2>
-    <p>&ldquo;Any dress in any of Theia&rsquo;s collections are worthy of your attention. It&rsquo;s not just a dress, it&rsquo;s an attitude.&rdquo;</p>
+    <div class="content">
+      <h2>Theia Collections</h2>
+      <p>&ldquo;Any dress in any of Theia&rsquo;s collections are worthy of your attention. It&rsquo;s not just a dress, it&rsquo;s an attitude.&rdquo;</p>
 
-    {{ 'the-oprah-magazine-logo.svg' | asset_url | img_tag }}
-    {{ 'the-oprah-magazine-logo.png' | asset_url | img_tag }}
+      <div class="the-oprah-magazine-logo">
+        {{ 'the-oprah-magazine-logo.svg' | asset_url | img_tag }}
+        {{ 'the-oprah-magazine-logo.png' | asset_url | img_tag }}
+      </div>
+      
+    </div>
   </div>
 </div>
 
-<div class="collections-block">
+<div class="collections-grid-hero">
   <div class="wrapper">
+
+    <h2>Collections from Theia</h2>
 
     {% for collection in collections %}
 
