@@ -6,19 +6,23 @@
 {% endcomment %}
 
 <div class="collection-page-hero">
-
   <div class="wrapper">
-    <h2>
-      Theia.
-      <br />
-      {{ collection.title }}
-      <br />
-      Collection.
-    </h2>
-    {{ 'usa-today-logo.svg' | asset_url | img_tag }}
-    {{ 'usa-today-logo.png' | asset_url | img_tag }}
-  </div>
+    <div class="content">
 
+      <h2>
+        Theia.
+        <br />
+        {{ collection.title }}
+        <br />
+        Collection.
+      </h2>
+      <div class="usa-today-logo">
+        {{ 'usa-today-logo.svg' | asset_url | img_tag }}
+        {{ 'usa-today-logo.png' | asset_url | img_tag }}
+      </div>
+
+    </div>
+  </div>
 </div>
 
 <h3>In this collection:</h3>
@@ -55,7 +59,6 @@
         {% include 'pagination-custom' %}
       </div>
     {% endif %}
-
 
     {% endpaginate %}
   </div>

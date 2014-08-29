@@ -1,0 +1,22 @@
+<div class="homepage-press-releases">
+
+  {% for article in blogs['press-releases'].articles limit:5 %}
+
+    <div class="press-release">
+      <div class="row">
+        <span class="icon-arrow-right-solid"></span>
+        <h3>
+          <a href="{{ article.url }}">{{ article.title }}</a>
+        </h3>
+      </div>
+      <div class="row">
+        <time pubdate datetime="{{ article.published_at | date: '%Y-%m-%d' }}">
+          [{{ article.published_at | date: '%B %Y' }}]
+        </time>
+      </div>
+    </div>
+
+  {% endfor %}
+
+  <a class="read-more" href="{{ blogs['press-releases'].url }}">See all press releases</a>
+</div>

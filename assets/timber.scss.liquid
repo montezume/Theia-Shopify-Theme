@@ -2107,9 +2107,6 @@ $iconSelector: '[class^="icon-"], [class*=" icon-"]';
   # Extends - these are for common text and block styles
   ================================================================================*/
 
-%content-block-base {
-}
-
 %medium-arial-text {
     font-family: $arialFontStack;
 
@@ -2122,6 +2119,18 @@ $iconSelector: '[class^="icon-"], [class*=" icon-"]';
     }
 }
 
+%small-mid-arial-text {
+    font-family: $arialFontStack;
+
+    @include at-query ($min, $postSmall) {
+        font-size: 0.875em; /* ~14px */
+    }
+
+    @include at-query ($max, $small) {
+        font-size: 0.8125em; /* ~13px */
+    }
+}    
+
 %small-arial-text {
     font-family: $arialFontStack;
     font-weight: 700;
@@ -2133,6 +2142,13 @@ $iconSelector: '[class^="icon-"], [class*=" icon-"]';
     @include at-query ($max, $small) {
         font-size: 0.625em; /* ~10px */
     }
+}    
+
+%smallish-arial-text {
+    font-family: $arialFontStack;
+    font-weight: 700;
+
+    font-size: 0.75em; /* ~12px */
 }    
 
 %smaller-arial-text {
@@ -2320,6 +2336,7 @@ $iconSelector: '[class^="icon-"], [class*=" icon-"]';
 
 %wrapper-base {
     @extend .clearfix;
+    position: relative;
 
     margin: 0 auto;
 }
@@ -2352,6 +2369,8 @@ $iconSelector: '[class^="icon-"], [class*=" icon-"]';
     padding-right: $gutter;
     padding-left: $gutter;
 }
+
+
 
 %inline-list-base {
     ul, li {
@@ -2389,6 +2408,51 @@ $iconSelector: '[class^="icon-"], [class*=" icon-"]';
 }
 
 
+/*================ Address Block ================*/
+
+address {
+    @extend %small-mid-arial-text;
+
+    a {
+        @extend %gold-hover-underline-link;
+    }
+
+    %address-item-base {
+        @extend .clearfix;
+        @extend %icon-base;
+
+        position: relative;
+        padding-left: 20px;
+        margin: ( $gutter / 2 ) 0;
+        line-height: 1.4285714285714286;
+
+        /* icon */
+        &:before {
+            position: absolute;
+            top: 3px;
+            left: 0;
+        }
+    }
+
+    .email {
+        @extend %address-item-base;
+        @extend .icon-stamp;
+
+        &:before {
+            color: $colorGold;
+        }
+    }
+
+    .address {
+        @extend %address-item-base;
+        @extend .icon-map-pin;
+    }
+
+    .phone {
+        @extend %address-item-base;
+        @extend .icon-telephone-handset;
+    }
+}
 
 /* Header */
 
@@ -2698,13 +2762,50 @@ $iconSelector: '[class^="icon-"], [class*=" icon-"]';
 /* Heros */
 
 %hero-base {
+    position: relative;
     color: #fff;
+
+    &:before, &:after {
+        content: '';
+        height: 0px;
+        width: 50%;
+        display: block;
+        position: absolute;
+        bottom: 0px;
+        border-top: 0;
+        border-bottom: 38px solid white;
+    }
+
+    &:before {
+        left: 0px;
+        border-left: 0;
+        border-right: 48px solid transparent;
+    }
+
+    &:after {
+        right: 0px;
+        border-right: 0;
+        border-left: 48px solid transparent;
+    }
 }
 
 %hero-large {
     @extend %hero-base;
 
     height: 588px;
+
+    h2 {
+        font-size: 5.625em;
+        line-height: 1;
+        margin: 0 0 ( $gutter * 6 );
+    }
+
+    .content {
+        position: absolute;
+        top: $gutter * 4;
+        left: $gutter;
+        width: 544px;
+    }
 }
 
 %hero-medium {
@@ -2719,7 +2820,7 @@ $iconSelector: '[class^="icon-"], [class*=" icon-"]';
     height: 168px;
 }
 
-.collections-list-hero {
+.collections-list-page-hero {
     @extend %hero-large;
 
     background: url({{ 'collections-list-hero-bg.jpg' | asset_url }}) top center repeat-x;
@@ -2730,6 +2831,14 @@ $iconSelector: '[class^="icon-"], [class*=" icon-"]';
 
     background: url({{ 'collection-page-hero-bg-DELETE.jpg' | asset_url}}) top center repeat-x;
 }
+
+.about-page-hero {
+    @extend %hero-medium;
+
+    background: #000 url({{ 'about-page-hero-bg.jpg' | asset_url}}) top right no-repeat;
+}
+
+
 
 .collections-hero {
     background: #000;
@@ -2765,6 +2874,7 @@ $iconSelector: '[class^="icon-"], [class*=" icon-"]';
         color: $colorOffWhite;
         margin-top: 0;
         margin-bottom: 24px;
+        text-shadow: 0 0 $colorOffWhite;
     }
 
     a {
@@ -2827,6 +2937,7 @@ $iconSelector: '[class^="icon-"], [class*=" icon-"]';
         z-index: 1;
         top: percentage( 156px / $totalHeight );
         left: percentage( $mainLeftMargin / $mainWidth );
+        text-shadow: 0 0 $colorOffWhite;
     }
 
     /* for slides and the thumb links */
@@ -2872,12 +2983,14 @@ $iconSelector: '[class^="icon-"], [class*=" icon-"]';
         h3 {
             font-size: 2.5em;
             font-weight: 300;
+            text-shadow: 0 0 $colorOffWhite;
         }
 
         p {
             font-size: 1.25em;
             font-weight: 100;
-            letter-spacing: 0.0625em
+            letter-spacing: 0.0625em;
+            text-shadow: 0 0 $colorOffWhite;
         }
 
         a {
@@ -2910,6 +3023,7 @@ $iconSelector: '[class^="icon-"], [class*=" icon-"]';
             left: percentage( $thumbLeftMargin / $sideWidth );
             line-height: 1;
             margin: 0;
+            text-shadow: 0 0 $colorOffWhite;            
         }
 
         img {
@@ -2923,8 +3037,20 @@ $iconSelector: '[class^="icon-"], [class*=" icon-"]';
 }
 
 .social-hero {
+    padding-top: $gutter * 4;
+    padding-bottom: $gutter * 5.25;
+
     h2 {
         text-align: center;
+        margin-bottom: $gutter;
+    }
+
+    .social-link-row {
+        margin-bottom: $gutter * 3;
+    }
+
+    .social-media-feed-row {
+        margin-bottom: $gutter * 1.75;
     }
 }
 
@@ -2934,7 +3060,7 @@ $iconSelector: '[class^="icon-"], [class*=" icon-"]';
     text-align: center;
 
     li {
-        margin: 8px;
+        margin: 0 8px;
     }
 
     a {
@@ -2954,9 +3080,10 @@ $iconSelector: '[class^="icon-"], [class*=" icon-"]';
             transition: all 0.3s;
 
             &:hover {
+                @include prefix('transform', 'scale( 1.1 )');
+
                 color: $colorGold;
                 border-color: $colorGold;
-                transform: scale( 1.1 );
             }
         }
     }
@@ -2970,7 +3097,6 @@ $iconSelector: '[class^="icon-"], [class*=" icon-"]';
     position: relative;
     height: 238px;
     width: 348px;
-    overflow: hidden;
     background: $colorDarkGray;
     display: inline-block;
     margin: -1px 1px;
@@ -3021,6 +3147,101 @@ $iconSelector: '[class^="icon-"], [class*=" icon-"]';
         color: #fff;
         border-color: #fff;
         border-width: 2px;
+    }
+}
+
+.collections-grid-hero {
+    text-align: center;
+
+    h2 {
+        text-align: center;
+        
+    }
+}
+
+.collections-grid-item {
+    display: inline-block;
+    height: 312px;
+    width: 256px;
+    margin: 0 ( $gutter - 2px );
+
+    /* fixes issue with positioning inline elements. not sure why... */
+    overflow: hidden;
+
+    %row-base {
+        margin: $gutter 0;
+        
+    }
+
+    .header-row {
+        @extend %row-base;
+    }
+
+    .image-row {
+        @extend %row-base;
+        height: 192px;
+    }
+
+    .button-row {
+        @extend %row-base;
+    }
+
+    h4 {
+        font-size: 1.25em; /* ~20px */
+        font-weight: 300;
+        letter-spacing: 0.4px;
+        margin: 0;
+        line-height: 1;
+
+        a {
+            @extend %rsaquo;
+            
+            color: $colorWarmGrayDark;
+
+            &:after {
+                padding: 0;
+                margin-left: -1px;
+            }
+        }
+    }
+
+    img {
+        display: block;
+        height: 100%;
+        width: auto;
+    }
+
+    .button {
+        @extend %gold-outline-block-small;
+
+        color: #fff;
+        text-decoration: none;
+        display: inline-block;
+        /* outline property adds 2 times it's width to the height and width of the block, regardless of box-sizing property */
+        width: 168px;
+        height: 28px;
+        padding: 4px 0 0;
+
+        > * {
+            line-height: 1;
+        }
+
+        .label {
+            @extend %smallish-arial-text;
+
+            text-transform: uppercase;
+            font-weight: 700;
+        }
+
+        .icon {
+            @extend %icon-base;
+            @extend .icon-arrow-right-solid;
+
+            display: inline-block;
+            position: relative;
+            top: 1px;
+            font-size: 12px;
+        }
     }
 }
 
@@ -3403,51 +3624,57 @@ $iconSelector: '[class^="icon-"], [class*=" icon-"]';
 }
 
 
+%gold-outline-block-base {
+    outline-style: solid;
+    outline-color: $colorGold;
+    border-style: solid;
+    border-color: #fff;
+    background: $colorGold;
+}
+
+%gold-outline-block-large {
+    @extend %gold-outline-block-base;
+
+    outline-width: 2px;
+    border-width: 5px;
+}
+
+%gold-outline-block-small {
+    @extend %gold-outline-block-base;
+
+    outline-width: 1px;
+    border-width: 1px;
+}
+
 .newsletter-signup-block {
-    width: 608px;
+    @extend %gold-outline-block-large;
+
     margin: 0 auto;
     text-align: center;
-    outline: 2px solid $colorGold;
-    border: 5px solid #fff;
-    background: $colorGold;
-    padding: $gutter * 1.75;
 
     h4 {
         color: #fff;
-        font-size: 1.75em;
-        font-weight: 300;
-        width: 416px;
-        margin: 0 auto ( $gutter / 2 );
-        line-height: 1.25;
     }
 
     form {
         @extend .clearfix;
 
         position: relative;
-        width: 352px;
-        margin: 0 auto;
         border: 1px solid $colorDarkerGold;
         border-bottom: 1px solid $colorLightGold;
 
         > * {
             background: $colorDarkGold;
             display: block;
-            float: left;
             height: 48px;
             color: $colorLighterGold;
         }
     }
 
-    @mixin myInputStyle(){
-        font-family: $arialFontStack;
-        font-size: 1.125em; /* ~18px */
-        color: $colorLighterGold;
-    }
-
     input {
-        @include myInputStyle;
+        @extend %medium-arial-text;
 
+        color: $colorLighterGold;
         line-height: 1;
 
         @include placeholder {
@@ -3457,7 +3684,7 @@ $iconSelector: '[class^="icon-"], [class*=" icon-"]';
 
         border: 0;
         margin: 0;
-        padding: 9px 20px 11px;
+        padding: 9px 48px 11px 20px;
     }
 
     button {
@@ -3469,10 +3696,50 @@ $iconSelector: '[class^="icon-"], [class*=" icon-"]';
         text-align: center;
         padding-top: 2px;
     }
+
+    .template-index & {
+        width: 608px;
+        padding: $gutter * 1.75;
+
+        h4 {
+            font-size: 1.75em;
+            font-weight: 300;
+            width: 416px;
+            margin: 0 auto ( $gutter / 2 );
+            line-height: 1.25;
+        }
+
+        form {
+            width: 352px;
+            margin: 0 auto;
+        }
+    }
+
+    .template-list-collections & {
+        width: 782px;
+        
+
+        > * {
+            display: inline-block;
+        }
+
+        h4 {
+            @extend %medium-arial-text;
+            width: 452px;
+            margin: 0 auto ( $gutter / 2 );
+        }
+
+        form {
+            width: 284px;
+        }
+
+    }
 }
 
 
 .events-press-releases-hero {
+    margin-bottom: $gutter * 8;
+
     h2 {
         text-align: center;
     }
@@ -3482,17 +3749,80 @@ $iconSelector: '[class^="icon-"], [class*=" icon-"]';
         width: 50%;
     }
 
-    .media-events-contact-column {
-        
-    }
-
     .press-releases-column {
+        border-right: 1px solid $colorLighterGray;
         
     }
 
+    .media-events-contact-column {
+        padding-left: $gutter * 3;
+    }
 }
 
+.homepage-press-releases {
 
+    span {
+        font-size: 0.75em;
+        width: $gridGutter;
+        color: $colorGold;
+        padding-top: 1px;
+        text-align: center;
+    }
+
+    h3 {
+        @extend %medium-helvetica-text;
+        @include overflowEllipsis;
+
+        margin: 0;
+        width: 400px;
+        font-weight: 400;
+
+        a {
+            @extend %gray-underline-hover-gold-link;
+        }
+    }
+
+    time {
+        @extend %smaller-arial-text;
+
+        text-transform: uppercase;
+        padding-left: $gridGutter;
+        color: $colorMidGray;
+    }
+    
+    .row {
+        @extend .clearfix;
+
+        > *  {
+            float: left;
+            display: block;
+        }
+    }
+
+    .press-release {
+        margin: 0 0 20px;
+    }
+
+    .read-more {
+        @extend %small-arial-text;
+        @extend %gold-hover-underline-link;
+        @extend %rsaquo;
+
+        padding-left: $gutter * 0.75;
+        text-transform: uppercase;
+    }
+}
+
+.media-events-contact-block {
+
+    p {
+        @extend %small-helvetica-text;
+    }
+
+    .contact-block {
+        margin-bottom: $gridGutter;
+    }
+}
 
 /*================ Page Specific Styles ================*/
 .template-404 {

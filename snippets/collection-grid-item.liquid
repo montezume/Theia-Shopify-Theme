@@ -5,29 +5,35 @@
 
 {% endcomment %}
 
-<div class="text-center">
+<div class="collections-grid-item text-center">
 
   {% comment %}
     Use capture to put the collection title in a variable that is used in liquid filters
   {% endcomment %}
   {% capture collection_title %}{{ collection.title | escape }}{% endcapture %}
 
-  <h4>
-    <a href="{{ collection.url }}" title="Browse our {{ collection_title }} collection">
-      {{ collection.title }}
+  <div class="header-row">
+    <h4>
+      <a href="{{ collection.url }}" title="Browse our {{ collection_title }} collection">
+        {{ collection.title }}
+      </a>
+    </h4>
+  </div>
+  <div class="image-row">
+    <a class="" href="{{ collection.url }}" title="Browse our {{ collection_title }} collection">
+
+      {% if collection.image %}
+        {{ collection.image.src | collection_img_url: 'large' | img_tag: collection_title }}
+      {% else %}
+        {{ collection.products.first.featured_image | product_img_url: 'large' | img_tag: collection_title }}
+      {% endif %}
+
     </a>
-  </h4>
-
-  <a href="{{ collection.url }}" title="Browse our {{ collection_title }} collection">
-
-    {% if collection.image %}
-      {{ collection.image.src | collection_img_url: 'large' | img_tag: collection_title }}
-    {% else %}
-      {{ collection.products.first.featured_image | product_img_url: 'large' | img_tag: collection_title }}
-    {% endif %}
-
-  </a>
-
-  <a href="{{ collection.url }}" title="Browse our {{ collection_title }} collection">View collection</a>
-
+  </div>
+  <div class="button-row">
+    <a class="button" href="{{ collection.url }}" title="Browse our {{ collection_title }} collection">
+      <span class="label">View collection</span>
+      <span class="icon"></span>
+    </a>
+  </div>
 </div>
