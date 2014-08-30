@@ -5,7 +5,7 @@
 
 {% endcomment %}
 
-<div class="collections-grid-item text-center">
+<div class="collection-grid-item">
 
   {% comment %}
     Use capture to put the collection title in a variable that is used in liquid filters
@@ -20,7 +20,7 @@
     </h4>
   </div>
   <div class="image-row">
-    <a class="" href="{{ collection.url }}" title="Browse our {{ collection_title }} collection">
+    <a href="{{ collection.url }}" title="Browse our {{ collection_title }} collection">
 
       {% if collection.image %}
         {{ collection.image.src | collection_img_url: 'large' | img_tag: collection_title }}
@@ -30,7 +30,7 @@
 
     </a>
   </div>
-  <div class="button-row">
+  <div class="meta-row">
     <a class="button" href="{{ collection.url }}" title="Browse our {{ collection_title }} collection">
       <span class="label">View collection</span>
       <span class="icon"></span>

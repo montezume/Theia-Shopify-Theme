@@ -16,6 +16,10 @@
         <br />
         Collection.
       </h2>
+
+    </div>
+    <div class="logo">
+
       <div class="usa-today-logo">
         {{ 'usa-today-logo.svg' | asset_url | img_tag }}
         {{ 'usa-today-logo.png' | asset_url | img_tag }}
@@ -25,11 +29,11 @@
   </div>
 </div>
 
-<h3>In this collection:</h3>
-
-<div class="collection-block">
-  
+<div class="product-grid-hero">
   <div class="wrapper">
+
+    <h2>In this collection:</h2>
+
     {% paginate collection.products by 12 %}
 
     {% comment %}
@@ -53,7 +57,6 @@
 
     {% endfor %}
 
-
     {% if paginate.pages > 1 %}
       <div class="text-center">
         {% include 'pagination-custom' %}
@@ -64,12 +67,10 @@
   </div>
 </div>
 
-<hr />
-
-<h3>Other collections from Theia:</h3>
-
-<div class="collections-block">
+<div class="collection-grid-hero">
   <div class="wrapper">
+
+    <h2>Other collections from Theia:</h2>
 
     {% for collection in collections limit:4 %}
 
@@ -78,4 +79,16 @@
     {% endfor %}
     
   </div>
+</div>
+
+<hr class="hr-4-col" />
+
+<div class="social-hero">
+
+  <h2>Keep in touch:</h2>
+
+  {% include 'newsletter-signup-block' %}
+
+  {% include 'social-link-block' %}
+
 </div>
