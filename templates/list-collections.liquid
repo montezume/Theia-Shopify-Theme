@@ -8,22 +8,26 @@
 
 {% endcomment %}
 
-<div class="collections-list-page-hero">
+<div class="list-collections-page-hero">
   <div class="wrapper">
     <div class="content">
+
       <h2>Theia Collections</h2>
       <p>&ldquo;Any dress in any of Theia&rsquo;s collections are worthy of your attention. It&rsquo;s not just a dress, it&rsquo;s an attitude.&rdquo;</p>
+
+    </div>
+    <div class="logo">
 
       <div class="the-oprah-magazine-logo">
         {{ 'the-oprah-magazine-logo.svg' | asset_url | img_tag }}
         {{ 'the-oprah-magazine-logo.png' | asset_url | img_tag }}
       </div>
-      
+
     </div>
   </div>
 </div>
 
-<div class="collections-grid-hero">
+<div class="collection-grid-hero">
   <div class="wrapper">
 
     <h2>Collections from Theia</h2>
@@ -37,10 +41,14 @@
   </div>
 </div>
 
+<hr class="hr-4-col" />
+
 <div class="social-hero">
+
   <h2>Keep in touch:</h2>
+
   {% include 'newsletter-signup-block' %}
+
   {% include 'social-link-block' %}
+
 </div>
-
-
