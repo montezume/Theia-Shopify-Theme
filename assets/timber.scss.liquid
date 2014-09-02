@@ -47,6 +47,19 @@ Some things to know about this file:
 ==============================================================================*/
 
 /*============================================================================
+  #Breakpoint and Grid Variables (from timber.scss.liquid)
+==============================================================================*/
+$viewportIncrement: 1px;
+
+$small: 480px;
+$medium: 768px;
+$large: 769px;
+
+$postSmall: $small + $viewportIncrement;
+$preMedium: $medium - $viewportIncrement;
+$preLarge: $large - $viewportIncrement;
+
+/*============================================================================
   #Breakpoint and Grid Variables
   ==============================================================================*/
 $viewportIncrement: 1px;
@@ -83,7 +96,7 @@ $colorMidGray: #bcbbbb;
 $colorGray: #8d8d8d;
 $colorDarkGray: #616161;
 
-
+$colorWarmLighterGray: #f9f8f8;
 $colorWarmLightGray: #a5a2a4;
 $colorWarmGray: #797778;
 $colorWarmGrayDark: #4d4c4c;
@@ -93,6 +106,22 @@ $colorLightGold: #c8a45a;
 $colorGold: #c19946;
 $colorDarkGold: #a98741;
 $colorDarkerGold: #896e35;
+
+
+/*============================================================================
+  Ajaxify Colours
+==============================================================================*/
+$ajaxifyGrey: #444;
+$ajaxifyGreyDark: #454545;
+
+/* Border colors from Timber */
+$borderColor: #e5e5e5;
+
+$drawerBackgroundColor: $colorWarmLighterGray;
+$drawerBorderColor: #454545;
+
+$modalBackgroundColor: #fff;
+$modalBorderColor: $borderColor;
 
 
 // Timber Colors
@@ -281,6 +310,32 @@ $socialIconFontStack: 'theia-icons';
     }
 }
 
+@mixin rotateX($t) {
+  -webkit-transform: rotateX($t);
+  -moz-transform: rotateX($t);
+  -o-transform: rotateX($t);
+  -ms-transform: rotateX($t);
+  transform: rotateX($t);
+}
+
+@mixin perspective ($p) {
+  -webkit-perspective: $p;
+  -moz-perspective: $p;
+  -o-perspective: $p;
+  perspective: $p;
+}
+
+@mixin backface($visibility: hidden) {
+  -moz-backface-visibility: $visibility;
+  -webkit-backface-visibility: $visibility;
+  -o-backface-visibility: $visibility;
+  backface-visibility: $visibility;
+}
+
+@mixin transform($transform) {
+    @include prefix('transform', #{$transform});
+}
+
 @mixin transition($transition: 0.1s all) {
     @include prefix('transition', #{$transition});
 }
@@ -314,6 +369,26 @@ $socialIconFontStack: 'theia-icons';
     }
 }
 
+@mixin transform-origin($origin) {
+  -webkit-transform-origin: $origin;
+  -moz-transform-origin: $origin;
+  -o-transform-origin: $origin;
+  -ms-transform-origin: $origin;
+  transform-origin: $origin;
+}
+
+@mixin transform-style($style: preserve-3d) {
+  -moz-transform-style: $style;
+  -webkit-transform-style: $style;
+  -o-transform-style: $style;
+  transform-style: $style;
+}
+
+@mixin box-shadow($shadow) {
+  -webkit-box-shadow: $shadow;
+  -moz-box-shadow: $shadow;
+  box-shadow: $shadow;
+}
 
 /* Vertical Centering Mixin - now 100% table free!
    http://css-tricks.com/centering-in-the-unknown/ */
@@ -381,428 +456,332 @@ $max: max-width;
   ==============================================================================*/
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td,article,aside,canvas,details,embed,figure,figcaption,footer,header,main,hgroup,menu,nav,output,ruby,section,summary,time,mark,audio,video,button{border:0;font-size:100%;font:inherit;vertical-align:baseline;margin:0;padding:0;}article,aside,details,figcaption,figure,footer,header,hgroup,menu,nav,section{display:block;}ol,ul{list-style:none;}blockquote,q{quotes:none;}blockquote:before,blockquote:after,q:before,q:after{content:none;}table{border-collapse:collapse;border-spacing:0;}code,pre{background-color:#faf7f5;font-family:Consolas,monospace;border:0 none;padding:0 2px;color:#51ab62;}pre{overflow:auto;padding:0.5em;margin:0 0 1em;}
 
-
-
 *, input, :before, :after {
     @include box-sizing();
 }
 
-/*============================================================================
-  #Grid Setup
-  - Based on csswizardry grid, but with floated columns and a fixed gutter size
-  - Breakpoints defined above, under #Breakpoint and Grid Variables
-  - Note the inclusion of .grid-uniform to take care of clearfixes on evenly sized grid-items
-  ==============================================================================*/
-$responsive:         true;
-$mobile-first:       true;
-$use-silent-classes: false;
-$push:               true;
-$pull:               false;
 
-/* Force clearfix on grids */
-.grid,
-.grid-uniform {
-    @include clearfix;
+
+/*================================================================================
+  # Extends - these are for common text and block styles
+  ================================================================================*/
+
+%medium-arial-text {
+    font-family: $arialFontStack;
+
+    @include at-query ($min, $postSmall) {
+        font-size: 1.125em; /* ~18px */
+    }
+
+    @include at-query ($max, $small) {
+        font-size: 0.9375em; /* ~15px */
+    }
 }
 
-/* Manual grid-item clearfix */
-.grid-item.clear {
-    clear: both;
+%small-mid-arial-text {
+    font-family: $arialFontStack;
+
+    @include at-query ($min, $postSmall) {
+        font-size: 0.875em; /* ~14px */
+    }
+
+    @include at-query ($max, $small) {
+        font-size: 0.8125em; /* ~13px */
+    }
+}    
+
+%small-arial-text {
+    font-family: $arialFontStack;
+    font-weight: 700;
+
+    @include at-query ($min, $postSmall) {
+        font-size: 0.8125em; /* ~13px */
+    }
+
+    @include at-query ($max, $small) {
+        font-size: 0.625em; /* ~10px */
+    }
+}    
+
+%smallish-arial-text {
+    font-family: $arialFontStack;
+    font-weight: 700;
+
+    font-size: 0.75em; /* ~12px */
+}    
+
+%smaller-arial-text {
+    font-family: $arialFontStack;
+    font-weight: 700;
+
+    @include at-query ($min, $postSmall) {
+        font-size: 0.6875em; /* ~11px */
+    }
+
+    @include at-query ($max, $small) {
+        font-size: 0.6875em; /* ~11px */
+    }
 }
 
-$class-type: unquote(".");
+%medium-helvetica-text {
+    font-family: $helveticaFontStack;
 
-@if $use-silent-classes == true {
-    $class-type: unquote("%");
+    @include at-query ($min, $postSmall) {
+        font-size: 1.25em; /* ~20px */
+    }
+
+    @include at-query ($max, $small) {
+        font-size: 0.9375em; /* ~15px */
+    }
 }
 
-@mixin grid-media-query($media-query) {
-    $breakpoint-found: false;
+%small-helvetica-text {
+    font-family: $helveticaFontStack;
 
-    @each $breakpoint in $breakpoints {
-        $name: nth($breakpoint, 1);
-        $declaration: nth($breakpoint, 2);
+    @include at-query ($min, $postSmall) {
+        font-size: 1.125em; /* ~18px */
+    }
 
-        @if $media-query == $name and $declaration {
-            $breakpoint-found: true;
+    @include at-query ($max, $small) {
+        font-size: 0.9375em; /* ~15px */
+    }
+}
 
-            @media only screen and #{$declaration} {
-                @content;
+%smaller-helvetica-text {
+    font-family: $helveticaFontStack;
+
+    @include at-query ($min, $postSmall) {
+        font-size: 0.875em; /* ~14px */
+    }
+
+    @include at-query ($max, $small) {
+        font-size: 0.78125em; /* ~12.5px */
+    }
+}
+
+%rsaquo {
+    &:after {
+        content: '\203A';
+        display: inline-block;
+        position: relative;
+        padding-left: 3px;
+    }
+}
+
+
+%link-base {
+    white-space: nowrap;
+}
+
+%base-link {
+    text-decoration: none;
+    white-space: nowrap;
+    color: $colorGray;
+
+    &:hover,
+    &:active,
+    &:focus {
+        color: $colorGold;
+    }
+}
+
+/* link text styles */
+
+/* gray link base */
+
+/* gray, gold on hover */
+%gray-hover-gold-link {
+    @extend %link-base;
+
+    color: $colorGray;
+    text-decoration: none;
+
+    &:hover,
+    &:active,
+    &:focus {
+        color: $colorGold;
+    }
+}
+
+/* gray, gold on hover */
+%warmGray-hover-underline-link {
+    @extend %link-base;
+
+    color: $colorWarmGray;
+    text-decoration: none;
+
+    &:hover,
+    &:active,
+    &:focus {
+        text-decoration: underline;
+    }
+}
+
+
+/* gray, gold and underline on hover */
+%gray-hover-gold-underline-link {
+    @extend %link-base;
+
+    color: $colorGray;
+    text-decoration: none;
+
+    &:hover,
+    &:active,
+    &:focus {
+        text-decoration: underline;
+        color: $colorGold;
+    }
+}
+
+/* gray, underline on hover */
+%gray-hover-underline-link {
+    @extend %link-base;
+
+    color: $colorGray;
+    text-decoration: none;
+
+    &:hover,
+    &:active,
+    &:focus {
+        text-decoration: underline;
+    }
+}
+
+
+/* gray underline, gold on hover */
+%gray-underline-hover-gold-link {
+    @extend %link-base;
+
+    color: $colorGray;
+    text-decoration: underline;
+
+    &:hover,
+    &:active,
+    &:focus {
+        color: $colorGold;
+    }
+}
+
+/* gold, underline on hover */
+%gold-hover-underline-link {
+    @extend %link-base;
+
+    color: $colorGold;
+    text-decoration: none;
+
+    &:hover,
+    &:active,
+    &:focus {
+        text-decoration: underline;
+    }
+}
+
+/* white, gray on hover */
+%white-hover-gray-link {
+    @extend %link-base;
+    @include prefix('transition', 'all 0.4s ease');
+
+    color: #fff;
+    text-decoration: none;
+
+    &:hover,
+    &:active,
+    &:focus {
+        color: $colorWarmGrayDark;
+    }
+}
+
+/* white, gray on hover */
+%white-underline-hover-gold-link {
+    @extend %link-base;
+
+    color: #fff;
+
+    &:hover,
+    &:active,
+    &:focus {
+        color: $colorGold;
+    }
+}
+
+/*================================================================================
+  # Layouts
+  ================================================================================*/
+
+%wrapper-base {
+    @extend .clearfix;
+    position: relative;
+
+    margin: 0 auto;
+}
+
+.wrapper-14-col {
+    @extend %wrapper-base;
+
+    max-width: $siteWidth14col;
+}
+
+.wrapper {
+    @extend %wrapper-base;
+
+    max-width: $siteWidth;
+}
+
+.wrapper-10-col {
+    @extend %wrapper-base;
+
+    max-width: $siteWidth10Col;
+}
+
+.wrapper-8-col {
+    @extend %wrapper-base;
+
+    max-width: $siteWidth8Col;
+}
+
+%column-base {
+    padding-right: $gutter;
+    padding-left: $gutter;
+}
+
+
+
+%inline-list-base {
+    ul, li {
+        margin: 0;
+    }
+
+    li {
+        display: inline-block;
+        vertical-align: top;
+    }
+}
+
+%nav-menu-base {
+    @extend %inline-list-base;
+
+    @include at-query ($min, $postSmall) {
+        ul {
+            height: 21px;
+        }
+    }
+
+    .site-footer & {
+        @include at-query ($max, $small) {
+            ul {
+                @include clearfix();
             }
-        }
-    }
 
-    @if $breakpoint-found == false{
-        @warn "Breakpoint '#{$media-query}' does not exist";
-    }
-}
-
-
-/*============================================================================
-  Drop relative positioning into silent classes which can't take advantage of
-  the `[class*="push--"]` and `[class*="pull--"]` selectors.
-  ==============================================================================*/
-@mixin silent-relative() {
-    @if $use-silent-classes == true{
-        position:relative;
-    }
-}
-
-/*============================================================================
-  Grid Setup
-  1. Allow the grid system to be used on lists.
-  2. Remove any margins and paddings that might affect the grid system.
-  3. Apply a negative `margin-left` to negate the columns' gutters.
-  ==============================================================================*/
-#{$class-type}grid,
-#{$class-type}grid-uniform {
-    list-style:none;
-    margin:0;
-    padding:0;
-    margin-left:-$gridGutter;
-}
-
-#{$class-type}grid-item {
-    float: left;
-    min-height: 1px;
-    padding-left:$gridGutter;
-    vertical-align:top;
-    @if $mobile-first == true {
-        width:100%;
-    }
-    @include box-sizing();
-}
-
-/*============================================================================
-  Reversed grids allow you to structure your source in the opposite
-  order to how your rendered layout will appear.
-  ==============================================================================*/
-#{$class-type}grid--rev {
-    @extend #{$class-type}grid;
-    direction:rtl;
-    text-align:left;
-
-    > #{$class-type}grid-item {
-        direction:ltr;
-        text-align:left;
-        float: right;
-    }
-}
-
-/* Gutterless grids have all the properties of regular grids, minus any spacing. */
-#{$class-type}grid--full {
-    @extend #{$class-type}grid;
-    margin-left:0;
-
-    > #{$class-type}grid-item {
-        padding-left:0;
-    }
-}
-
-/* Align the entire grid to the right. */
-#{$class-type}grid--right {
-    @extend #{$class-type}grid;
-    direction:rtl;
-    text-align:right;
-
-    > #{$class-type}grid-item {
-        direction:ltr;
-        float: right;
-        text-align:left;
-    }
-}
-
-/* Centered grids align grid items centrally without needing to use push or pull classes. */
-#{$class-type}grid--center {
-    @extend #{$class-type}grid;
-    text-align:center;
-
-    > #{$class-type}grid-item {
-        text-align:left;
-    }
-}
-
-/*============================================================================
-  WIDTHS
-  - Create width classes, prefixed by the specified namespace.
-  ==============================================================================*/
-@mixin device-type($namespace:"") {
-    /** Whole */
-    #{$class-type}#{$namespace}one-whole       { width:100%; }
-
-    /* Halves */
-    #{$class-type}#{$namespace}one-half        { width:50%; }
-
-    /* Thirds */
-    #{$class-type}#{$namespace}one-third       { width:33.333%; }
-    #{$class-type}#{$namespace}two-thirds      { width:66.666%; }
-
-    /* Quarters */
-    #{$class-type}#{$namespace}one-quarter     { width:25%; }
-    #{$class-type}#{$namespace}two-quarters    { @extend #{$class-type}#{$namespace}one-half; }
-    #{$class-type}#{$namespace}three-quarters  { width:75%; }
-
-    /* Fifths */
-    #{$class-type}#{$namespace}one-fifth       { width:20%; }
-    #{$class-type}#{$namespace}two-fifths      { width:40%; }
-    #{$class-type}#{$namespace}three-fifths    { width:60%; }
-    #{$class-type}#{$namespace}four-fifths     { width:80%; }
-
-    /* Sixths */
-    #{$class-type}#{$namespace}one-sixth       { width:16.666%; }
-    #{$class-type}#{$namespace}two-sixths      { @extend #{$class-type}#{$namespace}one-third; }
-    #{$class-type}#{$namespace}three-sixths    { @extend #{$class-type}#{$namespace}one-half; }
-    #{$class-type}#{$namespace}four-sixths     { @extend #{$class-type}#{$namespace}two-thirds; }
-    #{$class-type}#{$namespace}five-sixths     { width:83.333%; }
-
-    /* Eighths */
-    #{$class-type}#{$namespace}one-eighth      { width:12.5%; }
-    #{$class-type}#{$namespace}two-eighths     { @extend #{$class-type}#{$namespace}one-quarter; }
-    #{$class-type}#{$namespace}three-eighths   { width:37.5%; }
-    #{$class-type}#{$namespace}four-eighths    { @extend #{$class-type}#{$namespace}one-half; }
-    #{$class-type}#{$namespace}five-eighths    { width:62.5%; }
-    #{$class-type}#{$namespace}six-eighths     { @extend #{$class-type}#{$namespace}three-quarters; }
-    #{$class-type}#{$namespace}seven-eighths   { width:87.5%; }
-
-    /* Tenths */
-    #{$class-type}#{$namespace}one-tenth       { width:10%; }
-    #{$class-type}#{$namespace}two-tenths      { @extend #{$class-type}#{$namespace}one-fifth; }
-    #{$class-type}#{$namespace}three-tenths    { width:30%; }
-    #{$class-type}#{$namespace}four-tenths     { @extend #{$class-type}#{$namespace}two-fifths; }
-    #{$class-type}#{$namespace}five-tenths     { @extend #{$class-type}#{$namespace}one-half; }
-    #{$class-type}#{$namespace}six-tenths      { @extend #{$class-type}#{$namespace}three-fifths; }
-    #{$class-type}#{$namespace}seven-tenths    { width:70%; }
-    #{$class-type}#{$namespace}eight-tenths    { @extend #{$class-type}#{$namespace}four-fifths; }
-    #{$class-type}#{$namespace}nine-tenths     { width:90%; }
-
-    /* Twelfths */
-    #{$class-type}#{$namespace}one-twelfth     { width:8.333%; }
-    #{$class-type}#{$namespace}two-twelfths    { @extend #{$class-type}#{$namespace}one-sixth; }
-    #{$class-type}#{$namespace}three-twelfths  { @extend #{$class-type}#{$namespace}one-quarter; }
-    #{$class-type}#{$namespace}four-twelfths   { @extend #{$class-type}#{$namespace}one-third; }
-    #{$class-type}#{$namespace}five-twelfths   { width:41.666% }
-    #{$class-type}#{$namespace}six-twelfths    { @extend #{$class-type}#{$namespace}one-half; }
-    #{$class-type}#{$namespace}seven-twelfths  { width:58.333%; }
-    #{$class-type}#{$namespace}eight-twelfths  { @extend #{$class-type}#{$namespace}two-thirds; }
-    #{$class-type}#{$namespace}nine-twelfths   { @extend #{$class-type}#{$namespace}three-quarters; }
-    #{$class-type}#{$namespace}ten-twelfths    { @extend #{$class-type}#{$namespace}five-sixths; }
-    #{$class-type}#{$namespace}eleven-twelfths { width:91.666%; }
-}
-
-/*================ Clearfix helper on uniform grids ================*/
-@mixin clearfix-helper($namespace:"") {
-    .grid-uniform {
-        #{$class-type}#{$namespace}one-half:nth-child(2n+1),
-        #{$class-type}#{$namespace}one-third:nth-child(3n+1),
-        #{$class-type}#{$namespace}one-quarter:nth-child(4n+1),
-        #{$class-type}#{$namespace}one-fifth:nth-child(5n+1),
-        #{$class-type}#{$namespace}one-sixth:nth-child(6n+1),
-        #{$class-type}#{$namespace}two-sixths:nth-child(3n+1),
-        #{$class-type}#{$namespace}three-sixths:nth-child(2n+1),
-        #{$class-type}#{$namespace}two-eighths:nth-child(4n+1),
-        #{$class-type}#{$namespace}four-eighths:nth-child(2n+1),
-        #{$class-type}#{$namespace}five-tenths:nth-child(2n+1),
-        #{$class-type}#{$namespace}one-twelfth:nth-child(12n+1),
-        #{$class-type}#{$namespace}two-twelfths:nth-child(6n+1),
-        #{$class-type}#{$namespace}three-twelfths:nth-child(4n+1),
-        #{$class-type}#{$namespace}four-twelfths:nth-child(3n+1),
-        #{$class-type}#{$namespace}six-twelfths:nth-child(2n+1)    { clear:both; }
-    }
-}
-
-/*============================================================================
-  HELPERS
-  ==============================================================================*/
-
-/*================ Helper show/hide classes around our breakpoints ================*/
-@mixin device-helper($namespace:"") {
-    #{$class-type}#{$namespace}show        { display:block!important; }
-    #{$class-type}#{$namespace}hide        { display:none!important; }
-
-    #{$class-type}#{$namespace}text-left   { text-align:left!important; }
-    #{$class-type}#{$namespace}text-right  { text-align:right!important; }
-    #{$class-type}#{$namespace}text-center { text-align:center!important; }
-
-    #{$class-type}#{$namespace}left        { float:left!important; }
-    #{$class-type}#{$namespace}right       { float:right!important; }
-}
-
-/*================ Our regular, non-responsive width and helper classes ================*/
-@include device-type();
-@include device-helper();
-
-/*================ Our responsive classes, if we have enabled them ================*/
-@if $responsive == true {
-    @each $name in $breakpoint-has-widths {
-        @include grid-media-query($name) {
-            @include device-type('#{$name}--');
-            @include device-helper('#{$name}--');
-            @include clearfix-helper('#{$name}--');
-        }
-    }
-}
-
-/*============================================================================
-  PUSH
-  - Push classes, to move grid items over to the right by certain amounts
-  ==============================================================================*/
-@mixin push-setup($namespace: "") {
-    /* Whole */
-    #{$class-type}push--#{$namespace}one-whole       { left:100%; @include silent-relative(); }
-
-    /* Halves */
-    #{$class-type}push--#{$namespace}one-half        { left:50%; @include silent-relative(); }
-
-    /* Thirds */
-    #{$class-type}push--#{$namespace}one-third       { left:33.333%; @include silent-relative(); }
-    #{$class-type}push--#{$namespace}two-thirds      { left:66.666%; @include silent-relative(); }
-
-    /* Quarters */
-    #{$class-type}push--#{$namespace}one-quarter     { left:25%; @include silent-relative(); }
-    #{$class-type}push--#{$namespace}two-quarters    { @extend #{$class-type}push--#{$namespace}one-half; }
-    #{$class-type}push--#{$namespace}three-quarters  { left:75%; @include silent-relative(); }
-
-    /* Fifths */
-    #{$class-type}push--#{$namespace}one-fifth       { left:20%; @include silent-relative(); }
-    #{$class-type}push--#{$namespace}two-fifths      { left:40%; @include silent-relative(); }
-    #{$class-type}push--#{$namespace}three-fifths    { left:60%; @include silent-relative(); }
-    #{$class-type}push--#{$namespace}four-fifths     { left:80%; @include silent-relative(); }
-
-    /* Sixths */
-    #{$class-type}push--#{$namespace}one-sixth       { left:16.666%; @include silent-relative(); }
-    #{$class-type}push--#{$namespace}two-sixths      { @extend #{$class-type}push--#{$namespace}one-third; }
-    #{$class-type}push--#{$namespace}three-sixths    { @extend #{$class-type}push--#{$namespace}one-half; }
-    #{$class-type}push--#{$namespace}four-sixths     { @extend #{$class-type}push--#{$namespace}two-thirds; }
-    #{$class-type}push--#{$namespace}five-sixths     { left:83.333%; @include silent-relative(); }
-
-    /* Eighths */
-    #{$class-type}push--#{$namespace}one-eighth      { left:12.5%; @include silent-relative(); }
-    #{$class-type}push--#{$namespace}two-eighths     { @extend #{$class-type}push--#{$namespace}one-quarter; }
-    #{$class-type}push--#{$namespace}three-eighths   { left:37.5%; @include silent-relative(); }
-    #{$class-type}push--#{$namespace}four-eighths    { @extend #{$class-type}push--#{$namespace}one-half; }
-    #{$class-type}push--#{$namespace}five-eighths    { left:62.5%; @include silent-relative(); }
-    #{$class-type}push--#{$namespace}six-eighths     { @extend #{$class-type}push--#{$namespace}three-quarters; }
-    #{$class-type}push--#{$namespace}seven-eighths   { left:87.5%; @include silent-relative(); }
-
-    /* Tenths */
-    #{$class-type}push--#{$namespace}one-tenth       { left:10%; @include silent-relative(); }
-    #{$class-type}push--#{$namespace}two-tenths      { @extend #{$class-type}push--#{$namespace}one-fifth; }
-    #{$class-type}push--#{$namespace}three-tenths    { left:30%; @include silent-relative(); }
-    #{$class-type}push--#{$namespace}four-tenths     { @extend #{$class-type}push--#{$namespace}two-fifths; }
-    #{$class-type}push--#{$namespace}five-tenths     { @extend #{$class-type}push--#{$namespace}one-half; }
-    #{$class-type}push--#{$namespace}six-tenths      { @extend #{$class-type}push--#{$namespace}three-fifths; }
-    #{$class-type}push--#{$namespace}seven-tenths    { left:70%; @include silent-relative(); }
-    #{$class-type}push--#{$namespace}eight-tenths    { @extend #{$class-type}push--#{$namespace}four-fifths; }
-    #{$class-type}push--#{$namespace}nine-tenths     { left:90%; @include silent-relative(); }
-
-    /* Twelfths */
-    #{$class-type}push--#{$namespace}one-twelfth     { left:8.333%; @include silent-relative(); }
-    #{$class-type}push--#{$namespace}two-twelfths    { @extend #{$class-type}push--#{$namespace}one-sixth; }
-    #{$class-type}push--#{$namespace}three-twelfths  { @extend #{$class-type}push--#{$namespace}one-quarter; }
-    #{$class-type}push--#{$namespace}four-twelfths   { @extend #{$class-type}push--#{$namespace}one-third; }
-    #{$class-type}push--#{$namespace}five-twelfths   { left:41.666%; @include silent-relative(); }
-    #{$class-type}push--#{$namespace}six-twelfths    { @extend #{$class-type}push--#{$namespace}one-half; }
-    #{$class-type}push--#{$namespace}seven-twelfths  { left:58.333%; @include silent-relative(); }
-    #{$class-type}push--#{$namespace}eight-twelfths  { @extend #{$class-type}push--#{$namespace}two-thirds; }
-    #{$class-type}push--#{$namespace}nine-twelfths   { @extend #{$class-type}push--#{$namespace}three-quarters; }
-    #{$class-type}push--#{$namespace}ten-twelfths    { @extend #{$class-type}push--#{$namespace}five-sixths; }
-    #{$class-type}push--#{$namespace}eleven-twelfths { left:91.666%; @include silent-relative(); }
-}
-
-@if $push == true {
-    [class*="push--"]{ position:relative; }
-
-    @include push-setup();
-
-    @if $responsive == true {
-        @each $name in $breakpoint-has-push {
-            @include grid-media-query($name) {
-                @include push-setup('#{$name}--');
+            li {
+                display: block;
+                width: 50%;
+                float: left;
+                padding: 0 $gutter/2;
             }
         }
     }
 }
 
-/*============================================================================
-  PULL
-  - Pull classes, to move grid items back to the left by certain amounts
-  ==============================================================================*/
-@mixin pull-setup($namespace: "") {
-    /* Whole */
-    #{$class-type}pull--#{$namespace}one-whole       { right:100%; @include silent-relative(); }
-
-    /* Halves */
-    #{$class-type}pull--#{$namespace}one-half        { right:50%; @include silent-relative(); }
-
-    /* Thirds */
-    #{$class-type}pull--#{$namespace}one-third       { right:33.333%; @include silent-relative(); }
-    #{$class-type}pull--#{$namespace}two-thirds      { right:66.666%; @include silent-relative(); }
-
-    /* Quarters */
-    #{$class-type}pull--#{$namespace}one-quarter     { right:25%; @include silent-relative(); }
-    #{$class-type}pull--#{$namespace}two-quarters    { @extend #{$class-type}pull--#{$namespace}one-half; }
-    #{$class-type}pull--#{$namespace}three-quarters  { right:75%; @include silent-relative(); }
-
-    /* Fifths */
-    #{$class-type}pull--#{$namespace}one-fifth       { right:20%; @include silent-relative(); }
-    #{$class-type}pull--#{$namespace}two-fifths      { right:40%; @include silent-relative(); }
-    #{$class-type}pull--#{$namespace}three-fifths    { right:60%; @include silent-relative(); }
-    #{$class-type}pull--#{$namespace}four-fifths     { right:80%; @include silent-relative(); }
-
-    /* Sixths */
-    #{$class-type}pull--#{$namespace}one-sixth       { right:16.666%; @include silent-relative(); }
-    #{$class-type}pull--#{$namespace}two-sixths      { @extend #{$class-type}pull--#{$namespace}one-third; }
-    #{$class-type}pull--#{$namespace}three-sixths    { @extend #{$class-type}pull--#{$namespace}one-half; }
-    #{$class-type}pull--#{$namespace}four-sixths     { @extend #{$class-type}pull--#{$namespace}two-thirds; }
-    #{$class-type}pull--#{$namespace}five-sixths     { right:83.333%; @include silent-relative(); }
-
-    /* Eighths */
-    #{$class-type}pull--#{$namespace}one-eighth      { right:12.5%; @include silent-relative(); }
-    #{$class-type}pull--#{$namespace}two-eighths     { @extend #{$class-type}pull--#{$namespace}one-quarter; }
-    #{$class-type}pull--#{$namespace}three-eighths   { right:37.5%; @include silent-relative(); }
-    #{$class-type}pull--#{$namespace}four-eighths    { @extend #{$class-type}pull--#{$namespace}one-half; }
-    #{$class-type}pull--#{$namespace}five-eighths    { right:62.5%; @include silent-relative(); }
-    #{$class-type}pull--#{$namespace}six-eighths     { @extend #{$class-type}pull--#{$namespace}three-quarters; }
-    #{$class-type}pull--#{$namespace}seven-eighths   { right:87.5%; @include silent-relative(); }
-
-    /* Tenths */
-    #{$class-type}pull--#{$namespace}one-tenth       { right:10%; @include silent-relative(); }
-    #{$class-type}pull--#{$namespace}two-tenths      { @extend #{$class-type}pull--#{$namespace}one-fifth; }
-    #{$class-type}pull--#{$namespace}three-tenths    { right:30%; @include silent-relative(); }
-    #{$class-type}pull--#{$namespace}four-tenths     { @extend #{$class-type}pull--#{$namespace}two-fifths; }
-    #{$class-type}pull--#{$namespace}five-tenths     { @extend #{$class-type}pull--#{$namespace}one-half; }
-    #{$class-type}pull--#{$namespace}six-tenths      { @extend #{$class-type}pull--#{$namespace}three-fifths; }
-    #{$class-type}pull--#{$namespace}seven-tenths    { right:70%; @include silent-relative(); }
-    #{$class-type}pull--#{$namespace}eight-tenths    { @extend #{$class-type}pull--#{$namespace}four-fifths; }
-    #{$class-type}pull--#{$namespace}nine-tenths     { right:90%; @include silent-relative(); }
-
-    /* Twelfths */
-    #{$class-type}pull--#{$namespace}one-twelfth     { right:8.333%; @include silent-relative(); }
-    #{$class-type}pull--#{$namespace}two-twelfths    { @extend #{$class-type}pull--#{$namespace}one-sixth; }
-    #{$class-type}pull--#{$namespace}three-twelfths  { @extend #{$class-type}pull--#{$namespace}one-quarter; }
-    #{$class-type}pull--#{$namespace}four-twelfths   { @extend #{$class-type}pull--#{$namespace}one-third; }
-    #{$class-type}pull--#{$namespace}five-twelfths   { right:41.666%; @include silent-relative(); }
-    #{$class-type}pull--#{$namespace}six-twelfths    { @extend #{$class-type}pull--#{$namespace}one-half; }
-    #{$class-type}pull--#{$namespace}seven-twelfths  { right:58.333%; @include silent-relative(); }
-    #{$class-type}pull--#{$namespace}eight-twelfths  { @extend #{$class-type}pull--#{$namespace}two-thirds; }
-    #{$class-type}pull--#{$namespace}nine-twelfths   { @extend #{$class-type}pull--#{$namespace}three-quarters; }
-    #{$class-type}pull--#{$namespace}ten-twelfths    { @extend #{$class-type}pull--#{$namespace}five-sixths; }
-    #{$class-type}pull--#{$namespace}eleven-twelfths { right:91.666%; @include silent-relative(); }
-}
-
-@if $pull == true {
-    [class*="pull--"]{ position:relative; }
-
-    @include pull-setup();
-
-    @if $responsive == true{
-        @each $name in $breakpoint-has-pull {
-            @include grid-media-query($name) {
-                @include pull-setup('#{$name}--');
-            }
-        }
-    }
-}
 
 /*============================================================================
   #Basic Styles
@@ -1071,70 +1050,327 @@ hr {
 /*============================================================================
   #Links and Buttons
   ==============================================================================*/
-.btn {
+
+%button-base {
     display: inline-block;
-    padding: 8px 10px;
-    margin: 0;
-    line-height: 1.42;
-    font-weight: bold;
     text-decoration: none;
     text-align: center;
     vertical-align: middle;
     white-space: nowrap;
     cursor: pointer;
-    border: 1px solid transparent;
-    @include prefix('user-select', 'none');
     -webkit-appearance: none;
     -moz-appearance: none;
-
-    &.btn--small {
-        padding: 4px 5px;
-        font-size: 0.75em; //12px
-    }
-
-    &.btn--full {
-        width: 100%;
-    }
-
-    /*================ Set primary button colors - can override later ================*/
-    background-color: $colorBtnPrimary;
     color: #fff;
 
-    &:hover {
-        background-color: $colorBtnPrimaryHover;
-        color: #fff;
+    > * {
+        line-height: 1;
     }
 
     &:active,
     &:focus {
-        background-color: $colorBtnPrimaryActive;
-        color: #fff;
+
     }
 
     &[disabled],
     &.disabled {
         cursor: default;
-        color: $disabledBorder;
-        background-color: $disabledGrey;
     }
 }
 
-.btn-secondary,
-input.btn-secondary {
-    @extend .btn;
-    background-color: $colorBtnSecondary;
+%large-button-base {
+    height: 50px;
+    padding: 6px $gutter 0;
 
-    &:hover {
-        background-color: $colorBtnSecondaryHover;
-        color: #fff;
-    }
-
-    &:active,
-    &:focus {
-        background-color: $colorBtnSecondaryActive;
-        color: #fff;
+    .label {
+        font-size: 1.5625em;
+        font-weight: 300;
+        font-family: $helveticaFontStack;
     }
 }
+
+%medium-button-base {
+
+}
+
+%small-button-base {
+    height: 30px;
+    padding: 4px 12px 0;
+
+    .label {
+        @extend %smallish-arial-text;
+
+        text-transform: uppercase;
+        font-weight: 700;
+    }
+}
+
+%gold-button-base {
+    @extend %gold-outline-block-small;
+}
+
+%gray-button-base {
+
+}
+
+%lightGray-button-base {
+
+}
+
+%icon-button-base {
+    .icon {
+        @extend %icon-base;
+
+        display: inline-block;
+        position: relative;
+    }
+}
+
+%arrow-icon-button-base {
+    @extend %icon-button-base;
+
+    .icon {
+        @extend .icon-arrow-right-solid;
+
+        font-size: 12px;
+    }
+}
+
+/* gold, large button with solid arrow icon */
+%large-gold-arrow-button {
+    @extend %button-base;
+    @extend %large-button-base;
+    @extend %gold-button-base;
+    @extend %arrow-icon-button-base;
+
+    .icon {
+        padding-left: 10px;
+        top: -2px;
+    }
+}
+
+/* gold, small button with solid arrow icon */
+%small-gold-arrow-button {
+    @extend %button-base;
+    @extend %small-button-base;
+    @extend %gold-button-base;
+    @extend %arrow-icon-button-base;
+
+    .icon {
+        top: 1px;
+    }
+}
+
+/* gold, medium button with rsaquo */
+%large-gold-rsaquo-button {
+
+}
+
+/* gold, medium button with rsaquo  */
+%medium-gold-rsaquo-button {
+
+}
+
+/* gold, small button with rsaquo  */
+%small-gold-rsaquo-button {
+
+}
+
+/* gray, medium button with rsaquo */
+%large-gray-rsaquo-button {
+
+}
+
+/* gray, medium button with rsaquo  */
+%medium-gray-rsaquo-button {
+
+}
+
+/* gray, small button with rsaquo  */
+%small-gray-rsaquo-button {
+
+}
+
+/* gray, medium button */
+%medium-gray-button {
+
+}
+
+/* light gray, small button */
+%small-lightGray-button {
+
+}
+
+
+%logo-base {
+    text-align: center;
+    margin: 0;
+
+    a,
+    a:hover,
+    a:focus {
+        text-decoration: none;
+    }
+
+    a, img {
+        display: block;
+    }
+
+    img {
+        margin: 0 auto;
+        height: 100%;
+        width: 100%;
+    }
+
+    /* Fallback .png support for IE8 */
+    [src*=".svg"] {
+        display: none;
+    }
+
+    .supports-svg & {
+        [src*=".png"] {
+            display: none;
+        }
+
+        [src*=".svg"] {
+            display: block;
+        }
+    }
+}
+
+
+%hero-base {
+    position: relative;
+    color: #fff;
+
+    /* White image mask */
+    &:before, &:after {
+        content: '';
+        height: 0px;
+        width: 50%;
+        display: block;
+        position: absolute;
+        bottom: 0px;
+        border-top: 0;
+        border-bottom: 38px solid white;
+    }
+
+    &:before {
+        left: 0px;
+        border-left: 0;
+        border-right: 48px solid transparent;
+    }
+
+    &:after {
+        right: 0px;
+        border-right: 0;
+        border-left: 48px solid transparent;
+    }
+}
+
+%hero-large {
+    @extend %hero-base;
+
+    h2 {
+        font-size: 5.625em;
+        line-height: 1;
+        margin: 0 0 ( $gutter * 3.75 );
+    }
+
+    p {
+        line-height: (25/16);
+        margin-bottom: 1em;
+    }
+
+    [class*='wrapper'] {
+        height: 588px;
+
+        > div {
+            position: absolute;
+            left: $gutter;
+        }
+    }
+
+    .content {
+        top: $gutter * 6.75;
+        width: 544px;
+    }
+
+    .logo {
+        bottom: $gutter * 5;
+    }
+}
+
+%hero-medium {
+    @extend %hero-base;
+
+    height: 338px;
+}
+
+%hero-small {
+    @extend %hero-base;
+
+    height: 168px;
+}
+
+%gold-outline-block-base {
+    position: relative;
+    background: $colorGold;
+    z-index: 0;
+
+    /* outer border */
+    border-style: solid;
+    border-color: $colorGold;
+
+    /* inner border */
+    &:before {
+        content: '';
+        position: absolute;
+        z-index: -1;
+        border-style: solid;
+        border-color: #fff;
+    }
+}
+
+@mixin outlineBlockBorderWidths( $innerWidth, $outerWidth ){
+    /* outer border */
+    border-width: $outerWidth + $innerWidth;
+
+    /* inner border */
+    &:before {
+        top: -$innerWidth;
+        right: -$innerWidth;
+        bottom: -$innerWidth;
+        left: -$innerWidth;
+        border-width: $innerWidth;
+    }
+}
+
+%gold-outline-block-large {
+    @extend %gold-outline-block-base;
+    @include outlineBlockBorderWidths( 5px, 2px );
+}
+
+%gold-outline-block-small {
+    @extend %gold-outline-block-base;
+    @include outlineBlockBorderWidths( 1px, 1px );
+}
+
+
+%social-icon-base {
+    @extend %icon-base;
+
+    $circumfrence: 3.375em;
+
+    height: $circumfrence;
+    width: $circumfrence;
+
+    @include prefix( 'border-radius', 3.375em / 2 );
+    position: absolute;
+    border-width: 0.15626em;
+    border-style: solid;
+    text-align: center;
+}
+
 
 /*================ Force an input/button to look like a text link ================*/
 .text-link {
@@ -1647,20 +1883,6 @@ $iconSelector: '[class^="icon-"], [class*=" icon-"]';
 	content: "\e621";
 }
 
-%social-icon-base {
-    @extend %icon-base;
-
-    $circumfrence: 3.375em;
-
-    height: $circumfrence;
-    width: $circumfrence;
-
-    @include prefix( 'border-radius', 3.375em / 2 );
-    position: absolute;
-    border-width: 0.15626em;
-    border-style: solid;
-    text-align: center;
-}
 
 .pinterest-icon {
     @extend %social-icon-base;
@@ -1902,58 +2124,32 @@ $iconSelector: '[class^="icon-"], [class*=" icon-"]';
 }
 
 
-
-/*============================================================================
-  #Product Grid and List Views
-  ==============================================================================*/
-.sold-out {
-
-}
-
-.on-sale {
-
-}
-
-.product-list-image {
-    display: block;
-    float: left;
-    margin-right: $gutter;
-    margin-bottom: $gutter;
-    max-width: 40%;
-}
-
-.product-grid-image {
-    display: block;
-    margin: 0 auto;
-
-    img {
-        display: block;
-        margin: 0 auto;
-    }
-}
-
-/*============================================================================
-  #Collection Filters
-  ==============================================================================*/
-.active-filter {
-    font-weight: bold;
-}
-
 /*============================================================================
   #Breadcrumbs
   ==============================================================================*/
-.breadcrumb {
-    margin-bottom: $gutter;
+.breadcrumb-block {
+    height: $gutter * 2.25;
+    background: $colorLighterGray;
+    padding: 2px ( $gutter * 1.25 ) 0;
+    line-height: $gutter * 2;
+    border-bottom: 1px solid $colorLightGray;
 
     a,
     span {
-        display: inline-block;
-        padding: $gutter/2 7px $gutter/2 0;
-        margin-right: 7px;
+        @extend %smallish-arial-text;
 
-        &:first-child {
-            padding-left: 0;
-        }
+        display: inline-block;
+        font-weight: 700;
+    }
+
+    a {
+        @extend %rsaquo;
+        @extend %warmGray-hover-underline-link;
+        
+    }
+
+    span {
+        color: $colorGold;
     }
 }
 
@@ -1961,36 +2157,174 @@ $iconSelector: '[class^="icon-"], [class*=" icon-"]';
 /*============================================================================
   #Product Page
   ==============================================================================*/
-.product-variants {
-    display: none;
 
-    .no-js & {
-        display: block;
+.product-detail-hero {
+    background: gray;
+
+    height: 692px;
+
+    .wrapper {
+        height: 100%;
     }
 }
 
-@include at-query($min, $large) {
-    .selector-wrapper,
-    .product-variants {
-        select {
-            max-width: 40%;
+.product-info-block {
+    background: #fff;
+    position: absolute;
+    right: $gutter;
+    top: $gutter * 2;
+    bottom: $gutter * 2;
+    width: 448px;
+
+    %product-info-block-row {
+        @extend .clearfix;
+
+        margin: 20px;
+    }
+
+    h2 {
+        font-size: 2.5em;
+        font-weight: 300;
+        color: $colorWarmGrayDark;
+        line-height: 1;
+        margin: 0 0 12px;
+    }
+
+    .product-price {
+        font-family: $helveticaFontStack;
+        font-size: 1.875em;
+        color: $colorWarmLightGray;
+        line-height: 1;
+        margin-bottom: 8px;
+    }
+
+    .product-style-number {
+        @extend %smallish-arial-text;
+
+        color: $colorLightGray;
+        font-weight: 700;
+        line-height: 1;
+    }
+
+    button {
+        @extend %large-gold-arrow-button;
+    }
+
+    .product-offer {
+        color: $colorWarmLightGray;
+
+        span {
+            vertical-align: middle;
+        }
+
+        .icon {
+            @extend %icon-base;
+            @extend .icon-gift;
+
+            font-size: 18px;
+        }
+
+        .text {
+            @extend %smallish-arial-text;
+
+            font-weight: 700;
+            text-transform: uppercase;
         }
     }
-}
 
-.product-photo-container {
-    margin-bottom: $gutter;
-}
+    .product-meta-block {
+        @extend %product-info-block-row;
 
-.product-photo-container,
-.product-photo-thumbs {
-    a, img {
-        display: block;
-        margin: 0 auto;
+        border-bottom: 1px solid $colorLighterGray;
+        padding: 8px 0 $gutter;
     }
 
-    li {
-        margin-bottom: $gutter;
+    .product-purchase-block {
+        @extend %product-info-block-row;
+    }
+
+    .product-share-block {
+        @extend %product-info-block-row;
+
+        border-top: 1px solid $colorLighterGray;
+        border-bottom: 1px solid $colorLighterGray;
+        padding: $gutter 0 14px;
+
+        > div {
+            display: inline-block;
+            line-height: 1;
+            vertical-align: middle;
+        }
+
+        .label {
+            @extend %smallish-arial-text;
+
+            font-weight: 700;
+            text-transform: uppercase;
+            color: $colorWarmLightGray;
+            padding-top: 2px;
+        }
+
+        .share-buttons {
+            background: gray;
+
+            height: 20px;
+            width: 200px;
+        }
+    }
+
+    .product-description-block {
+        @extend %product-info-block-row;
+
+        padding-bottom: $gutter * 3; /* room for the more details expand link */
+        position: relative;
+
+        .content {
+            height: 87px; /* height of the header and 3 lines of text. */
+            overflow-y: hidden;
+        }
+        
+        h5 {
+            @extend %smallish-arial-text;
+
+            text-transform: uppercase;
+            margin-top: 0;
+            font-weight: 700;
+            color: $colorWarmLightGray;
+        }
+
+        p {
+            @extend %smaller-helvetica-text;
+
+            line-height: (23/14);
+            color: $colorWarmGray;
+        }
+
+    }
+
+    .expand {
+        @extend %gray-hover-gold-link;
+        
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        color: $colorWarmLightGray;
+
+        .label {
+            @extend %smaller-arial-text;
+
+            font-weight: 700;
+            text-transform: uppercase;
+            text-decoration: underline;
+        }
+
+        .icon {
+            @extend %icon-base;
+            @extend .icon-arrow-up-small;
+
+            font-size: 11px;
+            color: $colorDarkGray;
+        }
     }
 }
 
@@ -2059,345 +2393,39 @@ $iconSelector: '[class^="icon-"], [class*=" icon-"]';
 /*============================================================================
   #Cart Page
   ==============================================================================*/
-.cart-row {
-    margin-top: $gutter;
-    padding-top: $gutter;
-    border-top: 1px solid $borderColor;
 
-    #ajaxifyDrawer & {
-        border-top-color: #444;
+/* stying the '/cart' page */
+.cart-page-layout {
+
+    h2 {
+        text-align: center;
     }
 
-    &:first-child {
-        margin-top: 0;
-    }
-
-    &:first-child {
-        padding-top: 0;
-        border-top: 0 none;
-    }
-
-    a {
-        color: $colorTextBody;
-
-        &:hover {
-            color: $colorPrimary;
-        }
-    }
 }
 
-.cart-subtotal {
-    margin-bottom: $gutter;
-}
-
-.cart-subtotal--price {
-    margin: 0 0 0 $gutter/3;
-    display: inline;
-}
-
-
-/*================================================================================
-  # Extends - these are for common text and block styles
-  ================================================================================*/
-
-%medium-arial-text {
-    font-family: $arialFontStack;
-
-    @include at-query ($min, $postSmall) {
-        font-size: 1.125em; /* ~18px */
-    }
-
-    @include at-query ($max, $small) {
-        font-size: 0.9375em; /* ~15px */
-    }
-}
-
-%small-mid-arial-text {
-    font-family: $arialFontStack;
-
-    @include at-query ($min, $postSmall) {
-        font-size: 0.875em; /* ~14px */
-    }
-
-    @include at-query ($max, $small) {
-        font-size: 0.8125em; /* ~13px */
-    }
-}    
-
-%small-arial-text {
-    font-family: $arialFontStack;
-    font-weight: 700;
-
-    @include at-query ($min, $postSmall) {
-        font-size: 0.8125em; /* ~13px */
-    }
-
-    @include at-query ($max, $small) {
-        font-size: 0.625em; /* ~10px */
-    }
-}    
-
-%smallish-arial-text {
-    font-family: $arialFontStack;
-    font-weight: 700;
-
-    font-size: 0.75em; /* ~12px */
-}    
-
-%smaller-arial-text {
-    font-family: $arialFontStack;
-    font-weight: 700;
-
-    @include at-query ($min, $postSmall) {
-        font-size: 0.6875em; /* ~11px */
-    }
-
-    @include at-query ($max, $small) {
-        font-size: 0.6875em; /* ~11px */
-    }
-}
-
-%medium-helvetica-text {
-    font-family: $helveticaFontStack;
-
-    @include at-query ($min, $postSmall) {
-        font-size: 1.25em; /* ~20px */
-    }
-
-    @include at-query ($max, $small) {
-        font-size: 0.9375em; /* ~15px */
-    }
-}
-
-%small-helvetica-text {
-    font-family: $helveticaFontStack;
-
-    @include at-query ($min, $postSmall) {
-        font-size: 1.125em; /* ~18px */
-    }
-
-    @include at-query ($max, $small) {
-        font-size: 0.9375em; /* ~15px */
-    }
-}
-
-%smaller-helvetica-text {
-    font-family: $helveticaFontStack;
-
-    @include at-query ($min, $postSmall) {
-        font-size: 0.875em; /* ~14px */
-    }
-
-    @include at-query ($max, $small) {
-        font-size: 0.78125em; /* ~12.5px */
-    }
-}
-
-%rsaquo {
-    &:after {
-        content: '\203A';
-        display: inline-block;
-        position: relative;
-        padding-left: 3px;
-    }
-}
-
-
-%link-base {
-    white-space: nowrap;
-}
-
-%base-link {
-    text-decoration: none;
-    white-space: nowrap;
-    color: $colorGray;
-
-    &:hover,
-    &:active,
-    &:focus {
-        color: $colorGold;
-    }
-}
-
-/* link text styles */
-
-/* gray link base */
-
-/* gray, gold on hover */
-%gray-hover-gold-link {
-    @extend %link-base;
-
-    color: $colorGray;
-    text-decoration: none;
-
-    &:hover,
-    &:active,
-    &:focus {
-        color: $colorGold;
-    }
-}
-
-/* gray, gold and underline on hover */
-%gray-hover-gold-underline-link {
-    @extend %link-base;
-
-    color: $colorGray;
-    text-decoration: none;
-
-    &:hover,
-    &:active,
-    &:focus {
-        text-decoration: underline;
-        color: $colorGold;
-    }
-}
-
-/* gray, underline on hover */
-%gray-hover-underline-link {
-    @extend %link-base;
-
-    color: $colorGray;
-    text-decoration: none;
-
-    &:hover,
-    &:active,
-    &:focus {
-        text-decoration: underline;
-    }
-}
-
-
-/* gray underline, gold on hover */
-%gray-underline-hover-gold-link {
-    @extend %link-base;
-
-    color: $colorGray;
-    text-decoration: underline;
-
-    &:hover,
-    &:active,
-    &:focus {
-        color: $colorGold;
-    }
-}
-
-/* gold, underline on hover */
-%gold-hover-underline-link {
-    @extend %link-base;
-
-    color: $colorGold;
-    text-decoration: none;
-
-    &:hover,
-    &:active,
-    &:focus {
-        text-decoration: underline;
-    }
-}
-
-/* white, gray on hover */
-%white-hover-gray-link {
-    @extend %link-base;
-    @include prefix('transition', 'all 0.4s ease');
-
-    color: #fff;
-    text-decoration: none;
-
-    &:hover,
-    &:active,
-    &:focus {
-        color: $colorWarmGrayDark;
-    }
-}
-
-/* white, gray on hover */
-%white-underline-hover-gold-link {
-    @extend %link-base;
-
-    color: #fff;
-
-    &:hover,
-    &:active,
-    &:focus {
-        color: $colorGold;
-    }
-}
-
-/*================================================================================
-  # Layouts
-  ================================================================================*/
-
-%wrapper-base {
+/* wrapper for the cart info block. used on the /cart page and on the cart drawer. */
+.cart-layout {
     @extend .clearfix;
-    position: relative;
 
-    margin: 0 auto;
-}
-
-.wrapper-14-col {
-    @extend %wrapper-base;
-
-    max-width: $siteWidth14col;
-}
-
-.wrapper {
-    @extend %wrapper-base;
-
-    max-width: $siteWidth;
-}
-
-.wrapper-10-col {
-    @extend %wrapper-base;
-
-    max-width: $siteWidth10Col;
-}
-
-.wrapper-8-col {
-    @extend %wrapper-base;
-
-    max-width: $siteWidth8Col;
-}
-
-%column-base {
-    padding-right: $gutter;
-    padding-left: $gutter;
-}
-
-
-
-%inline-list-base {
-    ul, li {
-        margin: 0;
+    %cart-column {
+        float: left;
+    }
+    
+    .main-col {
+        @extend %cart-column;
+        
+        width: 912px;
+        padding-left: $gutter;
+        padding-right: $gutter * 2;
     }
 
-    li {
-        display: inline-block;
-        vertical-align: top;
-    }
-}
+    .side-col {
+        @extend %cart-column;
 
-%nav-menu-base {
-    @extend %inline-list-base;
-
-    @include at-query ($min, $postSmall) {
-        ul {
-            height: 21px;
-        }
-    }
-
-    .site-footer & {
-        @include at-query ($max, $small) {
-            ul {
-                @include clearfix();
-            }
-
-            li {
-                display: block;
-                width: 50%;
-                float: left;
-                padding: 0 $gutter/2;
-            }
-        }
+        width: 240px;
+        border-left: 1px solid $colorLightGray;
+        padding-left: $gutter * 2;
+        padding-right: $gutter;
     }
 }
 
@@ -2668,42 +2696,6 @@ address {
   # Blocks
   ================================================================================*/
 
-%logo-base {
-    text-align: center;
-    margin: 0;
-
-    a,
-    a:hover,
-    a:focus {
-        text-decoration: none;
-    }
-
-    a, img {
-        display: block;
-    }
-
-    img {
-        margin: 0 auto;
-        height: 100%;
-        width: 100%;
-    }
-
-    /* Fallback .png support for IE8 */
-    [src*=".svg"] {
-        display: none;
-    }
-
-    .supports-svg & {
-        [src*=".png"] {
-            display: none;
-        }
-
-        [src*=".svg"] {
-            display: block;
-        }
-    }
-}
-
 .site-logo {
     @extend %logo-base;
 
@@ -2755,79 +2747,6 @@ address {
 
 /* Heros */
 
-%hero-base {
-    position: relative;
-    color: #fff;
-
-    /* White image mask */
-    &:before, &:after {
-        content: '';
-        height: 0px;
-        width: 50%;
-        display: block;
-        position: absolute;
-        bottom: 0px;
-        border-top: 0;
-        border-bottom: 38px solid white;
-    }
-
-    &:before {
-        left: 0px;
-        border-left: 0;
-        border-right: 48px solid transparent;
-    }
-
-    &:after {
-        right: 0px;
-        border-right: 0;
-        border-left: 48px solid transparent;
-    }
-}
-
-%hero-large {
-    @extend %hero-base;
-
-    h2 {
-        font-size: 5.625em;
-        line-height: 1;
-        margin: 0 0 ( $gutter * 3.75 );
-    }
-
-    p {
-        line-height: (25/16);
-        margin-bottom: 1em;
-    }
-
-    [class*='wrapper'] {
-        height: 588px;
-
-        > div {
-            position: absolute;
-            left: $gutter;
-        }
-    }
-
-    .content {
-        top: $gutter * 6.75;
-        width: 544px;
-    }
-
-    .logo {
-        bottom: $gutter * 5;
-    }
-}
-
-%hero-medium {
-    @extend %hero-base;
-
-    height: 338px;
-}
-
-%hero-small {
-    @extend %hero-base;
-
-    height: 168px;
-}
 
 .list-collections-page-hero {
     @extend %hero-large;
@@ -3159,12 +3078,14 @@ address {
 }
 
 .product-grid-hero,
+.related-products-hero,
 .collection-grid-hero {
     text-align: center;
 
     h2 {
         text-align: center;
-        margin-bottom: 0;
+        margin-top: 0;
+        margin-bottom: $gutter * 1;
     }
 }
 
@@ -3210,7 +3131,7 @@ address {
 
             &:after {
                 padding: 0;
-                margin-left: -1px;
+                margin-left: 5px;
             }
         }
     }
@@ -3224,6 +3145,8 @@ address {
 
 .collection-grid-item {
     .button {
+        @extend %small-gold-arrow-button;
+        
         width: 168px;
     }
 }
@@ -3258,9 +3181,10 @@ address {
     }
 
     .button {
+        @extend %small-gold-arrow-button;
+
         text-align: center;
-        width: 128px;
-        margin-right: 1px;
+        width: 126px;
     }
 
     /* **todo** remove this block */
@@ -3268,38 +3192,6 @@ address {
         display: block;
         width: 100%;
         height: auto;
-    }
-}
-
-.button {
-    @extend %gold-outline-block-small;
-
-    color: #fff;
-    text-decoration: none;
-    display: inline-block;
-    /* outline property adds 2 times it's width to the height and width of the block, regardless of box-sizing property */
-    height: 28px;
-    padding: 4px 12px 0;
-
-    > * {
-        line-height: 1;
-    }
-
-    .label {
-        @extend %smallish-arial-text;
-
-        text-transform: uppercase;
-        font-weight: 700;
-    }
-
-    .icon {
-        @extend %icon-base;
-        @extend .icon-arrow-right-solid;
-
-        display: inline-block;
-        position: relative;
-        top: 1px;
-        font-size: 12px;
     }
 }
 
@@ -3681,32 +3573,6 @@ address {
     }
 }
 
-
-%gold-outline-block-base {
-    outline-style: solid;
-    outline-color: $colorGold;
-    border-style: solid;
-    border-color: #fff;
-    background: $colorGold;
-}
-
-%gold-outline-block-large {
-    @extend %gold-outline-block-base;
-
-    outline-width: 2px;
-    margin: 2px;
-    border-width: 5px;
-}
-
-%gold-outline-block-small {
-    @extend %gold-outline-block-base;
-
-    outline-width: 1px;
-    margin: 1px;
-    border-width: 1px;
-}
-
-
 .newsletter-signup-block {
     @extend %gold-outline-block-large;
 
@@ -3743,6 +3609,7 @@ address {
 
     /* single row, two column layout */
     .template-collection &,
+    .template-product &,
     .template-list-collections & {
         padding: 0 5px;
         margin-bottom: $gutter * 2;
@@ -3928,6 +3795,7 @@ address {
     }
 
     .collection-grid-hero {
+        margin-top: $gutter * 2;
         margin-bottom: $gutter * 3;
     }
 
@@ -3937,7 +3805,24 @@ address {
 }
 
 .template-collection {
+    .product-grid-hero {
+        margin-top: $gutter * 2;
+        margin-bottom: $gutter * 3;
+    }
+
     .collection-grid-hero {
+        margin-top: $gutter * 3.75;
+        margin-bottom: $gutter * 3;
+    }
+
+    .social-hero {
+        padding: ( $gutter * 3.5 ) 0;
+    }
+}
+
+.template-product {
+    .related-products-hero {
+        margin-top: $gutter * 5;
         margin-bottom: $gutter * 3;
     }
 
@@ -4050,4 +3935,439 @@ address {
     100% {
         opacity: 1;
     }
+}
+
+/*================================================================================
+  # Ajaxify Cart Styles
+  ================================================================================*/
+
+/*============================================================================
+  Shopify Ajax Cart
+  Copyright 2014 Shopify Inc.
+  Author Carson Shold @cshold
+  Built with Sass - http://sass-lang.com/
+
+  Some things to know about this file:
+    - This file uses the same grid as timber.scss.liquid.
+      - If you want to use this separately, please include the following sections from timber.scss.liquid:
+        * #Breakpoint and Grid Variables
+        * #Grid Setup
+      - You may need to massage the code so it doesn't reference any non-existent mixins.
+
+  This file includes
+    - Sass helpers
+    - Colour variables to customize
+    - Styles for cart drawer, modal, and the flipped add to cart button
+==============================================================================*/
+
+.ajaxify-grey {
+  color: $ajaxifyGrey;
+}
+
+/*============================================================================
+  General Styles
+==============================================================================*/
+@include at-query ($max, $small) {
+  body.ajaxify-modal-visible {
+    overflow: hidden;
+  }
+}
+
+.ajaxifyCart-loader {
+  display: none;
+  opacity: 0;
+  position: absolute;
+  right: -24px;
+  top: 50%;
+  margin-top: -5px;
+  padding: 0;
+  width: 16px;
+  height: 16px;
+  @include transition(opacity 0.1s);
+  background-repeat: no-repeat;
+  background-color: #fff;
+  background-image: url(data:image/gif;base64,R0lGODlhEAAQAPQAAP///5mZmfj4+M/Pz/Ly8rS0tMnJyZmZmbu7u6enp93d3eTk5KCgoNfX15qamq6ursLCwgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACH+GkNyZWF0ZWQgd2l0aCBhamF4bG9hZC5pbmZvACH5BAAKAAAAIf8LTkVUU0NBUEUyLjADAQAAACwAAAAAEAAQAAAFdyAgAgIJIeWoAkRCCMdBkKtIHIngyMKsErPBYbADpkSCwhDmQCBethRB6Vj4kFCkQPG4IlWDgrNRIwnO4UKBXDufzQvDMaoSDBgFb886MiQadgNABAokfCwzBA8LCg0Egl8jAggGAA1kBIA1BAYzlyILczULC2UhACH5BAAKAAEALAAAAAAQABAAAAV2ICACAmlAZTmOREEIyUEQjLKKxPHADhEvqxlgcGgkGI1DYSVAIAWMx+lwSKkICJ0QsHi9RgKBwnVTiRQQgwF4I4UFDQQEwi6/3YSGWRRmjhEETAJfIgMFCnAKM0KDV4EEEAQLiF18TAYNXDaSe3x6mjidN1s3IQAh+QQACgACACwAAAAAEAAQAAAFeCAgAgLZDGU5jgRECEUiCI+yioSDwDJyLKsXoHFQxBSHAoAAFBhqtMJg8DgQBgfrEsJAEAg4YhZIEiwgKtHiMBgtpg3wbUZXGO7kOb1MUKRFMysCChAoggJCIg0GC2aNe4gqQldfL4l/Ag1AXySJgn5LcoE3QXI3IQAh+QQACgADACwAAAAAEAAQAAAFdiAgAgLZNGU5joQhCEjxIssqEo8bC9BRjy9Ag7GILQ4QEoE0gBAEBcOpcBA0DoxSK/e8LRIHn+i1cK0IyKdg0VAoljYIg+GgnRrwVS/8IAkICyosBIQpBAMoKy9dImxPhS+GKkFrkX+TigtLlIyKXUF+NjagNiEAIfkEAAoABAAsAAAAABAAEAAABWwgIAICaRhlOY4EIgjH8R7LKhKHGwsMvb4AAy3WODBIBBKCsYA9TjuhDNDKEVSERezQEL0WrhXucRUQGuik7bFlngzqVW9LMl9XWvLdjFaJtDFqZ1cEZUB0dUgvL3dgP4WJZn4jkomWNpSTIyEAIfkEAAoABQAsAAAAABAAEAAABX4gIAICuSxlOY6CIgiD8RrEKgqGOwxwUrMlAoSwIzAGpJpgoSDAGifDY5kopBYDlEpAQBwevxfBtRIUGi8xwWkDNBCIwmC9Vq0aiQQDQuK+VgQPDXV9hCJjBwcFYU5pLwwHXQcMKSmNLQcIAExlbH8JBwttaX0ABAcNbWVbKyEAIfkEAAoABgAsAAAAABAAEAAABXkgIAICSRBlOY7CIghN8zbEKsKoIjdFzZaEgUBHKChMJtRwcWpAWoWnifm6ESAMhO8lQK0EEAV3rFopIBCEcGwDKAqPh4HUrY4ICHH1dSoTFgcHUiZjBhAJB2AHDykpKAwHAwdzf19KkASIPl9cDgcnDkdtNwiMJCshACH5BAAKAAcALAAAAAAQABAAAAV3ICACAkkQZTmOAiosiyAoxCq+KPxCNVsSMRgBsiClWrLTSWFoIQZHl6pleBh6suxKMIhlvzbAwkBWfFWrBQTxNLq2RG2yhSUkDs2b63AYDAoJXAcFRwADeAkJDX0AQCsEfAQMDAIPBz0rCgcxky0JRWE1AmwpKyEAIfkEAAoACAAsAAAAABAAEAAABXkgIAICKZzkqJ4nQZxLqZKv4NqNLKK2/Q4Ek4lFXChsg5ypJjs1II3gEDUSRInEGYAw6B6zM4JhrDAtEosVkLUtHA7RHaHAGJQEjsODcEg0FBAFVgkQJQ1pAwcDDw8KcFtSInwJAowCCA6RIwqZAgkPNgVpWndjdyohACH5BAAKAAkALAAAAAAQABAAAAV5ICACAimc5KieLEuUKvm2xAKLqDCfC2GaO9eL0LABWTiBYmA06W6kHgvCqEJiAIJiu3gcvgUsscHUERm+kaCxyxa+zRPk0SgJEgfIvbAdIAQLCAYlCj4DBw0IBQsMCjIqBAcPAooCBg9pKgsJLwUFOhCZKyQDA3YqIQAh+QQACgAKACwAAAAAEAAQAAAFdSAgAgIpnOSonmxbqiThCrJKEHFbo8JxDDOZYFFb+A41E4H4OhkOipXwBElYITDAckFEOBgMQ3arkMkUBdxIUGZpEb7kaQBRlASPg0FQQHAbEEMGDSVEAA1QBhAED1E0NgwFAooCDWljaQIQCE5qMHcNhCkjIQAh+QQACgALACwAAAAAEAAQAAAFeSAgAgIpnOSoLgxxvqgKLEcCC65KEAByKK8cSpA4DAiHQ/DkKhGKh4ZCtCyZGo6F6iYYPAqFgYy02xkSaLEMV34tELyRYNEsCQyHlvWkGCzsPgMCEAY7Cg04Uk48LAsDhRA8MVQPEF0GAgqYYwSRlycNcWskCkApIyEAOwAAAAAAAAAAAA==);
+}
+
+/*============================================================================
+  Ajaxify Cart - General
+==============================================================================*/
+.ajaxifyCart--content {
+  position: relative;
+  @include perspective(1000px);
+  @include transform-style(preserve-3d);
+  @include transition(all 450ms cubic-bezier(0.57,.06,.05,.95));
+  padding-top: $gutter;
+  padding-bottom: $gutter;
+
+  .is-visible & {
+    @include transition(all 550ms cubic-bezier(0.57, 0.06, 0.05, 0.95));
+  }
+
+  form {
+    margin-bottom: 0;
+  }
+
+  @include at-query ($max, $medium) {
+    padding-top: 15px;
+    padding-bottom: 15px;
+  }
+}
+
+// Row and column spacing
+.ajaxifyCart--products {
+  padding-bottom: 10px;
+  margin-bottom: 20px;
+}
+
+.ajaxifyCart--product {
+  position: relative;
+  padding: 10px 0;
+
+  &:first-child {
+    padding-top: 0;
+  }
+}
+
+.ajaxifyCart--product,
+.cart-row {
+  @include transform-origin(top);
+  @include transition(all 650ms cubic-bezier(0.57, 0.06, 0.05, 0.95));
+  @include rotateX(0deg);
+  max-height: 500px;
+  visibility: visible;
+
+  &.is-removed {
+    overflow: hidden;
+    opacity: 0;
+    padding: 0;
+    margin: -$gutter 0 0;
+    visibility: hidden;
+    @include rotateX(-92deg);
+    @include backface(hidden);
+    @include transition(all 450ms cubic-bezier(0.57,.06,.05,.95));
+    max-height: 0;
+  }
+}
+
+.ajaxifyCart--row {
+  clear: both;
+  @include clearfix;
+}
+
+.ajaxCart--product-image {
+  display: block;
+  overflow: hidden;
+  margin-bottom: 15px;
+
+  img {
+    display: block;
+    margin: 0 auto;
+    max-width: 100%;
+  }
+}
+
+
+/*============================================================================
+  #Quantity Selectors
+==============================================================================*/
+.js-qty {
+  position: relative;
+  margin-bottom: 1em;
+  max-width: 100px;
+  min-width: 75px;
+  overflow: visible;
+  @include backface(hidden);
+
+  input[type="text"] {
+    display: block;
+    background: none;
+    text-align: center;
+    width: 100%;
+    padding: 5px 25px;
+    margin: 0;
+  }
+}
+
+.js--qty-adjuster {
+  cursor: pointer;
+  position: absolute;
+  display: block;
+  top: 0;
+  bottom: 0;
+  padding: 5px 0;
+  width: 20px;
+  text-align: center;
+  overflow: hidden;
+  -webkit-user-select: none;
+  -moz-user-select:    none;
+  -ms-user-select:     none;
+  -o-user-select:      none;
+  user-select:         none;
+  @include transition(all 0.2s ease-out);
+
+  &:hover {
+    background-color: $borderColor;
+  }
+
+  &:active {
+    background-color: darken($borderColor, 10%);
+  }
+}
+
+.js--add {
+  right: 0;
+  border-left: 1px solid $borderColor;
+}
+
+.js--minus {
+  left: 0;
+  border-right: 1px solid $borderColor;
+}
+
+/*============================================================================
+  #Quantity Selectors in the Ajax Cart
+==============================================================================*/
+.ajaxifyCart--qty {
+  @extend .js-qty;
+  margin: 0;
+
+  .ajaxifyCart--is-loading & {
+    opacity: 0.5;
+    @include transition(none);
+  }
+}
+
+.ajaxifyCart--num {
+  @include transition(all 0.1s ease-out);
+
+  .supports-no-touch & {
+    border: 1px solid rgba(0,0,0,0);
+  }
+}
+
+.ajaxifyCart--qty-adjuster {
+  @extend .js--qty-adjuster;
+  opacity: 0;
+
+  .cart-row:hover &,
+  .ajaxifyCart--product:hover &,
+  .supports-touch & {
+    opacity: 1;
+    @include transition(background-color 0.2s ease-out);
+  }
+
+  &:hover {
+    background-color: $ajaxifyGreyDark;
+  }
+
+  &:active {
+    background-color: darken($ajaxifyGreyDark, 10%);
+  }
+
+  // Turn off animation on initial hover
+  .ajaxifyCart--product:hover &:hover {
+    @include transition(none);
+  }
+}
+
+.ajaxifyCart--add {
+  @extend .js--add;
+}
+
+.ajaxifyCart--minus {
+  @extend .js--minus;
+}
+
+/*============================================================================
+  Ajaxify Drawer
+==============================================================================*/
+#ajaxifyDrawer {
+  background-color: $drawerBackgroundColor;
+  height: 0px;
+  overflow: hidden;
+  @include perspective (1000px);
+  @include transform-style(preserve-3d);
+  @include transition(all 600ms cubic-bezier(0.47, 0.5, 0, 0.95));
+
+  &.is-visible {
+    @include transition(all 550ms cubic-bezier(0.47, 0, 0, 0.95));
+  }
+
+  .update-cart {
+    display: none!important;
+  }
+}
+
+// Drawer colors and general styles
+#ajaxifyDrawer .ajaxifyCart--content {
+  margin: 0 auto;
+  opacity: 0;
+  overflow: hidden;
+  padding-top: $gutter;
+  padding-bottom: $gutter;
+  background-color: $drawerBackgroundColor;
+  color: color-control($drawerBackgroundColor);
+
+  // Typography styles
+  h1, h2, h3, h4 {
+    color: color-control($drawerBackgroundColor);
+  }
+
+  a {
+    color: color-control($drawerBackgroundColor);
+  }
+
+  input[type="text"] {
+    color: color-control($drawerBackgroundColor);
+  }
+
+  @include transform-origin(top);
+  @include rotateX(-90deg);
+}
+
+#ajaxifyDrawer.is-visible .ajaxifyCart--content {
+  opacity: 1;
+  @include rotateX(0deg);
+}
+
+// Quantity selector colors in the drawer
+#ajaxifyDrawer {
+  .cart-row:hover input[type="text"],
+  .ajaxifyCart--product:hover input[type="text"],
+  .supports-touch input[type="text"] {
+    border-color: $drawerBorderColor;
+  }
+
+  .js-qty {
+    margin: 0 auto;
+  }
+
+  .js--add {
+    border-left: 1px solid $drawerBorderColor;
+  }
+
+  .js--minus {
+    border-right: 1px solid $drawerBorderColor;
+  }
+
+  .ajaxifyCart--products {
+    border-bottom: 1px solid $drawerBorderColor;
+  }
+
+  .ajaxifyCart--qty-adjuster {
+    &:hover {
+      background-color: $drawerBorderColor;
+    }
+
+    &:active {
+      background-color: darken($drawerBorderColor, 10%);
+    }
+  }
+}
+
+.ajaxifyDrawer-caret {
+  position: relative;
+  display: block;
+  height: 0;
+  opacity: 0;
+  overflow: hidden;
+
+  .is-visible + & {
+    opacity: 1;
+    overflow: visible;
+  }
+
+  & > span {
+    position: absolute;
+    top: 0;
+    left: 100%;
+    display: block;
+    width: 0;
+    height: 0;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-top: 6px solid $drawerBackgroundColor;
+    margin-left: -6px;
+    opacity: 0;
+    @include transform(translate(0,-12px));
+    @include transition(all 0.25s ease-in-out 0.2s);
+  }
+
+  .is-visible + & > span {
+    @include transform(translate(0,0));
+    opacity: 1;
+  }
+}
+
+
+
+/*============================================================================
+  Sprites
+//   - using data URIs to prevent any additional http requests
+==============================================================================*/
+.sprite {
+  display: block;
+  text-indent: -9999px;
+  background-repeat: no-repeat;
+  background-position: 0 0;
+}
+
+.ajaxifyCart--add {
+  @extend .sprite;
+  background-position: center center;
+  background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAYAAADED76LAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyNpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNS1jMDE0IDc5LjE1MTQ4MSwgMjAxMy8wMy8xMy0xMjowOToxNSAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIChNYWNpbnRvc2gpIiB4bXBNTTpJbnN0YW5jZUlEPSJ4bXAuaWlkOjIxNTJBNEY1NDY1OTExRTM4ODdCODU0OEQ4MDA1MjgwIiB4bXBNTTpEb2N1bWVudElEPSJ4bXAuZGlkOjIxNTJBNEY2NDY1OTExRTM4ODdCODU0OEQ4MDA1MjgwIj4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6QUU4MjYyOEE0NjU3MTFFMzg4N0I4NTQ4RDgwMDUyODAiIHN0UmVmOmRvY3VtZW50SUQ9InhtcC5kaWQ6MjE1MkE0RjQ0NjU5MTFFMzg4N0I4NTQ4RDgwMDUyODAiLz4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94OnhtcG1ldGE+IDw/eHBhY2tldCBlbmQ9InIiPz6VbCy4AAAAWklEQVR42mJsampigAIeIH4GZUsB8RcQg4UBAUACvEhsBpgCkE5GKA0DklBF/0EKXgExJwMqgFn1nYmBAACZIIZkBbojwVbAHPQZSeNzZBOQvfkZiQ3WCBBgALZlEm83dptmAAAAAElFTkSuQmCC);
+}
+
+.ajaxifyCart--minus {
+  @extend .sprite;
+  background-position: center center;
+  background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAYAAADED76LAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyNpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNS1jMDE0IDc5LjE1MTQ4MSwgMjAxMy8wMy8xMy0xMjowOToxNSAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIChNYWNpbnRvc2gpIiB4bXBNTTpJbnN0YW5jZUlEPSJ4bXAuaWlkOjIxNTJBNEZENDY1OTExRTM4ODdCODU0OEQ4MDA1MjgwIiB4bXBNTTpEb2N1bWVudElEPSJ4bXAuZGlkOjIxNTJBNEZFNDY1OTExRTM4ODdCODU0OEQ4MDA1MjgwIj4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6MjE1MkE0RkI0NjU5MTFFMzg4N0I4NTQ4RDgwMDUyODAiIHN0UmVmOmRvY3VtZW50SUQ9InhtcC5kaWQ6MjE1MkE0RkM0NjU5MTFFMzg4N0I4NTQ4RDgwMDUyODAiLz4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94OnhtcG1ldGE+IDw/eHBhY2tldCBlbmQ9InIiPz6MzbYiAAAALElEQVR42mL6//8/Az7MxEAAEFTA2NTU9A1Ic+KQ/07YBJBDKHIDQQUAAQYAbksecMSS2doAAAAASUVORK5CYII=);
+}
+
+.ajaxifyCart--close {
+  @extend .sprite;
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  opacity: 0;
+  visibility: hidden;
+  border: 0 none;
+  width: 30px;
+  height: 25px;
+  cursor: pointer;
+  background: {
+    color: transparent;
+    position: center center;
+    image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAsAAAALCAYAAACprHcmAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyNpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNS1jMDE0IDc5LjE1MTQ4MSwgMjAxMy8wMy8xMy0xMjowOToxNSAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIChNYWNpbnRvc2gpIiB4bXBNTTpJbnN0YW5jZUlEPSJ4bXAuaWlkOkMzRUY2REVBNDY1QjExRTM4ODdCODU0OEQ4MDA1MjgwIiB4bXBNTTpEb2N1bWVudElEPSJ4bXAuZGlkOkMzRUY2REVCNDY1QjExRTM4ODdCODU0OEQ4MDA1MjgwIj4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6QzNFRjZERTg0NjVCMTFFMzg4N0I4NTQ4RDgwMDUyODAiIHN0UmVmOmRvY3VtZW50SUQ9InhtcC5kaWQ6QzNFRjZERTk0NjVCMTFFMzg4N0I4NTQ4RDgwMDUyODAiLz4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94OnhtcG1ldGE+IDw/eHBhY2tldCBlbmQ9InIiPz7sdZ8fAAAAp0lEQVR42nSPQQ6CMBBFx4ZEj+DSY8BGt9SVwRP1QBDdULeygaN4BFzpn+Q3mZCW5DFk/uvQ2YUQfiIygYuUnzc4O7wW/QCxIEbmi8oNG23mgO03js0reDF4gCNry77mUpkpHvSgo7QHA7gnwW1+q8FKcbViTtbJB/Bl7Uty5BWe4MTa2aWTPJplbuDDmpYe04IzqBn4zbU8J2udHcUpI9oDmtd/AQYAX20mtnhTCxQAAAAASUVORK5CYII=)
+  }
+  z-index: 999999999;
+  @include transition(all 450ms cubic-bezier(0.57,.06,.05,.95));
+
+  .is-visible & {
+    opacity: 0.8;
+    visibility: visible;
+    @include transition(opacity 650ms cubic-bezier(0.57, 0.06, 0.05, 0.95) 200ms);
+  }
+
+  &:hover {
+    opacity: 1;
+  }
+}
+
+
+@media
+(-webkit-min-device-pixel-ratio: 2),
+(min-resolution: 192dpi) {
+
+  .ajaxifyCart--add {
+    background-size: 8px;
+    background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyNpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNS1jMDE0IDc5LjE1MTQ4MSwgMjAxMy8wMy8xMy0xMjowOToxNSAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIChNYWNpbnRvc2gpIiB4bXBNTTpJbnN0YW5jZUlEPSJ4bXAuaWlkOkFFODI2Mjg4NDY1NzExRTM4ODdCODU0OEQ4MDA1MjgwIiB4bXBNTTpEb2N1bWVudElEPSJ4bXAuZGlkOkFFODI2Mjg5NDY1NzExRTM4ODdCODU0OEQ4MDA1MjgwIj4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6QUU4MjYyODY0NjU3MTFFMzg4N0I4NTQ4RDgwMDUyODAiIHN0UmVmOmRvY3VtZW50SUQ9InhtcC5kaWQ6QUU4MjYyODc0NjU3MTFFMzg4N0I4NTQ4RDgwMDUyODAiLz4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94OnhtcG1ldGE+IDw/eHBhY2tldCBlbmQ9InIiPz7Q1IXcAAAAL0lEQVR42mJsampiwAH+o/EZsSliYqAQjBrAwMCCJbSJjZXhFAaMoylxgA0ACDAAufIFqTR3duwAAAAASUVORK5CYII=);
+  }
+
+  .ajaxifyCart--minus {
+    background-size: 8px;
+    background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyNpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNS1jMDE0IDc5LjE1MTQ4MSwgMjAxMy8wMy8xMy0xMjowOToxNSAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIChNYWNpbnRvc2gpIiB4bXBNTTpJbnN0YW5jZUlEPSJ4bXAuaWlkOjIxNTJBNEY5NDY1OTExRTM4ODdCODU0OEQ4MDA1MjgwIiB4bXBNTTpEb2N1bWVudElEPSJ4bXAuZGlkOjIxNTJBNEZBNDY1OTExRTM4ODdCODU0OEQ4MDA1MjgwIj4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6MjE1MkE0Rjc0NjU5MTFFMzg4N0I4NTQ4RDgwMDUyODAiIHN0UmVmOmRvY3VtZW50SUQ9InhtcC5kaWQ6MjE1MkE0Rjg0NjU5MTFFMzg4N0I4NTQ4RDgwMDUyODAiLz4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94OnhtcG1ldGE+IDw/eHBhY2tldCBlbmQ9InIiPz54TqQaAAAAKElEQVR42mL8//8/AyWAiYFCMGoAAwNLc3Pz/xEeBoyjKXEQGAAQYABVgwijPO94YQAAAABJRU5ErkJggg==);
+  }
+
 }

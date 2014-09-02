@@ -8,106 +8,60 @@
 
 {% endcomment %}
 
-<div itemscope itemtype="http://schema.org/Product">
+<div class="product-detail-hero" itemscope itemtype="http://schema.org/Product">
 
   <meta itemprop="url" content="{{ shop.url }}{{ product.url }}">
   <meta itemprop="image" content="{{ product.featured_image.src | product_img_url: 'grande' }}">
+  <meta itemprop="priceCurrency" content="{{ shop.currency }}">
+  {% if product.available %}
+    <link itemprop="availability" href="http://schema.org/InStock">
+  {% else %}
+    <link itemprop="availability" href="http://schema.org/OutOfStock">
+  {% endif %}
 
-  <div class="grid">
-    <div class="grid-item large--one-half">
+  <div class="wrapper">
 
-      {% comment %}
-        If we only have one product image, show a large version of it.
-        If we have more than 1, show it then loop through the rest as thumbnails.
-      {% endcomment %}
-      {% if product.images.size == 0 %}
+    <div class="product-info-block" itemprop="offers" itemscope itemtype="http://schema.org/Offer">
 
-        <div class="product-photo-container" id="productPhoto">
-          <img src="{{ '' | product_img_url: 'grande' }}" alt="" id="productPhotoImg">
-        </div>
+      <div class="breadcrumb-row">
+        
+        {% include 'breadcrumb' %}
 
-      {% else %}
+      </div>
 
-        <div class="product-photo-container" id="productPhoto">
-          <a href="{{ product.featured_image.src | product_img_url: 'original' }}">
-            <img src="{{ product.featured_image.src | product_img_url: 'grande' }}" alt="{{ product.featured_image.alt | escape }}" id="productPhotoImg">
-          </a>
-        </div>
-
-        {% comment %}
-          If we have more than one product image, loop through them and create thumbnails.
-
-          By default, images will link to their grande size (600x600).
-          Thumbnail swapping is enabled in shop.js.liquid.
-        {% endcomment %}
-        {% if product.images.size > 1 %}
-          <ul class="product-photo-thumbs grid-uniform" id="productThumbs">
-
-            {% for image in product.images %}
-              <li class="grid-item one-quarter">
-                <a href="{{ image.src | product_img_url: 'grande' }}" class="product-photo-thumb">
-                  <img src="{{ image.src | product_img_url: 'compact' }}" alt="{{ image.alt | escape }}">
-                </a>
-              </li>
-            {% endfor %}
-
-          </ul>
-        {% endif %}
-
-      {% endif %}
-
-    </div>
-
-    <div class="grid-item large--one-half">
-
-      <div itemprop="offers" itemscope itemtype="http://schema.org/Offer">
-
-        <meta itemprop="priceCurrency" content="{{ shop.currency }}">
+      <div class="product-meta-block">
 
         <h2 itemprop="name">{{ product.title }}</h2>
 
-        {% if product.available %}
-          <link itemprop="availability" href="http://schema.org/InStock">
-        {% else %}
-          <link itemprop="availability" href="http://schema.org/OutOfStock">
-        {% endif %}
+        <div class="product-price" id="productPrice" itemprop="price">
+          US {{ product.price | money }}
+        </div>
+
+        <div class="product-style-number">
+          Style #: {{ product.variants.first.sku }}
+        </div>
+        
+      </div>
+
+      <div class="product-purchase-block">
 
         {% comment %}
-          ID addToCartForm is a selector for the ajaxify cart plugin
+        ID addToCartForm is a selector for the ajaxify cart plugin
         {% endcomment %}
         <form action="/cart/add" method="post" enctype="multipart/form-data" id="addToCartForm">
 
           {% comment %}
-            Optionally show the 'compare at' or original price of the product.
-          {% endcomment %}
-          <span id="productPrice" class="h2{% if product.compare_at_price > product.price %} on-sale{% endif %}" itemprop="price">
-            US {{ product.price | money }}
-          </span>
+          Add product variants as a dropdown.
+          - By default, each variant (or combination of variants) will display as its own <option>
+          - To separate these into multiple steps, which we suggest, use option_selection.js (see below)
 
-          {% if product.compare_at_price > product.price %}
-            <span id="comparePrice" class="h5">
-              Compare at:
-              {{ product.compare_at_price_max | money }}
-            </span>
-          {% endif %}
+          You can leverage jQuery to add a callback on page load and each time the select element changes:
+          - Include option_selection.js (as seen at the bottom of this file)
+          - This allows you to use JavaScript anytime the variant dropdown changes
+          - This also separates out your variant options (ie. size, color, etc.) to separate select elements
 
-          <span>Style #: {{ product.variants.first.sku }}</span>
-
-
-          <hr />
-
-          {% comment %}
-            Add product variants as a dropdown.
-              - By default, each variant (or combination of variants) will display as its own <option>
-              - To separate these into multiple steps, which we suggest, use option_selection.js (see below)
-
-            You can leverage jQuery to add a callback on page load and each time the select element changes:
-              - Include option_selection.js (as seen at the bottom of this file)
-              - This allows you to use JavaScript anytime the variant dropdown changes
-              - This also separates out your variant options (ie. size, color, etc.) to separate select elements
-
-            For more information on products with multiple options, visit:
-              - http://docs.shopify.com/support/your-website/themes/can-i-make-my-theme-use-products-with-multiple-options#update-product-liquid
+          For more information on products with multiple options, visit:
+          - http://docs.shopify.com/support/your-website/themes/can-i-make-my-theme-use-products-with-multiple-options#update-product-liquid
 
           {% endcomment %}
           <select name="id" id="productSelect" class="product-variants">
@@ -115,7 +69,7 @@
               {% if variant.available %}
 
                 {% comment %}
-                  Note: if you use option_selection.js, your <select> tag will be overwritten, meaning what you have inside <option> will not reflect what you coded below.
+                Note: if you use option_selection.js, your <select> tag will be overwritten, meaning what you have inside <option> will not reflect what you coded below.
                 {% endcomment %}
                 <option value="{{variant.id}}">
                   {{ variant.title }} - {{ variant.price | money_with_currency }}
@@ -129,33 +83,98 @@
             {% endfor %}
           </select>
 
-
           <!-- <label for="quantity">Quantity</label>
           <input type="number" id="quantity" name="quantity" value="1" min="1"> -->
 
-          <input type="submit" name="add" class="btn" id="addToCart" value="Add to Cart">
+          <button type="submit" name="add" id="addToCart">
+            <span class="label">Add to cart</span>
+            <span class="icon"></span>
+          </button>
+
         </form>
 
-        <span>Free shipping on int'l orders $1,000+</span>
+        <div class="product-offer">
 
-        <div class="product-share-block">
-          sharing buttons
+          <span class="icon"></span>
+          <span class="text">Free shipping on int&rsquo;l orders $1,000+</span>
+
         </div>
-
-        <div class="product-description rte" itemprop="description">
-          <h5>Details:</h5>
-          <p>{{ product.description }}</p>
-        </div>
-
-        <a href="#">More Details</a>
 
       </div>
 
+      <div class="product-share-block">
+
+        <div class="label">Share:</div>
+
+        <div class="share-buttons">
+
+        </div>
+
+      </div>
+
+      <div class="product-description-block" itemprop="description">
+        <div class="content">
+          <h5>Details:</h5>
+          {{ product.description }}
+        </div>
+        <a class="expand" href="#">
+          <span class="label">More Details</span><span class="icon"></span>
+        </a>
+      </div>
+
     </div>
+
+
+    {% comment %}
+    If we only have one product image, show a large version of it.
+    If we have more than 1, show it then loop through the rest as thumbnails.
+    {% endcomment %}
+    <div class="product-image-main-block" id="productPhoto">
+      
+      {% if product.images.size == 0 %}
+
+        <img src="{{ '' | product_img_url: 'grande' }}" alt="" id="productPhotoImg">
+
+      {% else %}
+
+        <img src="{{ product.featured_image.src | product_img_url: 'grande' }}" alt="{{ product.featured_image.alt | escape }}" id="productPhotoImg">
+
+      {% endif %}
+
+    </div>
+
+    {% if product.images.size == 0 %}
+      {% comment %}
+      If we have more than one product image, loop through them and create thumbnails.
+
+      By default, images will link to their grande size (600x600).
+      Thumbnail swapping is enabled in shop.js.liquid.
+      {% endcomment %}
+      {% if product.images.size > 1 %}
+
+        <div class="product-image-thumbs-block">
+
+          <ul class="product-photo-thumbs grid-uniform" id="productThumbs">
+
+            {% for image in product.images %}
+              <li class="grid-item one-quarter">
+                <a href="{{ image.src | product_img_url: 'master' }}" class="product-photo-thumb">
+                  <img src="{{ image.src | product_img_url: 'small' }}" alt="{{ image.alt | escape }}">
+                </a>
+              </li>
+            {% endfor %}
+
+          </ul>
+
+        </div>
+
+      {% endif %}
+
+    {% endif %}
+
   </div>
-
+  
 </div>
-
 
 {% comment %}
 If the user is on a collection product page (ie with /collections/collection-handle/products/product-handle)
@@ -163,77 +182,71 @@ in the URL, we can show next/previous links to other products in the collection.
 {% endcomment %}
 {% if collection %}
 
-  <div class="related-products-block">
-    <h2>Other styles you might like:</h2>
+  <div class="related-products-hero">
 
-    <div class="collection-carousel-block">
+    <div class="wrapper">
+      
+      <h2>Other styles you might like:</h2>
 
-    {% paginate collection.products by 4 %}
+      <div class="carousel-block">
 
-    {% comment %}
-    Use class grid-uniform to have evenly sized columns clear
-    each other properly at each breakpoint.
-    {% endcomment %}
+        {% comment %}
+        Use class grid-uniform to have evenly sized columns clear
+        each other properly at each breakpoint.
+        {% endcomment %}
 
-    {% comment %}
-    Loop through our products in the current collection.
-    See the snippet 'product-grid-item' for the layout.
-    {% endcomment %}
+        {% comment %}
+        Loop through our products in the current collection.
+        See the snippet 'product-grid-item' for the layout.
+        {% endcomment %}
+
+        {% comment %}
+        Capture the current product for this page. This allows the loop to use the name 'product'
+        {% endcomment %}
+        {% assign this_product = product %}
+
+        {% for product in collection.products limit:5 %}
+
+          {% if product.id != this_product.id %}
+
+            {% include 'product-grid-item' %}
+
+          {% endif %}
+
+        {% endfor %}
 
 
-      {% comment %}
-      Capture the current product for this page. This allows the loop to use the name 'product'
-      {% endcomment %}
-      {% assign this_product = product %}
-
-    {% for product in collection.products %}
-
-      {% if product.id != this_product.id %}
-
-      {% include 'product-grid-item' %}
-
+        {% if paginate.pages > 1 %}
+          <div class="text-center">
+            {% include 'pagination-custom' %}
+          </div>
         {% endif %}
 
-      {% else %}
 
-      <div class="grid-item">
-        <p>Sorry, there are no products matching your search.</p>
+        {% comment %}
+        Restore the currnt page product.
+        {% endcomment %}
+        {% assign product = this_product %}
+
       </div>
-
-    {% endfor %}
-
-
-    {% if paginate.pages > 1 %}
-      <div class="text-center">
-        {% include 'pagination-custom' %}
-      </div>
-    {% endif %}
-
-
-    {% comment %}
-    Restore the currnt page product.
-    {% endcomment %}
-    {% assign product = this_product %}
-
-    {% endpaginate %}
-      
 
     </div>
     
   </div>
 
-
-
 {% endif %}
 
-
+<hr class="hr-4-col" />
 
 <div class="social-hero">
-  <h2>Keep in Touch:</h2>
-  {% include 'newsletter-signup-block' %}
-  {% include 'social-link-block' %}
-</div>
 
+  <h2>Keep in Touch:</h2>
+
+  {% include 'newsletter-signup-block' %}
+
+  {% include 'social-link-block' %}
+
+</div>
 
 {% comment %}
   To take advantage of a callback on the select dropdown, add option_selection.js

@@ -73,7 +73,7 @@
     </div>
 
     <div class="button-block">
-      <a class="button" href="{{ collection.url }}" title="Browse our {{ collection_title }} collection">
+      <a class="button" href="{{ product.url | within: collection }}">
         <span class="label">View Dress</span>
         <span class="icon"></span>
       </a>
