@@ -90,7 +90,8 @@ $breakpoint-has-pull:  ('medium', 'medium-down', 'large');
 // Theia Colors
 $colorOffWhite: #fefefe;
 
-$colorLighterGray: #f2f2f2;
+$colorLightestGray: #f2f2f2;
+$colorLighterGray: #e5e5e5;
 $colorLightGray: #d8d8d8;
 $colorMidGray: #bcbbbb;
 $colorGray: #8d8d8d;
@@ -559,6 +560,18 @@ html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abb
     }
 }
 
+%smallest-helvetica-text {
+    font-family: $helveticaFontStack;
+
+    @include at-query ($min, $postSmall) {
+        font-size: 0.75em; /* ~12px */
+    }
+
+    @include at-query ($max, $small) {
+        font-size: 0.75em; /* ~12px */
+    }
+}
+
 %rsaquo {
     &:after {
         content: '\203A';
@@ -616,6 +629,21 @@ html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abb
         text-decoration: underline;
     }
 }
+
+/* gray, gold on hover */
+%warmLightGray-hover-gold-link {
+    @extend %link-base;
+
+    color: $colorWarmLightGray;
+    text-decoration: none;
+
+    &:hover,
+    &:active,
+    &:focus {
+        color: $colorGold;
+    }
+}
+
 
 
 /* gray, gold and underline on hover */
@@ -1109,7 +1137,7 @@ hr {
 }
 
 %gray-button-base {
-
+    @extend %gray-outline-block-small;
 }
 
 %lightGray-button-base {
@@ -1192,7 +1220,9 @@ hr {
 
 /* gray, medium button */
 %medium-gray-button {
-
+    @extend %button-base;
+    @extend %large-button-base;
+    @extend %gray-button-base;
 }
 
 /* light gray, small button */
@@ -2129,7 +2159,7 @@ $iconSelector: '[class^="icon-"], [class*=" icon-"]';
   ==============================================================================*/
 .breadcrumb-block {
     height: $gutter * 2.25;
-    background: $colorLighterGray;
+    background: $colorLightestGray;
     padding: 2px ( $gutter * 1.25 ) 0;
     line-height: $gutter * 2;
     border-bottom: 1px solid $colorLightGray;
@@ -2235,7 +2265,7 @@ $iconSelector: '[class^="icon-"], [class*=" icon-"]';
     .product-meta-block {
         @extend %product-info-block-row;
 
-        border-bottom: 1px solid $colorLighterGray;
+        border-bottom: 1px solid $colorLightestGray;
         padding: 8px 0 $gutter;
     }
 
@@ -2246,8 +2276,8 @@ $iconSelector: '[class^="icon-"], [class*=" icon-"]';
     .product-share-block {
         @extend %product-info-block-row;
 
-        border-top: 1px solid $colorLighterGray;
-        border-bottom: 1px solid $colorLighterGray;
+        border-top: 1px solid $colorLightestGray;
+        border-bottom: 1px solid $colorLightestGray;
         padding: $gutter 0 14px;
 
         > div {
@@ -2394,6 +2424,17 @@ $iconSelector: '[class^="icon-"], [class*=" icon-"]';
   #Cart Page
   ==============================================================================*/
 
+%money-format {
+    line-height: 1;
+    word-spacing: -0.2em;
+    white-space: nowrap;
+
+    .currency {
+        font-size: 0.5em;
+        vertical-align: top;
+    }
+}
+
 /* stying the '/cart' page */
 .cart-page-layout {
 
@@ -2404,7 +2445,7 @@ $iconSelector: '[class^="icon-"], [class*=" icon-"]';
 }
 
 /* wrapper for the cart info block. used on the /cart page and on the cart drawer. */
-.cart-layout {
+%cart-layout {
     @extend .clearfix;
 
     %cart-column {
@@ -2416,19 +2457,275 @@ $iconSelector: '[class^="icon-"], [class*=" icon-"]';
         
         width: 912px;
         padding-left: $gutter;
-        padding-right: $gutter * 2;
+        padding-right: ($gutter * 2) - 1px;
+        border-right: 1px solid $colorLighterGray;
     }
 
     .side-col {
         @extend %cart-column;
 
         width: 240px;
-        border-left: 1px solid $colorLightGray;
         padding-left: $gutter * 2;
         padding-right: $gutter;
     }
+
+    .cart-terms-row {
+        margin-top: $gutter * 2;
+    }
 }
 
+.shopping-cart {
+    @extend %cart-layout;
+
+    h4 {
+        font-size: 1.25em; /* ~20px */
+        font-weight: 300;
+        margin: 0;
+    }
+
+    h5 {
+        @extend %smallish-arial-text;
+        font-weight: 700;
+        text-transform: uppercase;
+        color: $colorMidGray;
+        margin-top: 0;
+    }
+
+    .cart-subtotal {
+        @extend %money-format;
+
+        font-family: $helveticaFontStack;
+        font-weight: 300;
+        color: $colorWarmGrayDark;
+        font-size: 2.5em;
+        padding-top: 4px;
+        letter-spacing: -0.05em;
+    }
+
+    %cart-button-base {
+        width: 100%;
+
+    }
+
+    .checkout-button {
+        @extend %cart-button-base;
+        @extend %large-gold-arrow-button;
+
+        
+    }
+
+    .update-cart-button {
+        @extend %large-gray-button;
+
+    }
+
+    .continue-shopping-row {
+        text-align: center;
+        border-bottom: 1px solid $colorLighterGray;
+
+        a {
+            @extend %smallish-arial-text;
+            @extend %gray-hover-gold-link;
+            @extend %rsaquo;
+
+            text-transform: uppercase;
+            font-weight: 700;
+        }
+    }
+
+    %order-info-item {
+        color: $colorMidGray;
+
+        .icon {
+            @extend %icon-base;
+
+            display: inline-block;
+        }
+
+        .label {
+            @extend %smallish-arial-text;
+
+            padding-top: 4px;
+            text-transform: uppercase;
+        }
+
+        > span {
+            vertical-align: middle;
+            display: inline-block;
+        }
+    }
+
+    .free-shipping {
+        @extend %order-info-item;
+
+        .icon {
+            @extend .icon-gift;
+
+            font-size: 18px;
+
+            height: 18px;
+        }
+        
+    }
+    
+    .shipped-by-date {
+        @extend %order-info-item;
+
+        .icon {
+            @extend .icon-calendar;
+
+            height: 16px;
+        }
+    }
+}
+
+
+.cart-item {
+    padding-bottom: $gutter;
+    border-bottom: 1px solid $colorLighterGray;
+    margin-bottom: $gutter;
+
+    %cart-item-icon-info {
+        color: $colorWarmLightGray;
+        line-height: 18px;
+
+        .icon {
+            @extend %icon-base;
+
+            font-size: 12px;
+            display: inline-block;
+            height: 12px;
+        }
+
+        .label {
+            @extend %smallish-arial-text;
+
+            text-transform: uppercase;
+        }
+    }
+
+    .style-number {
+        @extend %cart-item-icon-info;
+
+        .icon {
+            @extend .icon-info-circle;
+        }
+    }
+
+    .remove-item-link {
+        @extend %cart-item-icon-info;
+        @extend %warmLightGray-hover-gold-link;
+
+        display: block;
+
+        .icon {
+            @extend .icon-cross-circle;
+        }
+    }
+
+    .line-price {
+        @extend %money-format;
+
+        font-family: $helveticaFontStack;
+        font-weight: 300;
+        color: $colorWarmGrayDark;
+        font-size: 1.875em;
+        padding-top: 4px;
+    }
+
+    /* .cart-item layout */
+    
+    %cart-row-base, & {
+        @extend .clearfix;
+    }
+
+    %cart-column-base {
+        float: left;
+    }
+    
+    .image-column {
+        @extend %cart-column-base;
+
+        width: 96px;
+    }
+
+    .info-options-column {
+        @extend %cart-column-base;
+
+        width: 768px;
+        padding: 0 0 0 32px;
+    }
+
+    .header-row {
+        @extend %cart-row-base;
+
+        margin-bottom: 16px;
+    }
+
+    .options-row {
+        @extend %cart-row-base;
+    }
+
+    .info-column {
+        @extend %cart-column-base;
+
+        width: 176px;
+        margin-right: 16px;
+    }
+
+    %cart-item-option-column {
+        width: 128px;
+        margin-right: 16px;
+        min-height: 10px;
+    }
+
+    .size-column {
+        @extend %cart-column-base;
+        @extend %cart-item-option-column;
+    }
+
+    .color-column {
+        @extend %cart-column-base;
+        @extend %cart-item-option-column;
+    }
+
+    .quantity-column {
+        @extend %cart-column-base;
+        @extend %cart-item-option-column;        
+    }
+
+    .price-column {
+        @extend %cart-column-base;
+        
+        width: 112px;
+    }
+
+
+    
+}
+
+.cart-item-image {
+    height: 96px;
+    width: 96px;
+    overflow: hidden;
+
+    img {
+        width: 100%;
+        height: auto;
+    }
+}
+
+.cart-terms {
+    list-style: disc;
+    margin-left: $gutter;
+
+    li {
+        @extend %smallest-helvetica-text;
+        color: $colorWarmLightGray;
+        line-height: (16/12);
+        margin: 4px 0;
+    }
+}
 
 /*================ Address Block ================*/
 
@@ -2681,7 +2978,7 @@ address {
 
             .first-column {
                 height: 40px;
-                border-right: 1px solid $colorLighterGray;
+                border-right: 1px solid $colorLightestGray;
             }
 
             .last-column {
@@ -3270,7 +3567,7 @@ address {
 
     li {
         @include at-query ($min, $postSmall) {
-            border-left: 1px solid $colorLighterGray;
+            border-left: 1px solid $colorLightestGray;
 
             &:first-child {
                 border-left: 0;
@@ -3691,7 +3988,7 @@ address {
     }
 
     .press-releases-column {
-        border-right: 1px solid $colorLighterGray;
+        border-right: 1px solid $colorLightestGray;
         
     }
 
@@ -4072,21 +4369,23 @@ address {
   #Quantity Selectors
 ==============================================================================*/
 .js-qty {
-  position: relative;
-  margin-bottom: 1em;
-  max-width: 100px;
-  min-width: 75px;
-  overflow: visible;
-  @include backface(hidden);
+    position: relative;
+    min-width: 75px;
+    overflow: visible;
+    @include backface(hidden);
 
-  input[type="text"] {
-    display: block;
-    background: none;
-    text-align: center;
-    width: 100%;
-    padding: 5px 25px;
-    margin: 0;
-  }
+    input[type="text"] {
+        @extend %smaller-arial-text;
+
+        display: block;
+        background: $colorLightestGray;
+        border: 1px solid $colorWarmLightGray;
+        text-align: center;
+        width: 100%;
+        padding: 5px 25px;
+        height: 30px;
+        margin: 0;
+    }
 }
 
 .js--qty-adjuster {
@@ -4095,8 +4394,10 @@ address {
   display: block;
   top: 0;
   bottom: 0;
-  padding: 5px 0;
-  width: 20px;
+  padding: 0;
+  line-height: 30px;
+  width: 30px;
+  font-size: 12px;
   text-align: center;
   overflow: hidden;
   -webkit-user-select: none;
@@ -4108,6 +4409,7 @@ address {
 
   &:hover {
     background-color: $borderColor;
+    color: #fff;
   }
 
   &:active {
@@ -4117,12 +4419,12 @@ address {
 
 .js--add {
   right: 0;
-  border-left: 1px solid $borderColor;
+  // border-left: 1px solid $borderColor;
 }
 
 .js--minus {
   left: 0;
-  border-right: 1px solid $borderColor;
+  // border-right: 1px solid $borderColor;
 }
 
 /*============================================================================
