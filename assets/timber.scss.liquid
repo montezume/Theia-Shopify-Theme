@@ -1108,29 +1108,29 @@ hr {
 %large-button-base {
     height: 50px;
     padding: 6px $gutter 0;
-
-    .label {
-        font-size: 1.5625em;
-        font-weight: 300;
-        font-family: $helveticaFontStack;
-    }
+    font-size: 1.5625em;
+    font-weight: 300;
+    font-family: $helveticaFontStack;
 }
 
 %medium-button-base {
+    height: 44px;
+    padding: 6px $gutter 0;
 
+    font-size: 1.125em;
+    font-weight: 400;
+    font-family: $helveticaFontStack;
 }
 
 %small-button-base {
+    @extend %smallish-arial-text;
+
     height: 30px;
-    padding: 4px 12px 0;
-
-    .label {
-        @extend %smallish-arial-text;
-
-        text-transform: uppercase;
-        font-weight: 700;
-    }
+    padding: 5px 12px 0;
+    text-transform: uppercase;
+    font-weight: 700;
 }
+
 
 %gold-button-base {
     @extend %gold-outline-block-small;
@@ -1171,7 +1171,7 @@ hr {
     @extend %arrow-icon-button-base;
 
     .icon {
-        padding-left: 10px;
+        padding-left: 2px;
         top: -2px;
     }
 }
@@ -1221,9 +1221,19 @@ hr {
 /* gray, medium button */
 %medium-gray-button {
     @extend %button-base;
-    @extend %large-button-base;
+    @extend %medium-button-base;
     @extend %gray-button-base;
 }
+
+/* gray, small button */
+%small-gray-button {
+    @extend %button-base;
+    @extend %small-button-base;
+    @extend %gray-button-base;
+
+    padding-top: 2px;
+}
+
 
 /* light gray, small button */
 %small-lightGray-button {
@@ -1334,6 +1344,24 @@ hr {
     @extend %hero-base;
 
     height: 338px;
+
+    h2 {
+        line-height: 1;
+        margin: 0;
+    }
+
+    h3 {
+        font-size: 2.8125em;
+        line-height: 1;
+        margin: 0;
+    }
+
+    .content {
+        position: absolute;
+        left: $gutter;
+        top: $gutter * 6.25;
+        width: 544px;
+    }
 }
 
 %hero-small {
@@ -1342,14 +1370,12 @@ hr {
     height: 168px;
 }
 
-%gold-outline-block-base {
+%outline-block-base {
     position: relative;
-    background: $colorGold;
     z-index: 0;
 
     /* outer border */
     border-style: solid;
-    border-color: $colorGold;
 
     /* inner border */
     &:before {
@@ -1360,6 +1386,25 @@ hr {
         border-color: #fff;
     }
 }
+
+%gold-outline-block-base {
+    @extend %outline-block-base;
+
+    background: $colorGold;
+
+    /* outer border */
+    border-color: $colorGold;
+}
+
+%gray-outline-block-base {
+    @extend %outline-block-base;
+
+    background: $colorGray;
+
+    /* outer border */
+    border-color: $colorGray;
+}
+
 
 @mixin outlineBlockBorderWidths( $innerWidth, $outerWidth ){
     /* outer border */
@@ -1384,6 +1429,12 @@ hr {
     @extend %gold-outline-block-base;
     @include outlineBlockBorderWidths( 1px, 1px );
 }
+
+%gray-outline-block-small {
+    @extend %gray-outline-block-base;
+    @include outlineBlockBorderWidths( 1px, 1px );
+}
+
 
 
 %social-icon-base {
@@ -2446,36 +2497,11 @@ $iconSelector: '[class^="icon-"], [class*=" icon-"]';
 
 /* wrapper for the cart info block. used on the /cart page and on the cart drawer. */
 %cart-layout {
-    @extend .clearfix;
 
-    %cart-column {
-        float: left;
-    }
-    
-    .main-col {
-        @extend %cart-column;
-        
-        width: 912px;
-        padding-left: $gutter;
-        padding-right: ($gutter * 2) - 1px;
-        border-right: 1px solid $colorLighterGray;
-    }
-
-    .side-col {
-        @extend %cart-column;
-
-        width: 240px;
-        padding-left: $gutter * 2;
-        padding-right: $gutter;
-    }
-
-    .cart-terms-row {
-        margin-top: $gutter * 2;
-    }
 }
 
 .shopping-cart {
-    @extend %cart-layout;
+    @extend .clearfix;
 
     h4 {
         font-size: 1.25em; /* ~20px */
@@ -2507,21 +2533,11 @@ $iconSelector: '[class^="icon-"], [class*=" icon-"]';
 
     }
 
-    .checkout-button {
-        @extend %cart-button-base;
-        @extend %large-gold-arrow-button;
-
-        
-    }
-
-    .update-cart-button {
-        @extend %large-gray-button;
-
-    }
-
-    .continue-shopping-row {
+    .checkout-button-row {
         text-align: center;
         border-bottom: 1px solid $colorLighterGray;
+        padding-bottom: $gutter / 2;
+        margin-bottom: $gutter;
 
         a {
             @extend %smallish-arial-text;
@@ -2531,7 +2547,22 @@ $iconSelector: '[class^="icon-"], [class*=" icon-"]';
             text-transform: uppercase;
             font-weight: 700;
         }
+
+        button {
+            margin-bottom: $gutter;
+        }
     }
+
+    .checkout-button {
+        @extend %cart-button-base;
+        @extend %large-gold-arrow-button;
+    }
+
+    .update-cart-button {
+        @extend %cart-button-base;
+        @extend %small-gray-button;
+    }
+
 
     %order-info-item {
         color: $colorMidGray;
@@ -2565,11 +2596,12 @@ $iconSelector: '[class^="icon-"], [class*=" icon-"]';
 
             height: 18px;
         }
-        
     }
     
     .shipped-by-date {
         @extend %order-info-item;
+
+        margin-bottom: $gutter / 2;
 
         .icon {
             @extend .icon-calendar;
@@ -2577,6 +2609,56 @@ $iconSelector: '[class^="icon-"], [class*=" icon-"]';
             height: 16px;
         }
     }
+
+    .accepted-credit-cards {
+        @extend .clearfix;
+
+        > img {
+            display: block;
+            float: left;
+            margin-left: 4px;
+
+            &:first-of-type {
+                margin: 0;
+            }
+        }
+    }
+
+
+    /* Cart Layout */
+
+    %cart-column {
+        float: left;
+        padding-top: $gutter;
+        padding-bottom: $gutter / 2;
+    }
+    
+    .main-col {
+        @extend %cart-column;
+        
+        width: 912px;
+        padding-left: $gutter;
+        padding-right: $gutter * 2;
+    }
+
+    .side-col {
+        @extend %cart-column;
+
+        width: 240px;
+        padding-left: ( $gutter * 2 ) - 1px;
+        padding-right: $gutter;
+        border-left: 1px solid $colorLighterGray;
+    }
+
+    .cart-terms-row {
+        margin-top: $gutter * 2;
+    }
+
+    .cart-subtotal-row {
+        margin-bottom: $gutter;
+    }
+    
+    
 }
 
 
@@ -4450,7 +4532,6 @@ address {
 
 .ajaxifyCart--qty-adjuster {
   @extend .js--qty-adjuster;
-  opacity: 0;
 
   .cart-row:hover &,
   .ajaxifyCart--product:hover &,
@@ -4511,19 +4592,6 @@ address {
   background-color: $drawerBackgroundColor;
   color: color-control($drawerBackgroundColor);
 
-  // Typography styles
-  h1, h2, h3, h4 {
-    color: color-control($drawerBackgroundColor);
-  }
-
-  a {
-    color: color-control($drawerBackgroundColor);
-  }
-
-  input[type="text"] {
-    color: color-control($drawerBackgroundColor);
-  }
-
   @include transform-origin(top);
   @include rotateX(-90deg);
 }
@@ -4535,36 +4603,8 @@ address {
 
 // Quantity selector colors in the drawer
 #ajaxifyDrawer {
-  .cart-row:hover input[type="text"],
-  .ajaxifyCart--product:hover input[type="text"],
-  .supports-touch input[type="text"] {
-    border-color: $drawerBorderColor;
-  }
-
   .js-qty {
     margin: 0 auto;
-  }
-
-  .js--add {
-    border-left: 1px solid $drawerBorderColor;
-  }
-
-  .js--minus {
-    border-right: 1px solid $drawerBorderColor;
-  }
-
-  .ajaxifyCart--products {
-    border-bottom: 1px solid $drawerBorderColor;
-  }
-
-  .ajaxifyCart--qty-adjuster {
-    &:hover {
-      background-color: $drawerBorderColor;
-    }
-
-    &:active {
-      background-color: darken($drawerBorderColor, 10%);
-    }
   }
 }
 
@@ -4604,72 +4644,6 @@ address {
 
 
 
-/*============================================================================
-  Sprites
-//   - using data URIs to prevent any additional http requests
-==============================================================================*/
-.sprite {
-  display: block;
-  text-indent: -9999px;
-  background-repeat: no-repeat;
-  background-position: 0 0;
-}
-
-.ajaxifyCart--add {
-  @extend .sprite;
-  background-position: center center;
-  background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAYAAADED76LAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyNpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNS1jMDE0IDc5LjE1MTQ4MSwgMjAxMy8wMy8xMy0xMjowOToxNSAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIChNYWNpbnRvc2gpIiB4bXBNTTpJbnN0YW5jZUlEPSJ4bXAuaWlkOjIxNTJBNEY1NDY1OTExRTM4ODdCODU0OEQ4MDA1MjgwIiB4bXBNTTpEb2N1bWVudElEPSJ4bXAuZGlkOjIxNTJBNEY2NDY1OTExRTM4ODdCODU0OEQ4MDA1MjgwIj4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6QUU4MjYyOEE0NjU3MTFFMzg4N0I4NTQ4RDgwMDUyODAiIHN0UmVmOmRvY3VtZW50SUQ9InhtcC5kaWQ6MjE1MkE0RjQ0NjU5MTFFMzg4N0I4NTQ4RDgwMDUyODAiLz4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94OnhtcG1ldGE+IDw/eHBhY2tldCBlbmQ9InIiPz6VbCy4AAAAWklEQVR42mJsampigAIeIH4GZUsB8RcQg4UBAUACvEhsBpgCkE5GKA0DklBF/0EKXgExJwMqgFn1nYmBAACZIIZkBbojwVbAHPQZSeNzZBOQvfkZiQ3WCBBgALZlEm83dptmAAAAAElFTkSuQmCC);
-}
-
-.ajaxifyCart--minus {
-  @extend .sprite;
-  background-position: center center;
-  background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAYAAADED76LAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyNpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNS1jMDE0IDc5LjE1MTQ4MSwgMjAxMy8wMy8xMy0xMjowOToxNSAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIChNYWNpbnRvc2gpIiB4bXBNTTpJbnN0YW5jZUlEPSJ4bXAuaWlkOjIxNTJBNEZENDY1OTExRTM4ODdCODU0OEQ4MDA1MjgwIiB4bXBNTTpEb2N1bWVudElEPSJ4bXAuZGlkOjIxNTJBNEZFNDY1OTExRTM4ODdCODU0OEQ4MDA1MjgwIj4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6MjE1MkE0RkI0NjU5MTFFMzg4N0I4NTQ4RDgwMDUyODAiIHN0UmVmOmRvY3VtZW50SUQ9InhtcC5kaWQ6MjE1MkE0RkM0NjU5MTFFMzg4N0I4NTQ4RDgwMDUyODAiLz4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94OnhtcG1ldGE+IDw/eHBhY2tldCBlbmQ9InIiPz6MzbYiAAAALElEQVR42mL6//8/Az7MxEAAEFTA2NTU9A1Ic+KQ/07YBJBDKHIDQQUAAQYAbksecMSS2doAAAAASUVORK5CYII=);
-}
-
-.ajaxifyCart--close {
-  @extend .sprite;
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  opacity: 0;
-  visibility: hidden;
-  border: 0 none;
-  width: 30px;
-  height: 25px;
-  cursor: pointer;
-  background: {
-    color: transparent;
-    position: center center;
-    image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAsAAAALCAYAAACprHcmAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyNpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNS1jMDE0IDc5LjE1MTQ4MSwgMjAxMy8wMy8xMy0xMjowOToxNSAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIChNYWNpbnRvc2gpIiB4bXBNTTpJbnN0YW5jZUlEPSJ4bXAuaWlkOkMzRUY2REVBNDY1QjExRTM4ODdCODU0OEQ4MDA1MjgwIiB4bXBNTTpEb2N1bWVudElEPSJ4bXAuZGlkOkMzRUY2REVCNDY1QjExRTM4ODdCODU0OEQ4MDA1MjgwIj4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6QzNFRjZERTg0NjVCMTFFMzg4N0I4NTQ4RDgwMDUyODAiIHN0UmVmOmRvY3VtZW50SUQ9InhtcC5kaWQ6QzNFRjZERTk0NjVCMTFFMzg4N0I4NTQ4RDgwMDUyODAiLz4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94OnhtcG1ldGE+IDw/eHBhY2tldCBlbmQ9InIiPz7sdZ8fAAAAp0lEQVR42nSPQQ6CMBBFx4ZEj+DSY8BGt9SVwRP1QBDdULeygaN4BFzpn+Q3mZCW5DFk/uvQ2YUQfiIygYuUnzc4O7wW/QCxIEbmi8oNG23mgO03js0reDF4gCNry77mUpkpHvSgo7QHA7gnwW1+q8FKcbViTtbJB/Bl7Uty5BWe4MTa2aWTPJplbuDDmpYe04IzqBn4zbU8J2udHcUpI9oDmtd/AQYAX20mtnhTCxQAAAAASUVORK5CYII=)
-  }
-  z-index: 999999999;
-  @include transition(all 450ms cubic-bezier(0.57,.06,.05,.95));
-
-  .is-visible & {
-    opacity: 0.8;
-    visibility: visible;
-    @include transition(opacity 650ms cubic-bezier(0.57, 0.06, 0.05, 0.95) 200ms);
-  }
-
-  &:hover {
-    opacity: 1;
-  }
-}
 
 
-@media
-(-webkit-min-device-pixel-ratio: 2),
-(min-resolution: 192dpi) {
 
-  .ajaxifyCart--add {
-    background-size: 8px;
-    background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyNpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNS1jMDE0IDc5LjE1MTQ4MSwgMjAxMy8wMy8xMy0xMjowOToxNSAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIChNYWNpbnRvc2gpIiB4bXBNTTpJbnN0YW5jZUlEPSJ4bXAuaWlkOkFFODI2Mjg4NDY1NzExRTM4ODdCODU0OEQ4MDA1MjgwIiB4bXBNTTpEb2N1bWVudElEPSJ4bXAuZGlkOkFFODI2Mjg5NDY1NzExRTM4ODdCODU0OEQ4MDA1MjgwIj4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6QUU4MjYyODY0NjU3MTFFMzg4N0I4NTQ4RDgwMDUyODAiIHN0UmVmOmRvY3VtZW50SUQ9InhtcC5kaWQ6QUU4MjYyODc0NjU3MTFFMzg4N0I4NTQ4RDgwMDUyODAiLz4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94OnhtcG1ldGE+IDw/eHBhY2tldCBlbmQ9InIiPz7Q1IXcAAAAL0lEQVR42mJsampiwAH+o/EZsSliYqAQjBrAwMCCJbSJjZXhFAaMoylxgA0ACDAAufIFqTR3duwAAAAASUVORK5CYII=);
-  }
-
-  .ajaxifyCart--minus {
-    background-size: 8px;
-    background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyNpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNS1jMDE0IDc5LjE1MTQ4MSwgMjAxMy8wMy8xMy0xMjowOToxNSAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIChNYWNpbnRvc2gpIiB4bXBNTTpJbnN0YW5jZUlEPSJ4bXAuaWlkOjIxNTJBNEY5NDY1OTExRTM4ODdCODU0OEQ4MDA1MjgwIiB4bXBNTTpEb2N1bWVudElEPSJ4bXAuZGlkOjIxNTJBNEZBNDY1OTExRTM4ODdCODU0OEQ4MDA1MjgwIj4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6MjE1MkE0Rjc0NjU5MTFFMzg4N0I4NTQ4RDgwMDUyODAiIHN0UmVmOmRvY3VtZW50SUQ9InhtcC5kaWQ6MjE1MkE0Rjg0NjU5MTFFMzg4N0I4NTQ4RDgwMDUyODAiLz4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94OnhtcG1ldGE+IDw/eHBhY2tldCBlbmQ9InIiPz54TqQaAAAAKElEQVR42mL8//8/AyWAiYFCMGoAAwNLc3Pz/xEeBoyjKXEQGAAQYABVgwijPO94YQAAAABJRU5ErkJggg==);
-  }
-
-}
