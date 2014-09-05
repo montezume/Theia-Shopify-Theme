@@ -157,21 +157,22 @@ For info on test orders:
             </div>
           </div>
 
-          {% comment %}
-          name="checkout" is required for the submit button to work
-          {% endcomment %}
-          <button type="submit" name="checkout" class="checkout-button">
-            <span class="label">Checkout</span>
-            <span class="icon"></span>
-          </button>
+          <div class="checkout-button-row">
+            {% comment %}
+            name="checkout" is required for the submit button to work
+            {% endcomment %}
+            <button type="submit" name="checkout" class="checkout-button">
+              <span class="label">Checkout</span>
+              <span class="icon"></span>
+            </button>
 
-          {% comment %}
-          name="update" is required for the update button to work
-          {% endcomment %}
-          <button type="submit" name="update" class="update-cart-button">Update cart</button>
+            {% comment %}
+            name="update" is required for the update button to work
+            {% endcomment %}
+            <button type="submit" name="update" class="update-cart-button">Update cart</button>
 
-          <div class="continue-shopping-row">
             <a href="#">or continue shopping</a>
+
           </div>
 
           <div class="order-info-row">
@@ -198,6 +199,27 @@ For info on test orders:
             </div>
 
           </div>
+
+          <div class="accepted-credit-cards">
+
+            <h5>We accept:</h5>
+
+
+            {{ 'visa-logo-small.png' | asset_url | img_tag }}
+
+            
+            {{ 'american-express-logo-small.png' | asset_url | img_tag }}
+
+
+            {{ 'mastercard-logo-small.png' | asset_url | img_tag }}
+            
+
+            {{ 'paypal-logo-small.png' | asset_url | img_tag }}
+              
+            </div>
+
+          </div>
+
 
 
         </div>
