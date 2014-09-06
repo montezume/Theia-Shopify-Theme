@@ -19,56 +19,52 @@
   </div>
 </div>
 
+<div class="content-hero">
 
-<div class="grid">
+  <div class="wrapper-10-col">
+    <h2>The godess Theia
+    </h2>
 
-  <div class="grid-item large--two-thirds push--large--one-sixth">
+    <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.
+    </p>
 
-    <h2>{{ page.title }}</h2>
-
-    {% comment %}
-      Regular page content goes here.
-    {% endcomment %}
-    <div class="rte">
-      {{ page.content }}
+    <div class="col">
+      <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.
+      </p>
+      <p>It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.
+      </p>
+      <p>It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages.
+      </p>
     </div>
 
-    {% comment %}
-      Contact form starts here
-    {% endcomment %}
-    <div>
-      {% form 'contact' %}
+    <div class="col">
+      <p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English.
+      </p>
+      <p>Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy.
+      </p>
+    </div>
+  </div>
+</div>
 
-        {% comment %}
-          Successful message
-        {% endcomment %}
-        {% if form.posted_successfully? %}
-          <p class="note form-success">
-            Thanks for contacting us! We'll get back to you as soon as possible.
-          </p>
-        {% endif %}
+<div class="content-hero">
+  <div class="wrapper-10-col">
 
-        {% include 'form-errors-custom' %}
+    <h2>Going forward</h2>
 
-        <div id="contactFormWrapper">
-          <label for="contactFormName" class="hidden-label">Name</label>
-          <input type="text" id="contactFormName" name="contact[name]" placeholder="Name" autocapitalize="words" value="{% if form.name %}{{ form.name }}{% elsif customer %}{{ customer.name }}{% endif %}">
+    <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.</p>
 
-          <label for="contactFormEmail" class="hidden-label">Email</label>
-          <input type="email" id="contactFormEmail" name="contact[email]" placeholder="Email" autocorrect="off" autocapitalize="off" value="{% if form.email %}{{ form.email }}{% elsif customer %}{{ customer.email }}{% endif %}">
+    <div class="col">
+      <p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English.</p>
+      <p>Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy.</p>
+    </div>
 
-          <label for="contactFormPhone" class="hidden-label">Phone Number</label>
-          <input type="tel" id="contactFormPhone" name="contact[phone]" placeholder="Phone Number" pattern="[0-9]*" value="{% if form.phone %}{{ form.phone }}{% elsif customer %}{{ customer.phone }}{% endif %}">
-
-          <label for="contactFormMessage" class="hidden-label">Message</label>
-          <textarea rows="10" id="contactFormMessage" name="contact[body]" placeholder="Message">{% if form.body %}{{ form.body }}{% endif %}</textarea>
-
-          <input type="submit" class="btn right" value="Send">
-        </div>
-
-      {% endform %}
+    <div class="col">
+      <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>
+      <p>It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.</p>
+      <p>It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages.</p>
     </div>
 
   </div>
-
 </div>
+
+{% include 'featured-press-hero' %}
