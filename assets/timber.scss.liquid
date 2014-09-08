@@ -3150,8 +3150,6 @@ address {
     background: #000 url({{ 'about-page-hero-bg.jpg' | asset_url}}) top right no-repeat;
 }
 
-
-
 .collections-hero {
     background: #000;
 
@@ -3641,6 +3639,40 @@ address {
     }
 }
 
+.content-hero {
+    padding-bottom: $gutter * 3;
+
+    h2 {
+
+    }
+
+    header {
+        text-align: center;
+        margin-bottom: $gutter * 2.5;
+
+        p {
+            font-size: 20px;
+            line-height: 1.3;
+            color: $colorWarmLightGray;
+        }
+    }
+
+    .row {
+        @extend .clearfix;
+    }
+
+    .col {
+        padding: ( $gutter / 2 ) $gutter ( $gutter / 2 ) ( $gutter * 2 );
+        float: left;
+        width: 50%;
+
+        &:first-of-type {
+            padding-right: $gutter * 2;
+            padding-left: $gutter;
+            border-right: 1px solid $colorLightestGray;
+        }
+    }
+}
 
 
 /* Naviation Menus */
@@ -4642,3 +4674,277 @@ address {
     opacity: 1;
   }
 }
+
+
+/*============================================================================
+  Carousel
+  ============================================================================*/
+
+// Default Variables
+
+$slick-arrow-color: white !default;
+$slick-dot-color: $colorWarmLightGray;
+$slick-dot-color-active: $colorWarmGrayDark;
+$slick-dot-size: 6px !default;
+$opacity-default: .75;
+$opacity-on-hover: 1;
+$opacity-not-active: .25;
+
+/* Slider */
+
+.slick-slider {
+    @include prefix('user-select', 'none');
+
+    position: relative;
+    display: block;
+    -webkit-touch-callout: none;
+    -ms-touch-action: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.slick-list {
+    position: relative;
+    overflow: hidden;
+    display: block;
+    margin: 0;
+    padding: 0;
+
+    &:focus {
+        outline: none;
+    }
+
+    .slick-loading & {
+        background: #fff;
+    }
+
+    &.dragging {
+        cursor: pointer;
+        cursor: hand;
+    }
+}
+
+.slick-slider .slick-list,
+.slick-track,
+.slick-slide,
+.slick-slide img {
+    @include transform('translate3d(0, 0, 0)');
+}
+
+.slick-track {
+    @extend .clearfix;
+
+    position: relative;
+    left: 0;
+    top: 0;
+    display: block;
+
+    .slick-loading & {
+        visibility: hidden;
+    }
+}
+
+.slick-slide {
+    float: left;
+    height: 100%;
+    min-height: 1px;
+
+    img {
+        display: block;
+    }
+
+    &.slick-loading img {
+        display: none;
+    }
+
+    display: none;
+
+    &.dragging img {
+        pointer-events: none;
+    }
+
+    .slick-initialized & {
+        display: block;
+    }
+
+    .slick-loading & {
+        visibility: hidden;
+    }
+
+    .slick-vertical & {
+        display: block;
+        height: auto;
+        border: 1px solid transparent;
+    }
+}
+
+/* Arrows */
+
+%carousel-arrow-base {
+    position: absolute;
+    display: block;
+    height: 20px;
+    width: 20px;
+    cursor: pointer;
+    top: 50%;
+    padding: 0;
+    text-decoration: none;
+    color: $colorLightGray;
+
+    @extend %icon-base;
+
+    opacity: $opacity-default;
+
+
+    &:hover, &:focus {
+      outline: none;
+      background: transparent;
+      color: $colorGold;
+
+      &:before {
+        opacity: $opacity-on-hover;
+      }
+    }
+
+    &.slick-disabled:before {
+        opacity: $opacity-not-active;
+    }
+
+    &:before {
+        font-size: 110px;
+        /* correct for the whitespace on either side of the icon */
+        margin: 0 -27px;
+    }
+
+}
+
+
+.slick-prev {
+    @extend %carousel-arrow-base;
+    @extend .icon-arrow-left-xlarge;
+
+    left: -56px;
+}
+
+.slick-next {
+    @extend %carousel-arrow-base;
+    @extend .icon-arrow-right-xlarge;
+
+    right: -56px;
+}
+
+/* Dots */
+
+.slick-dots {
+    $diameter: 18px;
+    $radius: $diameter / 2;
+
+    position: absolute;
+    bottom: ( $gutter * 2 ) + 38px; /* Add the hight of the lower mask on the hero */
+    height: $diameter;
+    list-style: none;
+    display: block;
+    text-align: center;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+
+    li {
+        position: relative;
+        display: inline-block;
+        margin: 0 4px;
+        padding: 0;
+        cursor: pointer;
+
+        a {
+            border: 0;
+            background: $slick-dot-color;
+            display: block;
+            height: $diameter;
+            width: $diameter;
+            outline: none;
+            line-height: 1;
+            font-size: 0;
+            color: transparent;
+            padding: 0;
+            cursor: pointer;
+            @include prefix( 'border-radius', $radius);            
+            opacity: $opacity-not-active;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+
+            &:hover, &:focus {
+                outline: none;
+                opacity: $opacity-on-hover;
+            }
+        }
+
+        &.slick-active a {
+            color: $slick-dot-color-active;
+            opacity: $opacity-default;
+        }
+    }
+}
+
+.carousel-hero {
+    @extend %hero-base;
+
+    background: #000;
+
+    h2 {
+        margin-top: 0;
+        line-height: 1;
+        margin-bottom: 20px;
+    }
+
+    p {
+        line-height: 1.4375;
+        margin: 10px 0;
+
+        &:first-of-type {
+            font-size: 20px;
+            color: $colorWarmGray;
+            margin: ( $gutter * 2 ) 0;
+            line-height: 1.3;
+        }
+    }
+
+    img {
+        position: absolute;
+        right: -96px;
+        top: 0;
+        display: block;
+        z-index: 0;
+    }
+
+    .content {
+        position: absolute;
+        top: $gutter * 6;
+        left: $gutter * 7;
+        width: $gutter * 34;
+        z-index: 1;
+    }
+
+    .slick-slide {
+        height: 698px;
+        position: relative;
+
+    }
+
+    .carousel-nav {
+        position: absolute;
+        top: 0;
+        width: 100%;
+
+        .wrapper {
+
+        }
+    }
+
+    .slick-next,
+    .slick-prev {
+        width: 56px;
+        height: 110px;
+        top: 250px;
+    }
+}
+
