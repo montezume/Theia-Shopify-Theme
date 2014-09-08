@@ -19,7 +19,20 @@ timber.init = function () {
     // Run on load
     timber.accessibleNav();
     timber.productImageSwitch();
+    timber.carouselInit();
 
+};
+
+timber.carouselInit = function () {
+    $('.carousel').slick({
+        dots: true,
+        appendArrows: '.carousel-nav .wrapper',
+        prevArrow: '<a href="#" class="slick-prev"></a>',
+        nextArrow: '<a href="#" class="slick-next"></a>',
+        customPaging: function(slider, i) {
+            return '<a href="#">' + (i + 1) + '</a>';
+        }
+    });
 };
 
 timber.accessibleNav = function () {
