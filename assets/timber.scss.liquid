@@ -3199,17 +3199,47 @@ address {
 
 .featured-press-hero {
     h3 {
-        font-size: 1.875em;
-        font-weight: 300;
+        margin: 0;
     }
 
     .wrapper {
-        @include verticalCenterChildElements();
         text-align: center;
 
-        > div {
+        > div, header {
             @extend %column-base;
+        }
+    }
 
+    .template-index & {
+        h3 {
+            font-size: 1.875em;
+            font-weight: 300;
+        }
+
+        .wrapper {
+            @include verticalCenterChildElements();
+            text-align: center;
+        }
+    }
+
+    #about-us & {
+        header {
+            display: block;
+            margin-bottom: $gutter * 2;
+        }
+
+        h3 {
+            font-size: 3.75em;
+        }
+
+        .wrapper {
+            @extend .wrapper-8-col;
+
+            > div {
+                display: inline-block;
+                vertical-align: middle;
+                margin-bottom: $gutter;
+            }
         }
     }
 }
@@ -4251,6 +4281,13 @@ address {
         p {
             color: $colorLightGray;
         }
+    }
+}
+
+#about-us {
+    .featured-press-hero {
+        margin-top: $gutter * 4;
+        margin-bottom: $gutter * 4;
     }
 }
 
