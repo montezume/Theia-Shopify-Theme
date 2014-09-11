@@ -90,6 +90,7 @@ $breakpoint-has-pull:  ('medium', 'medium-down', 'large');
 // Theia Colors
 $colorOffWhite: #fefefe;
 
+$colorPaleGray: #fafafa;
 $colorLightestGray: #f2f2f2;
 $colorLighterGray: #e5e5e5;
 $colorLightGray: #d8d8d8;
@@ -175,6 +176,7 @@ $successGreen: #0a942a;
 $siteWidth14col: 1344px;
 $siteWidth: 1152px; // 12 col width standard
 $siteWidth10Col: 960px;
+$siteWidth9Col: 864px;
 $siteWidth8Col: 768px;
 $gutter: 16px;
 $gridGutter: 32px; // can be a %, but nested grids will have smaller margins because of it
@@ -341,15 +343,30 @@ $socialIconFontStack: 'theia-icons';
     @include prefix('transition', #{$transition});
 }
 
-@mixin gradient($from, $to, $fallback) {
+@mixin gradient($dir, $from, $to, $fallback: transparent) {
+    /* **todo** - finish this cross browser mixin. */
+
+    /* variables in sass are scoped to blocks, need to initialize them here. */
+    $dirFrom: top;
+    $dirTo: bottom;
+
+    @if $dir == ltr {
+        $dirFrom: left;
+        $dirTo: right;
+    } @else if $dir == rtl {
+        $dirFrom: right;
+        $dirTo: left;
+    }
+
     background: $fallback;
-    background: -moz-linear-gradient(top, $from 0%, $to 100%);
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,$from), color-stop(100%,$to));
-    background: -webkit-linear-gradient(top, $from 0%, $to 100%);
-    background: -o-linear-gradient(top, $from 0%, $to 100%);
-    background: -ms-linear-gradient(top, $from 0%, $to 100%);
-    background: linear-gradient(top bottom, $from 0%, $to 100%);
+    /* background: -moz-linear-gradient(top, $from 0%, $to 100%); */
+    /* background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,$from), color-stop(100%,$to)); */
+    /* background: -webkit-linear-gradient(top, $from 0%, $to 100%); */
+    /* background: -o-linear-gradient(top, $from 0%, $to 100%); */
+    /* background: -ms-linear-gradient(top, $from 0%, $to 100%); */
+    background: linear-gradient(to $dirTo, $from 0%, $to 100%);
 }
+
 
 @mixin backface($visibility: hidden) {
     @include prefix('backface-visibility', #{$visibility});
@@ -761,6 +778,12 @@ html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abb
     max-width: $siteWidth10Col;
 }
 
+.wrapper-9-col {
+    @extend %wrapper-base;
+
+    max-width: $siteWidth9Col;
+}
+
 .wrapper-8-col {
     @extend %wrapper-base;
 
@@ -770,6 +793,51 @@ html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abb
 %column-base {
     padding-right: $gutter;
     padding-left: $gutter;
+}
+
+%row-base {
+    @extend .clearfix;
+
+    position: relative;
+
+    .vr {
+        height: 100%;
+        width: 0;
+        position: absolute;
+        border-right: 1px solid $colorLightestGray;
+    }
+
+    .col {
+        float: left;
+    }
+}
+
+%row-2-col {
+    @extend %row-base;
+
+    .vr {
+        left: 50%;
+    }
+
+    .col {
+        width: 50%;
+    }
+}
+
+%row-3-col {
+    @extend %row-base;
+
+    .vr {
+        left: percentage(1/3);
+
+        & ~ .vr {
+            left: percentage(2/3);
+        }
+    }
+
+    .col {
+        width: percentage(1/3);
+    }
 }
 
 
@@ -848,13 +916,19 @@ input,
 textarea,
 button,
 select {
-    font-size: $baseFontSize;
+    font-size: 1em;
+    font-family: $arialFontStack;
     line-height: 1.4375; // ~23px with a font size of 16px
-    font-family: $bodyFontStack;
-    color: $colorTextBody;
     font-weight: 400;
+    color: $colorWarmGray;
     -webkit-font-smoothing: antialiased;
     -webkit-text-size-adjust: 100%;
+
+    @include placeholder {
+        line-height: 1.4375; // ~23px with a font size of 16px
+        font-family: $arialFontStack;
+        color: $colorMidGray;
+    }
 }
 
 /* h1 tags have been excluded from this list. The h1 tag is used for the site header. */
@@ -1371,6 +1445,38 @@ hr {
     height: 168px;
 }
 
+%hero-edge-fade-base {
+
+    /* gradient fade at edges of image */
+    &:before, &:after {
+        content: '';
+        height: 100%;
+        display: block;
+        position: absolute;
+        top: 0px;
+    }
+}
+@mixin heroEdgeFade( $fadeColor, $width: 99px, $offset: $width ){
+    @extend %hero-edge-fade-base;
+
+    &:before, &:after {
+        width: $width;
+    }
+
+    &:before {
+        @include gradient(rtl, transparent, $fadeColor, $fadeColor);
+
+        left: -$offset;
+    }
+
+    &:after {
+        @include gradient(ltr, transparent, $fadeColor, $fadeColor);
+
+        right: -$offset;
+    }
+}
+
+
 %outline-block-base {
     position: relative;
     z-index: 0;
@@ -1577,9 +1683,6 @@ fieldset {
 input,
 select,
 textarea {
-    font-size: 1em;
-    padding: 8px 10px;
-    line-height: 1.42;
 }
 
 fieldset {
@@ -1612,7 +1715,12 @@ select {
     width: 100%;
     max-width: 100%;
     display: block;
-
+    margin-bottom: ( $gutter * 1.5 );
+    border: 1px solid $colorWarmLightGray;
+    background: $colorPaleGray;
+    padding: 10px $gutter;
+    line-height: 1.42;
+ 
     &:focus {
         /* border: 1px solid darken($borderColor, 10%); */
     }
@@ -1629,10 +1737,36 @@ textarea {
     min-height: 100px;
 }
 
+/* custom checkboxs and radios */
+
 input[type="checkbox"],
 input[type="radio"] {
+
     display: inline;
     margin: 0;
+
+    /* position labels following to be inline */
+    & + label {
+        display: inline-block;
+    }
+
+    /* hide custom checkbox styles from browers that do not support css3 psuedo classes */
+    /* http://code.stephenmorley.org/html-and-css/hiding-rules-with-the-negation-pseudo-class/ */
+    &:not(old) {
+        display: none;
+        padding-left: $gutter;
+
+        /* http://code.stephenmorley.org/html-and-css/styling-checkboxes-and-radio-buttons/ */
+        & + label {
+            @extend %icon-base;
+
+            @extend .icon-box-unchecked;
+        }
+
+        &:checked + label {
+            @extend .icon-box-checked;
+        }
+    }
 }
 
 select {
@@ -1664,9 +1798,17 @@ select::-ms-expand {
 /*================ Form labels ================*/
 label,
 legend {
+    @extend %smallish-arial-text;
+
     display: block;
-    margin-bottom: 2px;
-    font-weight: bold;
+    margin: ($gutter / 2 ) 0;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: $colorWarmLightGray;
+
+    .meta {
+        font-weight: 400;
+    }
 
     &.inline {
         display: inline;
@@ -3150,6 +3292,24 @@ address {
     background: #000 url({{ 'about-page-hero-bg.jpg' | asset_url}}) top right no-repeat;
 }
 
+.contact-page-hero {
+    @extend %hero-medium;
+
+    $heroBgColor: #868d8a;
+
+    background: $heroBgColor url({{ 'contact-page-hero-bg.jpg' | asset_url}}) top center no-repeat;
+
+    .content {
+        text-shadow: 0 1px rgba(0,0,0, 0.44);
+    }
+
+    .wrapper {
+        @include heroEdgeFade( $heroBgColor, $width: 160px, $offset: 99px );
+
+        height: 100%;
+    }
+}
+
 .collections-hero {
     background: #000;
 
@@ -3194,7 +3354,6 @@ address {
 
         text-transform: uppercase;
     }
-
 }
 
 .featured-press-hero {
@@ -3672,8 +3831,8 @@ address {
 .content-hero {
     padding-bottom: $gutter * 3;
 
-    h2 {
-
+    h2, h3 {
+        text-align: center;
     }
 
     header {
@@ -3687,19 +3846,24 @@ address {
         }
     }
 
-    .row {
-        @extend .clearfix;
+    .row-2-col {
+        @extend %row-2-col;
+
+        .col {
+            padding: ( $gutter / 2 ) $gutter ( $gutter / 2 ) ( $gutter * 2 );
+
+            &:first-of-type {
+                padding-right: $gutter * 2;
+                padding-left: $gutter;
+            }
+        }
     }
 
-    .col {
-        padding: ( $gutter / 2 ) $gutter ( $gutter / 2 ) ( $gutter * 2 );
-        float: left;
-        width: 50%;
+    .row-3-col {
+        @extend %row-3-col;
 
-        &:first-of-type {
-            padding-right: $gutter * 2;
-            padding-left: $gutter;
-            border-right: 1px solid $colorLightestGray;
+        .col {
+            padding: ( $gutter / 2 ) ( $gutter * 2 ) ( $gutter / 2 );
         }
     }
 }
@@ -4984,4 +5148,3 @@ $opacity-not-active: .25;
         top: 250px;
     }
 }
-

@@ -8,55 +8,193 @@
 
 {% endcomment %}
 
-<div class="grid">
+<div class="contact-page-hero">
+  <div class="wrapper">
+    <div class="content">
 
-  <div class="grid-item large--two-thirds push--large--one-sixth">
+      <h2>Theia.</h2>
+      <h3>One click away.</h3>
 
+    </div>
+  </div>
+</div>
+
+<div class="content-hero">
+  <div class="wrapper-8-col">
     <h2>{{ page.title }}</h2>
 
     {% comment %}
-      Regular page content goes here.
+    Contact form starts here
     {% endcomment %}
-    <div class="rte">
-      {{ page.content }}
-    </div>
+    {% form 'contact' %}
 
-    {% comment %}
-      Contact form starts here
-    {% endcomment %}
-    <div>
-      {% form 'contact' %}
+      {% comment %}
+      Successful message
+      {% endcomment %}
+      {% if form.posted_successfully? %}
+        <p class="note form-success">
+          Thanks for contacting us! We'll get back to you as soon as possible.
+        </p>
+      {% endif %}
 
-        {% comment %}
-          Successful message
-        {% endcomment %}
-        {% if form.posted_successfully? %}
-          <p class="note form-success">
-            Thanks for contacting us! We'll get back to you as soon as possible.
-          </p>
-        {% endif %}
+      {% include 'form-errors-custom' %}
 
-        {% include 'form-errors-custom' %}
+      <div class="row-2-col">
+        <div class="col">
+      
+          <input type="radio" id="contactFormTitleMr" name="contact[title]" value="Mr." {% if form.title == "Mr." %}checked="checked"{% endif %}>
+          <label for="contactFormTitleMr">Mr.</label>
 
-        <div id="contactFormWrapper">
-          <label for="contactFormName" class="hidden-label">Name</label>
-          <input type="text" id="contactFormName" name="contact[name]" placeholder="Name" autocapitalize="words" value="{% if form.name %}{{ form.name }}{% elsif customer %}{{ customer.name }}{% endif %}">
+          <input type="radio" id="contactFormTitleMrs" name="contact[title]" value="Mrs." {% if form.title == "Mrs." %}checked="checked"{% endif %}>
+          <label for="contactFormTitleMrs">Mrs.</label>
 
-          <label for="contactFormEmail" class="hidden-label">Email</label>
-          <input type="email" id="contactFormEmail" name="contact[email]" placeholder="Email" autocorrect="off" autocapitalize="off" value="{% if form.email %}{{ form.email }}{% elsif customer %}{{ customer.email }}{% endif %}">
+          <input type="radio" id="contactFormTitleMiss" name="contact[title]" value="Miss." {% if form.title == "Miss." %}checked="checked"{% endif %}>
+          <label for="contactFormTitleMiss">Miss.</label>
 
-          <label for="contactFormPhone" class="hidden-label">Phone Number</label>
-          <input type="tel" id="contactFormPhone" name="contact[phone]" placeholder="Phone Number" pattern="[0-9]*" value="{% if form.phone %}{{ form.phone }}{% elsif customer %}{{ customer.phone }}{% endif %}">
+          <input type="radio" id="contactFormTitleNone" name="contact[title]" value="None" {% if form.title == "None" %}checked="checked"{% endif %}>
+          <label for="contactFormTitleNone">None</label>
 
-          <label for="contactFormMessage" class="hidden-label">Message</label>
-          <textarea rows="10" id="contactFormMessage" name="contact[body]" placeholder="Message">{% if form.body %}{{ form.body }}{% endif %}</textarea>
 
-          <input type="submit" class="btn right" value="Send">
+          <label for="contactFormFirstName">First Name</label>
+          <input type="text" id="contactFormFirstName" name="contact[firstName]" placeholder="Dorian" autocapitalize="words" value="{% if form.firstName %}{{ form.firstName }}{% elsif customer %}{{ customer.firstName }}{% endif %}">
+
+          <label for="contactFormLastName">Last Name</label>
+          <input type="text" id="contactFormLastName" name="contact[lastName]" placeholder="Leigh" autocapitalize="words" value="{% if form.lastName %}{{ form.lastName }}{% elsif customer %}{{ customer.lastName }}{% endif %}">
+
+          <label for="contactFormAddress">
+            Address
+            <span class="meta">(optional)</span>
+          </label>
+          <input type="text" id="contactFormAddress" name="contact[address]" autocapitalize="" placeholder="5th Ave." value="{% if form.address %}{{ form.address }}{% elsif customer %}{{ customer.addressn }}{% endif %}">
+
+          <label for="contactFormCity">
+            City
+            <span class="meta">(optional)</span>
+          </label>
+          <input type="text" id="contactFormCity" name="contact[city]" autocapitalize="" placeholder="New York" value="{% if form.city %}{{ form.city }}{% elsif customer %}{{ customer.city }}{% endif %}">
+
+          <label for="contactFormStateProvince">
+            State or Province / Zip Code
+            <span class="meta">(optional)</span>
+          </label>
+          <input type="text" id="contactFormStateProvince" name="contact[stateProvince]" autocapitalize="" placeholder="NY" value="{% if form.stateProvince %}{{ form.stateProvince }}{% elsif customer %}{{ customer.stateProvince }}{% endif %}">
+
+          <input type="text" id="contactFormPostalCode" name="contact[postalCode]" autocapitalize="" placeholder="10018" value="{% if form.postalCode %}{{ form.postalCode }}{% elsif customer %}{{ customer.postalCode }}{% endif %}">
+
+          <label for="contactFormCountry">
+            Country
+            <span class="meta">(optional)</span>
+          </label>
+          <input type="text" id="contactFormCountry" name="contact[country]" autocapitalize="" placeholder="United States" value="{% if form.country %}{{ form.country }}{% elsif customer %}{{ customer.country }}{% endif %}">
+
         </div>
+        <div class="vr"></div>
+        <div class="col">
+
+
+
+          <input type="radio" id="contactFormSenderTypeCustomer" name="contact[senderType]" value="Customer" {% if form.senderType == "Customer" %}checked="checked"{% endif %}>
+          <label for="contactFormSenderTypeCustomer">Customer</label>
+
+          <input type="radio" id="contactFormSenderTypeRetailer" name="contact[senderType]" value="Retailer" {% if form.senderType == "Retailer" %}checked="checked"{% endif %}>
+          <label for="contactFormSenderTypeRetailer">Retailer</label>
+
+
+          <input type="radio" id="contactFormSenderTypeOther" name="contact[senderType]" value="Other" {% if form.senderType == "Other" %}checked="checked"{% endif %}>
+          <label for="contactFormSenderTypeOther">Other</label>
+
+
+
+          <label for="contactFormFirstName">First Name</label>
+          <input type="text" id="contactFormFirstName" name="contact[firstName]" placeholder="Dorian" autocapitalize="words" value="{% if form.firstName %}{{ form.firstName }}{% elsif customer %}{{ customer.firstName }}{% endif %}">
+
+          <label for="contactFormLastName">Last Name</label>
+          <input type="text" id="contactFormLastName" name="contact[lastName]" placeholder="Leigh" autocapitalize="words" value="{% if form.lastName %}{{ form.lastName }}{% elsif customer %}{{ customer.lastName }}{% endif %}">
+
+
+
+
+
+          <label for="contactFormEmail">Email</label>
+          <input type="email" id="contactFormEmail" name="contact[email]" placeholder="dorthy@theia.com" autocorrect="off" autocapitalize="off" value="{% if form.email %}{{ form.email }}{% elsif customer %}{{ customer.email }}{% endif %}">
+
+          <label for="contactFormPhone">
+            Phone Number
+            <span class="meta">(optional)</span>
+          </label>
+          <input type="tel" id="contactFormPhone" name="contact[phone]" placeholder="+1 555 564 3829" pattern="[0-9]*" value="{% if form.phone %}{{ form.phone }}{% elsif customer %}{{ customer.phone }}{% endif %}">
+
+
+          <label for="contactFormMessage">Message</label>
+          <textarea rows="10" id="contactFormMessage" name="contact[body]" placeholder="Dear Theia,">{% if form.body %}{{ form.body }}{% endif %}</textarea>
+
+        </div>
+      </div>
+
+
+      <div class="row">
+        <input type="checkbox" id="contactNewsletterConsent" name="contact[newsletterConsent]" value="checked" />
+        <label for="contactNewsletterConsent">Join our mailing list</label>
+        
+        <button type="submit">Send Message</button>
+      </div>
 
       {% endform %}
-    </div>
-
   </div>
 
+</div>
+<div class="content-hero">
+  <div class="wrapper-9-col">
+    <h3>For other enquiries</h3>
+
+    <div class="row-3-col">
+      <div class="col">
+        
+    <h4>Theia</h4>
+    <address>
+      <div class="address">
+        1412 Broadway Suite 1200
+        <br />
+        New York, New York 10018
+      </div>
+      <div class="email">
+        <a href="mailto:theia@jsgroup.com">theia@jsgroup.com</a>
+      </div>
+    </address>
+
+      </div>
+      <div class="vr"></div>
+      <div class="col">
+        
+    <h4>Theia Corporate</h4>
+    <address>
+      <div class="address">
+        225 Rue Chabanel Street West
+        <br />
+        10th floor Montreal, Quebec,
+        <br />
+        H2N 2C9 &ndash; Canada
+      </div>
+      <div class="email">
+        <a href="mailto:theia@jsgroup.com">theia@jsgroup.com</a>
+      </div>
+    </address>
+
+      </div>
+      <div class="vr"></div>
+      <div class="col">
+        
+    <h4>Press</h4>
+    <address>
+      <div class="phone">
+        +1 234 567 89-88
+      </div>
+      <div class="email">
+        <a href="mailto:theia@jsgroup.com">theia@jsgroup.com</a>
+      </div>
+    </address>
+
+      </div>
+    </div>
+  </div>
 </div>
