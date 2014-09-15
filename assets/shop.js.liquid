@@ -20,8 +20,45 @@ timber.init = function () {
     timber.accessibleNav();
     timber.productImageSwitch();
     timber.carouselInit();
+    timber.loginFormInit();
 
 };
+
+timber.loginFormInit = function(){
+
+    /*
+     Show/hide the recover password form when requested.
+     I'd suggest using some CSS3 transitions to make this change look cool,
+     but this gets the job done for now.
+     */
+    function showRecoverPasswordForm(e) {
+        e.preventDefault();
+
+        $('#recover_password').show();
+        $('#customer_login').hide();
+    }
+
+    function hideRecoverPasswordForm(e) {
+        e.preventDefault();
+
+        document.getElementById('recover_password').style.display = 'none';
+        document.getElementById('customer_login').style.display = 'block';
+    }
+
+    // Allow deep linking to the recover password form
+    if (window.location.hash == '#recover') {
+        showRecoverPasswordForm();
+    }
+
+    $('.forgot-passowrd-link').click(showRecoverPasswordForm);
+    $('.cancel-forgot-password-link').click(hideRecoverPasswordForm);
+
+    // reset_success is only true when the reset form is
+    {% if reset_success %}
+    document.getElementById('resetSuccess').style.display = 'block';
+    {% endif %}
+};
+
 
 timber.carouselInit = function () {
     $('.carousel').slick({

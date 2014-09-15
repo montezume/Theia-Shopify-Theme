@@ -117,7 +117,7 @@ $ajaxifyGrey: #444;
 $ajaxifyGreyDark: #454545;
 
 /* Border colors from Timber */
-$borderColor: #e5e5e5;
+$borderColor: $colorLightGray;
 
 $drawerBackgroundColor: $colorWarmLighterGray;
 $drawerBorderColor: #454545;
@@ -153,9 +153,6 @@ $colorBody: #fff;
 /* $colorTextBody: {{ settings.color_body_text }}; */
 $colorTextBody: $colorWarmGray;
 $colorHeaders: $colorWarmGray;
-
-// Border colors
-$borderColor: $colorWarmLightGray;
 
 // Nav and dropdown link background
 $colorNav: #f2f2f2;
@@ -1179,6 +1176,15 @@ hr {
     }
 }
 
+%extra-large-button-base {
+    height: 64px;
+    padding: 12px ( $gutter * 1.25 ) 0;
+    font-size: 1.5em;
+    line-height: 1;
+    font-weight: 400;
+    font-family: $helveticaFontStack;
+}
+
 %large-button-base {
     height: 50px;
     padding: 6px $gutter 0;
@@ -1189,7 +1195,8 @@ hr {
 
 %medium-button-base {
     height: 44px;
-    padding: 6px $gutter 0;
+    padding: 4px $gutter;
+    line-height: 36px;
 
     font-size: 1.125em;
     font-weight: 400;
@@ -1237,6 +1244,15 @@ hr {
     }
 }
 
+%rsaquo-button-base {
+    @extend %icon-button-base;
+
+    .icon {
+        @extend .icon-arrow-right-large;
+        font-size: 12px;
+    }
+}
+
 /* gold, large button with solid arrow icon */
 %large-gold-arrow-button {
     @extend %button-base;
@@ -1264,12 +1280,22 @@ hr {
 
 /* gold, medium button with rsaquo */
 %large-gold-rsaquo-button {
-
+    @extend %button-base;
+    @extend %large-button-base;
+    @extend %gold-button-base;
+    @extend %rsaquo;
 }
 
 /* gold, medium button with rsaquo  */
 %medium-gold-rsaquo-button {
+    @extend %button-base;
+    @extend %medium-button-base;
+    @extend %gold-button-base;
+    @extend %rsaquo-button-base;
 
+    .icon {
+        margin-left: -3px;
+    }
 }
 
 /* gold, small button with rsaquo  */
@@ -1311,9 +1337,53 @@ hr {
 
 /* light gray, small button */
 %small-lightGray-button {
-
 }
 
+
+/* extra large gold button */
+%extra-large-gold-button {
+    @extend %button-base;    
+    @extend %extra-large-button-base;
+    @extend %gold-button-base;
+}
+
+/* custom buttons */
+
+.facebook-login-button {
+    @extend %extra-large-gold-button;
+    @extend %icon-button-base;
+
+    padding-top: 12px;
+
+    span {
+        vertical-align: middle;
+    }
+
+    .label {
+
+    }
+
+    /* facebook f icon */
+    .icon:first-of-type {
+        @extend .icon-facebook-f;
+        
+        font-size: 34px;
+        right: 6px;
+    }
+
+    /* rsaquo icon */
+    .icon ~ .icon {
+        @extend .icon-arrow-right-large;
+
+        font-size: 15px;
+        left: -4px;
+        bottom: 1px;
+    }
+}
+
+
+
+/* Logos */
 
 %logo-base {
     text-align: center;
@@ -1351,6 +1421,8 @@ hr {
     }
 }
 
+
+/* heros */
 
 %hero-base {
     position: relative;
@@ -1715,11 +1787,15 @@ select {
     width: 100%;
     max-width: 100%;
     display: block;
-    margin-bottom: ( $gutter * 1.5 );
+    margin-bottom: 22px;
     border: 1px solid $colorWarmLightGray;
     background: $colorPaleGray;
-    padding: 10px $gutter;
-    line-height: 1.42;
+    padding: ( $gutter / 2 ) $gutter;
+    line-height: 1.625;
+
+    &:last-child {
+        margin-bottom: 0;
+    }
  
     &:focus {
         /* border: 1px solid darken($borderColor, 10%); */
@@ -1733,6 +1809,17 @@ select {
     }
 }
 
+input.half {
+    width: 49%;
+    margin-right: 2%;
+    float: left;
+
+    & + input.half {
+        margin-right: 0;
+    }
+}
+
+
 textarea {
     min-height: 100px;
 }
@@ -1741,33 +1828,94 @@ textarea {
 
 input[type="checkbox"],
 input[type="radio"] {
-
     display: inline;
     margin: 0;
 
     /* position labels following to be inline */
     & + label {
         display: inline-block;
+        font-size: 16px;
+        text-transform: none;
+        font-family: $helveticaFontStack;
+        color: $colorWarmGray;
     }
 
     /* hide custom checkbox styles from browers that do not support css3 psuedo classes */
     /* http://code.stephenmorley.org/html-and-css/hiding-rules-with-the-negation-pseudo-class/ */
     &:not(old) {
         display: none;
-        padding-left: $gutter;
 
         /* http://code.stephenmorley.org/html-and-css/styling-checkboxes-and-radio-buttons/ */
         & + label {
             @extend %icon-base;
-
             @extend .icon-box-unchecked;
+
+            /* ensure correct positioning of the icon, if the block is center aligned. */
+            text-align: left;
+
+            &:before {
+                display: inline-block !important;
+                width: 18px;
+                font-size: 16px;
+                color: $colorGold;
+                position: relative;
+                top: 1px;
+            }
         }
 
         &:checked + label {
             @extend .icon-box-checked;
+
+            color: $colorGold;
         }
     }
 }
+
+.contact-form {
+    .message {
+        height: 325px;
+    }
+
+    .newsletter-signup-row,
+    .submit-button-row {
+        margin: ( $gutter * 1.5 ) 0 ( $gutter * 1.75 );
+        text-align: center;
+
+        label {
+            margin: 0;
+        }
+    }
+
+    button {
+        @extend %medium-gold-rsaquo-button;
+        width: 288px;
+    }
+}
+
+.contact-form-title,
+.contact-form-sender-type {
+    @extend .clearfix;
+
+    label {
+        display: block;
+        float: left;
+    }
+}
+
+.contact-form-title {
+    label {
+        width: 25%;
+    }
+}
+
+.contact-form-sender-type {
+    label {
+        width: percentage(1/3);
+    }
+}
+
+
+
 
 select {
     -webkit-appearance: none;
@@ -1801,10 +1949,11 @@ legend {
     @extend %smallish-arial-text;
 
     display: block;
-    margin: ($gutter / 2 ) 0;
+    margin: ($gutter / 2 ) 0 10px;
     font-weight: 700;
     text-transform: uppercase;
     color: $colorWarmLightGray;
+    line-height: 1;
 
     .meta {
         font-weight: 400;
@@ -3301,7 +3450,23 @@ address {
 
     .content {
         text-shadow: 0 1px rgba(0,0,0, 0.44);
+        top: $gutter * 4.125;
+        margin: 0;
     }
+
+    .wrapper {
+        @include heroEdgeFade( $heroBgColor, $width: 160px, $offset: 99px );
+
+        height: 100%;
+    }
+}
+
+.login-page-hero {
+    @extend %hero-small;
+
+    $heroBgColor: #7f8a8d;
+
+    background: $heroBgColor url({{ 'login-page-hero-bg.jpg' | asset_url}}) top center no-repeat;
 
     .wrapper {
         @include heroEdgeFade( $heroBgColor, $width: 160px, $offset: 99px );
@@ -3831,8 +3996,16 @@ address {
 .content-hero {
     padding-bottom: $gutter * 3;
 
+    h2 {
+        margin-bottom: $gutter * 2.75;
+    }
+
     h2, h3 {
         text-align: center;
+    }
+
+    h3, h4 {
+        font-weight: 300;
     }
 
     header {
@@ -3850,10 +4023,10 @@ address {
         @extend %row-2-col;
 
         .col {
-            padding: ( $gutter / 2 ) $gutter ( $gutter / 2 ) ( $gutter * 2 );
+            padding: ( $gutter / 2 ) $gutter ( $gutter / 2 ) ( $gutter * 3 );
 
             &:first-of-type {
-                padding-right: $gutter * 2;
+                padding-right: $gutter * 3;
                 padding-left: $gutter;
             }
         }
@@ -3868,6 +4041,66 @@ address {
     }
 }
 
+.other-enquires-hero {
+    @extend .content-hero;
+
+    margin-bottom: $gutter * 6;
+
+    h3 {
+        margin-bottom: $gutter * 3.5;
+    }
+
+    h4 {
+        padding-left: 20px;
+        font-size: 18px;
+        color: $colorWarmGrayDark;
+    }
+}
+
+.login-form-hero {
+    @extend .content-hero;
+
+    margin-top: 12px;
+
+    h2 {
+        margin-bottom: 36px;
+    }
+
+    h4 {
+        color: $colorWarmGrayDark;
+        font-weight: 400;
+        margin-bottom: $gutter * 1.75;
+    }
+
+    h5 {
+        @extend %smallish-arial-text;
+
+        text-transform: uppercase;
+        color: $colorWarmLightGray;
+        margin: ( $gutter / 2 ) 0;
+    }
+
+    ul {
+        list-style-type: disc;
+    }
+
+    li {
+        line-height: 1.375;
+        margin: ( $gutter / 2 ) 0;
+    }
+
+    .register-button, .login-submit-button, .reset-password-button {
+        @extend %medium-gold-rsaquo-button;
+
+        width: 198px;
+    }
+
+    .login-form-fields-block, .register-benefits-block {
+        @extend .clearfix;
+
+        height: 204px;
+    }
+}
 
 /* Naviation Menus */
 
@@ -4455,6 +4688,22 @@ address {
     }
 }
 
+.template-customers-login {
+    
+    .facebook-login-button-block {
+        width: 405px;
+        margin: 0 auto ( $gutter * 3.625 );
+        border: 1px solid $borderColor;
+        border-right: 0;
+        border-left: 0;
+        padding: $gutter 0;
+
+        .facebook-login-button {
+            width: 100%;
+        }
+    }
+}
+
 
 /*================ Search bar in header ================*/
 .search-bar {
@@ -5017,7 +5266,6 @@ $opacity-not-active: .25;
     }
 
 }
-
 
 .slick-prev {
     @extend %carousel-arrow-base;
