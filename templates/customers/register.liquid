@@ -1,25 +1,25 @@
 {% comment %}
 
-  This template will be automatically generated for you if the file doesn't exist,
-  but where's the fun in having no control? Define your layout below.
+This template will be automatically generated for you if the file doesn't exist,
+but where's the fun in having no control? Define your layout below.
 
-  The 'layout settings.customer_layout' line is inserted at the top of every customer account template.
-  Your theme's settings determine to use the 'default' or 'theme' customer templates.
-  More info:
-    - http://www.tetchi.ca/shopify-theme-from-scratch-part-11/
+The 'layout settings.customer_layout' line is inserted at the top of every customer account template.
+Your theme's settings determine to use the 'default' or 'theme' customer templates.
+More info:
+- http://www.tetchi.ca/shopify-theme-from-scratch-part-11/
 
 {% endcomment %}
 
-{% layout settings.customer_layout %}
+{% include 'login-register-page-hero' %}
 
-<div class="grid">
 
-  <div class="grid-item large--one-third push--large--one-third">
-
+<div class="register-form-hero">
+  
+  <div class="wrapper-8-col">
     <h1>Create Account</h1>
 
     {% comment %}
-      This form must use 'create_customer'
+    This form must use 'create_customer'
     {% endcomment %}
     {% form 'create_customer' %}
 
@@ -46,8 +46,7 @@
         or <a href="{{ shop.url }}">Return to Store</a>
       </div>
 
-    {% endform %}
-
+    {% endform %}  
   </div>
 
 </div>
