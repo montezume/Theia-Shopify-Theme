@@ -12,11 +12,15 @@ More info:
 
 {% include 'login-register-page-hero' %}
 
-
 <div class="register-form-hero">
-  
   <div class="wrapper-8-col">
-    <h1>Create Account</h1>
+    <h2>Create an account</h2>
+
+    <div class="facebook-login-button-block">
+      {% include 'facebook-login-button' %}
+    </div>
+
+    <h3>Or create your account with Theia:</h3>
 
     {% comment %}
     This form must use 'create_customer'
@@ -25,28 +29,46 @@ More info:
 
       {% include 'form-errors-custom' %}
 
-      <label for="first_name" class="hidden-label">First Name</label>
-      <input type="text" value="" name="customer[first_name]" id="first_name" placeholder="First Name" {% if form.errors contains "first_name" %} class="error"{% endif %} autocapitalize="words" autofocus>
+      <div class="register-form-field-row">
+        <div class="col">
 
-      <label for="last_name" class="hidden-label">Last Name</label>
-      <input type="text" value="" name="customer[last_name]" id="last_name" placeholder="Last Name" {% if form.errors contains "last_name" %} class="error"{% endif %} autocapitalize="words">
 
-      <label for="email" class="hidden-label">Email Address</label>
-      <input type="email" value="" name="customer[email]" id="email" placeholder="Email" {% if form.errors contains "email" %} class="error"{% endif %} autocorrect="off" autocapitalize="off">
+          <label for="first_name">First Name</label>
+          <input type="text" value="" name="customer[first_name]" id="first_name" placeholder="First Name" {% if form.errors contains "first_name" %} class="error"{% endif %} autocapitalize="words" autofocus>
 
-      <label for="password" class="hidden-label">Password</label>
-      <input type="password" value="" name="customer[password]" id="create_password" placeholder="Password" {% if form.errors contains "password" %} class="error"{% endif %}>
+          <label for="last_name">Last Name</label>
+          <input type="text" value="" name="customer[last_name]" id="last_name" placeholder="Last Name" {% if form.errors contains "last_name" %} class="error"{% endif %} autocapitalize="words">
 
-      <div class="text-center">
-        <p>
-          <input type="submit" value="Create" class="btn">
-        </p>
-        or {{ 'Log in' | customer_login_link }}
-        <br />
-        or <a href="{{ shop.url }}">Return to Store</a>
+          <label for="email">Email Address</label>
+          <input type="email" value="" name="customer[email]" id="email" placeholder="Email" {% if form.errors contains "email" %} class="error"{% endif %} autocorrect="off" autocapitalize="off">
+
+
+        </div>
+        <div class="vr"></div>
+        <div class="col">
+
+          <label for="password">Password</label>
+          <input type="password" value="" name="customer[password]" id="create_password" placeholder="Password" {% if form.errors contains "password" %} class="error"{% endif %}>
+
+          <div class="newsletter-signup-row">
+            <input type="checkbox" id="customerNewsletterConsent" name="customer[accepts_marketing]" checked="checked" />
+            <label for="customerNewsletterConsent">Join our mailing list</label>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="register-submit-button-block">
+        <button type="submit" class="register-submit-button">
+          Create your Theia Account
+          <span class="icon"></span>
+        </button>
+
+        <p>Need help? <a href="/pages/contact">Customer service</a></p>
+
       </div>
 
     {% endform %}  
+    
   </div>
-
 </div>

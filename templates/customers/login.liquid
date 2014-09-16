@@ -61,7 +61,9 @@ into an external JS file.
               <span class="icon"></span>
             </button>
             
-            <a href="#" class="forgot-passowrd-link">Forgot your password?</a>
+            <p>
+              <a href="#forgot" class="forgot-passowrd-link">Forgot your password?</a>
+            </p>
 
           {% endform %}
 
@@ -82,22 +84,20 @@ into an external JS file.
             </ul>
 
           </div>
-          <p>
-            <a href="#" class="register-button">
-              Create Account
-              <span class="icon"></span>
-            </a>
-          </p>
+          <a href="http://theia.myshopify.com/account/register" class="register-button">
+            Create Account
+            <span class="icon"></span>
+          </a>
           
           <p>
-            Need Help? <a href="#" class="customer-service-link">Customer Service</a>
+            Need Help? <a href="/pages/contact" class="customer-service-link">Customer Service</a>
           </p>
-          
+
         </div>
       </div>
     </div>
 
-    <div class="recover-password-block">
+    <div class="hidden recover-password-block">
       <div class="row-2-col">
         <div class="col">
 
@@ -130,7 +130,11 @@ into an external JS file.
               Reset Password
               <span class="icon"></span>
             </button>
-            or <a href="#" class="cancel-forgot-password-link">Cancel</a>
+
+            <p>
+              Remember your password? <a href="#" class="cancel-forgot-password-link">Login</a>
+            </p>
+
           {% endform %}
 
         </div>
@@ -139,12 +143,12 @@ into an external JS file.
 
           <h4>Avoid the hassle.</h4>
 
-          <p>Use your facebook account to login.</p>
+          <h5>Use your facebook account to login.</h5>
 
           {% include 'facebook-login-button' %}
           
           <p>
-            Need Help? <a href="#" class="customer-service-link">Customer Service</a>
+            Need Help? <a href="/pages/contact" class="customer-service-link">Customer Service</a>
           </p>
 
         </div>
