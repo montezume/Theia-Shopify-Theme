@@ -476,6 +476,15 @@ html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abb
 }
 
 
+/*============================================================================
+  #Javascript styles
+  ============================================================================*/
+
+.supports-js {
+    .js-hidden {
+        display: none;
+    }
+}
 
 /*================================================================================
   # Extends - these are for common text and block styles
@@ -641,6 +650,18 @@ html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abb
     &:active,
     &:focus {
         text-decoration: underline;
+    }
+}
+
+%warmGray-underline-hover-gold-link {
+    @extend %link-base;
+
+    color: $colorWarmGray;
+
+    &:hover,
+    &:active,
+    &:focus {
+        color: $colorGold;
     }
 }
 
@@ -4057,7 +4078,7 @@ address {
     }
 }
 
-.login-form-hero {
+.login-form-hero, .register-form-hero {
     @extend .content-hero;
 
     margin-top: 12px;
@@ -4089,16 +4110,44 @@ address {
         margin: ( $gutter / 2 ) 0;
     }
 
-    .register-button, .login-submit-button, .reset-password-button {
+    p a {
+        @extend %rsaquo;
+        @extend %warmGray-underline-hover-gold-link;
+    }
+
+    
+    .col {
+        .facebook-login-button,
+        .register-button,
+        button {
+            margin-bottom: $gutter * 1.5;
+        }
+    }
+
+    .register-button, .login-submit-button, .reset-password-button, .register-submit-button {
         @extend %medium-gold-rsaquo-button;
 
-        width: 198px;
+        min-width: 198px;
     }
 
     .login-form-fields-block, .register-benefits-block {
         @extend .clearfix;
 
         height: 204px;
+    }
+
+    .register-form-field-row {
+        @extend .row-2-col;
+
+        margin-bottom: $gutter * 3.25;
+    }
+
+    .register-submit-button-block {
+        text-align: center;
+
+        button {
+            margin-bottom: $gutter;
+        }
     }
 }
 
@@ -4688,7 +4737,7 @@ address {
     }
 }
 
-.template-customers-login {
+[class^="template-customers-"] {
     
     .facebook-login-button-block {
         width: 405px;

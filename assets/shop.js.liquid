@@ -32,21 +32,25 @@ timber.loginFormInit = function(){
      but this gets the job done for now.
      */
     function showRecoverPasswordForm(e) {
-        e.preventDefault();
+        if (typeof e !== 'undefined') {
+            e.preventDefault();
+        }
 
-        $('#recover_password').show();
-        $('#customer_login').hide();
+        $('.recover-password-block').show();
+        $('.login-block').hide();
     }
 
     function hideRecoverPasswordForm(e) {
         e.preventDefault();
 
-        document.getElementById('recover_password').style.display = 'none';
-        document.getElementById('customer_login').style.display = 'block';
+        $('.recover-password-block').hide();
+        $('.login-block').show();
     }
 
     // Allow deep linking to the recover password form
-    if (window.location.hash == '#recover') {
+    if (window.location.hash == '#forgot') {
+        console.log( 'forgot' );
+
         showRecoverPasswordForm();
     }
 
