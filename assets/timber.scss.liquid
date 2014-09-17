@@ -1515,13 +1515,14 @@ hr {
 
     h2 {
         line-height: 1;
-        margin: 0 0 $gutter;
+        margin: 0 0 10px;
     }
 
     h3 {
         font-size: 2.8125em;
         line-height: 1;
         margin: 0;
+        letter-spacing: -0.2px;
     }
 
     .content {
@@ -4018,7 +4019,7 @@ address {
     padding-bottom: $gutter * 3;
 
     h2 {
-        margin-bottom: $gutter * 2.75;
+        margin: ( $gutter * 2 ) 0;
     }
 
     h2, h3 {
@@ -4533,7 +4534,7 @@ address {
     border-bottom: 1px solid $colorLightGold;
     margin: 0;
 
-    > * {
+    input, button {
         background: $colorDarkGold;
         display: block;
         height: 48px;
@@ -5388,6 +5389,10 @@ $opacity-not-active: .25;
 
     background: #000;
 
+    .wrapper {
+        height: 698px;
+    }
+
     h2 {
         margin-top: 0;
         line-height: 1;
@@ -5423,7 +5428,6 @@ $opacity-not-active: .25;
     }
 
     .slick-slide {
-        height: 698px;
         position: relative;
 
     }
