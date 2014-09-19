@@ -130,9 +130,12 @@
       {% include 'social-link-block' %}
     </div>
 
-    <div class="social-media-feed-row">
-      {% include 'social-media-feed-block' %}
-    </div>
+    {% comment %}
+      **todo** add this post launch
+      <div class="social-media-feed-row">
+        {% include 'social-media-feed-block' %}
+      </div>
+    {% endcomment %}
 
     <div class="newsletter-signup-row">
       {% include 'newsletter-signup-block' %}
@@ -147,7 +150,31 @@
     <h2>Events and Press Releases</h2>
 
     <div class="press-releases-column">
+      <div class="contact-block">
+        {% if settings.contact_events_full_name %}
+          <p>For any events enquiries, please contact {{ settings.contact_events_full_name }}</p>
+          <address>
+            <div class="email">
+              <a href="mailto:{{ settings.contact_events_email }}">{{ settings.contact_events_email }}</a>
+            </div>
+            <div class="address">
+              {{ settings.contact_events_address1 }}
+              {% if settings.contact_events_address2 %}
+                <br />
+                {{ settings.contact_events_address2 }}
+              {% endif %}
+            </div>
+            <div class="phone">
+              {{ settings.contact_events_phone }}
+            </div>
+          </address>
+         {% endif %}
+      </div>
+
+      {% comment %}
+      **todo** add this once the press section is done after launch.
       {% include 'homepage-press-releases' %}
+      {% endcomment %}
     </div>
 
     <div class="media-events-contact-column">
@@ -169,27 +196,6 @@
               </div>
               <div class="phone">
                 {{ settings.contact_media_phone }}
-              </div>
-            </address>
-          {% endif %}
-        </div>
-
-        <div class="contact-block">
-          {% if settings.contact_events_full_name %}
-            <p>For any events enquiries, please contact {{ settings.contact_events_full_name }}</p>
-            <address>
-              <div class="email">
-                <a href="mailto:{{ settings.contact_events_email }}">{{ settings.contact_events_email }}</a>
-              </div>
-              <div class="address">
-                {{ settings.contact_events_address1 }}
-                {% if settings.contact_events_address2 %}
-                  <br />
-                  {{ settings.contact_events_address2 }}
-                {% endif %}
-              </div>
-              <div class="phone">
-                {{ settings.contact_events_phone }}
               </div>
             </address>
           {% endif %}
