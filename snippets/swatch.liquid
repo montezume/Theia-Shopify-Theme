@@ -1,0 +1,64 @@
+<!-- begin swatch.liquid -->
+{% comment %}
+Set the extension of your color files below. Use 'png', 'jpeg', 'jpg' or 'gif'.
+{% endcomment %}
+
+{% assign file_extension = 'png' %}
+
+{% assign option_index = 0 %}
+
+{% for option in product.options %}
+
+  {% if option == swatch %}
+    {% assign option_index = forloop.index0 %}
+
+    <style>
+      label[for="product-select-option-{{ option_index }}"] { display: none; }
+      #product-select-option-{{ option_index }} { display: none; }
+      #product-select-option-{{ option_index }} + .custom-style-select-box { display: none !important; }
+    </style>
+    <script>$(window).load(function() { $('.selector-wrapper:eq({{ option_index }})').hide(); });</script>
+
+  {% endif %}
+
+{% endfor %}
+
+<fieldset class="swatch" data-option-index="{{ option_index }}">
+  <legend>{{ swatch }}: </legend>
+
+  {% assign values = '' %}
+
+  {% for variant in product.variants %}
+
+    {% assign value = variant.options[option_index] %}
+    {% unless values contains value %}
+
+      {% assign values = values | join: ',' %}
+      {% assign values = values | append: ',' | append: value %} 
+      {% assign values = values | split: ',' %}
+      
+      <div data-value="{{ value | escape }}" class="swatch-element {% if is_color %}color {% endif %}{{ value | handle }} {% if variant.available %}available{% else %}soldout{% endif %}">
+
+        <div class="tooltip">{{ value }}</div>
+
+        <input id="swatch-{{ option_index }}-{{ value | handle }}" type="radio" name="option-{{ option_index }}" value="{{ value | escape }}"{% if forloop.first %} checked{% endif %} {% unless variant.available %}disabled{% endunless %} />
+
+        <label for="swatch-{{ option_index }}-{{ value | handle }}" style="background-color: {{ value | split: ' ' | last | handle }}; background-image: url({{ value | handle | append: '.' | append: file_extension | asset_url }})">
+          <img class="crossed-out" src="{{ 'soldout.png' | asset_url }}" />
+        </label>
+
+      </div>
+
+      {% if variant.available %}
+
+        <script>
+            jQuery('.swatch[data-option-index="{{ option_index }}"] .{{ value | handle }}').removeClass('soldout').addClass('available').find(':radio').removeAttr('disabled');
+        </script>
+
+      {% endif %}
+
+    {% endunless %}
+  {% endfor %}
+</fieldset>
+
+<!-- end swatch.liquid -->
