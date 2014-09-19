@@ -11,8 +11,14 @@ timber.cache = {
     // Product Page
     $mainImage: $('#productPhotoImg'),
     $thumbImages: $('#productThumbs').find('a.product-photo-thumb'),
-    $newImage: null
-}
+    $newImage: null,
+
+    // Celebrity Gallery
+    $celebrityGallery: $('.celebrity-gallery'),
+    $celebritySlides: $('.celebrity-gallery .slide'),
+    $celebrityThumbs: $('.celebrity-gallery .thumb')
+
+};
 
 timber.init = function () {
 
@@ -21,7 +27,31 @@ timber.init = function () {
     timber.productImageSwitch();
     timber.carouselInit();
     timber.loginFormInit();
+    timber.celebrityGallery();
 
+};
+
+timber.celebrityGallery = function(){
+
+    // get elements
+    var $gallery = timber.cache.$celebrityGallery,
+        $slides = timber.cache.$celebritySlides,
+        $thumbs = timber.cache.$celebrityThumbs;
+
+    // wire click actions
+    $thumbs.click(function(e){
+        e.preventDefault();
+
+        var $this = $(this),
+            $targetSlide = $( $this.attr('href') );
+
+        $thumbs.removeClass('active');
+        $slides.removeClass('active');
+
+        $this.addClass('active');
+        $targetSlide.addClass('active');
+
+    });
 };
 
 timber.loginFormInit = function(){
