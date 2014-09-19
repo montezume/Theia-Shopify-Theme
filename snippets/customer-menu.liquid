@@ -11,7 +11,7 @@
           <a class="customer-menu-link customer-profile-link" href="/account">
 
             {% comment %} https://en.gravatar.com/site/implement/images/ {% endcomment %}
-            <img alt="{{ customer.first_name }}s gravitar" src="http://www.gravatar.com/avatar/{{ customer.email | remove: ' ' | strip_newlines | downcase | md5 }}?s=44&d={{ default_profile_url }}" />
+            <img alt="{{ customer.first_name }}s gravitar" src="//www.gravatar.com/avatar/{{ customer.email | remove: ' ' | strip_newlines | downcase | md5 }}?s=44&d={{ default_profile_url }}" />
 
             <span class="label">{{ customer.first_name }} {{ customer.last_name }}</span>
           </a>
