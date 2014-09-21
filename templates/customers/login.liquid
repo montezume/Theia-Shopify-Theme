@@ -23,16 +23,20 @@ into an external JS file.
 
     <div class="login-block">
 
+      {% comment %}
+      We don't have facebook login functionaitly just yet.
+
       <div class="facebook-login-button-block">
         {% include 'facebook-login-button' %}
       </div>
+      {% endcomment %}
 
       {% comment %}
       If a user has successfully requested a new password, the form.posted_successfully? variable
       is set to true within the 'recover_customer_password' form only. Within that form you'll see
       us assign a variable 'reset_success' to true, which is used in JS to show our success message.
       {% endcomment %}
-      <div class="note form-success" id="resetSuccess" style="display:none;">
+      <div class="password-reset-form-success hidden" id="resetSuccess">
         We've sent you an email with a link to update your password.
       </div>
 
@@ -131,9 +135,9 @@ into an external JS file.
               <span class="icon"></span>
             </button>
 
-            <p>
-              Remember your password? <a href="#" class="cancel-forgot-password-link">Login</a>
-            </p>
+            {% if form.posted_successfully? %}
+              {% assign reset_success = true %}
+            {% endif %}
 
           {% endform %}
 
@@ -141,14 +145,20 @@ into an external JS file.
         <div class="vr"></div>
         <div class="col">
 
-          <h4>Avoid the hassle.</h4>
+          <h4>Need help?</h4>
 
+          {% comment %}
           <h6>Use your facebook account to login.</h6>
 
           {% include 'facebook-login-button' %}
-          
+          {% endcomment %}
+
           <p>
-            Need Help? <a href="/pages/contact" class="customer-service-link">Customer Service</a>
+            Contact <a href="/pages/contact" class="customer-service-link">Customer Service</a> for assistence.
+          </p>
+
+          <p>
+            Remember your password? <a href="#" class="cancel-forgot-password-link">Login here</a>
           </p>
 
         </div>
@@ -156,3 +166,11 @@ into an external JS file.
     </div><!-- end .recover-password-block -->
   </div>
 </div>
+
+<script>
+    $(function(){
+        {% if password_reset_success %}
+        $('#resetSuccess').removeClass('hidden');
+        {% endif %}
+    });
+</script>
