@@ -1,3 +1,9 @@
+{% comment %}
+get style number
+should be a 6 digit number as a tag
+using the times filter converts the string to an integer. If the tag contains letters it converts to 0.
+This tests the length of the string and then if the value of the int is 0 after multiplication by 1.
+{% endcomment %}
 {% capture style_number %}
   {% for tag in product.tags %}
     {% if tag.size == 6 %}
