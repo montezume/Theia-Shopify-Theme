@@ -1,3 +1,5 @@
+{% layout 'customer-account' %}
+
 {% comment %}
 
   This template will be automatically generated for you if the file doesn't exist,
@@ -13,9 +15,7 @@
 
 {% endcomment %}
 
-{% layout settings.customer_layout %}
-
-<h1>My Account</h1>
+<h2>My Account</h2>
 
 <p><a href="/account">Return to Account Details</a></p>
 
@@ -28,7 +28,7 @@
 
     {% if order.cancelled %}
     <div class="errors">
-      <h5>Order Cancelled on {{ order.cancelled_at | date: "%B %d, %Y %I:%M%p" }}</h5>
+      <h6>Order Cancelled on {{ order.cancelled_at | date: "%B %d, %Y %I:%M%p" }}</h6>
       <p>Reason: {{ order.cancel_reason }}</p>
     </div>
     {% endif %}
@@ -108,7 +108,7 @@
 
     <p><strong>Payment Status:</strong> {{ order.financial_status }}</p>
 
-    <h5>{{ order.billing_address.name }}</h5>
+    <h6>{{ order.billing_address.name }}</h6>
     <p>
       {% if order.billing_address.company != '' %}
         {{ order.billing_address.company }}<br>
@@ -127,7 +127,7 @@
 
     <p><strong>Fulfillment Status:</strong> {{ order.fulfillment_status }}</p>
 
-    <h5>{{ order.shipping_address.name }}</h5>
+    <h6>{{ order.shipping_address.name }}</h6>
     <p>
       {% if order.shipping_address.company != '' %}
         {{ order.shipping_address.company }}<br>

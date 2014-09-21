@@ -1,0 +1,10 @@
+<nav class="customer-account-menu" role="navigation">
+  <ul>
+    {% for link in linklists.customer-account-menu.links %}
+      <li>
+        <a class="customer-account-menu-link{% if link.active %} active{% endif %}" href="{{ link.url }}">{{ link.title }}</a>
+      </li>
+    {% endfor %}
+  </ul>
+</nav>
+

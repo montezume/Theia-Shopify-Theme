@@ -88,7 +88,7 @@ For info on test orders:
                   </div>
                   <div class="quantity-column">
 
-                    <h5>Quantity</h5>
+                    <h6>Quantity</h6>
 
                     {% comment %}
                     Added data-id for the ajax cart implementation only.
@@ -98,7 +98,7 @@ For info on test orders:
                   </div>
                   <div class="price-column">
 
-                    <h5>Line price</h5>
+                    <h6>Line price</h6>
 
                     <div class="line-price">
                       <span class="currency">$</span>
@@ -155,7 +155,7 @@ For info on test orders:
         <div class="side-col">
 
           <div class="cart-subtotal-row">
-            <h5>Subtotal:</h5>
+            <h6>Subtotal:</h6>
             <div class="cart-subtotal">
               <span class="currency">$</span>
               <span class="value">{{ cart.total_price | money_without_currency }}</span>
@@ -207,7 +207,7 @@ For info on test orders:
 
           <div class="accepted-credit-cards">
 
-            <h5>We accept:</h5>
+            <h6>We accept:</h6>
 
 
             {{ 'visa-logo-small.png' | asset_url | img_tag }}
