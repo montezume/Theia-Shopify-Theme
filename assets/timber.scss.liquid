@@ -1042,6 +1042,10 @@ hr {
     &.hr-4-col {
         width: 416px;
     }
+
+    &.hr-8-col {
+        width: $siteWidth8Col - $gridGutter;
+    }
 }
 
 /*================ Section Headers ================*/
@@ -2798,7 +2802,7 @@ $iconSelector: '[class^="icon-"], [class*=" icon-"]';
             overflow-y: hidden;
         }
         
-        h5 {
+        h6 {
             @extend %smallish-arial-text;
 
             text-transform: uppercase;
@@ -2942,7 +2946,7 @@ $iconSelector: '[class^="icon-"], [class*=" icon-"]';
         margin: 0;
     }
 
-    h5 {
+    h6 {
         @extend %smallish-arial-text;
         font-weight: 700;
         text-transform: uppercase;
@@ -3602,18 +3606,64 @@ address {
     }
 }
 
-.login-page-hero {
+.login-register-page-hero {
     @extend %hero-small;
 
     $heroBgColor: #7f8a8d;
 
-    background: $heroBgColor url({{ 'login-page-hero-bg.jpg' | asset_url}}) top center no-repeat;
+    background: $heroBgColor url({{ 'login-register-page-hero-bg.jpg' | asset_url}}) top center no-repeat;
 
     .wrapper {
         @include heroEdgeFade( $heroBgColor, $width: 160px, $offset: 99px );
 
         height: 100%;
     }
+}
+
+.customer-account-page-hero {
+    @extend %hero-small;
+
+    $heroBgColor: #897456;
+
+    background: $heroBgColor url({{ 'customer-account-page-hero-bg.jpg' | asset_url}}) top center no-repeat;
+
+    h2 {
+        position: relative;
+        top: 42px;
+        margin: 0;
+        text-align: center;
+        color: $colorOffWhite;
+        text-shadow: 0 0 $colorOffWhite;
+    }
+
+    .wrapper {
+        @include heroEdgeFade( $heroBgColor, $width: 160px, $offset: 99px );
+
+        height: 100%;
+    }
+}
+
+.customer-account-content-hero {
+    h2, h3 {
+        text-align: center;
+
+        &:first-child {
+            margin-top: 42px;
+        }
+    }
+
+    h3 {
+        font-weight: 300;
+        letter-spacing: -0.2px;
+    }
+}
+
+.customer-account-menu-block {
+    $width: 176px;
+
+    position: absolute;
+    top: 40px;
+    width: 176px;
 }
 
 .collections-hero {
@@ -3961,42 +4011,27 @@ address {
 
 .product-grid-hero,
 .related-products-hero,
-.collection-grid-hero {
+.collection-grid-hero,
+.order-grid-hero {
     text-align: center;
 
     h2 {
         text-align: center;
         margin-top: 0;
-        margin-bottom: $gutter * 1;
+        margin-bottom: $gutter;
     }
 }
 
-%grid-item-row-base {
-    @extend .clearfix;
-
-    margin: $gutter 0;
-}
-
-.product-grid-item,
-.collection-grid-item {
+%grid-item-base {
     display: inline-block;
     vertical-align: top;
-    height: 312px;
-    width: 256px;
     margin: ( $gutter / 2 ) ( $gutter - 2px );
     overflow: hidden;
 
-    .header-row {
-        @extend %grid-item-row-base;
-    }
+    [class$="-row"] {
+        @extend .clearfix;
 
-    .image-row {
-        @extend %grid-item-row-base;
-        height: 192px;
-    }
-
-    .meta-row {
-        @extend %grid-item-row-base;
+        margin: $gutter 0;
     }
 
     h4 {
@@ -4018,11 +4053,42 @@ address {
         }
     }
 
+    .image-row {
+        overflow: hidden;
+    }
+
     img {
         display: block;
-        height: 100%;
-        width: auto;
+        width: 100%;
+        height: auto;
     }
+}
+
+%grid-item-3-col {
+    @extend %grid-item-base;
+
+    height: 312px;
+    width: 256px;
+
+    .image-row {
+        height: 192px;
+    }
+}
+
+%grid-item-2-col {
+    @extend %grid-item-base;
+
+    width: 160px;
+    height: 264px;
+
+    .image-row {
+        height: 120px;
+    }
+}
+
+.product-grid-item,
+.collection-grid-item {
+    @extend %grid-item-3-col;
 }
 
 .collection-grid-item {
@@ -4031,16 +4097,19 @@ address {
         
         width: 168px;
     }
+
+    /* **todo** some of the collection photos are not the correct aspect ratio. Fix this with either custome or better images. */
+    img {
+        display: block;
+        height: 100%;
+        width: auto;
+    }
 }
 
 .product-grid-item {
 
     .header-row {
         text-align: left;
-    }
-
-    .image-row {
-        overflow: hidden;
     }
 
     .meta-row {
@@ -4068,12 +4137,26 @@ address {
         text-align: center;
         width: 126px;
     }
+}
 
-    /* **todo** remove this block */
-    img {
-        display: block;
-        width: 100%;
-        height: auto;
+.order-grid-item {
+    @extend %grid-item-2-col;
+
+    text-align: left;
+    height: 280px;
+
+    .meta-row {
+        > div {
+            @extend %smallish-arial-text;
+
+            text-transform: uppercase;
+            line-height: (16/12);
+            color: $colorWarmLightGray;
+        }
+    }
+
+    .button {
+        @extend %small-gold-arrow-button;
     }
 }
 
@@ -4154,8 +4237,12 @@ address {
         text-align: center;
     }
 
-    h3, h4 {
+    h3 {
         font-weight: 300;
+    }
+
+    h4 {
+        font-weight: 400;
     }
 
     header {
@@ -4191,6 +4278,10 @@ address {
     }
 }
 
+.customer-info-hero {
+    @extend .content-hero;
+}
+
 .other-enquires-hero {
     @extend .content-hero;
 
@@ -4202,7 +4293,8 @@ address {
 
     h4 {
         padding-left: 20px;
-        font-size: 18px;
+        font-size: 1.125em;
+        font-weight: 300;
         color: $colorWarmGrayDark;
     }
 }
@@ -4222,7 +4314,7 @@ address {
         margin-bottom: $gutter * 1.75;
     }
 
-    h5 {
+    h6 {
         @extend %smallish-arial-text;
 
         text-transform: uppercase;
@@ -4596,6 +4688,34 @@ address {
     }
 }
 
+.customer-account-menu {
+    @extend .clearfix;
+
+    width: 112px;
+    border-right: 1px solid $borderColor;
+
+    li {
+        margin: 14px 0;
+    }
+}
+
+.customer-account-menu-link {
+    @extend %smallish-arial-text;
+    @extend %gray-hover-gold-link;
+    @extend %rsaquo;
+
+    text-transform: uppercase;
+    white-space: normal;
+    display: block;
+    line-height: (15/12);
+
+    &.active {
+        color: $colorGold;
+    }
+}
+
+
+
 .newsletter-signup-block {
     @extend %gold-outline-block-large;
 
@@ -4886,6 +5006,12 @@ address {
             width: 100%;
         }
     }
+}
+
+.template-customers-account {
+
+
+
 }
 
 

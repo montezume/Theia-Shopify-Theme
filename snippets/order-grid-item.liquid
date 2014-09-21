@@ -1,0 +1,39 @@
+<div class="order-grid-item">
+
+  <div class="header-row">
+    <h4>{{ order.name link_to: order.customer_url }}</h4>
+  </div>
+
+  <div class="image-row">
+    <img src="{{ order.line_items.first | img_url: "large" }}" alt="{{ order.line_items.first.featured_img.alt }}" />
+  </div>
+
+  <div class="meta-row">
+
+    <div class="items">Items: {{ order.line_items.size }}</div>
+
+    <div class="order-financial-status">
+      Payment: {{ order.financial_status }}
+    </div>
+
+    {% if order.cancelled %}
+
+      <div class="order-cancelled">Order Cancelled</div>
+
+    {% else %}
+
+      <div class="order-fulfillment-status">
+        Shipping: {{ order.fulfillment_status }}
+      </div>
+
+    {% endif %}
+
+  </div>
+
+  <a href="{{ order.customer_url }}" class="button">
+    View order
+    <span class="icon"></span>
+  </a>
+  
+</div>
+
