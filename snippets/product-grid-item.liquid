@@ -29,6 +29,8 @@
   {% assign sold_out = false %}
 {% endif %}
 
+{% include 'capture-style-number' %}
+
 {% comment %}
   Set a class for sold-out and on-sale items
 {% endcomment %}
@@ -64,12 +66,14 @@
 
   <div class="meta-row">
     <div class="info-block">
-      <span>
+      <div>
         US {{ product.price | money }}
-      </span>
-      <span>
-        Style #: {{ product.variants.first.sku }}
-      </span>
+      </div>
+      {% if style_number != 0 %}
+        <div>
+          Style #: {{ style_number }}
+        </div>
+      {% endif %}
     </div>
 
     <div class="button-block">

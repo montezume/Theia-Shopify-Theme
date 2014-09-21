@@ -8,6 +8,8 @@ For more information on these Scheme.org tags, visit:
 
 {% endcomment %}
 
+{% include 'capture-style-number' %}
+
 <div class="product-detail-hero" itemscope itemtype="http://schema.org/Product">
 
   <meta itemprop="url" content="{{ shop.url }}{{ product.url }}">
@@ -37,9 +39,11 @@ For more information on these Scheme.org tags, visit:
           US {{ product.price | money }}
         </div>
 
-        <div class="product-style-number">
-          Style #: {{ product.variants.first.sku }}
-        </div>
+        {% if style_number != 0 %}
+          <div class="product-style-number">
+            Style #: {{ style_number }}
+          </div>
+        {% endif %}
         
       </div>
 

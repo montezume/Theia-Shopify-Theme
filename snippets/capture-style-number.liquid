@@ -1,0 +1,11 @@
+{% capture style_number %}
+  {% for tag in product.tags %}
+    {% if tag.size == 6 %}
+      {% assign curr_tag = tag | times: 1 %}
+      {% if curr_tag != 0 %}
+        {{ curr_tag }}
+      {% endif %}
+    {% endif %}
+  {% endfor %}
+{% endcapture %}
+{% assign style_number = style_number | strip | times: 1 %}
