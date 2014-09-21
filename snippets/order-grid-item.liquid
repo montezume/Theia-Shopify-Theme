@@ -1,11 +1,15 @@
 <div class="order-grid-item">
 
   <div class="header-row">
-    <h4>{{ order.name link_to: order.customer_url }}</h4>
+    <h4>
+      <a href="{{ order.customer_url }}">Order {{ order.name link_to: order.customer_url }}</a>
+    </h4>
   </div>
 
   <div class="image-row">
-    <img src="{{ order.line_items.first | img_url: "large" }}" alt="{{ order.line_items.first.featured_img.alt }}" />
+    <a href="{{ order.customer_url }}">
+      <img src="{{ order.line_items.first | img_url: "large" }}" alt="{{ order.line_items.first.featured_img.alt }}" />
+    </a>
   </div>
 
   <div class="meta-row">
