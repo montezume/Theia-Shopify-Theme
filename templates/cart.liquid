@@ -58,10 +58,15 @@ For info on test orders:
                 <div class="options-row">
                   <div class="info-column">
 
-                    <div class="style-number">
-                      <span class="icon"></span>
-                      <span class="label">Style #: {{ item.product.variants.first.sku }}</span>
-                    </div>
+                    {% assign product = item.product %}
+                    {% include 'capture-style-number' %}
+
+                    {% if style_number != 0 %}
+                      <div class="style-number">
+                        <span class="icon"></span>
+                        <span class="label">Style #: {{ style_number }}</span>
+                      </div>
+                    {% endif %}
 
                     {% comment %}
                     To remove an item from the cart, reload the page with the following parameters.
