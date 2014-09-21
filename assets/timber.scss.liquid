@@ -4009,10 +4009,7 @@ address {
     }
 }
 
-.product-grid-hero,
-.related-products-hero,
-.collection-grid-hero,
-.order-grid-hero {
+%grid-block-base {
     text-align: center;
 
     h2 {
@@ -4020,6 +4017,13 @@ address {
         margin-top: 0;
         margin-bottom: $gutter;
     }
+}
+
+.product-grid-hero,
+.related-products-hero,
+.collection-grid-hero,
+.order-grid-block {
+    @extend %grid-block-base;
 }
 
 %grid-item-base {
@@ -4278,7 +4282,7 @@ address {
     }
 }
 
-.customer-info-hero {
+.customer-account-content-hero {
     @extend .content-hero;
 }
 
@@ -4299,7 +4303,8 @@ address {
     }
 }
 
-.login-form-hero, .register-form-hero {
+
+%login-register-form-hero-base {
     @extend .content-hero;
 
     margin-top: 12px;
@@ -4336,7 +4341,16 @@ address {
         @extend %warmGray-underline-hover-gold-link;
     }
 
-    
+    form {
+        input[type="radio"], input[type="checkbox"] {
+            @extend %checkbox-radio-icon;
+        }
+    }
+}
+
+.login-form-hero, .register-form-hero, .password-reset-form-hero {
+    @extend %login-register-form-hero-base;
+
     .col {
         .facebook-login-button,
         .register-button,
@@ -4368,12 +4382,6 @@ address {
 
         button {
             margin-bottom: $gutter;
-        }
-    }
-
-    form {
-        input[type="radio"], input[type="checkbox"] {
-            @extend %checkbox-radio-icon;
         }
     }
 }
