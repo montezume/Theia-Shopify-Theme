@@ -595,15 +595,30 @@ html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abb
     }
 }
 
-%rsaquo {
+
+%character-suffix-base {
     &:after {
-        content: '\203A';
         display: inline-block;
         position: relative;
         padding-left: 3px;
     }
 }
 
+%rsaquo {
+    @extend %character-suffix-base;
+
+    &:after {
+        content: '\203A';
+    }
+}
+
+%rdaquo {
+    @extend %character-suffix-base;
+
+    &:after {
+        content: '\BB';
+    }
+}
 
 %link-base {
     white-space: nowrap;
@@ -3658,6 +3673,29 @@ address {
         font-weight: 300;
         letter-spacing: -0.2px;
     }
+
+    h4 {
+        margin: 0 0 $gutter;
+    }
+
+    h6 {
+        @extend %smallish-arial-text;
+
+        text-transform: uppercase;
+        color: $colorLightGray;
+        margin: 0 0 $gutter;
+    }
+
+    .shipping-account-info-row {
+
+        a {
+            @extend %rdaquo;
+            @extend %smallish-arial-text;
+            @extend %warmGray-underline-hover-gold-link;
+
+            text-transform: uppercase;
+        }
+    }
 }
 
 .customer-account-menu-block {
@@ -4024,7 +4062,7 @@ address {
 .product-grid-hero,
 .related-products-hero,
 .collection-grid-hero,
-.order-grid-block {
+.order-grid-row {
     @extend %grid-block-base;
 }
 
@@ -5020,8 +5058,15 @@ address {
 
 .template-customers-account {
 
+    .order-grid-row {
+        margin-bottom: $gutter * 3.125;
+    }
 
+    .shipping-account-info-row {
+        @extend .row-2-col;
 
+        margin: ( $gutter * 3.125 ) 0;
+    }
 }
 
 
