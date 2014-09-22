@@ -596,19 +596,30 @@ html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abb
 }
 
 
+%character-prefix-suffix-base {
+    display: inline-block;
+    position: relative;
+}
+
+%character-prefix-base {
+    &:before {
+        @extend %character-prefix-suffix-base;
+        padding-right: 3px;
+    }
+}
+
 %character-suffix-base {
     &:after {
-        display: inline-block;
-        position: relative;
+        @extend %character-prefix-suffix-base;
         padding-left: 3px;
     }
 }
 
-%rsaquo {
-    @extend %character-suffix-base;
+%lsaquo-prefix {
+    @extend %character-prefix-base;
 
-    &:after {
-        content: '\203A';
+    &:before {
+        content: '\2039';
     }
 }
 
@@ -3686,6 +3697,20 @@ address {
         margin: 0 0 $gutter;
     }
 
+    .back-link {
+        @extend %lsaquo-prefix;
+        @extend %small-helvetica-text;
+        @extend %gold-hover-underline-link;
+    }
+
+    .previous-link {
+        @extend %lsaquo-prefix;
+    }
+
+    .next-link {
+        @extend %rsaquo;
+    }
+
     .shipping-account-info-row {
 
         a {
@@ -3695,6 +3720,13 @@ address {
 
             text-transform: uppercase;
         }
+    }
+
+    h5 {
+        @extend %smaller-helvetica-text;
+        
+        text-transform: uppercase;
+        font-weight: 700;
     }
 }
 
