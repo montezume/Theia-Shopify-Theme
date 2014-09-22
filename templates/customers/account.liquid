@@ -18,7 +18,7 @@ For all available customer liquid tags:
 
 {% endcomment %}
 
-<div class="order-grid-block">
+<div class="order-grid-row">
 
   <h3>Here&rsquo;s a summary of your account:</h3>
 
@@ -45,46 +45,55 @@ For all available customer liquid tags:
 
 <hr />
 
-<div class="row-2-col">
+<div class="shipping-account-info-row">
   <div class="col">
 
-    <h4>Shipping Info</h4>
+    <h4>My Billing Info</h4>
+
+    <h6>{{ customer.addresses_count }} Billing {{ customer.addresses_count | pluralize: 'address', 'addresses' }}:</h6>
 
     {% if customer.default_address != nil %}
       <p>
         {{ customer.name }}<br />
 
-        {{ customer.default_address.address1 }}<br>
+        {{ customer.default_address.address1 }},
 
         {% if customer.default_address.address2 != "" %}
-          {{ customer.default_address.address2 }}<br>
+          {{ customer.default_address.address2 }},
         {% endif %}
 
         {% if customer.default_address.city != "" %}
-          {{ customer.default_address.city }}<br>
+          {{ customer.default_address.city }},
         {% endif %}
 
         {% if customer.default_address.province_code != "" %}
-          {{ customer.default_address.province_code | upcase }}<br>
+          {{ customer.default_address.province_code | upcase }},
+        {% endif %}
+
+        <br />
+
+        {% if customer.default_address.country != "" %}
+          {{ customer.default_address.country }},
         {% endif %}
 
         {% if customer.default_address.zip != "" %}
-          {{ customer.default_address.zip | upcase }}<br>
-        {% endif %}
-
-        {% if customer.default_address.country != "" %}
-          {{ customer.default_address.country }}<br>
+          {{ customer.default_address.zip | upcase }}
         {% endif %}
 
         {% if customer.default_address.phone != "" %}
+          <br />
           {{ customer.default_address.phone }}
         {% endif %}
 
       </p>
 
+    {% else %}
+
+      <p>No addresses on file.</p>
+
     {% endif %}
 
-    <p><a href="/account/addresses">View Addresses ({{ customer.addresses_count }})</a></p>
+    <p><a href="/account/addresses">Review my billing info</a></p>
 
   </div>
   <div class="vr"></div>
@@ -99,4 +108,14 @@ For all available customer liquid tags:
     </p>
 
   </div>
+</div>
+
+<hr class="hr-4-col" />
+
+<div class="social-hero">
+
+  <h2>Keep in touch:</h2>
+
+  {% include 'social-link-block' %}
+
 </div>
