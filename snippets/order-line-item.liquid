@@ -1,0 +1,66 @@
+<div class="order-line-item">
+  <div class="image-column">
+    <div class="order-line-item-image">
+      <a href="{{ line_item.product.url | within: collections.all }}">
+
+        {% assign img_alt = item.title | escape %}
+        {{ line_item.product.featured_image | product_img_url: 'medium' | img_tag: img_alt, 'order-line-item-image' }}
+
+      </a>
+    </div>
+  </div>
+  <div class="info-options-column">
+    <div class="header-row">
+
+      {% comment %}
+      If you want the product title and any variants in one line, use {{ item.title }}.
+      Below they've been separated for styling purposes.
+      {% endcomment %}
+      <h4>
+        {{ line_item.product.title }}
+      </h4>
+
+    </div>
+    <div class="options-row">
+      <div class="info-column">
+
+        {% assign product = line_item.product %}
+        {% include 'capture-style-number' %}
+
+        {% if style_number != 0 %}
+          <div class="style-number">
+            <span class="icon"></span>
+            <span class="label">Style #: {{ style_number }}</span>
+          </div>
+        {% endif %}
+
+        {% if line_item.fulfillment %}
+          <div class="fulfillment-status">
+            Shipped: {{ line_item.fulfillment.created_at | date: "%b %d" }}
+            {% if line_item.fulfillment.tracking_number %}
+              Via: <a href="{{ line_item.fulfillment.tracking_url }}">{{ line_item.fulfillment.tracking_company }} #{{ line_item.fulfillment.tracking_number}}</a>
+            {% endif %}
+          </div>
+        {% endif %}
+
+      </div>
+      <div class="size-column">
+        
+      </div>
+      <div class="color-column">
+        
+      </div>
+      <div class="quantity-column">
+
+        <h6>Quantity</h6>
+
+        {% comment %}
+        Added data-id for the ajax cart implementation only.
+        {% endcomment %}
+        <p>{{ line_item.quantity }}</p>
+        
+      </div>
+    </div>
+
+  </div>
+</div>
