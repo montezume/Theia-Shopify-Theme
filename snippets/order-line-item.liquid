@@ -4,7 +4,7 @@
       <a href="{{ line_item.product.url | within: collections.all }}">
 
         {% assign img_alt = item.title | escape %}
-        {{ line_item.product.featured_image | product_img_url: 'medium' | img_tag: img_alt, 'order-line-item-image' }}
+        {{ line_item.product.featured_image | product_img_url: 'medium' | img_tag: img_alt }}
 
       </a>
     </div>
@@ -36,9 +36,14 @@
 
         {% if line_item.fulfillment %}
           <div class="fulfillment-status">
-            Shipped: {{ line_item.fulfillment.created_at | date: "%b %d" }}
+            <div class="shipped-date">
+              Shipped: {{ line_item.fulfillment.created_at | date: "%b %d" }}
+            </div>
             {% if line_item.fulfillment.tracking_number %}
-              Via: <a href="{{ line_item.fulfillment.tracking_url }}">{{ line_item.fulfillment.tracking_company }} #{{ line_item.fulfillment.tracking_number}}</a>
+              <div class="tracking-info">
+                Via:
+                <a href="{{ line_item.fulfillment.tracking_url }}">{{ line_item.fulfillment.tracking_company }} #{{ line_item.fulfillment.tracking_number}}</a>
+              </div>
             {% endif %}
           </div>
         {% endif %}

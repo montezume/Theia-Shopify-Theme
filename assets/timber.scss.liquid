@@ -109,6 +109,7 @@ $colorGold: #c19946;
 $colorDarkGold: #a98741;
 $colorDarkerGold: #896e35;
 
+$colorGreen: #29c050;
 
 /*============================================================================
   Ajaxify Colours
@@ -620,6 +621,14 @@ html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abb
 
     &:before {
         content: '\2039';
+    }
+}
+
+%rsaquo {
+    @extend %character-suffix-base;
+
+    &:after {
+        content: '\203a';
     }
 }
 
@@ -3198,18 +3207,33 @@ $iconSelector: '[class^="icon-"], [class*=" icon-"]';
 
 %line-item-column-base {
     float: left;
+
+    h6 {
+        line-height: 18px;
+        margin: 0;
+    }
+
+    p {
+        @extend %small-arial-text;
+
+        color: $colorDarkGray;
+        margin: 0;
+        line-height: 18px;
+    }
 }
 
 %line-item-image-base {
     overflow: hidden;
+
+    a {
+        display: block;
+    }
 
     img {
         width: 100%;
         height: auto;
     }
 }
-
-
 
 .cart-item {
     @extend %line-item-base;
@@ -3289,14 +3313,37 @@ $iconSelector: '[class^="icon-"], [class*=" icon-"]';
 .order-line-item {
     @extend %line-item-base;
 
-    .line-price {
-        @extend %money-format;
-
-        font-family: $helveticaFontStack;
+    h4 {
+        margin: 0;
+        font-size: 1.25em;
         font-weight: 300;
-        color: $colorWarmGrayDark;
-        font-size: 1.875em;
-        padding-top: 4px;
+    }
+
+    h6 {
+        color: $colorWarmLightGray;
+        margin: 0 0 ($gutter / 2);
+        line-height: 1;
+        text-transform: uppercase;
+        font-size: 12px;
+        font-family: $arialFontStack;
+        font-weight: 700;
+    }
+
+    .fulfillment-status {
+        @extend %smallish-arial-text;
+
+        color: $colorWarmLightGray;
+        line-height: 18px;
+        text-transform: uppercase;   
+
+        .shipped-date {
+            color: $colorGreen;
+        }
+
+        a {
+            @extend %rsaquo;
+            @extend %gray-hover-underline-link;
+        }
     }
 
     /* layout */
@@ -3311,10 +3358,6 @@ $iconSelector: '[class^="icon-"], [class*=" icon-"]';
 
     .header-row {
         margin-bottom: $gutter / 2;
-
-        h4 {
-            margin: 0;
-        }
     }
 
     .info-column {
@@ -3748,6 +3791,14 @@ address {
         margin: 0 0 $gutter;
     }
 
+    h5 {
+        @extend %smaller-helvetica-text;
+        
+        color: $colorWarmGrayDark;
+        text-transform: uppercase;
+        font-weight: 700;
+    }
+
     h6 {
         @extend %smallish-arial-text;
 
@@ -3780,13 +3831,6 @@ address {
             text-transform: uppercase;
         }
     }
-
-    h5 {
-        @extend %smaller-helvetica-text;
-        
-        text-transform: uppercase;
-        font-weight: 700;
-    }
 }
 
 .customer-account-menu-block {
@@ -3795,6 +3839,45 @@ address {
     position: absolute;
     top: 40px;
     width: 176px;
+}
+
+%order-info-block-base {
+    @extend .clearfix;
+
+    margin-top: $gutter * 2;
+
+    h5 {
+        margin-top: 0;
+        margin-bottom: $gutter;
+    }
+
+    .content {
+        @extend .clearfix;
+
+        border: 1px solid $colorLightGray;
+        padding: ($gutter / 2) $gutter 0;
+    }
+
+
+    &:first-of-type {
+        margin-top: 0;
+    }
+}
+
+.billing-status-block {
+    @extend %order-info-block-base;
+}
+
+.billing-address-block {
+    @extend %order-info-block-base;
+}
+
+.shipping-status-block {
+    @extend %order-info-block-base;
+}
+
+.shipping-address-block {
+    @extend %order-info-block-base;
 }
 
 .collections-hero {
@@ -5051,6 +5134,86 @@ address {
     }
 }
 
+.order-items-hero {
+    h5 {
+        @extend %smaller-helvetica-text;
+
+        text-transform: uppercase;
+        font-weight: 700;
+        color: $colorWarmGrayDark;
+        margin: 0 0 $gutter;
+    }
+
+    .order-table-block {
+        border: 1px solid $colorLightGray;
+        padding: 0 $gutter;
+    }
+
+    table {
+        border: 0;
+        width: 100%;
+    }
+
+    .item-row {
+        border-bottom: 1px solid $colorLightestGray;
+
+        td {
+            padding: $gutter 0;
+            font-weight: 700;
+        }
+    }
+
+    tr {
+        &:last-child {
+            font-weight: 700;
+            border-top: 1px solid $colorLightestGray;
+        }
+    }
+
+    %order-pricing-line-base {
+        height: 24px;
+    }
+
+    .subtotal-line {
+        td {
+            padding-top: 12px;
+            height: 24px;
+        }
+    }
+
+    .discount-line {
+        @extend %order-pricing-line-base;
+    }
+
+    .shipping-cost-line {
+        @extend %order-pricing-line-base;
+    }
+
+    .tax-line {
+        @extend %order-pricing-line-base;
+    }
+
+    .tax-line-last td {
+        padding-bottom: 12px;
+    }
+
+
+    .grand-total {
+        border-top: 1px solid $colorLightestGray;
+        height: 48px;
+    }
+
+    td {
+        border: 0;
+        padding: 0;
+        vertical-align: middle;
+
+        &:last-child {
+            text-align: right;
+        }
+    }
+}
+
 /*================ Page Specific Styles & Layout ================*/
 .template-index {
     .collections-hero {
@@ -5161,6 +5324,21 @@ address {
         @extend .row-2-col;
 
         margin: ( $gutter * 3.125 ) 0;
+    }
+}
+
+.template-customers-order {
+    h2 {
+        margin-bottom: 8px;
+    }
+
+    .back-link {
+        display: block;
+        margin: $gutter auto 0;
+    }
+
+    .order-items-hero {
+        margin-bottom: $gutter * 4;
     }
 }
 
@@ -5879,6 +6057,4 @@ $opacity-not-active: .25;
 
         right: -56px;
     }
-
-
 }

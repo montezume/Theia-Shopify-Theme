@@ -18,104 +18,111 @@ For all available customer liquid tags:
 
 {% endcomment %}
 
-<div class="order-grid-row">
+<div class="customer-account-content-hero">
+  <div class="wrapper-8-col">
 
-  <h3>Here&rsquo;s a summary of your account:</h3>
+    <div class="order-grid-row">
 
-  <h2>Order History</h2>
+      <h3>Here&rsquo;s a summary of your account:</h3>
 
-  {% comment %}
-  If we have past orders, loop through each one
-  {% endcomment %}
-  {% if customer.orders.size != 0 %}
+      <h2>Order History</h2>
 
-    {% for order in customer.orders %}
+      {% comment %}
+      If we have past orders, loop through each one
+      {% endcomment %}
+      {% if customer.orders.size != 0 %}
 
-      {% include 'order-grid-item' %}
+        {% for order in customer.orders %}
 
-    {% endfor %}
+          {% include 'order-grid-item' %}
 
-  {% else %}
+        {% endfor %}
 
-    <p>You haven't placed any orders yet.</p>
+      {% else %}
 
-  {% endif %}
+        <p>You haven't placed any orders yet.</p>
 
-</div>
+      {% endif %}
 
-<hr />
+    </div>
 
-<div class="shipping-account-info-row">
-  <div class="col">
+    <hr />
 
-    <h4>My Billing Info</h4>
+    <div class="shipping-account-info-row">
+      <div class="col">
 
-    <h6>{{ customer.addresses_count }} Billing {{ customer.addresses_count | pluralize: 'address', 'addresses' }}:</h6>
+        <h4>My Billing Info</h4>
 
-    {% if customer.default_address != nil %}
-      <p>
-        {{ customer.name }}<br />
+        <h6>{{ customer.addresses_count }} Billing {{ customer.addresses_count | pluralize: 'address', 'addresses' }}:</h6>
 
-        {{ customer.default_address.address1 }},
+        {% if customer.default_address != nil %}
+          <p>
+            {{ customer.name }}<br />
 
-        {% if customer.default_address.address2 != "" %}
-          {{ customer.default_address.address2 }},
+            {{ customer.default_address.address1 }},
+
+            {% if customer.default_address.address2 != "" %}
+              {{ customer.default_address.address2 }},
+            {% endif %}
+
+            {% if customer.default_address.city != "" %}
+              {{ customer.default_address.city }},
+            {% endif %}
+
+            {% if customer.default_address.province_code != "" %}
+              {{ customer.default_address.province_code | upcase }},
+            {% endif %}
+
+            <br />
+
+            {% if customer.default_address.country != "" %}
+              {{ customer.default_address.country }},
+            {% endif %}
+
+            {% if customer.default_address.zip != "" %}
+              {{ customer.default_address.zip | upcase }}
+            {% endif %}
+
+            {% if customer.default_address.phone != "" %}
+              <br />
+              {{ customer.default_address.phone }}
+            {% endif %}
+
+          </p>
+
+        {% else %}
+
+          <p>No addresses on file.</p>
+
         {% endif %}
 
-        {% if customer.default_address.city != "" %}
-          {{ customer.default_address.city }},
-        {% endif %}
+        <p><a href="/account/addresses">Review my billing info</a></p>
 
-        {% if customer.default_address.province_code != "" %}
-          {{ customer.default_address.province_code | upcase }},
-        {% endif %}
+      </div>
+      <div class="vr"></div>
+      <div class="col">
 
-        <br />
+        <h4>Account Info</h4>
 
-        {% if customer.default_address.country != "" %}
-          {{ customer.default_address.country }},
-        {% endif %}
+        <h6>Email Address</h6>
 
-        {% if customer.default_address.zip != "" %}
-          {{ customer.default_address.zip | upcase }}
-        {% endif %}
+        <p>
+          {{ customer.email }}
+        </p>
 
-        {% if customer.default_address.phone != "" %}
-          <br />
-          {{ customer.default_address.phone }}
-        {% endif %}
+      </div>
+    </div>
 
-      </p>
+    <hr class="hr-4-col" />
 
-    {% else %}
+    <div class="social-hero">
 
-      <p>No addresses on file.</p>
+      <h2>Keep in touch:</h2>
 
-    {% endif %}
+      {% include 'social-link-block' %}
 
-    <p><a href="/account/addresses">Review my billing info</a></p>
+    </div>
 
   </div>
-  <div class="vr"></div>
-  <div class="col">
-
-    <h4>Account Info</h4>
-
-    <h6>Email Address</h6>
-
-    <p>
-      {{ customer.email }}
-    </p>
-
-  </div>
 </div>
 
-<hr class="hr-4-col" />
-
-<div class="social-hero">
-
-  <h2>Keep in touch:</h2>
-
-  {% include 'social-link-block' %}
-
-</div>
