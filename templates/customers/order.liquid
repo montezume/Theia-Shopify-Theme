@@ -15,137 +15,154 @@ Template note:
 
 {% endcomment %}
 
-<header>
-  <h2>Order {{ order.name }}, {{ order.created_at | date: "%b %d" }}, &lsquo;{{ order.created_at | date: "%y" }}</h2>
+<div class="customer-account-content-hero">
+  <div class="wrapper-8-col">
 
-  <hr class="hr-4-col" />
 
-  <p>
-    <a href="/account" class="back-link">Back to Account Overview</a>
-  </p>
-</header>
+    <header>
+      <h2>Order {{ order.name }}, {{ order.created_at | date: "%b %d" }}, &lsquo;{{ order.created_at | date: "%y" }}</h2>
 
-<div class="billing-info-block">
+      <hr class="hr-4-col" />
+      <a href="/account" class="back-link">Back to Account Overview</a>
+    </header>
 
-  <h5>Billing Status</h5>
+    <div class="billing-status-block">
 
-  <p><strong>Payment Status:</strong> {{ order.financial_status }}</p>
+      <h5>Billing Status</h5>
 
-  <h5>Billing Address</h5>
+      <div class="content">
+        <p>{{ order.financial_status }}</p>
+      </div>
 
-  <p>
-    {{ order.billing_address.name }}
-    <br />
-    {% if order.billing_address.company != '' %}
-      {{ order.billing_address.company }}
-      <br />
+    </div>
+
+    <div class="billing-address-block">
+      <h5>Billing Address</h5>
+
+      <div class="content">
+        <p>
+          {{ order.billing_address.name }}
+          <br />
+          {% if order.billing_address.company != '' %}
+            {{ order.billing_address.company }}
+            <br />
+          {% endif %}
+          {{ order.billing_address.street }},
+          {{ order.billing_address.city }},
+          {% if order.billing_address.province != '' %}
+            {{ order.billing_address.province }},
+          {% endif %}
+          {{ order.billing_address.country }},
+          {{ order.billing_address.zip | upcase }}
+          <br />
+          Phone: {{ order.billing_address.phone }}, Email: {{ customer.email }}
+        </p>
+      </div>
+    </div>
+
+    <div class="shipping-status-block">
+      
+      <h5>Shipping Status</h5>
+
+      <div class="content">
+        <p>{{ order.fulfillment_status }}</p>
+      </div>
+
+    </div>
+
+    <div class="shipping-address-block">
+
+      <h5>Shipping Address</h5>
+
+      <div class="content">
+        <p>
+          {{ order.shipping_address.name }}
+          <br />
+          {% if order.shipping_address.company != '' %}
+            {{ order.shipping_address.company }}
+            <br />
+          {% endif %}
+          {{ order.shipping_address.street }},
+          {{ order.shipping_address.city }}
+          {% if order.shipping_address.province != '' %}
+            , {{ order.shipping_address.province }},
+          {% endif %}
+          {{ order.shipping_address.country }},
+          {{ order.shipping_address.zip | upcase }}
+          <br>
+          Phone: {{ order.shipping_address.phone }},
+          Email: {{ customer.email }}
+        </p>
+      </div>
+
+    </div>
+
+    {% if order.cancelled %}
+      <div class="errors">
+        <h6>Order Cancelled on {{ order.cancelled_at | date: "%B %d, %Y %I:%M%p" }}</h6>
+        <p>Reason: {{ order.cancel_reason }}</p>
+      </div>
     {% endif %}
-    {{ order.billing_address.street }},
-    {{ order.billing_address.city }},
-    {% if order.billing_address.province != '' %}
-      {{ order.billing_address.province }},
-    {% endif %}
-    {{ order.billing_address.country }},
-    {{ order.billing_address.zip | upcase }}
-    <br />
-    Phone: {{ order.billing_address.phone }}, Email: {{ customer.email }}
-  </p>
-  
-</div>
 
-<div class="shipping-info-block">
-  
-  <h5>Shipping Status</h5>
-
-  <p>
-    <strong>Fulfillment Status:</strong> {{ order.fulfillment_status }}
-  </p>
-
-  <h5>Shipping Address</h5>
-
-  <p>
-    {{ order.shipping_address.name }}
-    <br />
-    {% if order.shipping_address.company != '' %}
-      {{ order.shipping_address.company }}
-      <br />
-    {% endif %}
-    {{ order.shipping_address.street }},
-    {{ order.shipping_address.city }}
-    {% if order.shipping_address.province != '' %}
-      , {{ order.shipping_address.province }},
-    {% endif %}
-    {{ order.shipping_address.country }},
-    {{ order.shipping_address.zip | upcase }}
-    <br>
-    Phone: {{ order.shipping_address.phone }},
-    Email: {{ customer.email }}
-  </p>
-
-</div>
-
-{% if order.cancelled %}
-  <div class="errors">
-    <h6>Order Cancelled on {{ order.cancelled_at | date: "%B %d, %Y %I:%M%p" }}</h6>
-    <p>Reason: {{ order.cancel_reason }}</p>
   </div>
-{% endif %}
+</div>
 
-<div class="order-items-block">
-  <h5>Items</h5>
+<div class="order-items-hero">
+  <div class="wrapper-8-col">
 
-  <div class="order-table-block">
-    <table>
-      <tbody>
-        {% for line_item in order.line_items %}
-          <tr>
-            <td>
+    <h5>Items</h5>
 
-              {% include 'order-line-item' %}
+    <div class="order-table-block">
+      <table>
+        <tbody>
+          {% for line_item in order.line_items %}
+            <tr class="item-row">
+              <td>
 
-            </td>
-            <td>{{ line_item.quantity | times: line_item.price | money }}</td>
+                {% include 'order-line-item' %}
+
+              </td>
+              <td class="line-total">{{ line_item.quantity | times: line_item.price | money }}</td>
+            </tr>
+          {% endfor %}
+          
+        </tbody>
+        <tfoot>
+          <tr class="subtotal-line">
+            <td>Subtotal:</td>
+            <td>{{ order.subtotal_price | money }}</td>
           </tr>
-        {% endfor %}
-        
-      </tbody>
-      <tfoot>
-        <tr>
-          <td>Subtotal:</td>
-          <td class="text-right">{{ order.subtotal_price | money }}</td>
-        </tr>
 
-        {% for discount in order.discounts %}
-          <tr class="order_summary discount">
-            <td>{{ discount.code }} Discount:</td>
-            <td class="text-right">{{ discount.savings | money }}</td>
+          {% for discount in order.discounts %}
+            <tr class="discount-line">
+              <td>{{ discount.code }} Discount:</td>
+              <td>{{ discount.savings | money }}</td>
+            </tr>
+          {% endfor %}
+
+          {% for shipping_method in order.shipping_methods %}
+            <tr class="shipping-cost-line">
+              <td>Shipping ({{ shipping_method.title }}):</td>
+              <td>{{ shipping_method.price | money }}</td>
+            </tr>
+          {% endfor %}
+
+          {% for tax_line in order.tax_lines %}
+            <tr class="tax-line{% if forloop.last %} tax-line-last{% endif %}">
+              <td>Tax ({{ tax_line.title }} {{ tax_line.rate | times: 100 }}%):</td>
+              <td>{{ tax_line.price | money }}</td>
+            </tr>
+          {% endfor %}
+
+          <tr class="grand-total">
+            <td>Grand Total:</td>
+            <td>{{ order.total_price | money }} {{ order.currency }}</td>
           </tr>
-        {% endfor %}
+        </tfoot>
 
-        {% for shipping_method in order.shipping_methods %}
-          <tr>
-            <td>Shipping ({{ shipping_method.title }}):</td>
-            <td class="text-right">{{ shipping_method.price | money }}</td>
-          </tr>
-        {% endfor %}
-
-        {% for tax_line in order.tax_lines %}
-          <tr>
-            <td>Tax ({{ tax_line.title }} {{ tax_line.rate | times: 100 }}%):</td>
-            <td class="text-right">{{ tax_line.price | money }}</td>
-          </tr>
-        {% endfor %}
-
-        <tr>
-          <td><strong>Total:</strong></td>
-          <td class="text-right"><strong>{{ order.total_price | money }} {{ order.currency }}</strong></td>
-        </tr>
-      </tfoot>
-
-    </table>
+      </table>
+      
+    </div>
     
   </div>
 </div>
-
-
-
