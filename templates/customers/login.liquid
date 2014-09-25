@@ -27,7 +27,7 @@ into an external JS file.
       We don't have facebook login functionaitly just yet.
 
       <div class="facebook-login-button-block">
-        {% include 'facebook-login-button' %}
+      {% include 'facebook-login-button' %}
       </div>
       {% endcomment %}
 
@@ -40,25 +40,26 @@ into an external JS file.
         We've sent you an email with a link to update your password.
       </div>
 
-      <div class="row-2-col">
-        <div class="col">
+      {% form 'customer_login' %}
 
-          <h4>Already have an account?</h4>
+        {% include 'form-errors-custom' %}
 
-          <div class="login-form-fields-block">
-            {% comment %}
-            This form must use 'customer_login'
-            {% endcomment %}
-            {% form 'customer_login' %}
+        <div class="row-2-col">
+          <div class="col">
 
-              {% include 'form-errors-custom' %}
+            <h4>Already have an account?</h4>
+
+            <div class="login-form-fields-block">
+              {% comment %}
+          This form must use 'customer_login'
+               {% endcomment %}
 
               <label for="customer_email">Email Address</label>
               <input type="email" value="" name="customer[email]" id="customer_email" placeholder="cara@theia.com" {% if form.errors contains "email" %} class="error"{% endif %} autocorrect="off" autocapitalize="off" autofocus>
 
               <label for="customer_password">Password</label>
               <input type="password" value="" name="customer[password]" id="customer_password" placeholder="Your Password" {% if form.errors contains "password" %} class="error"{% endif %}>
-          </div>
+            </div>
 
             <button type="submit" class="login-submit-button">
               Log In
@@ -66,57 +67,61 @@ into an external JS file.
             </button>
             
             <p>
-              <a href="#forgot" class="forgot-passowrd-link">Forgot your password?</a>
+              <a href="#recover" class="forgot-passowrd-link">Forgot your password?</a>
             </p>
 
-          {% endform %}
+          </div>
+          <div class="vr"></div>
+          <div class="col">
 
-        </div>
-        <div class="vr"></div>
-        <div class="col">
+            <h4>Don&rsquo;t have an account?</h4>
 
-          <h4>Don&rsquo;t have an account?</h4>
+            <div class="register-benefits-block">
+              <h6>Register with us to:</h6>
 
-          <div class="register-benefits-block">
-            <h6>Register with us to:</h6>
+              <ul>
+                <li>Checkout faster</li>
+                <li>Save your shipping and billing information &ndash; no need to re-enter it later.</li>
+                <li>Access you order status and order history.</li>
+                <li>Save items to your fitting room.</li>
+              </ul>
 
-            <ul>
-              <li>Checkout faster</li>
-              <li>Save your shipping and billing information &ndash; no need to re-enter it later.</li>
-              <li>Access you order status and order history.</li>
-              <li>Save items to your fitting room.</li>
-            </ul>
+            </div>
+            <a href="http://theia.myshopify.com/account/register" class="register-button">
+              Create Account
+              <span class="icon"></span>
+            </a>
+            
+            <p>
+              Need Help? <a href="/pages/contact" class="customer-service-link">Customer Service</a>
+            </p>
 
           </div>
-          <a href="http://theia.myshopify.com/account/register" class="register-button">
-            Create Account
-            <span class="icon"></span>
-          </a>
-          
-          <p>
-            Need Help? <a href="/pages/contact" class="customer-service-link">Customer Service</a>
-          </p>
-
         </div>
-      </div>
+
+      {% endform %}
+
     </div>
 
-    <div class="hidden recover-password-block">
-      <div class="row-2-col">
-        <div class="col">
 
-          {% comment %}
-          This page uses JavaScript to show/hide the recover password form
-          {% endcomment %}
 
-          <h4>Reset your password:</h4>
+    {% comment %}
+    This form must use 'recover_customer_password'
+    {% endcomment %}
+    {% form 'recover_customer_password' %}
 
-          {% comment %}
-          This form must use 'recover_customer_password'
-          {% endcomment %}
-          {% form 'recover_customer_password' %}
+      {% include 'form-errors-custom' %}
 
-            {% include 'form-errors-custom' %}
+      <div class="hidden recover-password-block">
+        <div class="row-2-col">
+          <div class="col">
+
+            {% comment %}
+            This page uses JavaScript to show/hide the recover password form
+            {% endcomment %}
+
+            <h4>Reset your password:</h4>
+
 
             {% comment %}
             form.posted_successfully? is true only inside this form, but we want
@@ -139,31 +144,32 @@ into an external JS file.
               {% assign reset_success = true %}
             {% endif %}
 
-          {% endform %}
+          </div>
+          <div class="vr"></div>
+          <div class="col">
 
+            <h4>Need help?</h4>
+
+            {% comment %}
+            <h6>Use your facebook account to login.</h6>
+
+            {% include 'facebook-login-button' %}
+            {% endcomment %}
+
+            <p>
+              Contact <a href="/pages/contact" class="customer-service-link">Customer Service</a> for assistence.
+            </p>
+
+            <p>
+              Remember your password? <a href="#" class="cancel-forgot-password-link">Login here</a>
+            </p>
+
+          </div>
         </div>
-        <div class="vr"></div>
-        <div class="col">
+      </div><!-- end .recover-password-block -->
 
-          <h4>Need help?</h4>
+    {% endform %}
 
-          {% comment %}
-          <h6>Use your facebook account to login.</h6>
-
-          {% include 'facebook-login-button' %}
-          {% endcomment %}
-
-          <p>
-            Contact <a href="/pages/contact" class="customer-service-link">Customer Service</a> for assistence.
-          </p>
-
-          <p>
-            Remember your password? <a href="#" class="cancel-forgot-password-link">Login here</a>
-          </p>
-
-        </div>
-      </div>
-    </div><!-- end .recover-password-block -->
   </div>
 </div>
 
