@@ -45,14 +45,12 @@
       <div class="color-column">
         
       </div>
-      <div class="price-column">
+      <div class="button-column">
 
-        <h6>Line price</h6>
-
-        <div class="line-price">
-          <span class="currency">$</span>
-          <span class="value">{{ item.line_price | money_without_currency | remove: '.00' }}</span>
-        </div>
+        <a class="button" href="{{ item.url | within: collection }}">
+          <span class="label">View Dress</span>
+          <span class="icon"></span>
+        </a>
 
       </div>
     </div>
