@@ -1,0 +1,61 @@
+<div class="search-result-item">
+
+  <div class="image-column">
+    <div class="search-result-item-image">
+      <a href="{{ item.url | within: collections.all }}">
+
+        {% comment %}
+        More image size options at:
+        - http://docs.shopify.com/themes/filters/product-img-url
+        {% endcomment %}
+        <img src="{{ item.featured_image.src | product_img_url: 'medium' }}" alt="{{ item.title | escape }}">
+
+      </a>
+    </div>
+  </div>
+  <div class="info-options-column">
+    <div class="header-row">
+
+      {% comment %}
+      If you want the product title and any variants in one line, use {{ item.title }}.
+      Below they've been separated for styling purposes.
+      {% endcomment %}
+      <h4>
+        {{ item.title }} &ndash; {{ item.price | money }}
+      </h4>
+
+    </div>
+    <div class="options-row">
+      <div class="info-column">
+
+        {% assign product = item %}
+        {% include 'capture-style-number' %}
+
+        {% if style_number != 0 %}
+          <div class="style-number">
+            <span class="icon"></span>
+            <span class="label">Style #: {{ style_number }}</span>
+          </div>
+        {% endif %}
+
+      </div>
+      <div class="size-column">
+        
+      </div>
+      <div class="color-column">
+        
+      </div>
+      <div class="price-column">
+
+        <h6>Line price</h6>
+
+        <div class="line-price">
+          <span class="currency">$</span>
+          <span class="value">{{ item.line_price | money_without_currency | remove: '.00' }}</span>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</div>

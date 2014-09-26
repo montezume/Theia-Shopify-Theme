@@ -3235,6 +3235,31 @@ $iconSelector: '[class^="icon-"], [class*=" icon-"]';
     }
 }
 
+.search-result-item {
+
+    @extend %line-item-base;
+
+    .line-price {
+        @extend %money-format;
+
+        font-family: $helveticaFontStack;
+        font-weight: 300;
+        color: $colorWarmGrayDark;
+        font-size: 1.875em;
+        padding-top: 4px;
+    }
+}
+
+.search-result-item-image {
+    @extend %line-item-image-base;
+
+    height: 96px;
+    width: 96px;
+}
+
+
+
+
 .cart-item {
     @extend %line-item-base;
 
@@ -3750,6 +3775,7 @@ address {
     }
 }
 
+.search-results-page-hero,
 .customer-account-page-hero {
     @extend %hero-small;
 
