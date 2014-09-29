@@ -43,3 +43,4 @@ Thumbs.db
 config.yml
 /_site
 assets/logo.png
+node_modules/
