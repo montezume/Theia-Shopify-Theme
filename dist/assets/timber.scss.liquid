@@ -489,7 +489,7 @@ html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abb
 }
 
 /*================================================================================
-  # Extends - these are for common text and block styles
+  #Extends - these are for common text and block styles
   ================================================================================*/
 
 %medium-arial-text {
@@ -2514,105 +2514,76 @@ $iconSelector: '[class^="icon-"], [class*=" icon-"]';
 }
 
 /*================ Custom Pagination ================*/
-.pagination-custom {
+.pagination-block {
     display: inline-block;
     padding-left: 0;
     margin: 0 0 $gutter;
+
+    border-top: 1px solid $borderColor;
+    border-bottom: 1px solid $borderColor;
+
+    > li {
+        display: inline;
+
+         > a,
+         > span {
+             @extend %gray-hover-gold-link;
+             @extend %small-mid-arial-text;
+
+             position: relative;
+             float: left;
+             padding: 11px 5px 9px;
+             margin-left: -1px;
+             line-height: 1.42;
+             text-transform: uppercase;
+             font-weight: 700;
+
+             &:hover, &:focus {
+
+             }
+
+         }
+
+         /* Previous Link */
+         &:first-child > a,
+         &:first-child > span {
+             margin-left: 0;
+             padding-left: $gutter * 3;
+             padding-right: $gutter;
+         }
+
+         /* Next Link */
+         &:last-child > a,
+         &:last-child > span {
+             padding-left: $gutter;
+             padding-right: $gutter * 3;
+         }
+    }
+
+    > .active {
+        > a,
+        > span,
+        > a:hover,
+        > span:hover,
+        > a:focus,
+        > span:focus {
+            z-index: 2;
+            color: $colorGold;
+            cursor: default;
+        }
+    }
+
+    > .disabled {
+        > span,
+        > a,
+        > a:hover,
+        > a:focus {
+            color: #999999;
+            cursor: not-allowed;
+        }
+    }
 }
 
-.pagination-custom > li {
-    display: inline;
-}
-
-.pagination-custom > li > a,
-.pagination-custom > li > span {
-    position: relative;
-    float: left;
-    padding: 5px 10px;
-    margin-left: -1px;
-    line-height: 1.42;
-    text-decoration: none;
-    background-color: #ffffff;
-    border: 1px solid $borderColor;
-}
-
-.pagination-custom > li:first-child > a,
-.pagination-custom > li:first-child > span {
-    margin-left: 0;
-    border-bottom-left-radius: 4px;
-    border-top-left-radius: 4px;
-}
-
-.pagination-custom > li:last-child > a,
-.pagination-custom > li:last-child > span {
-    border-top-right-radius: 4px;
-    border-bottom-right-radius: 4px;
-}
-
-.pagination-custom > li > a:hover,
-.pagination-custom > li > span:hover,
-.pagination-custom > li > a:focus,
-.pagination-custom > li > span:focus {
-    background-color: #eeeeee;
-}
-
-.pagination-custom > .active > a,
-.pagination-custom > .active > span,
-.pagination-custom > .active > a:hover,
-.pagination-custom > .active > span:hover,
-.pagination-custom > .active > a:focus,
-.pagination-custom > .active > span:focus {
-    z-index: 2;
-    color: #ffffff;
-    cursor: default;
-    background-color: $colorBtnPrimary;
-    border-color: $colorBtnPrimary;
-}
-
-.pagination-custom > .disabled > span,
-.pagination-custom > .disabled > a,
-.pagination-custom > .disabled > a:hover,
-.pagination-custom > .disabled > a:focus {
-    color: #999999;
-    cursor: not-allowed;
-    background-color: $disabledGrey;
-}
-
-.pagination-custom-lg > li > a,
-.pagination-custom-lg > li > span {
-    padding: 10px 16px;
-    font-size: 18px;
-}
-
-.pagination-custom-lg > li:first-child > a,
-.pagination-custom-lg > li:first-child > span {
-    border-bottom-left-radius: 6px;
-    border-top-left-radius: 6px;
-}
-
-.pagination-custom-lg > li:last-child > a,
-.pagination-custom-lg > li:last-child > span {
-    border-top-right-radius: 6px;
-    border-bottom-right-radius: 6px;
-}
-
-.pagination-custom-sm > li > a,
-.pagination-custom-sm > li > span {
-    padding: 5px 10px;
-    font-size: 0.75em;
-}
-
-.pagination-custom-sm > li:first-child > a,
-.pagination-custom-sm > li:first-child > span {
-    border-bottom-left-radius: 3px;
-    border-top-left-radius: 3px;
-}
-
-.pagination-custom-sm > li:last-child > a,
-.pagination-custom-sm > li:last-child > span {
-    border-top-right-radius: 3px;
-    border-bottom-right-radius: 3px;
-}
 
 
 /*============================================================================
@@ -3242,18 +3213,23 @@ $iconSelector: '[class^="icon-"], [class*=" icon-"]';
     .info-options-column {
         width: 640px;
         padding: 0 0 0 32px;
-
-        background: green;
     }
 
     .info-column,
     .size-column,
-    .color-column,
-    .button-column {
-        width: 120px;
-        
+    .color-column {
+        margin-right: $gutter;
         min-height: 10px;
-        background: pink;
+    }
+
+    .info-column,
+    .size-column,
+    .color-column {
+        width: 133px;
+    }
+
+    .button-column {
+        width: 160px;
     }
 
     .button {
@@ -3729,6 +3705,11 @@ address {
 
     height: 86px;
     width: 64px;
+}
+
+
+.pagination-block {
+    
 }
 
 
@@ -5384,6 +5365,25 @@ address {
     }
 }
 
+.template-search {
+
+    .search-bar-row {
+        margin: ($gutter * 4) 0 ($gutter * 4);
+
+        .search-bar {
+            margin: 0 auto;
+        }
+    }
+
+    .search-results-row {
+        margin: ($gutter * 2) 0;
+    }
+
+    .pagination-row {
+        margin: ($gutter * 3) 0 ($gutter * 2);
+        text-align: center;
+    }
+}
 
 /*================ Search bar in header ================*/
 .search-bar {
@@ -5403,6 +5403,8 @@ address {
     button {
         line-height: 1;
         color: $colorGray;
+        cursor: pointer;
+        z-index: 1;
     }
 
     input {
@@ -5446,6 +5448,46 @@ address {
         input {
             padding-left: $buttonWidth;
         }
+    }
+
+
+    /* Make it big when in the main body */
+    .main-content & {
+
+        @include at-query ($min, $postSmall) {
+            $buttonWidth: 46px;
+
+            width: 440px;
+            height: 46px;
+
+            button {
+                font-size: 2em;
+                width: $buttonWidth;
+            }
+
+            input {
+                padding-left: $buttonWidth;
+                font-size: 1.2em;
+            }
+        }
+
+        @include at-query ($max, $small) {
+            $buttonWidth: 16px;
+
+            height: 27px;
+            margin: 0 $gutter/2;
+
+            button {
+                font-size: 0.8125em;
+                width: $buttonWidth;
+            }
+
+            input {
+                padding-left: $buttonWidth;
+            }
+        }
+
+        
     }
 }
 
