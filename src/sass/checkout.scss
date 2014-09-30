@@ -1933,6 +1933,9 @@ h2, h3, h4, h5, h6,
 .group {
     line-height: 1.5em;
     border: none;
+    margin: 0 0 ($gutter * 3);
+    padding: 0;
+    background: white;
 
     h3 {
         font-size: 24px;
@@ -1941,6 +1944,12 @@ h2, h3, h4, h5, h6,
         padding: 1px 0 0 0;
         color: $colorWarmGrayDark;
         border: 0;
+        text-shadow: none;
+    }
+
+    p {
+        color: $colorWarmGray;
+        font-weight: 400;
     }
 }
 
@@ -2117,6 +2126,9 @@ h2, h3, h4, h5, h6,
     display: none;
 }
 
+
+
+
 /*================ #Checkout Form ================*/
 
 #container {
@@ -2282,6 +2294,12 @@ h2, h3, h4, h5, h6,
     width: auto;
 }
 
+#marketing-box {
+    label {
+        display: inline;
+    }
+}
+
 @media only screen and (max-width: 646px) {
     .sst .gleft, #credit-card-info {
         width: 100%;
@@ -2292,6 +2310,8 @@ h2, h3, h4, h5, h6,
         margin-bottom: 5px;
     }
 }
+
+
 
 /*================ #Buttons ================*/
 
@@ -2366,6 +2386,44 @@ input[type="submit"] {
         opacity: 1;
     }
 }
+
+/*============================================================================
+  container slim
+  ============================================================================*/
+
+#container.slim {
+    #header {
+        background-image: none;
+    }
+
+    #main {
+        width: 430px;
+        marign: 0;
+        padding: 0;
+    }
+
+    #overview {
+        display: none;
+    }
+
+    #content {
+        width: auto;
+        margin: 0;
+        border: 0;
+        padding: 0;
+        text-align: center;
+
+        p:first-child {
+            font-size: 24px;
+        }
+    }
+
+    #footer {
+        background-image: none;
+    }
+}
+
+
 
 /*================ #Footer ================*/
 
