@@ -2810,10 +2810,17 @@ $iconSelector: '[class^="icon-"], [class*=" icon-"]';
         }
 
         .share-buttons {
-            background: gray;
-
             height: 20px;
-            width: 200px;
+            width: 356px;
+
+            > * {
+                display: inline-block !important;
+                vertical-align: top !important;
+            }
+
+            .twitter-share-button {
+                width: 80px !important;
+            }
         }
     }
 
