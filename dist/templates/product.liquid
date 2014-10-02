@@ -131,41 +131,25 @@ For more information on these Scheme.org tags, visit:
     </div>
 
 
-    {% comment %}
-    If we only have one product image, show a large version of it.
-    If we have more than 1, show it then loop through the rest as thumbnails.
-    {% endcomment %}
-    <div class="product-image-main-block" id="productPhoto">
-      
-      {% if product.images.size == 0 %}
 
-        <img src="{{ '' | product_img_url: 'grande' }}" alt="" id="productPhotoImg">
+    <div class="product-gallery-block">
 
-      {% else %}
+      <div class="product-gallery-image-block" id="productPhoto">
+        
+        <img src="{{ product.featured_image.src | product_img_url: 'master' }}" alt="{{ product.featured_image.alt | escape }}" id="productPhotoImg">
 
-        <img src="{{ product.featured_image.src | product_img_url: 'grande' }}" alt="{{ product.featured_image.alt | escape }}" id="productPhotoImg">
+      </div>
 
-      {% endif %}
-
-    </div>
-
-    {% if product.images.size == 0 %}
-      {% comment %}
-      If we have more than one product image, loop through them and create thumbnails.
-
-      By default, images will link to their grande size (600x600).
-      Thumbnail swapping is enabled in shop.js.liquid.
-      {% endcomment %}
       {% if product.images.size > 1 %}
 
         <div class="product-image-thumbs-block">
 
-          <ul class="product-photo-thumbs grid-uniform" id="productThumbs">
+          <ul id="productThumbs">
 
             {% for image in product.images %}
-              <li class="grid-item one-quarter">
+              <li>
                 <a href="{{ image.src | product_img_url: 'master' }}" class="product-photo-thumb">
-                  <img src="{{ image.src | product_img_url: 'small' }}" alt="{{ image.alt | escape }}">
+                  <img src="{{ image.src | product_img_url: 'large' }}" alt="{{ image.alt | escape }}">
                 </a>
               </li>
             {% endfor %}
@@ -176,10 +160,8 @@ For more information on these Scheme.org tags, visit:
 
       {% endif %}
 
-    {% endif %}
-
+    </div>
   </div>
-  
 </div>
 
 {% comment %}
@@ -339,12 +321,12 @@ addons can override it.
         new Shopify.OptionSelectors('productSelect', {
             product: {{ product | json }},
             onVariantSelected: selectCallback
-    });
+        });
 
-    // Add label if only one product option and it isn't 'Title'. Could be 'Size'.
-    {% if product.options.size == 1 and product.options.first != 'Title' %}
-    $('.selector-wrapper:eq(0)').prepend('<label>{{ product.options.first | escape }}</label>');
-    {% endif %}
+        // Add label if only one product option and it isn't 'Title'. Could be 'Size'.
+        {% if product.options.size == 1 and product.options.first != 'Title' %}
+        $('.selector-wrapper:eq(0)').prepend('<label>{{ product.options.first | escape }}</label>');
+        {% endif %}
 
         // Hide selectors if we only have 1 variant and its title contains 'Default'.
         {% if product.variants.size == 1 and product.variants.first.title contains 'Default' %}

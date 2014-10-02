@@ -67,6 +67,7 @@ $viewportIncrement: 1px;
 $small: 480px;
 $medium: 768px;
 $large: 769px;
+// $extraLarge: 900px;
 
 $postSmall: $small + $viewportIncrement;
 $preMedium: $medium - $viewportIncrement;
@@ -2650,22 +2651,88 @@ $iconSelector: '[class^="icon-"], [class*=" icon-"]';
   ==============================================================================*/
 
 .product-detail-hero {
-    background: gray;
-
+    background: white;
     height: 692px;
 
     .wrapper {
         height: 100%;
     }
+
+    .product-gallery-block,
+    .product-info-block {
+        position: absolute;
+    }
+
+    .product-gallery-block {
+        left: $gutter;
+        top: 0;
+        z-index: 0;
+    }
+
+    .product-info-block {
+        right: $gutter;
+        top: $gutter * 2;
+        z-index: 1;
+    }
 }
+
+/* product gallery */
+
+.product-gallery-block {
+    position: absolute;
+    left: $gutter;
+    top: 0;
+    width: 768px;
+}
+
+.product-gallery-image-block {
+    height: 100%;
+    width: 100%;
+
+    img {
+        display: block;
+        margin: 0 auto;
+        height: 100%;
+    }
+}
+
+.product-image-thumbs-block {
+    $thumbSize: 96px;
+    $thumbMargin: $gutter / 4;
+
+    position: absolute;
+    top: $gutter * 2;
+    left: $gutter;
+    width: $thumbSize;
+    height: ($thumbSize * 6) + (5 * $thumbMargin);
+
+    ul {
+
+    }
+
+    li {
+        margin: 0 0 $thumbMargin;
+    }
+
+    a {
+        display: block;
+        border: 1px solid #000;
+        height: $thumbSize;
+        width: $thumbSize;
+        overflow: hidden;
+    }
+
+    img {
+        display: block;
+        width: 100%;
+    }
+}
+
 
 .product-info-block {
     background: #fff;
-    position: absolute;
-    right: $gutter;
-    top: $gutter * 2;
-    bottom: $gutter * 2;
     width: 448px;
+    height: 628px;
 
     %product-info-block-row {
         @extend .clearfix;
@@ -2878,6 +2945,7 @@ $iconSelector: '[class^="icon-"], [class*=" icon-"]';
         }
     }
 }
+
 
 /*============================================================================
   #Blogs and Comments
@@ -3516,6 +3584,8 @@ address {
             }
 
         }
+
+        /*  */
         
         /* Mobile */
         @include at-query ($max, $small) {
@@ -4710,7 +4780,7 @@ address {
 
 .customer-menu-link {
     @extend %gray-hover-gold-link;
-    @extend .clearfix;
+    /* @extend .clearfix; */
 
     display: block;
     position: relative;
@@ -4767,11 +4837,15 @@ address {
         text-align: center;
 
         #{$iconSelector} {
-            display: inline-block;
             height: 1em;
             width: 1em;
             font-size: 0.75em;
-            padding-top: 4px;
+            display: block;
+            margin: 4px auto;
+
+            &:before {
+                display: block;
+            }
         }
 
         .label {
