@@ -1698,16 +1698,29 @@ hr {
 %social-icon-base {
     @extend %icon-base;
 
-    $circumfrence: 3.375em;
-
-    height: $circumfrence;
-    width: $circumfrence;
-
-    @include prefix( 'border-radius', 3.375em / 2 );
     position: absolute;
-    border-width: 0.15626em;
     border-style: solid;
     text-align: center;
+
+    @include at-query( $min, $postSmall ){
+        $desktopCircumfrence: 3.375em;
+
+        @include prefix( 'border-radius', $desktopCircumfrence / 2 );
+
+        height: $desktopCircumfrence;
+        width: $desktopCircumfrence;
+        border-width: 0.15626em;
+    }
+
+    @include at-query( $max, $small ){
+        $smallCircumfrence: 2.66em;
+
+        @include prefix( 'border-radius', $smallCircumfrence / 2 );
+
+        height: $smallCircumfrence;
+        width: $smallCircumfrence;
+        border-width: 0.125em;
+    }
 }
 
 
@@ -2400,106 +2413,74 @@ $iconSelector: '[class^="icon-"], [class*=" icon-"]';
 }
 
 
+$smallSocialIconRatio: (2.66/3.375);
+
+@mixin socialIconResponsiveSizes( $iconSize, $paddingTop, $paddingRight: false, $paddingLeft: false ){
+    @include at-query( $min, $postSmall ){
+        padding-top: $paddingTop;
+
+        @if $paddingRight {
+            padding-right: $paddingRight;
+        }
+
+        @if $paddingLeft {
+            padding-left: $paddingLeft;
+        }
+
+        &:before {
+            font-size: $iconSize
+        }
+    }
+
+    @include at-query( $max, $small ){
+        padding-top: $paddingTop * $smallSocialIconRatio;
+        @if $paddingRight {
+            padding-right: $paddingRight * $smallSocialIconRatio;
+        }
+
+        @if $paddingLeft {
+            padding-left: $paddingLeft * $smallSocialIconRatio;
+        }
+
+        &:before {
+            font-size: $iconSize * $smallSocialIconRatio;
+        }
+    }
+}
+
 .pinterest-icon {
     @extend %social-icon-base;
     @extend .icon-pinterest-p;
 
-    padding-top: 0.625em;
-    padding-right: 0.125em;
-
-    &:before {
-        font-size: 2.5em;
-    }
+    @include socialIconResponsiveSizes( $iconSize: 2.5em, $paddingTop: 0.625em, $paddingRight: 0.125em );
 }
 
 .twitter-icon {
     @extend %social-icon-base;
     @extend .icon-twitter;
 
-    padding-top: 0.5em;
-    padding-left: 0.125em;
-
-    &:before {
-        font-size: 1.9375em;
-    }
+    @include socialIconResponsiveSizes( $iconSize: 1.9375em, $paddingTop: 0.5em, $paddingLeft: 0.125em );
 }
 
 .instagram-icon {
     @extend %social-icon-base;
     @extend .icon-instagram;
 
-    padding-top: 0.75em;
-
-    &:before {
-        font-size: 1.5625em;
-    }
+    @include socialIconResponsiveSizes( $iconSize: 1.5625em, $paddingTop: 0.75em );
 }
 
 .tumblr-icon {
     @extend %social-icon-base;
     @extend .icon-tumblr;
 
-    padding-top: 0.375em;
-    padding-left: 0.0625em;
-
-    &:before {
-        font-size: 2.0625em;
-    }
+    @include socialIconResponsiveSizes( $iconSize: 2.0625em, $paddingTop: 0.375em, $paddingLeft: 0.0625em );
 }
 
 .facebook-icon {
     @extend %social-icon-base;
     @extend .icon-facebook-f;
 
-    padding-top: 0.4375em;
-    padding-right: 0.0625em;
-
-    &:before {
-        font-size: 2.125em;
-    }
-}
-
-/* **todo** update or remove these icons since the icon sets have changed now. */
-.payment-icons {
-    @include prefix('user-select', 'none');
-    cursor: default;
-
-    li {
-        margin: 0 $gutter/4 $gutter/4;
-        color: {{ settings.color_footer_social_link }};
-        cursor: default;
-    }
-
-    .icon {
-        font-size: 30px;
-        line-height: 30px;
-    }
-
-    .fallback-text {
-        text-transform: capitalize;
-    }
-}
-
-.social-icons li {
-    margin: 0 $gutter/2 $gutter/2;
-    vertical-align: middle;
-
-    @include at-query ($min, $postSmall) {
-        margin-left: 0;
-    }
-
-    .icon {
-        font-size: 30px;
-        line-height: 26px;
-    }
-
-    a {
-        color: {{ settings.color_footer_social_link }};
-
-        &:hover {
-            color: darken({{ settings.color_footer_social_link }}, 10%);
-        }
-    }
+    @include socialIconResponsiveSizes( $iconSize: 2.125em, $paddingTop: 0.4375em, $paddingRight: 0.0625em );
 }
 
 /*============================================================================
@@ -4170,21 +4151,18 @@ address {
 
     /* http://wemadeyoulook.at/en/blog/proportional-scaling-responsive-boxes-using-just-css/ */
     position: relative;
-    width: 100%;
     height: 0;
-    padding-bottom: percentage( $desktopTotalHeight / $desktopTotalWidth );
     color: #fff;
     background: #000;
 
     h2 {
         position: absolute;
         z-index: 1;
-        top: percentage( 156px / $desktopTotalHeight );
-        left: percentage( $desktopMainLeftMargin / $desktopMainWidth );
         text-shadow: 0 0 $colorOffWhite;
     }
 
     img {
+        display: block;
         width: 100%;
         height: 100%;
         position: absolute;
@@ -4194,8 +4172,6 @@ address {
     }
 
     .main {
-        width: percentage( $desktopMainWidth / $desktopTotalWidth );
-        height: 100%;
         position: absolute;
         left: 0;
 
@@ -4212,14 +4188,11 @@ address {
                 opacity: 1;
             }
         }
-
     }
 
     .content {
         position: absolute;
         z-index: 1;
-        top: percentage( $desktopMainContentTop / $desktopTotalHeight );
-        left: percentage( $desktopMainLeftMargin / $desktopMainWidth );
 
         > * {
             margin: 20px 0;
@@ -4249,10 +4222,7 @@ address {
     }
 
     .thumbs-block {
-        width: percentage(382/1350);
-        height: 100%;
         position: absolute;
-        right: 0;
 
         > a {
             @extend .clearfix;
@@ -4265,8 +4235,6 @@ address {
 
         h3 {
             position: absolute;
-            bottom: percentage( 24px / $desktopThumbHeight );
-            left: percentage( $desktopThumbLeftMargin / $desktopSideWidth );
             line-height: 1;
             margin: 0;
             text-shadow: 0 0 $colorOffWhite;            
@@ -4287,37 +4255,145 @@ address {
             }
         }
     }
+
+    @include at-query( $min, $postSmall ){
+        width: 100%;
+        padding-bottom: percentage( $desktopTotalHeight / $desktopTotalWidth );
+        
+        h2 {
+            top: percentage( 156px / $desktopTotalHeight );
+            left: percentage( $desktopMainLeftMargin / $desktopMainWidth );
+        }
+
+        .main {
+            width: percentage( $desktopMainWidth / $desktopTotalWidth );
+            height: 100%;
+        }
+
+        .content {
+            top: percentage( $desktopMainContentTop / $desktopTotalHeight );
+            left: percentage( $desktopMainLeftMargin / $desktopMainWidth );
+        }
+
+        .thumbs-block {
+            width: percentage($desktopSideWidth / $desktopTotalWidth);
+            height: 100%;
+            right: 0;
+
+            > a {
+                height: percentage(1 / 3);
+            }
+
+            h3 {
+                bottom: percentage( 24px / $desktopThumbHeight );
+                left: percentage( $desktopThumbLeftMargin / $desktopSideWidth );
+            }
+        }        
+
+    }
+
+
+    $smallTotalHeight: 568px;
+    $smallTotalWidth: 320px;
+    $smallMainHeight: 458px;
+    $smallThumbBlockHeight: 110px;
+    $smallLeftMargin: $gutter;
+    $smallMainContentTop: 254px;
+
+    @include at-query( $max, $small ){
+        width: 100%;
+        padding-bottom: percentage( $smallTotalHeight / $smallTotalWidth );
+        
+        h2 {
+            top: percentage( 156px / $smallTotalHeight );
+            left: percentage( $smallLeftMargin / $smallTotalWidth );
+            font-size: 35px;
+        }
+
+        .main {
+            width: 100%;
+            height: percentage( $smallMainHeight / $smallTotalHeight );
+        }
+
+        .content {
+            top: percentage( $smallMainContentTop / $smallTotalHeight );
+            left: percentage( $smallLeftMargin / $smallTotalWidth );
+
+
+            h3 {
+                font-size: 25px;
+                margin: 0 0 8px;
+            }
+            
+            p {
+                font-size: 15px;
+                margin: 8px 0;
+                font-weight: 100;
+            }
+
+            a {
+                font-size: 12.5px;
+                margin: 8px 0;
+            }
+        }
+
+        .thumbs-block {
+            width: 100%;
+            height: percentage($smallThumbBlockHeight / $smallTotalHeight);
+            bottom: 0;
+            left: 0;
+            right: auto;
+
+            > a {
+                height: 100%;
+                width: percentage(1 / 3);
+                float: left;
+            }
+
+            h3 {
+                display: none;
+            }
+        }        
+    }
 }
 
 .social-hero {
     text-align: center;
 
     h2 {
-        margin-top: 0;
-        margin-bottom: $gutter;
+        margin: 0 0 $gutter;
+        letter-spacing: -1px;
     }
 
-    .social-link-row {
-        margin-bottom: $gutter * 3;
+    @include at-query( $min, $postSmall ){
+        .social-link-row {
+            margin-bottom: $gutter * 3;
+        }
+
+        .social-media-feed-row {
+            margin-bottom: $gutter * 1.75;
+        }
     }
 
-    .social-media-feed-row {
-        margin-bottom: $gutter * 1.75;
+    @include at-query( $max, $small ){
+        h2 {
+            font-size: 35px;
+        }
+
+        .social-link-row {
+            margin-bottom: $gutter * 2;
+        }
+
+        .social-media-feed-row {
+            margin-bottom: 0;
+        }
     }
 }
 
 .social-link-block {
     @extend %inline-list-base;
 
-    li {
-        margin: 0 8px;
-    }
-
     a {
-        $circumfrence: 3.375em;
-
-        height: $circumfrence;
-        width: $circumfrence;
         position: relative;
         display: block;
         text-decoration: none;
@@ -4335,6 +4411,32 @@ address {
                 color: $colorGold;
                 border-color: $colorGold;
             }
+        }
+    }
+
+    @include at-query( $min, $postSmall ){
+        li {
+            margin: 0 8px;
+        }
+
+        a {
+            $desktopCircumfrence: 3.375em;
+
+            height: $desktopCircumfrence;
+            width: $desktopCircumfrence;
+        }        
+    }
+
+    @include at-query( $max, $small ){
+        li {
+            margin: 0 8px;
+        }
+
+        a {
+            $smallCircumfrence: 2.66em;
+
+            height: $smallCircumfrence;
+            width: $smallCircumfrence;
         }
     }
 }
@@ -5442,11 +5544,6 @@ address {
         
     }
 
-    .social-hero {
-        padding-top: $gutter * 7;
-        padding-bottom: $gutter * 5.25;
-    }
-
     .events-press-releases-hero {
         margin-bottom: $gutter * 8;
     }
@@ -5455,11 +5552,20 @@ address {
         .featured-press-hero {
             padding: 3.125em 0;
         }
+
+        .social-hero {
+            padding-top: $gutter * 7;
+            padding-bottom: $gutter * 5.25;
+        }
     }
 
     @include at-query( $max, $small ){
         .featured-press-hero {
             padding: 1.25em 0;
+        }
+
+        .social-hero {
+            padding: ($gutter * 2) 0;
         }
     }
 }
