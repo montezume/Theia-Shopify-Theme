@@ -1,0 +1,24 @@
+{% assign current_url = '' %}
+
+{% case template %}
+{% when 'page' %}
+{% assign current_url = page.url %}
+{% when 'blog' %}
+{% assign current_url = blog.url %}
+{% when 'article' %}
+{% assign current_url = blog.url %}
+{% when 'collection' %}
+{% assign current_url = collection.url %}
+{% when 'product' %}
+{% assign current_url = product.url %}
+{% endcase %}
+
+{% capture share_url %}{{ shop.url }}{{ current_url }}{% endcapture %}
+
+<div class="share-buttons">
+  {% include 'facebook-like-button' %}
+  {% include 'twitter-tweet-button' %}
+  {% include 'google-plus-one-button' %}
+  {% include 'pinterest-pin-button' %}
+
+</div>

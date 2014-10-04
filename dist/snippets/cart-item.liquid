@@ -1,0 +1,111 @@
+<div class="cart-item" data-id="{{ item.id }}">
+
+  <div class="image-column">
+    <div class="cart-item-image">
+      <a href="{{ item.product.url | within: collections.all }}">
+
+        {% comment %}
+        More image size options at:
+        - http://docs.shopify.com/themes/filters/product-img-url
+        {% endcomment %}
+        <img src="{{ item.product.featured_image.src | product_img_url: 'medium' }}" alt="{{ item.title | escape }}">
+
+      </a>
+    </div>
+  </div>
+  <div class="info-options-column">
+    <div class="header-row">
+
+      {% comment %}
+      If you want the product title and any variants in one line, use {{ item.title }}.
+      Below they've been separated for styling purposes.
+      {% endcomment %}
+      <h4>
+        {{ item.product.title }} &ndash; {{ item.product.price | money }}
+        {% unless item.variant.title contains 'Default' %}
+          <br>
+          <small>{{ item.variant.title }}</small>
+        {% endunless %}
+      </h4>
+
+    </div>
+    <div class="options-row">
+      <div class="info-column">
+
+        {% assign product = item.product %}
+        {% include 'capture-style-number' %}
+
+        {% if style_number != 0 %}
+          <div class="style-number">
+            <span class="icon"></span>
+            <span class="label">Style #: {{ style_number }}</span>
+          </div>
+        {% endif %}
+
+        {% comment %}
+        To remove an item from the cart, reload the page with the following parameters.
+        Added data-id for the ajax cart implementation only.
+        {% endcomment %}
+        <a class="remove-item-link" href="/cart/change?line={{ forloop.index }}&amp;quantity=0" data-id="{{ item.id }}">
+          <span class="icon"></span>
+          <span class="label">Remove from cart</span>
+        </a>
+        
+      </div>
+      <div class="size-column">
+        
+      </div>
+      <div class="color-column">
+        
+      </div>
+      <div class="quantity-column">
+
+        <h6>Quantity</h6>
+
+        {% comment %}
+        Added data-id for the ajax cart implementation only.
+        {% endcomment %}
+        <input type="number" name="updates[]" id="updates_{{ item.id }}" value="{{ item.quantity }}" min="0" data-id="{{ item.id }}">
+        
+      </div>
+      <div class="price-column">
+
+        <h6>Line price</h6>
+
+        <div class="line-price">
+          <span class="currency">$</span>
+          <span class="value">{{ item.line_price | money_without_currency | remove: '.00' }}</span>
+        </div>
+
+      </div>
+    </div>
+
+    {% comment %}
+    Optional, loop through custom product line items if available
+
+    For more info on line item properties, visit:
+    - http://docs.shopify.com/support/your-store/products/how-do-I-collect-additional-information-on-the-product-page-Like-for-a-monogram-engraving-or-customization
+    {% endcomment %}
+    {% if item.properties.size > 0 %}
+      <p>
+        {% for p in item.properties %}
+          {% unless p.last == blank %}
+            {{ p.first }}:
+
+            {% comment %}
+            Check if there was an uploaded file associated
+            {% endcomment %}
+            {% if p.last contains '/uploads/' %}
+              <a href="{{ p.last }}">{{ p.last | split: '/' | last }}</a>
+            {% else %}
+              {{ p.last }}
+            {% endif %}
+
+            <br>
+          {% endunless %}
+        {% endfor %}
+      </p>
+    {% endif %}
+
+  </div>
+</div>

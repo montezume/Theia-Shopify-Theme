@@ -1,0 +1,237 @@
+{% comment %}
+
+  This page template is a requirement if you are submitting your theme to the Shopify Theme Store.
+  Be sure to select page.contact as the template from the admin page to have this template take effect.
+
+  For information on adding more fields, visit:
+    - http://docs.shopify.com/support/configuration/store-customization/adding-fields-to-the-liquid-contact-form
+
+{% endcomment %}
+
+<div class="contact-page-hero">
+  <div class="wrapper">
+    <div class="content">
+
+      <h2>Theia.</h2>
+      <h3>One click away.</h3>
+
+    </div>
+  </div>
+</div>
+
+<div class="content-hero">
+  <div class="wrapper-8-col">
+    <h2>{{ page.title }}</h2>
+
+    {% comment %}
+    Contact form starts here
+    {% endcomment %}
+    {% form 'contact' %}
+
+      {% comment %}
+      Successful message
+      {% endcomment %}
+      {% if form.posted_successfully? %}
+        <p class="note form-success">
+          Thanks for contacting us! We'll get back to you as soon as possible.
+        </p>
+      {% endif %}
+
+      {% include 'form-errors-custom' %}
+
+      <div class="row-2-col">
+        <div class="col">
+      
+          <fieldset class="contact-form-title">
+            <input type="radio" id="contactFormTitleMr" name="contact[title]" value="Mr." {% if form.title == "Mr." %}checked="checked"{% endif %}>
+            <label for="contactFormTitleMr">Mr.</label>
+
+            <input type="radio" id="contactFormTitleMrs" name="contact[title]" value="Mrs." {% if form.title == "Mrs." %}checked="checked"{% endif %}>
+            <label for="contactFormTitleMrs">Mrs.</label>
+
+            <input type="radio" id="contactFormTitleMiss" name="contact[title]" value="Miss." {% if form.title == "Miss." %}checked="checked"{% endif %}>
+            <label for="contactFormTitleMiss">Miss.</label>
+
+            <input type="radio" id="contactFormTitleNone" name="contact[title]" value="None" {% if form.title == "None" %}checked="checked"{% endif %}>
+            <label for="contactFormTitleNone">None</label>
+          </fieldset>
+
+
+          {% assign formFieldKey = 'firstName' %}
+          {% assign formFieldLabel = 'First Name' %}
+          {% assign formFieldAutocapitalize = 'words' %}
+          {% assign formFieldPlaceholder = 'Dorian' %}
+          {% capture formFieldValue %}{% if form.firstName %}{{ form.firstName }}{% elsif customer %}{{ customer.firstName }}{% endif %}{% endcapture %}
+          {% assign formFieldClass = false %}
+          {% include 'form-input-text' %}
+
+          {% assign formFieldKey = 'lastName' %}
+          {% assign formFieldLabel = 'Last Name' %}
+          {% assign formFieldAutocapitalize = 'words' %}
+          {% assign formFieldPlaceholder = 'Leigh' %}
+          {% capture formFieldValue %}{% if form.lastName %}{{ form.lastName }}{% elsif customer %}{{ customer.lastName }}{% endif %}{% endcapture %}
+          {% assign formFieldClass = false %}
+          {% include 'form-input-text' %}
+
+          {% assign formFieldKey = 'address' %}
+          {% assign formFieldLabel = 'Address' %}
+          {% assign formFieldAutocapitalize = 'words' %}
+          {% assign formFieldPlaceholder = '5th Ave.' %}
+          {% assign formFieldOptional = true %}
+          {% capture formFieldValue %}{% if form.address %}{{ form.address }}{% elsif customer %}{{ customer.address }}{% endif %}{% endcapture %}
+          {% assign formFieldClass = false %}
+          {% include 'form-input-text' %}
+
+          {% assign formFieldKey = 'city' %}
+          {% assign formFieldLabel = 'City' %}
+          {% assign formFieldAutocapitalize = 'words' %}
+          {% assign formFieldPlaceholder = 'New York' %}
+          {% assign formFieldOptional = true %}
+          {% capture formFieldValue %}{% if form.city %}{{ form.city }}{% elsif customer %}{{ customer.city }}{% endif %}{% endcapture %}
+          {% assign formFieldClass = false %}
+          {% include 'form-input-text' %}
+
+
+          {% assign formFieldKey = 'stateProvince' %}
+          {% assign formFieldLabel = 'State or Province / Zip Code' %}
+          {% assign formFieldAutocapitalize = 'characters' %}
+          {% assign formFieldPlaceholder = 'NY' %}
+          {% assign formFieldOptional = true %}
+          {% capture formFieldValue %}{% if form.stateProvince %}{{ form.stateProvince }}{% elsif customer %}{{ customer.stateProvince }}{% endif %}{% endcapture %}
+          {% assign formFieldClass = 'half' %}
+          {% include 'form-input-text' %}
+
+          {% assign formFieldKey = 'postalCode' %}
+          {% assign formFieldLabel = false %}
+          {% assign formFieldAutocapitalize = 'characters' %}
+          {% assign formFieldPlaceholder = '10018' %}
+          {% assign formFieldOptional = true %}
+          {% capture formFieldValue %}{% if form.postalCode %}{{ form.postalCode }}{% elsif customer %}{{ customer.postalCode }}{% endif %}{% endcapture %}
+          {% assign formFieldClass = 'half' %}
+          {% include 'form-input-text' %}
+
+
+          {% assign formFieldKey = 'country' %}
+          {% assign formFieldLabel = 'Country' %}
+          {% assign formFieldAutocapitalize = 'words' %}
+          {% assign formFieldPlaceholder = 'United States' %}
+          {% assign formFieldOptional = true %}
+          {% capture formFieldValue %}{% if form.country %}{{ form.country }}{% elsif customer %}{{ customer.country }}{% endif %}{% endcapture %}
+          {% assign formFieldClass = false %}
+          {% include 'form-input-text' %}
+
+
+        </div>
+        <div class="vr"></div>
+        <div class="col">
+
+
+          <fieldset class="contact-form-sender-type">
+            <input type="radio" id="contactFormSenderTypeCustomer" name="contact[senderType]" value="Customer" {% if form.senderType == "Customer" %}checked="checked"{% endif %}>
+            <label for="contactFormSenderTypeCustomer">Customer</label>
+
+            <input type="radio" id="contactFormSenderTypeRetailer" name="contact[senderType]" value="Retailer" {% if form.senderType == "Retailer" %}checked="checked"{% endif %}>
+            <label for="contactFormSenderTypeRetailer">Retailer</label>
+
+            <input type="radio" id="contactFormSenderTypeOther" name="contact[senderType]" value="Other" {% if form.senderType == "Other" %}checked="checked"{% endif %}>
+            <label for="contactFormSenderTypeOther">Other</label>
+          </fieldset>
+
+
+          {% assign formFieldKey = 'email' %}
+          {% assign formFieldLabel = 'Email Address' %}
+          {% assign formFieldAutocapitalize = false %}
+          {% assign formFieldPlaceholder = 'dorthy@theia.com' %}
+          {% assign formFieldOptional = false %}
+          {% capture formFieldValue %}{% if form.email %}{{ form.email }}{% elsif customer %}{{ customer.email }}{% endif %}{% endcapture %}
+          {% assign formFieldClass = false %}
+          {% include 'form-input-text' %}
+
+
+          {% assign formFieldKey = 'phone' %}
+          {% assign formFieldLabel = 'Telephone Number' %}
+          {% assign formFieldAutocapitalize = false %}
+          {% assign formFieldPlaceholder = '+1 555 564 3829' %}
+          {% assign formFieldOptional = true %}
+          {% capture formFieldValue %}{% if form.phone %}{{ form.phone }}{% elsif customer %}{{ customer.phone }}{% endif %}{% endcapture %}
+          {% assign formFieldClass = false %}
+          {% include 'form-input-text' %}
+
+
+          <label for="contactFormMessage">Message</label>
+          <textarea rows="10" id="contactFormMessage" class="message" name="contact[body]" placeholder="Dear Theia,">{% if form.body %}{{ form.body }}{% endif %}</textarea>
+
+        </div>
+      </div>
+
+      <div class="newsletter-signup-row">
+        <input type="checkbox" id="contactNewsletterConsent" name="contact[newsletterConsent]" value="checked" />
+        <label for="contactNewsletterConsent">Join our mailing list</label>
+      </div>
+
+      <div class="submit-button-row">
+        <button type="submit">
+          Send Message
+          <span class="icon"></span>
+        </button>
+      </div>
+
+      {% endform %}
+  </div>
+
+</div>
+<div class="other-enquires-hero">
+  <div class="wrapper-9-col">
+    <h3>For other enquiries</h3>
+
+    <div class="row-3-col">
+      <div class="col">
+        
+    <h4>THEIA</h4>
+    <address>
+      <div class="address">
+        1412 Broadway Suite 1200
+        <br />
+        New York, New York 10018
+      </div>
+      <div class="email">
+        <a href="mailto:theia@jsgroup.com">theia@jsgroup.com</a>
+      </div>
+    </address>
+
+      </div>
+      <div class="vr"></div>
+      <div class="col">
+        
+    <h4>THEIA Corporate</h4>
+    <address>
+      <div class="address">
+        225 Rue Chabanel Street West
+        <br />
+        10th floor Montreal, Quebec,
+        <br />
+        H2N 2C9 &ndash; Canada
+      </div>
+      <div class="email">
+        <a href="mailto:theia@jsgroup.com">theia@jsgroup.com</a>
+      </div>
+    </address>
+
+      </div>
+      <div class="vr"></div>
+      <div class="col">
+        
+    <h4>Press</h4>
+    <address>
+      <div class="phone">
+        +1 234 567 89-88
+      </div>
+      <div class="email">
+        <a href="mailto:theia@jsgroup.com">theia@jsgroup.com</a>
+      </div>
+    </address>
+
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,76 @@
+{% comment %}
+
+This template will be automatically generated for you if the file doesn't exist,
+but where's the fun in having no control? Define your layout below.
+
+The 'layout settings.customer_layout' line is inserted at the top of every customer account template.
+Your theme's settings determine to use the 'default' or 'theme' customer templates.
+More info:
+- http://www.tetchi.ca/shopify-theme-from-scratch-part-11/
+
+{% endcomment %}
+
+{% include 'login-register-page-hero' %}
+
+<div class="register-form-hero">
+  <div class="wrapper-8-col">
+    <h2>Create an account</h2>
+
+    {% comment %}
+    We don't have facebook login functionaitly just yet.
+
+    <div class="facebook-login-button-block">
+    {% include 'facebook-login-button' %}
+    </div>
+
+    <h3>Or create your account with Theia:</h3>
+    {% endcomment %}
+
+    {% comment %}
+    This form must use 'create_customer'
+    {% endcomment %}
+    {% form 'create_customer' %}
+
+      {% include 'form-errors-custom' %}
+
+      <div class="register-form-field-row">
+        <div class="col">
+
+          <label for="first_name">First Name</label>
+          <input type="text" value="" name="customer[first_name]" id="first_name" placeholder="First Name" {% if form.errors contains "first_name" %} class="error"{% endif %} autocapitalize="words" autofocus>
+
+          <label for="last_name">Last Name</label>
+          <input type="text" value="" name="customer[last_name]" id="last_name" placeholder="Last Name" {% if form.errors contains "last_name" %} class="error"{% endif %} autocapitalize="words">
+
+          <label for="email">Email Address</label>
+          <input type="email" value="" name="customer[email]" id="email" placeholder="Email" {% if form.errors contains "email" %} class="error"{% endif %} autocorrect="off" autocapitalize="off">
+
+        </div>
+        <div class="vr"></div>
+        <div class="col">
+
+          <label for="password">Password</label>
+          <input type="password" value="" name="customer[password]" id="create_password" placeholder="Password" {% if form.errors contains "password" %} class="error"{% endif %}>
+
+          <div class="newsletter-signup-row">
+            <input type="checkbox" id="customerNewsletterConsent" name="customer[accepts_marketing]" checked="checked" />
+            <label for="customerNewsletterConsent">Join our mailing list</label>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="register-submit-button-block">
+        <button type="submit" class="register-submit-button">
+          Create your Theia Account
+          <span class="icon"></span>
+        </button>
+
+        <p>Need help? <a href="/pages/contact">Customer service</a></p>
+
+      </div>
+
+    {% endform %}  
+    
+  </div>
+</div>
