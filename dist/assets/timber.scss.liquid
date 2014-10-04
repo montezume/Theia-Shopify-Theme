@@ -829,8 +829,8 @@ html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abb
 
 %wrapper-base {
     @extend .clearfix;
-    position: relative;
 
+    position: relative;
     margin: 0 auto;
 }
 
@@ -849,7 +849,10 @@ html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abb
 .wrapper-10-col {
     @extend %wrapper-base;
 
-    max-width: $siteWidth10Col;
+    /* Desktop */
+    @include at-query ($min, $postSmall) {
+        max-width: $siteWidth10Col;
+    }
 }
 
 .wrapper-9-col {
@@ -3500,10 +3503,6 @@ address {
         position: relative;
         display: block;
         float: left;
-
-        &:first-child {
-            margin-left: 0;
-        }
     }
 
     .layout-theme &,
@@ -3519,7 +3518,6 @@ address {
             $headerHeight: 85px;
 
             padding: $gutter 0;
-
             height: $headerHeight;
 
             .wrapper {
@@ -3531,8 +3529,8 @@ address {
                 @include header-column();
 
                 height: $headerHeight - $gridGutter;
+                margin: 0 $gutter;
             }
-
 
             .logo-column {
                 @extend %header-column;
@@ -3550,19 +3548,18 @@ address {
 
             .customer-menu-column {
                 @extend %header-column;
+
                 text-align: right;
                 width: 218px;
             }
 
             .search-column {
                 @extend %header-column;
+
                 width: 220px;
             }
-
         }
 
-        /*  */
-        
         /* Mobile */
         @include at-query ($max, $small) {
             $headerHeight: 44px;
@@ -3572,8 +3569,10 @@ address {
             height: $headerHeight;
 
             .wrapper {
-                position: relative;
                 @extend .clearfix;
+
+                position: relative;
+                margin: 0 $gutter;
             }
 
             %header-column {
@@ -3634,6 +3633,7 @@ address {
 /* footer */
 
 .site-footer {
+    @extend .wrapper-10-col;
 
     /* Desktop */
     @include at-query ($min, $postSmall) {
@@ -4357,37 +4357,30 @@ address {
     }
 }
 
-.social-hero {
+%social-hero-base {
     text-align: center;
 
     h2 {
         margin: 0 0 $gutter;
         letter-spacing: -1px;
     }
+}
+
+.social-link-hero {
+    @extend %social-hero-base;
 
     @include at-query( $min, $postSmall ){
-        .social-link-row {
-            margin-bottom: $gutter * 3;
-        }
-
-        .social-media-feed-row {
-            margin-bottom: $gutter * 1.75;
-        }
     }
 
     @include at-query( $max, $small ){
         h2 {
             font-size: 35px;
         }
-
-        .social-link-row {
-            margin-bottom: $gutter * 2;
-        }
-
-        .social-media-feed-row {
-            margin-bottom: 0;
-        }
     }
+}
+
+.newsletter-signup-hero {
+    @extend %social-hero-base;
 }
 
 .social-link-block {
@@ -5259,8 +5252,6 @@ address {
     }
 }
 
-
-
 .newsletter-signup-block {
     @extend %gold-outline-block-large;
 
@@ -5306,6 +5297,9 @@ address {
             width: 100%;
             padding: $gutter;
 
+            border-left: 0;
+            border-right: 0;
+
             h4 {
                 font-size: 1.25em;
             }
@@ -5321,7 +5315,6 @@ address {
     .template-product &,
     .template-list-collections & {
         padding: 0 5px;
-        margin-bottom: $gutter * 2;
 
         h4 {
             @extend %medium-arial-text;
@@ -5416,24 +5409,34 @@ address {
     }
 }
 
-
 .events-press-releases-hero {
+    .wrapper {
+        @extend .wrapper-10-col;
+    }
+
     h2 {
+        margin-top: 0;
         text-align: center;
     }
 
-    [class^=wrapper] > div {
-        float: left;
-        width: 50%;
+    /* Desktop */
+    @include at-query ($min, $postSmall) {
+        .wrapper > div {
+            float: left;
+            width: 50%;
+        }
+
+        .press-releases-column {
+            border-right: 1px solid $colorLightestGray;
+        }
+
+        .media-events-contact-column {
+            padding-left: $gutter * 3;
+        }
     }
 
-    .press-releases-column {
-        border-right: 1px solid $colorLightestGray;
-        
-    }
-
-    .media-events-contact-column {
-        padding-left: $gutter * 3;
+    /* Mobile */
+    @include at-query ($max, $small) {
     }
 }
 
@@ -5492,13 +5495,16 @@ address {
 }
 
 .media-events-contact-block {
+    .contact-block {
+        margin-bottom: $gridGutter;
+    }
+}
+
+.contact-block {
+    margin-bottom: $gutter * 1.5;
 
     p {
         @extend %small-helvetica-text;
-    }
-
-    .contact-block {
-        margin-bottom: $gridGutter;
     }
 }
 
@@ -5588,38 +5594,44 @@ address {
         
     }
 
-
     .celebrity-gallery-hero {
         
     }
 
-    .events-press-releases-hero {
-        margin-bottom: $gutter * 8;
-    }
-
     @include at-query( $min, $postSmall ){
         .featured-press-hero {
-            padding: 3.125em 0;
+            margin: 3.125em 0;
         }
 
-        .social-hero {
-            padding-top: $gutter * 7;
-            padding-bottom: $gutter * 5.25;
+        .social-link-hero {
+            margin-top: $gutter * 7;
+            margin-bottom: $gutter * 4;
+        }
+
+        .newsletter-signup-hero {
+            margin-top: $gutter * 2;
+            margin-bottom: $gutter * 6;
+        }
+
+        .events-press-releases-hero {
+            margin-top: $gutter * 6.5;
+            margin-bottom: $gutter * 8;
         }
     }
 
     @include at-query( $max, $small ){
         .featured-press-hero {
-            padding: 1.25em 0;
+            margin: 1.25em 0;
         }
 
-        .social-hero {
-            padding: ($gutter * 2) 0;
+        .social-link-hero {
+            margin: ($gutter * 2) 0;
         }
         
-        .newsletter-signup-row {
-            /* hide the double border on the sides of the .newsletter-signup-block */
-            margin: 0 -7px;
+        .newsletter-signup-row,
+        .events-press-releases-hero {
+            margin-top: $gutter * 2;
+            margin-bottom: $gutter * 2;
         }
     }
 }
@@ -5634,8 +5646,14 @@ address {
         margin-bottom: $gutter * 3;
     }
 
-    .social-hero {
-        padding: ( $gutter * 3.5 ) 0;
+    .newsletter-signup-hero {
+        margin-top: $gutter * 3.5;
+        margin-bottom: $gutter * 1.75;
+    }
+
+    .social-link-hero {
+        margin-top: $gutter * 1.75;
+        margin-bottom: $gutter * 3.5;
     }
 }
 
@@ -5650,8 +5668,14 @@ address {
         margin-bottom: $gutter * 3;
     }
 
-    .social-hero {
-        padding: ( $gutter * 3.5 ) 0;
+    .newsletter-signup-hero {
+        margin-top: $gutter * 3.5;
+        margin-bottom: $gutter * 1.75;
+    }
+
+    .social-link-hero {
+        margin-top: $gutter * 1.75;
+        margin-bottom: $gutter * 3.5;
     }
 }
 
