@@ -1,0 +1,168 @@
+{% layout 'customer-account' %}
+
+{% comment %}
+
+This template will be automatically generated for you if the file doesn't exist,
+but where's the fun in having no control? Define your layout below.
+
+The 'layout settings.customer_layout' line is inserted at the top of every customer account template.
+Your theme's settings determine to use the 'default' or 'theme' customer templates.
+More info:
+- http://www.tetchi.ca/shopify-theme-from-scratch-part-11/
+
+Template note:
+- All IDs on this template are required to make the form(s) submit properly
+
+{% endcomment %}
+
+<div class="customer-account-content-hero">
+  <div class="wrapper-8-col">
+
+
+    <header>
+      <h2>Order {{ order.name }}, {{ order.created_at | date: "%b %d" }}, &lsquo;{{ order.created_at | date: "%y" }}</h2>
+
+      <hr class="hr-4-col" />
+      <a href="/account" class="back-link">Back to Account Overview</a>
+    </header>
+
+    <div class="billing-status-block">
+
+      <h5>Billing Status</h5>
+
+      <div class="content">
+        <p>{{ order.financial_status }}</p>
+      </div>
+
+    </div>
+
+    <div class="billing-address-block">
+      <h5>Billing Address</h5>
+
+      <div class="content">
+        <p>
+          {{ order.billing_address.name }}
+          <br />
+          {% if order.billing_address.company != '' %}
+            {{ order.billing_address.company }}
+            <br />
+          {% endif %}
+          {{ order.billing_address.street }},
+          {{ order.billing_address.city }},
+          {% if order.billing_address.province != '' %}
+            {{ order.billing_address.province }},
+          {% endif %}
+          {{ order.billing_address.country }},
+          {{ order.billing_address.zip | upcase }}
+          <br />
+          Phone: {{ order.billing_address.phone }}, Email: {{ customer.email }}
+        </p>
+      </div>
+    </div>
+
+    <div class="shipping-status-block">
+      
+      <h5>Shipping Status</h5>
+
+      <div class="content">
+        <p>{{ order.fulfillment_status }}</p>
+      </div>
+
+    </div>
+
+    <div class="shipping-address-block">
+
+      <h5>Shipping Address</h5>
+
+      <div class="content">
+        <p>
+          {{ order.shipping_address.name }}
+          <br />
+          {% if order.shipping_address.company != '' %}
+            {{ order.shipping_address.company }}
+            <br />
+          {% endif %}
+          {{ order.shipping_address.street }},
+          {{ order.shipping_address.city }}
+          {% if order.shipping_address.province != '' %}
+            , {{ order.shipping_address.province }},
+          {% endif %}
+          {{ order.shipping_address.country }},
+          {{ order.shipping_address.zip | upcase }}
+          <br>
+          Phone: {{ order.shipping_address.phone }},
+          Email: {{ customer.email }}
+        </p>
+      </div>
+
+    </div>
+
+    {% if order.cancelled %}
+      <div class="errors">
+        <h6>Order Cancelled on {{ order.cancelled_at | date: "%B %d, %Y %I:%M%p" }}</h6>
+        <p>Reason: {{ order.cancel_reason }}</p>
+      </div>
+    {% endif %}
+
+  </div>
+</div>
+
+<div class="order-items-hero">
+  <div class="wrapper-8-col">
+
+    <h5>Items</h5>
+
+    <div class="order-table-block">
+      <table>
+        <tbody>
+          {% for line_item in order.line_items %}
+            <tr class="item-row">
+              <td>
+
+                {% include 'order-line-item' %}
+
+              </td>
+              <td class="line-total">{{ line_item.quantity | times: line_item.price | money }}</td>
+            </tr>
+          {% endfor %}
+          
+        </tbody>
+        <tfoot>
+          <tr class="subtotal-line">
+            <td>Subtotal:</td>
+            <td>{{ order.subtotal_price | money }}</td>
+          </tr>
+
+          {% for discount in order.discounts %}
+            <tr class="discount-line">
+              <td>{{ discount.code }} Discount:</td>
+              <td>{{ discount.savings | money }}</td>
+            </tr>
+          {% endfor %}
+
+          {% for shipping_method in order.shipping_methods %}
+            <tr class="shipping-cost-line">
+              <td>Shipping ({{ shipping_method.title }}):</td>
+              <td>{{ shipping_method.price | money }}</td>
+            </tr>
+          {% endfor %}
+
+          {% for tax_line in order.tax_lines %}
+            <tr class="tax-line{% if forloop.last %} tax-line-last{% endif %}">
+              <td>Tax ({{ tax_line.title }} {{ tax_line.rate | times: 100 }}%):</td>
+              <td>{{ tax_line.price | money }}</td>
+            </tr>
+          {% endfor %}
+
+          <tr class="grand-total">
+            <td>Grand Total:</td>
+            <td>{{ order.total_price | money }} {{ order.currency }}</td>
+          </tr>
+        </tfoot>
+
+      </table>
+      
+    </div>
+    
+  </div>
+</div>

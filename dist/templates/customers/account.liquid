@@ -1,0 +1,128 @@
+{% layout 'customer-account' %}
+
+{% comment %}
+
+This template will be automatically generated for you if the file doesn't exist,
+but where's the fun in having no control? Define your layout below.
+
+The 'layout settings.customer_layout' line is inserted at the top of every customer account template.
+Your theme's settings determine to use the 'default' or 'theme' customer templates.
+More info:
+- http://www.tetchi.ca/shopify-theme-from-scratch-part-11/
+
+Template note:
+- All IDs on this template are required to make the form(s) submit properly
+
+For all available customer liquid tags:
+- http://docs.shopify.com/themes/liquid-variables/customer
+
+{% endcomment %}
+
+<div class="customer-account-content-hero">
+  <div class="wrapper-8-col">
+
+    <div class="order-grid-row">
+
+      <h3>Here&rsquo;s a summary of your account:</h3>
+
+      <h2>Order History</h2>
+
+      {% comment %}
+      If we have past orders, loop through each one
+      {% endcomment %}
+      {% if customer.orders.size != 0 %}
+
+        {% for order in customer.orders %}
+
+          {% include 'order-grid-item' %}
+
+        {% endfor %}
+
+      {% else %}
+
+        <p>You haven't placed any orders yet.</p>
+
+      {% endif %}
+
+    </div>
+
+    <hr />
+
+    <div class="shipping-account-info-row">
+      <div class="col">
+
+        <h4>My Billing Info</h4>
+
+        <h6>{{ customer.addresses_count }} Billing {{ customer.addresses_count | pluralize: 'address', 'addresses' }}:</h6>
+
+        {% if customer.default_address != nil %}
+          <p>
+            {{ customer.name }}<br />
+
+            {{ customer.default_address.address1 }},
+
+            {% if customer.default_address.address2 != "" %}
+              {{ customer.default_address.address2 }},
+            {% endif %}
+
+            {% if customer.default_address.city != "" %}
+              {{ customer.default_address.city }},
+            {% endif %}
+
+            {% if customer.default_address.province_code != "" %}
+              {{ customer.default_address.province_code | upcase }},
+            {% endif %}
+
+            <br />
+
+            {% if customer.default_address.country != "" %}
+              {{ customer.default_address.country }},
+            {% endif %}
+
+            {% if customer.default_address.zip != "" %}
+              {{ customer.default_address.zip | upcase }}
+            {% endif %}
+
+            {% if customer.default_address.phone != "" %}
+              <br />
+              {{ customer.default_address.phone }}
+            {% endif %}
+
+          </p>
+
+        {% else %}
+
+          <p>No addresses on file.</p>
+
+        {% endif %}
+
+        <p><a href="/account/addresses">Review my billing info</a></p>
+
+      </div>
+      <div class="vr"></div>
+      <div class="col">
+
+        <h4>Account Info</h4>
+
+        <h6>Email Address</h6>
+
+        <p>
+          {{ customer.email }}
+        </p>
+
+      </div>
+    </div>
+
+    <hr class="hr-4-col" />
+
+    <div class="social-hero">
+
+      <h2>Keep in touch:</h2>
+
+      {% include 'social-link-block' %}
+
+    </div>
+
+  </div>
+</div>
+

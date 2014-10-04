@@ -1,0 +1,124 @@
+{% comment %}
+
+This is your /cart template. If you are using the Ajaxify Cart plugin,
+your form (with action="/cart") layout will be used in the drawer/modal.
+
+For info on test orders:
+- General http://docs.shopify.com/manual/your-store/orders/test-orders
+- Shopify Payments - http://docs.shopify.com/manual/more/shopify-payments/testing-shopify-payments
+
+{% endcomment %}
+
+<div class="cart-page-layout">
+  <div class="wrapper">
+    
+    <h2>Your Cart</h2>
+
+    {% if cart.item_count > 0 %}
+
+      <form class="shopping-cart" action="/cart" method="post" novalidate>
+
+        <div class="main-col">
+          
+          {% comment %}
+          Loop through products in the cart
+          {% endcomment %}
+          {% for item in cart.items %}
+
+            {% include 'cart-item' %}
+
+          {% endfor %}
+
+          <div class="cart-terms-row">
+
+            <ul class="cart-terms">
+              <li>The subtotal does not include shipping, duty and taxes and may vary depending on your location. Please review the final total on the summary page before checkout.</li>
+              <li>Once you click Checkout, no further items can be added to your basket.</li>
+            </ul>
+
+          </div>
+
+        </div>
+
+        <div class="side-col">
+
+          <div class="cart-subtotal-row">
+            <h6>Subtotal:</h6>
+            <div class="cart-subtotal">
+              <span class="currency">$</span>
+              <span class="value">{{ cart.total_price | money_without_currency }}</span>
+            </div>
+          </div>
+
+          <div class="checkout-button-row">
+            {% comment %}
+            name="checkout" is required for the submit button to work
+            {% endcomment %}
+            <button type="submit" name="checkout" class="checkout-button">
+              <span class="label">Checkout</span>
+              <span class="icon"></span>
+            </button>
+
+            {% comment %}
+            name="update" is required for the update button to work
+            {% endcomment %}
+            <button type="submit" name="update" class="update-cart-button">Update cart</button>
+
+            <a href="#">or continue shopping</a>
+
+          </div>
+
+          <div class="order-info-row">
+            
+            <div class="free-shipping{% if cart.total_price <= 1000 %} hidden{% endif %}">
+              <span class="icon"></span>
+              <span class="label">Free shipping</span>
+            </div>
+
+            {% comment %}Caputre the date seven days from now{% endcomment %}
+            {% assign seven_days_from_now = 'now' | date: "%s" | plus: 604800 %}
+            {% comment %}get just the date number{% endcomment %}
+            {% assign day = seven_days_from_now | date: "%-d" %}
+            {% capture shipped_by_date_formatted %}
+              {% comment %}abbreviated month{% endcomment %}
+              {{ seven_days_from_now | date: "%b." }}
+              {% comment %}Ordianalize the date with 'st', 'nd',' rd', or 'th'{% endcomment %}
+              {% case day %}{% when "1" or "21" or "31" %}{{ day }}st{% when "2" or "22" %}{{ day }}nd{% when "3" or "23" %}{{ day }}rd{% else %}{{ day }}th{% endcase %}
+            {% endcapture %}
+
+            <div class="shipped-by-date">
+              <span class="icon"></span>
+              <span class="label">Shipped by: {{ shipped_by_date_formatted }}</span>
+            </div>
+
+          </div>
+
+          <div class="accepted-credit-cards">
+
+            <h6>We accept:</h6>
+
+            {{ 'visa-logo-small.png' | asset_url | img_tag }}
+            {{ 'american-express-logo-small.png' | asset_url | img_tag }}
+            {{ 'mastercard-logo-small.png' | asset_url | img_tag }}
+            {{ 'paypal-logo-small.png' | asset_url | img_tag }}
+            
+          </div>
+
+        </div>
+      </form>
+
+    {% else %}
+
+      {% comment %}
+      It's likely people won't have items in the cart sometimes.
+      Do something fun here, it's a great chance to show your company's human side.
+      {% endcomment %}
+
+      <h2>It appears that your cart is currently empty.</h2>
+      <p>Continue browsing <a href="/collections/all">here</a>.</p>
+
+    {% endif %}
+
+  </div>
+</div>
+

@@ -1,0 +1,182 @@
+{% comment %}
+
+This template will be automatically generated for you if the file doesn't exist,
+but where's the fun in having no control? Define your layout below.
+
+The 'layout settings.customer_layout' line is inserted at the top of every customer account template.
+Your theme's settings determine to use the 'default' or 'theme' customer templates.
+More info:
+- http://www.tetchi.ca/shopify-theme-from-scratch-part-11/
+
+Template note:
+- All IDs on this template are required to make the forms submit properly
+- There are two instances of inline JS below. Best practices advise separating this
+into an external JS file.
+
+{% endcomment %}
+
+{% include 'login-register-page-hero' %}
+
+<div class="login-form-hero">
+  <div class="wrapper-8-col">
+    <h2>Your Theia.com</h2>
+
+    <div class="login-block">
+
+      {% comment %}
+      We don't have facebook login functionaitly just yet.
+
+      <div class="facebook-login-button-block">
+      {% include 'facebook-login-button' %}
+      </div>
+      {% endcomment %}
+
+      {% comment %}
+      If a user has successfully requested a new password, the form.posted_successfully? variable
+      is set to true within the 'recover_customer_password' form only. Within that form you'll see
+      us assign a variable 'reset_success' to true, which is used in JS to show our success message.
+      {% endcomment %}
+      <div class="password-reset-form-success hidden" id="resetSuccess">
+        We've sent you an email with a link to update your password.
+      </div>
+
+      {% form 'customer_login' %}
+
+        {% include 'form-errors-custom' %}
+
+        <div class="row-2-col">
+          <div class="col">
+
+            <h4>Already have an account?</h4>
+
+            <div class="login-form-fields-block">
+              {% comment %}
+          This form must use 'customer_login'
+               {% endcomment %}
+
+              <label for="customer_email">Email Address</label>
+              <input type="email" value="" name="customer[email]" id="customer_email" placeholder="cara@theia.com" {% if form.errors contains "email" %} class="error"{% endif %} autocorrect="off" autocapitalize="off" autofocus>
+
+              <label for="customer_password">Password</label>
+              <input type="password" value="" name="customer[password]" id="customer_password" placeholder="Your Password" {% if form.errors contains "password" %} class="error"{% endif %}>
+            </div>
+
+            <button type="submit" class="login-submit-button">
+              Log In
+              <span class="icon"></span>
+            </button>
+            
+            <p>
+              <a href="#recover" class="forgot-passowrd-link">Forgot your password?</a>
+            </p>
+
+          </div>
+          <div class="vr"></div>
+          <div class="col">
+
+            <h4>Don&rsquo;t have an account?</h4>
+
+            <div class="register-benefits-block">
+              <h6>Register with us to:</h6>
+
+              <ul>
+                <li>Checkout faster</li>
+                <li>Save your shipping and billing information &ndash; no need to re-enter it later.</li>
+                <li>Access you order status and order history.</li>
+                <li>Save items to your fitting room.</li>
+              </ul>
+
+            </div>
+            <a href="http://theia.myshopify.com/account/register" class="register-button">
+              Create Account
+              <span class="icon"></span>
+            </a>
+            
+            <p>
+              Need Help? <a href="/pages/contact" class="customer-service-link">Customer Service</a>
+            </p>
+
+          </div>
+        </div>
+
+      {% endform %}
+
+    </div>
+
+
+
+    {% comment %}
+    This form must use 'recover_customer_password'
+    {% endcomment %}
+    {% form 'recover_customer_password' %}
+
+      {% include 'form-errors-custom' %}
+
+      <div class="hidden recover-password-block">
+        <div class="row-2-col">
+          <div class="col">
+
+            {% comment %}
+            This page uses JavaScript to show/hide the recover password form
+            {% endcomment %}
+
+            <h4>Reset your password:</h4>
+
+
+            {% comment %}
+            form.posted_successfully? is true only inside this form, but we want
+            to show a success message outside of it. To do so, set the variable
+            reset_success to true, then use JS to show our success message above.
+            {% endcomment %}
+            {% if form.posted_successfully? %}
+              {% assign reset_success = true %}
+            {% endif %}
+
+            <label for="recover-email">Email Address</label>
+            <input type="email" value="" name="email" id="recover-email" placeholder="Email" autocorrect="off" autocapitalize="off">
+
+            <button type="submit" class="reset-password-button">
+              Reset Password
+              <span class="icon"></span>
+            </button>
+
+            {% if form.posted_successfully? %}
+              {% assign reset_success = true %}
+            {% endif %}
+
+          </div>
+          <div class="vr"></div>
+          <div class="col">
+
+            <h4>Need help?</h4>
+
+            {% comment %}
+            <h6>Use your facebook account to login.</h6>
+
+            {% include 'facebook-login-button' %}
+            {% endcomment %}
+
+            <p>
+              Contact <a href="/pages/contact" class="customer-service-link">Customer Service</a> for assistence.
+            </p>
+
+            <p>
+              Remember your password? <a href="#" class="cancel-forgot-password-link">Login here</a>
+            </p>
+
+          </div>
+        </div>
+      </div><!-- end .recover-password-block -->
+
+    {% endform %}
+
+  </div>
+</div>
+
+<script>
+    $(function(){
+        {% if password_reset_success %}
+        $('#resetSuccess').removeClass('hidden');
+        {% endif %}
+    });
+</script>

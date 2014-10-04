@@ -1,0 +1,17 @@
+{% comment %}
+*required* formFieldKey = firstName
+formFieldId = contactFormFirstName
+formFieldAutocapitalize = [ 'none' | 'sentences' | 'words' | 'characters' ]
+formFieldPlaceholder = [ string ]
+formFieldOptional = [bool]
+{% endcomment %}
+{% capture formFieldId %}contactForm{{ formFieldKey | slice: 0 | capitalize }}{{ formFieldKey | slice: 1, 999 }}{% endcapture %}
+{% if formFieldLabel %}
+  <label for="{{ formFieldId }}">
+    {{ formFieldLabel }}
+    {% if formFieldOptional %}
+      <span class="meta">(optional)</span>
+    {% endif %}
+  </label>
+{% endif %}
+<input type="text" id="{{ formFieldId }}" name="contact[{{ formFieldKey }}]"{% if formFieldClass %} class="{{ formFieldClass }}"{% endif %}{% if formFieldPlaceholder %} placeholder="{{ formFieldPlaceholder }}"{% endif %}{% if formFieldAutocapitalize %} autocapitalize="{{ formFieldAutocapitalize }}"{% endif %}{% if formFieldValue %} value="{{ formFieldValue }}"{% endif %}>
