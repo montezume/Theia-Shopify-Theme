@@ -5275,23 +5275,44 @@ address {
 
     /* two row layout */
     .template-index & {
-        width: 608px;
-        padding: $gutter * 1.75;
-
         h4 {
-            font-size: 1.75em;
             font-weight: 300;
             line-height: 1.25;
         }
 
-        .header-block {
-            width: 416px;
-            margin: 0 auto ( $gutter / 2 );
+        .form-block {
+            margin: 0 auto;
         }
 
-        .form-block {
-            width: 352px;
-            margin: 0 auto;
+        @include at-query( $min, $postSmall ){
+            width: 608px;
+            padding: $gutter * 1.75;
+
+            h4 {
+                font-size: 1.75em;
+            }
+
+            .header-block {
+                width: 416px;
+                margin: 0 auto ( $gutter / 2 );
+            }
+
+            .form-block {
+                width: 352px;
+            }
+        }
+
+        @include at-query( $max, $small ){
+            width: 100%;
+            padding: $gutter;
+
+            h4 {
+                font-size: 1.25em;
+            }
+
+            .header-block {
+                margin: 0 auto $gutter;
+            }
         }
     }
 
@@ -5336,7 +5357,6 @@ address {
     input, button {
         background: $colorDarkGold;
         display: block;
-        height: 48px;
         color: $colorLighterGold;
     }
 
@@ -5353,17 +5373,46 @@ address {
 
         border: 0;
         margin: 0;
-        padding: 9px 48px 11px 20px;
     }
 
     button {
         position: absolute;
         top: 0;
         right: 0;
-        font-size: 0.6875em;
-        width: 48px;
         text-align: center;
-        padding-top: 2px;
+    }
+
+    @include at-query( $min, $postSmall ){
+        input, button {
+            height: 48px;
+        }
+    
+        input {
+            padding: 9px 48px 11px 20px;
+        }
+
+        button {
+            font-size: 0.6875em;
+            width: 48px;
+            padding-top: 2px;
+        }
+
+    }
+
+    @include at-query( $max, $small ){
+        input, button {
+            height: 45px;
+        }
+
+        input {
+            padding: 8px 45px 9px 19px;
+        }
+
+        button {
+            font-size: 0.6445em;
+            width: 45px;
+            padding-top: 2px;
+        }
     }
 }
 
@@ -5566,6 +5615,11 @@ address {
 
         .social-hero {
             padding: ($gutter * 2) 0;
+        }
+        
+        .newsletter-signup-row {
+            /* hide the double border on the sides of the .newsletter-signup-block */
+            margin: 0 -7px;
         }
     }
 }
