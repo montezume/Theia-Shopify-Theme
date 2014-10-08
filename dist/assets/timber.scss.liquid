@@ -184,6 +184,16 @@ $gridGutter: 32px; // can be a %, but nested grids will have smaller margins bec
 // Radius
 $radius: 3px;
 
+
+// header heights
+$mobileHeaderHeight: 44px;
+$desktopHeaderHeight: 85px;
+
+
+// moblie side nav
+$mobileNavMenuWidth: 258px;
+
+
 /*================ Typography ================*/
 
 @font-face {
@@ -492,6 +502,18 @@ html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abb
 /*================================================================================
   #Extends - these are for common text and block styles
   ================================================================================*/
+
+%large-arial-text {
+    font-family: $arialFontStack;
+
+    @include at-query ($min, $postSmall) {
+        font-size: 1.5em; /* ~24px */
+    }
+
+    @include at-query ($max, $small) {
+        font-size: 1.25em; /* ~20px */
+    }
+}
 
 %medium-arial-text {
     font-family: $arialFontStack;
@@ -2291,126 +2313,167 @@ $iconSelector: '[class^="icon-"], [class*=" icon-"]';
 .icon-box-checked:before {
     content: "\f046";
 }
+
 .icon-box-unchecked:before {
     content: "\f096";
 }
+
 .icon-menu:before {
     content: "\e60c";
 }
+
 .icon-telephone-handset:before {
     content: "\e600";
 }
+
 .icon-map-pin:before {
     content: "\e601";
 }
+
 .icon-stamp:before {
     content: "\e602";
 }
+
 .icon-arrow-right-solid:before {
     content: "\e603";
 }
+
 .icon-facebook-f:before {
     content: "\e604";
 }
+
 .icon-instagram:before {
     content: "\e605";
 }
+
 .icon-pinterest-p:before {
     content: "\e606";
 }
+
 .icon-arrow-right-xlarge:before {
     content: "\e607";
 }
+
 .icon-arrow-left-xlarge:before {
     content: "\e608";
 }
+
 .icon-search:before {
     content: "\e609";
 }
+
 .icon-store:before {
     content: "\e60a";
 }
+
 .icon-safe:before {
     content: "\e60b";
 }
+
 .icon-fancy:before {
     content: "\46";
 }
+
 .icon-twitter:before {
     content: "\54";
 }
+
 .icon-facebook:before {
     content: "\66";
 }
+
 .icon-pinterest:before {
     content: "\70";
 }
+
 .icon-tumblr:before {
     content: "\74";
 }
+
 .icon-vimeo:before {
     content: "\76";
 }
+
 .icon-youtube:before {
     content: "\79";
 }
+
 .icon-gift:before {
     content: "\e60e";
 }
+
 .icon-calendar:before {
     content: "\e60f";
 }
+
 .icon-arrow-left-curved:before {
     content: "\e610";
 }
+
 .icon-arrow-right-curved:before {
     content: "\e611";
 }
+
 .icon-cross:before {
     content: "\e612";
 }
+
 .icon-cross-circle:before {
     content: "\e613";
 }
+
 .icon-info:before {
     content: "\e614";
 }
+
 .icon-info-circle:before {
     content: "\e615";
 }
+
 .icon-arrow-left:before {
     content: "\e616";
 }
+
 .icon-arrow-down:before {
     content: "\e617";
 }
+
 .icon-arrow-up:before {
     content: "\e618";
 }
+
 .icon-arrow-right:before {
     content: "\e619";
 }
+
 .icon-arrow-left-small:before {
     content: "\e61a";
 }
+
 .icon-arrow-down-small:before {
     content: "\e61b";
 }
+
 .icon-arrow-up-small:before {
     content: "\e61c";
 }
+
 .icon-arrow-right-small:before {
     content: "\e61d";
 }
+
 .icon-arrow-left-large:before {
     content: "\e61e";
 }
+
 .icon-arrow-down-large:before {
     content: "\e61f";
 }
+
 .icon-arrow-up-large:before {
     content: "\e620";
 }
+
 .icon-arrow-right-large:before {
     content: "\e621";
 }
@@ -3515,10 +3578,8 @@ address {
         /* Desktop */
         @include at-query ($min, $postSmall) {
 
-            $headerHeight: 85px;
-
             padding: $gutter 0;
-            height: $headerHeight;
+            height: $desktopHeaderHeight;
 
             .wrapper {
                 position: relative;
@@ -3528,7 +3589,7 @@ address {
             %header-column {
                 @include header-column();
 
-                height: $headerHeight - $gridGutter;
+                height: $desktopHeaderHeight - $gridGutter;
                 margin: 0 $gutter;
             }
 
@@ -3562,11 +3623,9 @@ address {
 
         /* Mobile */
         @include at-query ($max, $small) {
-            $headerHeight: 44px;
-
             padding: $gutter/2 0;
 
-            height: $headerHeight;
+            height: $mobileHeaderHeight;
 
             .wrapper {
                 @extend .clearfix;
@@ -3578,7 +3637,7 @@ address {
             %header-column {
                 @include header-column();
 
-                height: $headerHeight - $gridGutter/2;
+                height: $mobileHeaderHeight - $gridGutter/2;
             }
 
             .logo-column {
@@ -4879,14 +4938,32 @@ address {
 /* Naviation Menus */
 
 .main-menu {
-    @extend %nav-menu-base;
+    .site-header &,
+    .site-footer & {
+        @extend %nav-menu-base;
 
-    li {
         @include at-query ($min, $postSmall) {
-            border-left: 1px solid $colorLightestGray;
+            li {
+                border-left: 1px solid $colorLightestGray;
+
+                &:first-child {
+                    border-left-width: 0;
+                }
+            }
+        }
+    }
+
+    .mobile-side-nav & {
+        ul {
+            margin: 0 $gutter;
+        }
+
+        li {
+            border-top: 1px solid $colorLightGray;
+            margin-bottom: 0;
 
             &:first-child {
-                border-left: 0;
+                border-top-width: 0;
             }
         }
     }
@@ -4894,18 +4971,40 @@ address {
 
 .main-menu-link {
     @extend %gray-hover-gold-link;
-    @extend %small-arial-text;
 
     display: block;
-    line-height: 1;
     text-transform: uppercase;
+    line-height: 1;
 
-    @include at-query ($min, $postSmall) {
-        padding: $gutter/4 $gutter * 1.25;
+    .site-header &,
+    .site-footer & {
+        @extend %small-arial-text;
+
+        @include at-query ($min, $postSmall) {
+            padding: $gutter/4 $gutter * 1.25;
+        }
+
+        @include at-query ($max, $small) {
+            padding: $gutter/2 0;
+        }
     }
 
-    @include at-query ($max, $small) {
-        padding: $gutter/2 0;
+    .mobile-side-nav & {
+        @extend %small-arial-text;
+        @extend %icon-base;
+        @extend .icon-arrow-left;
+
+        font-weight: 700;
+        position: relative;
+        padding: $gutter 0 $gutter 20px;
+
+        &:before {
+            display: block !important;
+            position: absolute;
+            font-size: 14px;
+            top: 14px;
+            left: 0;
+        }
     }
 }
 
@@ -4950,78 +5049,114 @@ address {
     }
 }
 
+/* must be included within the avatar img selector block */
+@mixin customerAvatarSize( $radius ) {
+    height: $radius * 2;
+    width: $radius * 2;
+    @include prefix(border-radius, $radius);
+}
+
+/* styles shared between the desktop header and mobile side nav */
+@mixin customerLoginLink() {
+    img, #{$iconSelector}, .label {
+        display: block;
+        float: left;
+    }
+
+    img, #{$iconSelector} {
+        margin-right: $gutter/3;
+    }
+
+    #{$iconSelector} {
+        height: 1em;
+        width: 1em;
+    }
+
+    /* used for the avatar */
+    img {
+        position: relative;
+    }
+
+    .label {
+        @include overflowEllipsis();
+    }
+}
+
 .customer-menu-link {
     @extend %gray-hover-gold-link;
-    /* @extend .clearfix; */
+    @include clearfix();
 
     display: block;
     position: relative;
 
-    .label {
-        @extend %small-arial-text;
-    }
-
-    /* Desktop */
-    @include at-query ($min, $postSmall) {
-        padding: 3px $gutter/2 2px;
-
-        img, #{$iconSelector}, .label {
-            display: block;
-            float: left;
-        }
-
-        img, #{$iconSelector} {
-            margin-right: $gutter/3;
-        }
-
-        #{$iconSelector} {
-            height: 1em;
-            width: 1em;
-        }
-
-        /* used for the avatar */
-        img {
-            $radius: 11px;
-
-            position: relative;
-            top: -2px;
-            height: $radius * 2;
-            width: $radius * 2;
-            @include prefix(border-radius, $radius);
-            border: 2px solid $colorWarmGray;
-        }
+    .site-header & {
 
         .label {
-            @include overflowEllipsis();
-
-            padding-top: 1px;
-            line-height: 15px;
-            max-width: 105px;
+            @extend %small-arial-text;
         }
-    }
 
-    /* Mobile */
-    @include at-query ($max, $small) {
-        height: 22px;
-        width: 22px;
-        border: 1px solid $colorGray;
-        @include prefix(border-radius, 2px);
-        text-align: center;
+        /* Desktop */
+        @include at-query ($min, $postSmall) {
+            @include customerLoginLink();
+            
+            padding: 3px $gutter/2 2px;
 
-        #{$iconSelector} {
-            height: 1em;
-            width: 1em;
-            font-size: 0.75em;
-            display: block;
-            margin: 4px auto;
+            /* used for the avatar */
+            img {
+                @include customerAvatarSize( 11px );
 
-            &:before {
-                display: block;
+                top: -2px;
+                border: 2px solid $colorWarmGray;
+            }
+
+            .label {
+                padding-top: 1px;
+                line-height: 15px;
+                max-width: 105px;
             }
         }
 
+        /* Mobile */
+        @include at-query ($max, $small) {
+            height: 22px;
+            width: 22px;
+            border: 1px solid $colorGray;
+            @include prefix(border-radius, 2px);
+            text-align: center;
+
+            #{$iconSelector} {
+                height: 1em;
+                width: 1em;
+                font-size: 0.75em;
+                display: block;
+                margin: 4px auto;
+
+                &:before {
+                    display: block;
+                }
+            }
+
+            .label {
+                display: none;
+            }
+        }
+    }
+
+    .mobile-side-nav & {
+        @include customerLoginLink();
+
+        margin: 0 $gutter;
+        padding: 13px 0;
+
         .label {
-            display: none;
+            @extend %smallish-arial-text;
+        }
+        
+        /* used for the avatar */
+        img {
+            @include customerAvatarSize( 8px );
+
+            border: 1px solid $colorWarmGray;
         }
     }
 }
@@ -5227,28 +5362,67 @@ address {
 }
 
 .customer-account-menu {
-    @extend .clearfix;
+    .main-content & {
+        @extend .clearfix;
 
-    width: 112px;
-    border-right: 1px solid $borderColor;
+        width: 112px;
+        border-right: 1px solid $borderColor;
 
-    li {
-        margin: 14px 0;
+        li {
+            margin: 14px 0;
+        }
+    }
+
+    .mobile-side-nav & {
+
+        ul {
+            margin: 0 $gutter;
+        }
+
+        li {
+            border-top: 1px solid $colorLightGray;
+            margin-bottom: 0;
+
+            &:first-child {
+                border-top-width: 0;
+            }
+        }
     }
 }
 
 .customer-account-menu-link {
-    @extend %smallish-arial-text;
     @extend %gray-hover-gold-link;
-    @extend %rsaquo;
-
-    text-transform: uppercase;
-    white-space: normal;
     display: block;
-    line-height: (15/12);
+    position: relative;
 
-    &.active {
-        color: $colorGold;
+    .main-content & {
+        @extend %smallish-arial-text;
+        @extend %rsaquo;
+
+        text-transform: uppercase;
+        white-space: normal;
+        line-height: (15/12);
+
+        &.active {
+            color: $colorGold;
+        }
+    }
+
+    .mobile-side-nav & {
+        @extend %small-arial-text;
+        @extend %icon-base;
+        @extend .icon-arrow-left;
+
+        font-weight: 700;
+        padding: $gutter 0 ($gutter - 2) 20px;
+
+        &:before {
+            display: block !important;
+            position: absolute;
+            font-size: 14px;
+            top: 16px;
+            left: 0;
+        }
     }
 }
 
@@ -5825,7 +5999,6 @@ address {
         $buttonWidth: 16px;
 
         height: 27px;
-        margin: 0 $gutter/2;
 
         button {
             font-size: 0.8125em;
@@ -6527,5 +6700,83 @@ $opacity-not-active: .25;
         @extend .icon-arrow-right-xlarge;
 
         right: -56px;
+    }
+}
+
+
+/*============================================================================
+  Slide out Push Nav
+  
+  http://tympanus.net/codrops/2013/04/17/slide-and-push-menus/
+  ============================================================================*/
+
+/* Required styles for the menu */
+/* Transitions */
+%mobile-side-nav-transitions {
+    -webkit-transition: all 0.3s ease;
+    -moz-transition: all 0.3s ease;
+    transition: all 0.3s ease;
+}
+
+.mobile-side-nav {
+    @extend %mobile-side-nav-transitions;
+
+    position: fixed;
+    width: $mobileNavMenuWidth;
+    height: 100%;
+    top: 0;
+    right: -$mobileNavMenuWidth;
+    z-index: 1000;
+
+    &.open {
+        right: 0px;
+    }
+}
+
+/* Push classes applied to the body */
+.container {
+    @extend %mobile-side-nav-transitions;
+
+    overflow-x: hidden;
+    position: relative;
+    left: 0;
+
+    &.menu-open {
+        left: -$mobileNavMenuWidth;
+    }
+}
+
+/* end required styles */
+
+.mobile-side-nav {
+    background: $colorPaleGray;
+
+    .search-bar-row {
+        height: $mobileHeaderHeight;
+        background: #fff;
+        padding: 9px $gutter;
+
+        form {
+            border-bottom: 0;
+        }
+    }
+
+    .main-block {
+        height: 100%;
+        border: 1px solid $colorLightGray;
+        border-right-width: 0;
+    }
+
+    .main-menu-row {
+        border-bottom: 1px solid $colorLightGray;
+    }
+
+    .customer-profile-login-link-row {
+        background: #fff;
+        border-bottom: 1px solid $colorLightGray;
+    }
+
+    .customer-account-menu-row {
+
     }
 }
