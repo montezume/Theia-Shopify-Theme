@@ -16,8 +16,14 @@ timber.cache = {
     // Celebrity Gallery
     $celebrityGallery: $('.celebrity-gallery'),
     $celebritySlides: $('.celebrity-gallery .slide'),
-    $celebrityThumbs: $('.celebrity-gallery .thumb')
+    $celebrityThumbs: $('.celebrity-gallery .thumb'),
 
+    // Mobile Slide Out Navigation
+    mobileSideNav: {
+        $container: $('.container'),
+        $toggle: $('#sideNavToggle'),
+        $nav: $( '#mobileSideNav' )
+    }
 };
 
 timber.init = function () {
@@ -28,8 +34,46 @@ timber.init = function () {
     timber.carouselInit();
     timber.loginFormInit();
     timber.celebrityGallery();
+    timber.mobileSideNav();
 
 };
+
+timber.mobileSideNav = function(){
+
+    var $container = timber.cache.mobileSideNav.$container,
+        $toggle = timber.cache.mobileSideNav.$toggle,
+        $nav = timber.cache.mobileSideNav.$nav;
+
+    $toggle.click(function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+
+        if ( $container.hasClass('menu-open') ){
+            timber.mobileSideNav.close();
+        } else {
+            timber.mobileSideNav.open();
+        }
+    });
+
+    $container.click(function(e){
+
+        if ( $container.hasClass('menu-open') ){
+            timber.mobileSideNav.close();
+        }
+
+    });
+
+    this.mobileSideNav.open = function(){
+        $container.addClass( 'menu-open' );
+        $nav.addClass( 'open' );
+    };
+
+    this.mobileSideNav.close = function(){
+        $container.removeClass( 'menu-open' );
+        $nav.removeClass( 'open' );
+    };
+};
+
 
 timber.celebrityGallery = function(){
 
@@ -79,8 +123,6 @@ timber.loginFormInit = function(){
 
     // Allow deep linking to the recover password form
     if (window.location.hash == '#recover') {
-        console.log( 'forgot' );
-
         showRecoverPasswordForm();
     }
 

@@ -20,15 +20,49 @@
 
     {% include 'html-body-top-scripts' %}
 
-    {% include 'header' %}
+    <div id="mobileSideNav" class="mobile-side-nav">
 
-    <main class="main-content" role="main">
+      <div class="search-bar-row">
+        {% include 'search-bar' %}
+      </div>
 
-      {{ content_for_layout }}
+      <div class="main-block">
 
-    </main>
+        <div class="main-menu-row">
+          {% assign show_home_link = true %}
+          {% include 'main-menu' %}
+          {% assign show_home_link = false %}
+        </div>
 
-    {% include 'footer' %}
+        <div class="customer-profile-login-link-row">
+          {% include 'customer-profile-login-link' %}
+        </div>
+
+        {% if customer %}
+
+          <div class="customer-account-menu-row">
+            {% include 'customer-account-menu' %}
+          </div>
+
+        {% endif %}
+
+      </div>
+
+    </div>
+
+    <div class="container">
+
+      {% include 'header' %}
+
+      <main class="main-content" role="main">
+
+        {{ content_for_layout }}
+
+      </main>
+
+      {% include 'footer' %}
+
+    </div>
 
     {% include 'html-footer-scripts' %}
 
