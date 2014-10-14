@@ -58,9 +58,7 @@
     {% endfor %}
 
     {% if paginate.pages > 1 %}
-      <div class="text-center">
-        {% include 'pagination-custom' %}
-      </div>
+      {% include 'pagination-block' %}
     {% endif %}
 
     {% endpaginate %}

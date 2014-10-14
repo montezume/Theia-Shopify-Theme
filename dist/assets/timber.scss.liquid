@@ -1484,7 +1484,7 @@ hr {
 
 
 
-/* Logos */
+/* #Logos */
 
 %logo-base {
     text-align: center;
@@ -1528,6 +1528,10 @@ hr {
 %hero-base {
     position: relative;
     color: #fff;
+
+    .wrapper {
+        height: 100%;
+    }
 
     /* White image mask */
     &:before, &:after {
@@ -1684,7 +1688,15 @@ hr {
 %hero-small {
     @extend %hero-base;
 
-    height: 168px;
+    /* Desktop */
+    @include at-query ($min, $postSmall) {
+        height: 168px;
+    }
+
+    /* Mobile */
+    @include at-query ($max, $small) {
+        height: 131px;
+    }
 }
 
 %hero-edge-fade-base {
@@ -2620,39 +2632,30 @@ $smallSocialIconRatio: (2.66/3.375);
 /*============================================================================
   #Pagination
   ==============================================================================*/
-.pagination {
-    margin-bottom: 1em;
-}
-
-/*================ Custom Pagination ================*/
 .pagination-block {
-    display: inline-block;
-    padding-left: 0;
-    margin: 0 0 $gutter;
+    @extend .clearfix;
 
+    position: relative;
+    margin-bottom: 0;
     border-top: 1px solid $borderColor;
     border-bottom: 1px solid $borderColor;
 
     > li {
-        display: inline;
+        display: inline-block;
+        margin: 0;
 
         > a,
         > span {
             @extend %gray-hover-gold-link;
             @extend %small-mid-arial-text;
 
+            display: inline-block;
             position: relative;
-            float: left;
             padding: 11px 5px 9px;
             margin-left: -1px;
             line-height: 1.42;
             text-transform: uppercase;
             font-weight: 700;
-
-            &:hover, &:focus {
-
-            }
-
         }
 
         /* Previous Link */
@@ -2691,6 +2694,85 @@ $smallSocialIconRatio: (2.66/3.375);
         > a:focus {
             color: #999999;
             cursor: not-allowed;
+        }
+    }
+
+    /* Desktop */
+    @include at-query ($min, $postSmall) {
+        display: inline-block;
+    }
+
+    /* Mobile */
+    @include at-query ($max, $small) {
+        > li {
+
+            &:first-child,
+            &:last-child {
+                position: absolute;
+                top: 0;
+            }
+
+            &:first-child {
+                left: 0;
+            }
+
+            &:last-child {
+                right: 0;
+            }
+
+            > a,
+            > span {
+                padding: 11px 5px 9px;
+                font-size: 15px;
+            }
+
+            /* Previous Link */
+            &:first-child > a,
+            &:first-child > span {
+                @extend %prev-next-link-base;
+
+                margin-left: 0;
+                padding-left: 0;
+                padding-right: $gutter;
+
+                /* hide the 2nd half of the word previous. */
+                > span {
+                    display: none;
+                }
+
+            }
+
+            /* Next Link */
+            &:last-child > a,
+            &:last-child > span {
+                @extend %prev-next-link-base;
+
+                padding-left: $gutter;
+                padding-right: 0;
+            }
+        }
+
+        > .active {
+            > a,
+            > span,
+            > a:hover,
+            > span:hover,
+            > a:focus,
+            > span:focus {
+                z-index: 2;
+                color: $colorGold;
+                cursor: default;
+            }
+        }
+
+        > .disabled {
+            > span,
+            > a,
+            > a:hover,
+            > a:focus {
+                color: #999999;
+                cursor: not-allowed;
+            }
         }
     }
 }
@@ -4020,6 +4102,19 @@ address {
     .content {
         top: $gutter * 3.75;
     }
+
+    /* Desktop */
+    @include at-query ($min, $postSmall) {
+
+    }
+
+    /* Mobile */
+    @include at-query ($max, $small) {
+        background: {
+            size: cover;
+            position: 58% 50%;
+        }
+    }
 }
 
 .about-page-hero {
@@ -4057,8 +4152,6 @@ address {
 
     .wrapper {
         @include heroEdgeFade( $heroBgColor, $width: 160px, $offset: 99px );
-
-        height: 100%;
     }
 }
 
@@ -4072,7 +4165,6 @@ address {
 
     h2 {
         position: relative;
-        top: 42px;
         margin: 0;
         text-align: center;
         color: $colorOffWhite;
@@ -4081,8 +4173,25 @@ address {
 
     .wrapper {
         @include heroEdgeFade( $heroBgColor, $width: 160px, $offset: 99px );
+    }
 
-        height: 100%;
+    /* Desktop */
+    @include at-query ($min, $postSmall) {
+        h2 {
+            top: 42px;
+        }
+    }
+
+    /* Mobile */
+    @include at-query ($max, $small) {
+        .wrapper {
+            margin: 0 $gutter;
+        }
+
+        h2 {
+            top: 17px;
+            font-size: 45px;
+        }
     }
 }
 
@@ -4590,22 +4699,25 @@ address {
     text-align: center;
 
     h2 {
-        margin: 0 0 $gutter;
         letter-spacing: -1px;
     }
-}
-
-.social-link-hero {
-    @extend %social-hero-base;
 
     @include at-query( $min, $postSmall ){
+        h2 {
+            margin: 0 0 $gutter;
+        }
     }
 
     @include at-query( $max, $small ){
         h2 {
             font-size: 35px;
+            margin-bottom: $gutter * 2;
         }
     }
+}
+
+.social-link-hero {
+    @extend %social-hero-base;
 }
 
 .newsletter-signup-hero {
@@ -4732,6 +4844,24 @@ address {
         margin-top: 0;
         margin-bottom: $gutter;
     }
+
+    /* Desktop */
+    @include at-query ($min, $postSmall) {
+        .pagination-block {
+            margin: ($gutter * 3.25) 0;
+        }
+    }
+
+    /* Mobile */
+    @include at-query ($max, $small) {
+        .wrapper {
+            margin: 0 ($gutter * 3/4);
+        }
+
+        .pagination-block {
+            margin: ($gutter * 1.5) 5px;
+        }
+    }
 }
 
 .product-grid-hero,
@@ -4748,11 +4878,11 @@ address {
 
     [class$="-row"] {
         @extend .clearfix;
-
-        margin: $gutter 0;
     }
 
     h4 {
+        @include overflowEllipsis();
+
         font-size: 1.25em; /* ~20px */
         font-weight: 300;
         letter-spacing: 0.4px;
@@ -4784,11 +4914,27 @@ address {
     /* Desktop */
     @include at-query ($min, $postSmall) {
         margin: ( $gutter / 2 ) ( $gutter - 2px );
+
+        [class$="-row"] {
+            margin: $gutter 0;
+        }
+
+        h4 {
+            font-size: 1.25em; /* ~20px */
+        }
     }
 
     /* Mobile */
     @include at-query ($max, $small) {
-        margin: ( $gutter / 2 ) ( ($gutter / 2) - 2px );
+        margin: ( $gutter / 2 ) ( ($gutter / 4) - 2px );
+
+        [class$="-row"] {
+            margin: ($gutter / 2) 0;
+        }
+
+        h4 {
+            font-size: 0.875em; /* ~14px */
+        }
     }
 }
 
@@ -4807,11 +4953,10 @@ address {
 
     /* Mobile */
     @include at-query ($max, $small) {
-        height: 200px;
-        width: 135px;
+        width: 139px;
 
         .image-row {
-            height: 192px;
+            height: 100px;
         }
     }
 }
@@ -4823,20 +4968,34 @@ address {
     height: 264px;
 
     .image-row {
-        height: 120px;
+        height: 122px;
     }
 }
 
 .product-grid-item,
 .collection-grid-item {
     @extend %grid-item-3-col;
+
+    /* Mobile */
+    @include at-query ($max, $small) {
+        .button {
+            width: 100%;
+
+            font-size: 10px;
+            height: 33px;
+            padding-top: 8px;
+
+            .icon {
+                font-size: 8px;
+                top: 0;
+            }
+        }
+    }
 }
 
 .collection-grid-item {
     .button {
         @extend %small-gold-arrow-button;
-        
-        width: 168px;
     }
 
     /* **todo** some of the collection photos are not the correct aspect ratio. Fix this with either custome or better images. */
@@ -4845,19 +5004,18 @@ address {
         height: 100%;
         width: auto;
     }
+
+    /* Desktop */
+    @include at-query ($min, $postSmall) {
+        .button {
+            width: 168px;
+        }
+    }
 }
 
 .product-grid-item {
-
     .header-row {
         text-align: left;
-    }
-
-    .meta-row {
-        > div {
-            width: 50%;
-            float: left;
-        }
     }
 
     .info-block {
@@ -4876,7 +5034,33 @@ address {
         @extend %small-gold-arrow-button;
 
         text-align: center;
-        width: 126px;
+    }
+
+    /* Desktop */
+    @include at-query ($min, $postSmall) {
+        .meta-row {
+            > div {
+                width: 50%;
+                float: left;
+            }
+        }
+
+        .button {
+            width: 126px;
+        }
+    }
+
+    /* Mobile */
+    @include at-query ($max, $small) {
+        .meta-row {
+            margin-bottom: 0;
+        }
+
+        .info-block {
+            height: 24px;
+            font-size: 9px;
+            margin-bottom: $gutter / 2;
+        }
     }
 }
 
@@ -5687,20 +5871,45 @@ address {
             line-height: 68px;
         }
 
-        > * {
-            display: inline-block;
-            height: 68px;
-            vertical-align: top;
-            margin: 0 5px;
-        }
-
         .header-block {
 
         }
 
-        .form-block {
-            width: 300px;
-            padding-top: 10px;
+        /* Desktop */
+        @include at-query ($min, $postSmall) {
+            > * {
+                display: inline-block;
+                height: 68px;
+                vertical-align: top;
+                margin: 0 5px;
+            }
+
+            .form-block {
+                width: 300px;
+                padding-top: 10px;
+            }
+        }
+
+        /* Mobile */
+        @include at-query ($max, $small) {
+            width: 100%;
+            padding: ($gutter * 2) $gutter;
+
+            border: {
+                left: 0;
+                right: 0;
+            }
+
+            h4 {
+                font-family: $helveticaFontStack;
+                font-weight: 300;
+                font-size: 1.25em;
+                line-height: 1.1;
+            }
+
+            .header-block {
+                margin: 0 auto $gutter;
+            }
         }
     }
 }
@@ -5755,7 +5964,6 @@ address {
             width: 48px;
             padding-top: 2px;
         }
-
     }
 
     @include at-query( $max, $small ){
@@ -6036,14 +6244,32 @@ address {
         margin-bottom: $gutter * 3;
     }
 
-    .newsletter-signup-hero {
-        margin-top: $gutter * 3.5;
-        margin-bottom: $gutter * 1.75;
+    /* Desktop */
+    @include at-query ($min, $postSmall) {
+        .newsletter-signup-hero {
+            margin-top: $gutter * 3.5;
+            margin-bottom: $gutter * 1.75;
+        }
+
+        .social-link-hero {
+            margin-top: $gutter * 1.75;
+            margin-bottom: $gutter * 3.5;
+        }
     }
 
-    .social-link-hero {
-        margin-top: $gutter * 1.75;
-        margin-bottom: $gutter * 3.5;
+    /* Mobile */
+    @include at-query ($max, $small) {
+        .newsletter-signup-hero {
+            margin-top: $gutter * 2;
+            margin-bottom: $gutter * 2.75;
+        }
+
+        .social-link-hero {
+            margin: {
+                top: $gutter * 2.75;
+                bottom: $gutter * 2.75;
+            }
+        }
     }
 }
 
