@@ -3671,12 +3671,12 @@ $smallSocialIconRatio: (2.66/3.375);
 .search-result-item {
     @extend %line-item-base;
 
+    position: relative;
     padding-bottom: $gutter;
     border-bottom: 1px solid $colorLighterGray;
     margin: 0 $gutter $gutter;
 
     h4 {
-        font-size: 1.25em;
         font-weight: 300;
         margin: 0;
         color: $colorDarkerGray;
@@ -3690,11 +3690,6 @@ $smallSocialIconRatio: (2.66/3.375);
         color: $colorWarmGrayDark;
         font-size: 1.875em;
         padding-top: 4px;
-    }
-
-    .info-options-column {
-        width: 640px;
-        padding: 0 0 0 32px;
     }
 
     .info-column,
@@ -3720,13 +3715,65 @@ $smallSocialIconRatio: (2.66/3.375);
         text-align: center;
         width: 160px;
     }
+
+    /* Desktop */
+    @include at-query ($min, $postSmall) {
+        h4 {
+            font-size: 1.25em;
+        }
+
+        .info-options-column {
+            width: 640px;
+            padding: 0 0 0 32px;
+        }
+    }
+
+    /* Mobile */
+    @include at-query ($max, $small) {
+        h4 {
+            padding-top: 4px;
+            font-size: 1.5em;
+            line-height: 1.3333;
+            height: 64px;
+            overflow: hidden;
+        }
+
+        .header-row {
+            padding-left: 64px + 20px;
+        }
+
+        /*
+          Hiding these since I can't have an add to cart box in the search results.
+          They were also messing up spacing on mobile.
+          */
+        .size-column,
+        .color-column {
+            display: none;
+        }
+
+        .info-column {
+            margin-bottom: $gutter;
+        }
+    }
 }
 
 .search-result-item-image {
     @extend %line-item-image-base;
 
-    height: 96px;
-    width: 96px;
+    /* Desktop */
+    @include at-query ($min, $postSmall) {
+        height: 96px;
+        width: 96px;
+    }
+
+    /* Mobile */
+    @include at-query ($max, $small) {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 64px;
+        width: 64px;
+    }
 }
 
 .cart-item {
@@ -6624,12 +6671,7 @@ address {
         margin: 0 auto;
     }
 
-    .search-results-row {
-        margin: ($gutter * 2) 0;
-    }
-
     .pagination-row {
-        margin: ($gutter * 3) 0 ($gutter * 2);
         text-align: center;
     }
 
@@ -6638,12 +6680,28 @@ address {
         main .search-bar-row {
             margin: ($gutter * 4) 0 ($gutter * 4);
         }
+
+        .search-results-row {
+            margin: ($gutter * 2) 0;
+        }
+
+        .pagination-row {
+            margin: ($gutter * 3) 0 ($gutter * 2);
+        }
     }
 
     /* Mobile */
     @include at-query ($max, $small) {
         main .search-bar-row {
             margin: ($gutter * 2) $gutter;
+        }
+
+        .search-results-row {
+            margin: ($gutter * 2) 0 $gutter;
+        }
+
+        .pagination-row {
+            margin: $gutter $gutter ($gutter * 2);
         }
     }
 }
