@@ -896,7 +896,7 @@ html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abb
 
     /* Desktop */
     @include at-query ($min, $postSmall) {
-        .vr {
+        .divider {
             height: 100%;
             width: 0;
             position: absolute;
@@ -910,8 +910,15 @@ html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abb
 
     /* Mobile */
     @include at-query ($max, $small) {
-        .vr {
-            display: none;
+        .divider {
+            width: auto;
+            height: 0;
+            position: relative;
+            border-bottom: 1px solid $colorLightestGray;
+            margin: {
+                left: $gutter;
+                right: $gutter;
+            }
         }
 
         .col {
@@ -930,7 +937,7 @@ html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abb
 
    /* Desktop */
     @include at-query ($min, $postSmall) {
-        .vr {
+        .divider {
             left: 50%;
         }
 
@@ -955,10 +962,10 @@ html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abb
 
     /* Desktop */
     @include at-query ($min, $postSmall) {
-        .vr {
+        .divider {
             left: percentage(1/3);
 
-            & ~ .vr {
+            & ~ .divider {
                 left: percentage(2/3);
             }
         }
@@ -4513,8 +4520,7 @@ address {
         @extend %rsaquo;
     }
 
-    .shipping-account-info-row {
-
+    .shipping-account-info-block {
         a {
             @extend %rdaquo;
             @extend %smallish-arial-text;
@@ -4522,6 +4528,49 @@ address {
 
             text-transform: uppercase;
         }
+    }
+
+    /* Desktop */
+    @include at-query ($min, $postSmall) {
+
+    }
+
+    /* Mobile */
+    @include at-query ($max, $small) {
+        h2 {
+            font-size: 2.1875em;
+        }
+
+        h3 {
+            font-size: 1.25em;
+        }
+
+        .order-grid-row {
+            margin: {
+                left: $gutter;
+                right: $gutter;
+            }
+        }
+
+        .shipping-account-info-block {
+            p {
+                font-size: 0.9375em;
+            }
+        }
+
+        .divider {
+            margin: {
+                top: ($gutter * 2.25);
+                bottom: ($gutter * 2.25);
+            }
+        }
+    }
+}
+
+.customer-account-nav-row {
+    /* Mobile */
+    @include at-query ($max, $small) {
+        display: none;
     }
 }
 
@@ -4997,6 +5046,10 @@ address {
 .social-link-block {
     @extend %inline-list-base;
 
+    ul {
+        text-align: center;
+    }
+
     a {
         position: relative;
         display: block;
@@ -5018,11 +5071,11 @@ address {
         }
     }
 
-    @include at-query( $min, $postSmall ){
-        li {
-            margin: 0 8px;
-        }
+    li {
+        margin: 0 6px;
+    }
 
+    @include at-query( $min, $postSmall ){
         a {
             $desktopCircumfrence: 3.375em;
 
@@ -5032,9 +5085,7 @@ address {
     }
 
     @include at-query( $max, $small ){
-        li {
-            margin: 0 8px;
-        }
+        margin: 0 8px;
 
         a {
             $smallCircumfrence: 2.66em;
@@ -5234,11 +5285,24 @@ address {
 %grid-item-2-col {
     @extend %grid-item-base;
 
-    width: 160px;
-    height: 264px;
+    /* Desktop */
+    @include at-query ($min, $postSmall) {
+        width: 160px;
+        height: 264px;
 
-    .image-row {
-        height: 122px;
+        .image-row {
+            height: 122px;
+        }
+    }
+
+    /* Mobile */
+    @include at-query ($max, $small) {
+        width: 135px;
+        height: 212px;
+
+        .image-row {
+            height: 100px;
+        }
     }
 }
 
@@ -5338,8 +5402,6 @@ address {
     @extend %grid-item-2-col;
 
     text-align: left;
-    height: 280px;
-
     .meta-row {
         > div {
             @extend %smallish-arial-text;
@@ -5352,6 +5414,33 @@ address {
 
     .button {
         @extend %small-gold-arrow-button;
+    }
+
+    /* Desktop */
+    @include at-query ($min, $postSmall) {
+        height: 280px;
+    }
+
+    /* Mobile */
+    @include at-query ($max, $small) {
+
+
+        .meta-row > div {
+            font-size: 9px;
+        }
+
+        .button {
+            display: block;
+            width: auto;
+            height: 33px;
+            padding-top: 7px;
+            font-size: 0.625em;
+
+            .icon {
+                font-size: 8px;
+                top: auto;
+            }
+        }
     }
 }
 
@@ -6636,14 +6725,30 @@ address {
 
 .template-customers-account {
 
-    .order-grid-row {
-        margin-bottom: $gutter * 3.125;
-    }
-
     .shipping-account-info-row {
         @extend .row-2-col;
+    }
 
-        margin: ( $gutter * 3.125 ) 0;
+    /* Desktop */
+    @include at-query ($min, $postSmall) {
+        .order-grid-row {
+            margin-bottom: $gutter * 3.125;
+        }
+
+        .shipping-account-info-row {
+            margin: ( $gutter * 3.125 ) 0;
+        }
+    }
+
+    /* Mobile */
+    @include at-query ($max, $small) {
+        .order-grid-row {
+            margin-bottom: $gutter * 2;
+        } 
+
+        .shipping-account-info-row {
+            margin: ( $gutter * 2.5 ) 0;
+        }
     }
 }
 
