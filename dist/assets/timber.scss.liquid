@@ -1502,6 +1502,13 @@ hr {
     @extend %gold-button-base;
 }
 
+%medium-gold-button {
+    @extend %button-base;    
+    @extend %medium-button-base;
+    @extend %gold-button-base;
+}
+
+
 /* custom buttons */
 
 .facebook-login-button {
@@ -2069,10 +2076,6 @@ select {
     padding: ( $gutter / 2 ) $gutter;
     line-height: 1.625;
 
-    &:last-child {
-        margin-bottom: 0;
-    }
-    
     &:focus {
     /* border: 1px solid darken($borderColor, 10%); */
     }
@@ -5565,7 +5568,162 @@ address {
 
 .customer-account-content-hero {
     @extend .content-hero;
+
+    [class^="wrapper"] {
+        margin: {
+            left: $gutter;
+            right: $gutter;
+        }
+    }
 }
+
+.customer-addresses-block {
+    h4 {
+        margin: ($gutter * 4) 0 $gutter;
+
+        &:first-of-type {
+            margin-top: 0;
+        }
+    }
+
+    /* Desktop */
+    @include at-query ($min, $postSmall) {
+        h4 {
+            margin: ($gutter * 4) 0 $gutter;
+        }        
+    }
+
+    /* Mobile */
+    @include at-query ($max, $small) {
+        h4 {
+            margin: ($gutter * 2.5) 0 ($gutter * 1.5);
+            font-weight: 300;
+        }
+    }
+}
+
+.customer-address-view-edit-block {
+    background: $colorLightestGray;
+    padding: $gutter;
+    margin: $gutter 0;
+
+    p {
+        font-family: $helveticaFontStack;
+        color: $colorWarmLightGray;
+    }
+
+    .col {
+        padding: 0;
+    }
+
+    .default-address-row {
+        text-align: center;
+
+        label {
+
+        }
+    }
+
+    .submit-cancel-row {
+        text-align: center;
+
+        button {
+            @extend %medium-gold-button;
+
+            width: 288px;
+        }
+
+        a {
+            @extend %small-gray-button;
+
+            width: 192px;
+            padding-top: 5px;
+        }
+
+        .or-divider {
+            @extend %small-arial-text;
+
+            color: $colorWarmLightGray;
+        }
+    }
+
+    input[type="radio"], input[type="checkbox"] {
+        @extend %checkbox-radio-icon;
+    }
+
+    /* Desktop */
+    @include at-query ($min, $postSmall) {
+        .col {
+            padding-right: $gutter/2;
+            
+            &:first-child {
+                padding-left: $gutter/2;
+            }
+        }
+    }
+
+    /* Mobile */
+    @include at-query ($max, $small) {
+        .submit-cancel-row {
+
+            button,
+            a {
+                display: block;
+                width: 100%;
+            }
+        }
+    }
+}
+
+.customer-address-view-edit-row {
+    @extend .clearfix;
+
+    .button-block {
+        > a {
+            @extend %small-gray-button;
+
+            padding-top: 5px;
+            margin-bottom: $gutter / 2;
+            display: block;
+            width: auto;
+
+            &:last-child {
+                margin-bottom: 0;
+            }
+        }
+    }
+
+    /* Desktop */
+    @include at-query ($min, $postSmall) {
+        > div {
+            float: left;
+        }
+
+        .address-block {
+            width: 646px;
+        }
+
+        .button-block {
+            width: 90px;
+        }        
+    }
+
+    /* Mobile */
+    @include at-query ($max, $small) {
+        .address-block {
+            margin-bottom: $gutter;
+        }
+    }
+}
+
+
+
+.add-new-address-link {
+    @extend %gray-underline-hover-gold-link;
+
+    font-weight: 700;
+}
+
 
 .other-enquires-hero {
     @extend .content-hero;
