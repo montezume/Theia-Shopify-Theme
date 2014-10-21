@@ -5,6 +5,23 @@
 
 {% endcomment %}
 
+{% if collection.metafields.other_images.desktop_hero != blank %}
+  {% assign other_images = collection.metafields.other_images %}
+
+  <style>
+    .collection-page-hero {
+      background-image: url('{{ other_images.desktop_hero }}');
+      background-position: top center !important;
+    }
+
+    @media screen and (max-width: 480px){
+      .collection-page-hero {
+        background-image: url('{{ other_images.mobile_hero }}');
+      }
+    }
+  </style>
+{% endif %}
+
 <div class="collection-page-hero">
   <div class="wrapper">
     <div class="content">
