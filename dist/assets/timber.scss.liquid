@@ -103,7 +103,7 @@ $colorDarkerGray: #2f2f2f;
 $colorWarmLighterGray: #f9f8f8;
 $colorWarmLightGray: #a5a2a4;
 $colorWarmGray: #797778;
-$colorWarmGrayDark: #4d4c4c;
+$colorWarmDarkGray: #4d4c4c;
 
 $colorLighterGold: #ddc28a;
 $colorLightGold: #c8a45a;
@@ -134,7 +134,7 @@ $modalBorderColor: $borderColor;
 /* $colorSecondary: {{ settings.color_secondary }}; */
 
 // 
-$colorPrimary: $colorWarmGrayDark;
+$colorPrimary: $colorWarmDarkGray;
 $colorSecondary: $colorGold;
 
 
@@ -809,7 +809,7 @@ html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abb
     &:hover,
     &:active,
     &:focus {
-        color: $colorWarmGrayDark;
+        color: $colorWarmDarkGray;
     }
 }
 
@@ -1036,6 +1036,20 @@ body {
 .text-center { text-align: center; }
 .text-right { text-align: right; }
 .hidden { display: none; }
+
+/* Desktop */
+@include at-query ($min, $postSmall) {
+    .hidden-on-desktop {
+        display: none !important;
+    }
+}
+
+/* Mobile */
+@include at-query ($max, $small) {
+    .hidden-on-mobile {
+        display: none !important;
+    }
+}
 
 .display-table {
     display: table;
@@ -1545,7 +1559,7 @@ hr {
 
 
 
-/* #Logos */
+/* # Logos */
 
 %logo-base {
     text-align: center;
@@ -2985,10 +2999,7 @@ $smallSocialIconRatio: (2.66/3.375);
   #Breadcrumbs
   ==============================================================================*/
 .breadcrumb-block {
-    height: $gutter * 2.25;
     background: $colorLightestGray;
-    padding: 2px ( $gutter * 1.25 ) 0;
-    line-height: $gutter * 2;
     border-bottom: 1px solid $colorLightGray;
 
     a,
@@ -3002,11 +3013,30 @@ $smallSocialIconRatio: (2.66/3.375);
     a {
         @extend %rsaquo;
         @extend %warmGray-hover-underline-link;
-        
     }
 
     span {
         color: $colorGold;
+    }
+    
+    /* Desktop */
+    @include at-query ($min, $postSmall) {
+        height: $gutter * 2.25;
+        padding: 2px ( $gutter * 1.25 ) 0;
+        line-height: $gutter * 2;
+    }
+
+    /* Mobile */
+    @include at-query ($max, $small) {
+        border-top: 1px solid $colorLightGray;
+        height: 35px;
+        padding: 0 $gutter;
+
+        a,
+        span {
+            font-size: 0.625em;
+            line-height: 33px;
+        }
     }
 }
 
@@ -3017,37 +3047,108 @@ $smallSocialIconRatio: (2.66/3.375);
 
 .product-detail-hero {
     background: white;
-    height: 692px;
+    border-bottom: 1px solid $colorLighterGray;
+    border-top: 1px solid $colorLighterGray;    
 
     .wrapper {
         height: 100%;
     }
 
-    .product-gallery-block,
-    .product-info-block {
-        position: absolute;
+    /* Desktop */
+    @include at-query ($min, $postSmall) {
+        height: 692px;
+
+        .product-gallery-block,
+        .product-info-block {
+            position: absolute;
+        }
+
+        .product-gallery-block {
+            left: $gutter;
+            top: 0;
+            z-index: 0;
+        }
+
+        .product-info-block {
+            right: $gutter;
+            top: $gutter * 2;
+            z-index: 1;
+        }
     }
 
-    .product-gallery-block {
-        left: $gutter;
-        top: 0;
-        z-index: 0;
-    }
+    /* Mobile */
+    @include at-query ($max, $small) {
 
-    .product-info-block {
-        right: $gutter;
-        top: $gutter * 2;
-        z-index: 1;
+        .product-info-block {
+
+        }
     }
 }
+
+.product-mobile-header-block {
+    height: 44px;
+    width: 100%;
+    background: $colorPaleGray;
+    border-top: 1px solid $colorLighterGray;
+    padding: 9px $gutter;
+
+    .expand-detail-link {
+        position: relative;
+        color: $colorWarmDarkGray;
+        font-size: 0.9375em;
+        font-weight: 300;
+        font-family: $helveticaFontStack;
+        text-decoration: none;
+        line-height: 1;
+        padding-right: $gutter;
+    }
+
+    .icon {
+        @extend %icon-base;
+
+        position: absolute;
+        top: 1px;
+        right: 0;
+        height: 15px;
+        width: 15px;
+        font-size: 12px;
+        color: $colorGold;
+
+        &.down {
+            @extend .icon-arrow-down;
+        }
+
+        &.up {
+            @extend .icon-arrow-up;
+        }
+    }
+
+    /* Desktop */
+    @include at-query ($min, $postSmall) {
+        display: none;
+    }
+    
+    /* Mobile */
+    @include at-query ($max, $small) {
+        
+    }
+}
+
 
 /* product gallery */
 
 .product-gallery-block {
-    position: absolute;
-    left: $gutter;
-    top: 0;
-    width: 768px;
+    position: relative;
+
+    /* Desktop */
+    @include at-query ($min, $postSmall) {
+        width: 768px;
+    }
+    
+    /* Mobile */
+    @include at-query ($max, $small) {
+        height: 524px;
+    }
 }
 
 .product-gallery-image-block {
@@ -3062,63 +3163,131 @@ $smallSocialIconRatio: (2.66/3.375);
 }
 
 .product-image-thumbs-block {
-    $thumbSize: 96px;
-    $thumbMargin: $gutter / 4;
+    $thumbDesktopSize: 96px;
+    $thumbDesktopMargin: $gutter / 4;
+    $thumbMobileSize: 64px;
+    $thumbMobileMargin: $gutter / 4;
 
     position: absolute;
-    top: $gutter * 2;
     left: $gutter;
-    width: $thumbSize;
-    height: ($thumbSize * 6) + (5 * $thumbMargin);
-
-    ul {
-
-    }
-
-    li {
-        margin: 0 0 $thumbMargin;
-    }
 
     a {
         display: block;
-        border: 1px solid #000;
-        height: $thumbSize;
-        width: $thumbSize;
+        border: 1px solid $colorLightGray;
         overflow: hidden;
+        background: #fff;
     }
 
     img {
         display: block;
         width: 100%;
     }
+
+    /* Desktop */
+    @include at-query ($min, $postSmall) {
+        top: $gutter * 2;
+        width: $thumbDesktopSize;
+        height: ($thumbDesktopSize * 6) + (5 * $thumbDesktopMargin);
+
+        li {
+            margin: 0 0 $thumbDesktopMargin;
+        }
+
+        a {
+            height: $thumbDesktopSize;
+            width: $thumbDesktopSize;
+        }
+    }
+
+    /* Mobile */
+    @include at-query ($max, $small) {
+        bottom: $gutter;
+        height: $thumbMobileSize;
+        right: $gutter;
+        overflow: hidden;
+        text-align: center;
+
+        li {
+            margin: 0 $thumbMobileMargin/2;
+            display: inline-block;
+        }
+
+        a {
+            height: $thumbMobileSize;
+            width: $thumbMobileSize;
+        }
+    }
 }
 
+%product-info-block-row {
+    @extend .clearfix;
 
-.product-info-block {
-    background: #fff;
-    width: 448px;
-    height: 628px;
-
-    %product-info-block-row {
-        @extend .clearfix;
-
+    /* Desktop */
+    @include at-query ($min, $postSmall) {
         margin: 20px;
     }
+    
+    /* Mobile */
+    @include at-query ($max, $small) {
+        margin: $gutter;
+    }
+}
+
+.product-info-block {
+
+    /* Desktop */
+    @include at-query ($min, $postSmall) {
+        background: #fff;
+        width: 448px;
+        height: 628px;
+
+        border: 1px solid $colorLightGray;
+
+        /* expanded product description state */
+        &.description-expanded {
+            .product-purchase-block {
+                display: none;
+            }
+
+            .product-meta-block {
+                margin-bottom: 0;
+                border-bottom: 0;
+            }
+
+            .product-share-block {
+                margin-top: 0;
+            }
+
+            .product-description-block .content {
+                height: 282px;
+                overflow-y: scroll;
+            }
+        }
+    }
+
+    /* Mobile */
+    @include at-query ($max, $small) {
+        background: $colorPaleGray;
+        border-bottom: 1px solid $colorLightGray;
+    }
+}
+
+.product-meta-block {
+    @extend %product-info-block-row;
+    @extend .clearfix;
 
     h2 {
         font-size: 2.5em;
         font-weight: 300;
-        color: $colorWarmGrayDark;
+        color: $colorWarmDarkGray;
         line-height: 1;
         margin: 0 0 12px;
     }
 
     .product-price {
         font-family: $helveticaFontStack;
-        font-size: 1.875em;
         color: $colorWarmLightGray;
         line-height: 1;
-        margin-bottom: 8px;
     }
 
     .product-style-number {
@@ -3129,73 +3298,76 @@ $smallSocialIconRatio: (2.66/3.375);
         line-height: 1;
     }
 
+    /* Desktop */
+    @include at-query ($min, $postSmall) {
+        border-bottom: 1px solid $colorLightestGray;
+        padding: 8px 0 $gutter;
+
+        .product-price {
+            font-size: 1.875em;
+            margin-bottom: 8px;
+        }
+    }
+    
+    /* Mobile */
+    @include at-query ($max, $small) {
+        h2 {
+            display: none;
+        }
+
+        > div {
+            float: left;
+            width: 50%;
+        }
+
+        .product-price {
+            font-size: 1.25em;
+        }
+
+        .product-style-number {
+            text-align: right;
+        }
+    }
+}
+
+.product-purchase-block {
+    @extend %product-info-block-row;
+
     button {
         @extend %large-gold-arrow-button;
     }
 
-    .product-offer {
-        color: $colorWarmLightGray;
+    /* Desktop */
+    @include at-query ($min, $postSmall) {
+        
+    }
+    
+    /* Mobile */
+    @include at-query ($max, $small) {
+        button {
+            display: block;
+            width: 100%;
+            font-size: 1.25em;
+            height: 44px;
 
-        span {
-            vertical-align: middle;
-        }
-
-        .icon {
-            @extend %icon-base;
-            @extend .icon-gift;
-
-            font-size: 18px;
-        }
-
-        .text {
-            @extend %smallish-arial-text;
-
-            font-weight: 700;
-            text-transform: uppercase;
+            .icon {
+                font-size: 0.625em;
+                top: -1px;
+            }
         }
     }
+}
 
-    .product-meta-block {
-        @extend %product-info-block-row;
+.product-options-block {
+    @extend .clearfix;
 
-        border-bottom: 1px solid $colorLightestGray;
-        padding: 8px 0 $gutter;
-    }
-
-    .product-purchase-block {
-        @extend %product-info-block-row;
-    }
-
-    .product-options-block {
-        @extend .clearfix;
-
-        margin-bottom: 0px;
-
-        label, legend {
-            width: 72px;
-        }
-
-        > * {
-            margin: 10px 0;
-        }
-    }
-
-    .swatch {
-
-    }
+    margin-bottom: 0px;
 
     .selector-wrapper {
         @extend .clearfix;
 
-        $height: 30px;
-
-        label, select {
-            float: left;
-        }
-
         label {
             margin: 0;
-            line-height: $height;
 
             &:after {
                 content: ':';
@@ -3205,84 +3377,177 @@ $smallSocialIconRatio: (2.66/3.375);
         select {
             @extend %small-arial-text;
 
-            width: 170px;
-            height: $height;
-            line-height: $height;
             background: $colorLightestGray;
             padding: 0 8px;
             color: $colorWarmGray;
+            margin: 0;
 
             &:focus {
                 outline: none;
             }
         }
     }
+    
+    /* Desktop */
+    @include at-query ($min, $postSmall) {
+        margin-bottom: 20px;
 
-
-    .product-share-block {
-        @extend %product-info-block-row;
-
-        border-top: 1px solid $colorLightestGray;
-        border-bottom: 1px solid $colorLightestGray;
-        padding: $gutter 0 14px;
-
-        > div {
-            display: inline-block;
-            line-height: 1;
-            vertical-align: middle;
+        label, legend {
+            width: 72px;
         }
 
-        .label {
-            @extend %smallish-arial-text;
+        .selector-wrapper {
+            $height: 30px;
 
-            font-weight: 700;
-            text-transform: uppercase;
-            color: $colorWarmLightGray;
-            padding-top: 2px;
-        }
-
-        .share-buttons {
-            height: 20px;
-            width: 356px;
-
-            > * {
-                display: inline-block !important;
-                vertical-align: top !important;
+            label, select {
+                float: left;
             }
 
-            .twitter-share-button {
-                width: 80px !important;
+            label {
+                line-height: $height;
+
+                &:after {
+                    content: ':';
+                }
+            }
+
+            select {
+                width: 170px;
+                height: $height;
+                line-height: $height;
             }
         }
     }
+    
+    /* Mobile */
+    @include at-query ($max, $small) {
+        .selector-wrapper {
+            $height: 44px;
+            margin-bottom: $gutter;
 
-    .product-description-block {
-        @extend %product-info-block-row;
+            label {
+                margin-bottom: $gutter / 2;
 
-        padding-bottom: $gutter * 3; /* room for the more details expand link */
-        position: relative;
+                &:after {
+                    content: ':';
+                }
+            }
 
-        .content {
-            height: 87px; /* height of the header and 3 lines of text. */
-            overflow-y: hidden;
+            select {
+                height: $height;
+                line-height: $height;
+            }
         }
+    }
+}
+
+.product-offer-block {
+    color: $colorWarmLightGray;
+    margin: 20px 0 0;
+
+    span {
+        vertical-align: middle;
+    }
+
+    .icon {
+        @extend %icon-base;
+        @extend .icon-gift;
+
+        font-size: 18px;
+    }
+
+    .text {
+        @extend %smallish-arial-text;
+
+        font-weight: 700;
+        text-transform: uppercase;
+    }
+
+    /* Desktop */
+    @include at-query ($min, $postSmall) {
         
-        h6 {
-            @extend %smallish-arial-text;
+    }
+    
+    /* Mobile */
+    @include at-query ($max, $small) {
+        display: none;
+    }
+}
 
-            text-transform: uppercase;
-            margin-top: 0;
-            font-weight: 700;
-            color: $colorWarmLightGray;
+.product-share-block {
+    @extend %product-info-block-row;
+
+    border-top: 1px solid $colorLightestGray;
+    border-bottom: 1px solid $colorLightestGray;
+    padding: $gutter 0 14px;
+
+    > div {
+        display: inline-block;
+        line-height: 1;
+        vertical-align: middle;
+    }
+
+    .label {
+        @extend %smallish-arial-text;
+
+        font-weight: 700;
+        text-transform: uppercase;
+        color: $colorWarmLightGray;
+        padding-top: 2px;
+    }
+
+    .share-buttons {
+        height: 20px;
+        width: 354px;
+
+        > * {
+            display: inline-block !important;
+            vertical-align: top !important;
         }
 
-        p {
-            @extend %smaller-helvetica-text;
-
-            line-height: (23/14);
-            color: $colorWarmGray;
+        .twitter-share-button {
+            width: 80px !important;
         }
+    }
 
+    /* Desktop */
+    @include at-query ($min, $postSmall) {
+        
+    }
+    
+    /* Mobile */
+    @include at-query ($max, $small) {
+        .label {
+            display: none;
+        }
+    }
+}
+
+.product-description-block {
+    @extend %product-info-block-row;
+
+    padding-bottom: $gutter * 3; /* room for the more details expand link */
+    position: relative;
+
+    h6 {
+        @extend %smallish-arial-text;
+
+        text-transform: uppercase;
+        margin-top: 0;
+        font-weight: 700;
+        color: $colorWarmLightGray;
+    }
+
+    p {
+        @extend %smaller-helvetica-text;
+
+        line-height: (23/14);
+        color: $colorWarmGray;
+    }
+
+    .content {
+        height: 87px; /* height of the header and 3 lines of text. */
+        overflow-y: hidden;
     }
 
     .expand {
@@ -3303,13 +3568,46 @@ $smallSocialIconRatio: (2.66/3.375);
 
         .icon {
             @extend %icon-base;
-            @extend .icon-arrow-up-small;
 
             font-size: 11px;
             color: $colorDarkGray;
+
+            &.up {
+                @extend .icon-arrow-up-small;
+            }
+                
+            &.down {
+                @extend .icon-arrow-down-small;
+            }
+        }
+    }
+
+    /* Desktop */
+    @include at-query ($min, $postSmall) {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+    }
+    
+    /* Mobile */
+    @include at-query ($max, $small) {
+        padding-bottom: 0;
+
+        p {
+            font-size: 0.75em;
+        }
+
+        .content {
+            height: auto;
+        }
+
+        .expand {
+            display: none;
         }
     }
 }
+
+
 
 
 /*============================================================================
@@ -3420,7 +3718,7 @@ $smallSocialIconRatio: (2.66/3.375);
 
         font-family: $helveticaFontStack;
         font-weight: 300;
-        color: $colorWarmGrayDark;
+        color: $colorWarmDarkGray;
         padding-top: 4px;
         letter-spacing: -0.05em;
     }
@@ -3697,7 +3995,7 @@ $smallSocialIconRatio: (2.66/3.375);
 
         font-family: $helveticaFontStack;
         font-weight: 300;
-        color: $colorWarmGrayDark;
+        color: $colorWarmDarkGray;
         font-size: 1.875em;
         padding-top: 4px;
     }
@@ -3810,7 +4108,7 @@ $smallSocialIconRatio: (2.66/3.375);
 
         font-family: $helveticaFontStack;
         font-weight: 300;
-        color: $colorWarmGrayDark;
+        color: $colorWarmDarkGray;
         font-size: 1.875em;
         padding-top: 4px;
     }
@@ -4042,7 +4340,6 @@ address {
 
     .layout-theme &,
     .layout-customer-account &{
-
         .wrapper > div {
             @extend %column-base;
         }
@@ -4259,6 +4556,7 @@ address {
 @mixin logo-responsive-sizes( $baseHeight, $baseWidth ){
     $mobileLogoRatio: (304/960);
     $aboutUsMobileRatio: (108/216);
+    $collectionMobileRatio: (85/162);
 
     @include at-query( $min, $postSmall ){
         height: $baseHeight;
@@ -4270,6 +4568,12 @@ address {
         .template-index & {
             height: $baseHeight * $mobileLogoRatio;
             width: $baseWidth * $mobileLogoRatio;
+        }
+
+        .template-list-collections &,
+        .template-collection & {
+            height: $baseHeight * $collectionMobileRatio;
+            width: $baseWidth * $collectionMobileRatio;
         }
 
         #about-us & {
@@ -4476,6 +4780,8 @@ address {
 }
 
 .customer-account-content-hero {
+    @extend .content-hero;
+
     h2, h3 {
         text-align: center;
 
@@ -4496,7 +4802,7 @@ address {
     h5 {
         @extend %smaller-helvetica-text;
         
-        color: $colorWarmGrayDark;
+        color: $colorWarmDarkGray;
         text-transform: uppercase;
         font-weight: 700;
     }
@@ -4535,9 +4841,9 @@ address {
 
     /* Desktop */
     @include at-query ($min, $postSmall) {
-
+        
     }
-
+    
     /* Mobile */
     @include at-query ($max, $small) {
         h2 {
@@ -4546,6 +4852,10 @@ address {
 
         h3 {
             font-size: 1.25em;
+        }
+
+        .customer-addresses-block {
+            margin: 0 $gutter;
         }
 
         .order-grid-row {
@@ -5006,8 +5316,13 @@ address {
 
             > a {
                 height: 100%;
-                width: percentage(1 / 3);
+                width: 33%;
                 float: left;
+
+                /* 33% width and then 34 on the first to avoid some rounding errors in some browsers. */
+                &:first-child {
+                    width: 34%;
+                }
             }
 
             h3 {
@@ -5216,7 +5531,7 @@ address {
         a {
             @extend %rsaquo;
             
-            color: $colorWarmGrayDark;
+            color: $colorWarmDarkGray;
 
             &:after {
                 padding: 0;
@@ -5566,17 +5881,6 @@ address {
     }
 }
 
-.customer-account-content-hero {
-    @extend .content-hero;
-
-    [class^="wrapper"] {
-        margin: {
-            left: $gutter;
-            right: $gutter;
-        }
-    }
-}
-
 .customer-addresses-block {
     h4 {
         margin: ($gutter * 4) 0 $gutter;
@@ -5716,14 +6020,11 @@ address {
     }
 }
 
-
-
 .add-new-address-link {
     @extend %gray-underline-hover-gold-link;
 
     font-weight: 700;
 }
-
 
 .other-enquires-hero {
     @extend .content-hero;
@@ -5734,7 +6035,7 @@ address {
 
     h4 {
         font-weight: 300;
-        color: $colorWarmGrayDark;
+        color: $colorWarmDarkGray;
     }
 
     /* Desktop */
@@ -5788,7 +6089,7 @@ address {
     }
 
     h4 {
-        color: $colorWarmGrayDark;
+        color: $colorWarmDarkGray;
         font-weight: 400;
         margin-bottom: $gutter * 1.75;
     }
@@ -6640,7 +6941,7 @@ address {
 
         text-transform: uppercase;
         font-weight: 700;
-        color: $colorWarmGrayDark;
+        color: $colorWarmDarkGray;
         margin: 0 0 $gutter;
     }
 
@@ -6824,13 +7125,36 @@ address {
 }
 
 .template-product {
-    .related-products-hero {
-        margin-top: $gutter * 5;
-        margin-bottom: $gutter * 3;
-    }
+    /* Desktop */
+    @include at-query ($min, $postSmall) {
+        .related-products-hero {
+            margin-top: $gutter * 5;
+            margin-bottom: $gutter * 3;
+        }
 
-    .social-hero {
-        padding: ( $gutter * 3.5 ) 0;
+        .newsletter-signup-hero {
+            margin: ($gutter * 5.25) 0 ($gutter * 1.75);
+        }
+
+        .social-link-hero {
+            margin: ($gutter * 1.75) 0 ($gutter * 5.5);
+        }
+    }
+    
+    /* Mobile */
+    @include at-query ($max, $small) {
+        .related-products-hero {
+            margin-top: $gutter * 2.5;
+            margin-bottom: $gutter * 3;
+        }
+
+        .newsletter-signup-hero {
+            margin: ($gutter * 2.5) 0 ($gutter * 1.75);
+        }
+
+        .social-link-hero {
+            margin: ($gutter * 2.5) 0 ($gutter * 2.75);
+        }
     }
 }
 
@@ -7468,7 +7792,7 @@ This file includes
 
 $slick-arrow-color: white !default;
 $slick-dot-color: $colorWarmLightGray;
-$slick-dot-color-active: $colorWarmGrayDark;
+$slick-dot-color-active: $colorWarmDarkGray;
 $slick-dot-size: 6px !default;
 $opacity-default: .75;
 $opacity-on-hover: 1;
