@@ -7,6 +7,26 @@
 {% endcomment %}
 
 {% if linklists.featured-collections.links.size > 0 %}
+
+  {% assign hero_collection = linklists.featured-collections.links.first.object %}
+
+  <!-- {% if hero_collection.metafields.other_images.desktop_hero != blank %}
+  {% assign hero_collection_other_images = hero_collection.metafields.other_images %}
+
+  <style>
+  .collections-hero {
+  background-image: url('{{ hero_collection_other_images.desktop_hero }}');
+  background-position: top center !important;
+  }
+
+  @media screen and (max-width: 480px){
+  .collections-hero {
+  background-image: url('{{ hero_collection_other_images.mobile_hero }}');
+  }
+  }
+  </style>
+  {% endif %} -->
+
   <div class="collections-hero">
     <div class="wrapper">
 
@@ -35,16 +55,22 @@
               {% endcomment %}
               {% capture collection_title %}{{ collection.title | escape }}{% endcapture %}
 
+              {% if collection.metafields.other_images.featured_menu_thumb != blank %}
+                {% assign featured_menu_thumb_url = collection.metafields.other_images.featured_menu_thumb %}
+              {% else %}
+                {% capture featured_menu_thumb_url %}{{ collection.image.src | collection_img_url: 'large' }}{% endcapture %}
+              {% endif %}
+
               <li>
                 <style style="text/css" scoped>
 
                   #collection-{{ collection.id }}:before {
-                    background-image: url('{{ collection.image.src | collection_img_url: 'large' }}');
+                    background-image: url('{{ featured_menu_thumb_url }}');
                   }
 
                 </style>
                 <a id="collection-{{ collection.id }}" class="latest-collections-link" href="{{ collection.url }}" title="Browse our {{ collection_title }} collection">
-                  {{ collection.image.src | collection_img_url: 'large' | img_tag: collection_title }}
+                  <img src="{{ featured_menu_thumb_url }}" alt="{{ collection_title }}" />
                   <div class="overlay"></div>
                   <span>{{ collection_title }}</span>
                 </a>
