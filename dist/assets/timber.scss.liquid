@@ -52,28 +52,16 @@ Some things to know about this file:
 $viewportIncrement: 1px;
 
 $small: 480px;
-$medium: 720px;
-$large: 960px;
+$medium: 768px;
+$large: 1024px;
 $xlarge: 1152px;
 
 $postSmall: $small + $viewportIncrement;
 $preMedium: $medium - $viewportIncrement;
+$postMedium: $medium + $viewportIncrement;
 $preLarge: $large - $viewportIncrement;
+$postLarge: $large + $viewportIncrement;
 $preXLarge: $xlarge - $viewportIncrement;
-
-/*============================================================================
-  #Breakpoint and Grid Variables
-  ==============================================================================*/
-$viewportIncrement: 1px;
-
-$small: 480px;
-$medium: 768px;
-$large: 769px;
-// $extraLarge: 900px;
-
-$postSmall: $small + $viewportIncrement;
-$preMedium: $medium - $viewportIncrement;
-$preLarge: $large - $viewportIncrement;
 
 /*================ The following are dependencies of csswizardry grid ================*/
 $breakpoints: (
@@ -4329,7 +4317,6 @@ address {
 /* Header */
 
 .site-header {
-
     /* Using a mixin here since this is shared between media queries */
     @mixin header-column() {
         @include verticalCenterChildElements();
@@ -4954,9 +4941,10 @@ address {
         height: 616px;
         /* uploaded through the settings page. */
         background: {
-            image: url({{ 'homepage-hero-img.jpg' | asset_url }});
-            position: right 29px;
+            image: url({{ 'homepage-hero-desktop-img.jpg' | asset_url }});
+            position: center top;
             repeat: no-repeat;
+            size: auto 100%;
         }
         position: relative;
     }
@@ -4987,18 +4975,18 @@ address {
 
     .latest-collections-menu-row {
         position: absolute;
-        top: 450px;
+        bottom: $gutter * 2.875;
         left: 0;
         right: 0;
     }
 
-    @include at-query($max, $small) {
-
+    /* Small, most phones in landscape */
+    @include at-query ($max, $small) {
         > div {
             height: 524px;
+            /* uploaded through the settings page. */
             background: {
-                position: -143px 17px;
-                size: 716px;
+                image: url({{ 'homepage-hero-mobile-img.jpg' | asset_url }});
             }
         }
 
@@ -5011,10 +4999,24 @@ address {
                 margin-bottom: 2px;
             }
         }
-
-        .latest-collections-menu-row {
-            top: 445px;
+    }
+    
+    /* Medium, portrait tablet */
+    @include at-query (null, $postSmall, $medium) {
+        .content {
+            top: 118px;
+            max-width: 352px;
         }
+    }
+    
+    /* Large, landscape tablet, small desktops */
+    @include at-query (null, $postMedium, $large) {
+        
+    }
+    
+    /* Extra Large, most desktops */
+    @include at-query ($min, $xlarge) {
+        
     }
 }
 
@@ -6484,6 +6486,21 @@ address {
     }
 }
 
+@mixin latest-collections-link-size($height, $width, $clipWidth){
+    height: $height;
+    width: $width;
+
+    &:before {
+        background-size: $width $height;
+    }
+
+    img {
+        height: $height;
+        width: $width;
+        clip: rect($clipWidth, $width - $clipWidth, $height - $clipWidth, $clipWidth);
+    }
+}
+
 .latest-collections-link {
     @extend %white-hover-gray-link;
     @extend %small-arial-text;
@@ -6569,23 +6586,9 @@ address {
         }
     }
 
+    /* Small, most phones in landscape */
     @include at-query( $max, $small ){
-
-        $height: 59px;
-        $width: 90px;
-
-        height: $height;
-        width: $width;
-
-        &:before {
-            background-size: $width $height;
-        }
-
-        img {
-            height: $height;
-            width: $width;
-            clip: rect(2px, $width - 2px, $height - 2px, 2px);
-        }
+        @include latest-collections-link-size($height: 59px, $width: 90px, $clipWidth: 2px);
 
         .overlay {
             @include prefix('box-shadow', 'inset 0px 0px 40px 0px rgba(50, 50, 50, 0.75)');
@@ -6597,6 +6600,32 @@ address {
             font-size: 6px;
             width: 37px;
         }
+    }
+    
+    /* Medium, portrait tablet */
+    @include at-query (null, $postSmall, $medium) {
+        @include latest-collections-link-size($height: 94px, $width: 138px, $clipWidth: 4px);
+
+        .overlay {
+            @include prefix('box-shadow', 'inset 0px 0px 40px 0px rgba(50, 50, 50, 0.75)');
+        }
+
+        span {
+            top: 23px;
+            left: 9px;
+            font-size: 6px;
+            width: 37px;
+        }        
+    }
+    
+    /* Large, landscape tablet, small desktops */
+    @include at-query (null, $postMedium, $large) {
+        
+    }
+    
+    /* Extra Large, most desktops */
+    @include at-query ($min, $xlarge) {
+        
     }
 }
 
@@ -7030,14 +7059,6 @@ address {
 
 /*================ Page Specific Styles & Layout ================*/
 .template-index {
-    .collections-hero {
-        
-    }
-
-    .celebrity-gallery-hero {
-        
-    }
-
     @include at-query( $min, $postSmall ){
         .featured-press-hero {
             margin: 3.125em 0;
