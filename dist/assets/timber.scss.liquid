@@ -52,12 +52,14 @@ Some things to know about this file:
 $viewportIncrement: 1px;
 
 $small: 480px;
-$medium: 768px;
-$large: 769px;
+$medium: 720px;
+$large: 960px;
+$xlarge: 1152px;
 
 $postSmall: $small + $viewportIncrement;
 $preMedium: $medium - $viewportIncrement;
 $preLarge: $large - $viewportIncrement;
+$preXLarge: $xlarge - $viewportIncrement;
 
 /*============================================================================
   #Breakpoint and Grid Variables
@@ -4345,7 +4347,7 @@ address {
         }
 
         /* Desktop */
-        @include at-query ($min, $postSmall) {
+        @include at-query ($min, $xlarge) {
 
             padding: $gutter 0;
             height: $desktopHeaderHeight;
@@ -4391,7 +4393,7 @@ address {
         }
 
         /* Mobile */
-        @include at-query ($max, $small) {
+        @include at-query ($max, $preXLarge) {
             padding: $gutter/2 0;
 
             height: $mobileHeaderHeight;
@@ -4543,14 +4545,25 @@ address {
 .site-logo {
     @extend %logo-base;
 
-    height: 40px;
-    width: 154px;
+    .layout-simplified & {
+        height: 40px;
+        width: 154px;
 
-    @include at-query ( $max, $small ) {
-        height: 22px;
-        width: 84px;
+        @include at-query ( $max, $small ) {
+            height: 22px;
+            width: 84px;
+        }
     }
 
+    .layout-theme & {
+        height: 40px;
+        width: 154px;
+
+        @include at-query ( $max, $preXLarge ) {
+            height: 22px;
+            width: 84px;
+        }
+    }
 }
 
 @mixin logo-responsive-sizes( $baseHeight, $baseWidth ){
@@ -6238,7 +6251,7 @@ address {
     @extend %inline-list-base;
 
     /* Desktop */
-    @include at-query ($min, $postSmall) {
+    @include at-query ($min, $xlarge) {
         @include verticalCenterChildElements();
 
         height: 41px;
@@ -6259,7 +6272,7 @@ address {
     }
 
     /* Mobile */
-    @include at-query ($max, $small) {
+    @include at-query ($max, $preXLarge) {
 
         &, ul, li {
             height: 22px;
@@ -6322,7 +6335,7 @@ address {
         }
 
         /* Desktop */
-        @include at-query ($min, $postSmall) {
+        @include at-query ($min, $xlarge) {
             @include customerLoginLink();
             
             padding: 3px $gutter/2 2px;
@@ -6343,7 +6356,7 @@ address {
         }
 
         /* Mobile */
-        @include at-query ($max, $small) {
+        @include at-query ($max, $preXLarge) {
             height: 22px;
             width: 22px;
             border: 1px solid $colorGray;
