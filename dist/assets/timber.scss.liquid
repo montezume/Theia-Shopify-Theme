@@ -4554,16 +4554,20 @@ address {
 }
 
 @mixin logo-responsive-sizes( $baseHeight, $baseWidth ){
+    /* specific sizes, based on height or width ratios from the PSD. */
     $mobileLogoRatio: (304/960);
     $aboutUsMobileRatio: (108/216);
     $collectionMobileRatio: (85/162);
 
-    @include at-query( $min, $postSmall ){
-        height: $baseHeight;
-        width: $baseWidth;
-    }
+    /* ratios based on breakpoints for defaults */
+    $smallLogoRatio: ($small/$xlarge);
+    $mediumLogoRatio: ($medium/$xlarge);
+    $largeLogoRatio: ($large/$xlarge);
 
-    @include at-query( $max, $small ){
+    /* Small, most phones in landscape */
+    @include at-query ($max, $small) {
+        height: $baseHeight * $smallLogoRatio;
+        width: $baseWidth * $smallLogoRatio;
 
         .template-index & {
             height: $baseHeight * $mobileLogoRatio;
@@ -4580,6 +4584,24 @@ address {
             height: $baseHeight * $aboutUsMobileRatio;
             width: $baseWidth * $aboutUsMobileRatio;
         }
+    }
+
+    /* Medium, portrait tablet */
+    @include at-query (null, $postSmall, $medium) {
+        height: $baseHeight * $mediumLogoRatio;
+        width: $baseWidth * $mediumLogoRatio;
+    }
+
+    /* Large, landscape tablet, small desktops */
+    @include at-query (null, $postMedium, $large) {
+        height: $baseHeight * $largeLogoRatio;
+        width: $baseWidth * $largeLogoRatio;
+    }
+
+    /* Large and up, most desktops */
+    @include at-query ($min, $postLarge) {
+        height: $baseHeight;
+        width: $baseWidth;
     }
 }
 
@@ -5049,7 +5071,7 @@ address {
             }
 
             .logo-row {
-                width: 960px;
+                max-width: 960px;
             }
 
             .logo-column {
@@ -5241,6 +5263,112 @@ address {
         }
     }
 
+    /* most phones in portrait */
+    @include at-query ($max, $small) {
+        h2 {
+            font-size: 35px;
+        }
+
+        .content {
+            h3 {
+                font-size: 25px;
+                margin: 0 0 8px;
+            }
+            
+            p {
+                font-size: 15px;
+                margin: 8px 0;
+                font-weight: 100;
+            }
+
+            a {
+                font-size: 12.5px;
+                margin: 8px 0;
+            }
+        }
+
+        .thumbs-block {
+            h3 {
+                display: none;
+            }
+        }
+    }
+    
+    /* portrait tablet, landscape phones */
+    @include at-query (null, $postSmall, $medium) {
+        h2 {
+            font-size: 2.25em;
+            margin-top: 0;
+        }
+
+        .content {
+            h3 {
+                font-size: 1.75em;
+                margin: 0 0 8px;
+            }
+            
+            p {
+                font-size: 12px;
+                margin: 8px 0;
+                font-weight: 300;
+            }
+
+            a {
+                font-size: 11px;
+                margin: 8px 0;
+            }
+        }
+
+        .thumbs-block {
+            h3 {
+                display: none;
+            }
+        }
+    }
+    
+    /* landscape tablet, small desktops */
+    @include at-query (null, $postMedium, $large) {
+        h2 {
+            font-size: 2.75em;
+        }
+
+        .content {
+            h3 {
+                font-size: 2em;
+                margin: 0 0 8px;
+            }
+            
+            p {
+                font-size: 13px;
+                margin: 8px 0;
+                font-weight: 300;
+            }
+
+            a {
+                font-size: 13px;
+                margin: 8px 0;
+            }
+        }
+
+        .thumbs-block {
+            h3 {
+                font-size: 1.5em;
+                font-weight: 300;
+            }
+        }
+    }
+    
+    /* medium desktops */
+    @include at-query (null, $large, $xlarge) {
+        
+    }
+    
+    /* large desktops */
+    @include at-query ($min, $xlarge) {
+        
+    }
+
+    /* two col gallery layout */
     @include at-query( $min, $postSmall ){
         width: 100%;
         padding-bottom: percentage( $desktopTotalHeight / $desktopTotalWidth );
@@ -5274,9 +5402,7 @@ address {
                 left: percentage( $desktopThumbLeftMargin / $desktopSideWidth );
             }
         }        
-
     }
-
 
     $smallTotalHeight: 568px;
     $smallTotalWidth: 320px;
@@ -5285,6 +5411,7 @@ address {
     $smallLeftMargin: $gutter;
     $smallMainContentTop: 254px;
 
+    /* single col gallery layout with thumbs on bottom row */
     @include at-query( $max, $small ){
         width: 100%;
         padding-bottom: percentage( $smallTotalHeight / $smallTotalWidth );
@@ -5292,7 +5419,6 @@ address {
         h2 {
             top: percentage( 156px / $smallTotalHeight );
             left: percentage( $smallLeftMargin / $smallTotalWidth );
-            font-size: 35px;
         }
 
         .main {
@@ -5303,23 +5429,6 @@ address {
         .content {
             top: percentage( $smallMainContentTop / $smallTotalHeight );
             left: percentage( $smallLeftMargin / $smallTotalWidth );
-
-
-            h3 {
-                font-size: 25px;
-                margin: 0 0 8px;
-            }
-            
-            p {
-                font-size: 15px;
-                margin: 8px 0;
-                font-weight: 100;
-            }
-
-            a {
-                font-size: 12.5px;
-                margin: 8px 0;
-            }
         }
 
         .thumbs-block {
@@ -7059,11 +7168,39 @@ address {
 
 /*================ Page Specific Styles & Layout ================*/
 .template-index {
-    @include at-query( $min, $postSmall ){
+    
+    /* most phones in landscape */
+    @include at-query ($max, $small) {
+        .featured-press-hero {
+            margin: 1.25em 0;
+        }
+
+        .social-link-hero {
+            margin: ($gutter * 2) 0;
+        }
+        
+        .newsletter-signup-row,
+        .events-press-releases-hero {
+            margin-top: $gutter * 2;
+            margin-bottom: $gutter * 2;
+        }
+    }
+    
+    /* portrait tablet, landscape tablet, small desktops */
+    @include at-query (null, $postSmall, $large) {
+        .featured-press-hero {
+            margin: 2.125em 0;
+        }
+    }
+    
+    /* medium desktops, large desktops */
+    @include at-query ($min, $large){
         .featured-press-hero {
             margin: 3.125em 0;
         }
+    }
 
+    @include at-query( $min, $postSmall ){
         .social-link-hero {
             margin-top: $gutter * 7;
             margin-bottom: $gutter * 4;
@@ -7077,22 +7214,6 @@ address {
         .events-press-releases-hero {
             margin-top: $gutter * 6.5;
             margin-bottom: $gutter * 8;
-        }
-    }
-
-    @include at-query( $max, $small ){
-        .featured-press-hero {
-            margin: 1.25em 0;
-        }
-
-        .social-link-hero {
-            margin: ($gutter * 2) 0;
-        }
-        
-        .newsletter-signup-row,
-        .events-press-releases-hero {
-            margin-top: $gutter * 2;
-            margin-bottom: $gutter * 2;
         }
     }
 }
