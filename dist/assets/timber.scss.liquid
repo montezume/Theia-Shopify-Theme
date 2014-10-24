@@ -6854,12 +6854,20 @@ address {
             }
 
             .header-block {
-                width: 416px;
+                max-width: 416px;
                 margin: 0 auto ( $gutter / 2 );
             }
 
             .form-block {
-                width: 352px;
+                max-width: 352px;
+            }
+        }
+
+        @include at-query( null, $postSmall, $medium) {
+            max-width: $small - $gutter;
+
+            h4 {
+                font-size: 1.5em;
             }
         }
 
@@ -7210,19 +7218,23 @@ address {
         .featured-press-hero {
             margin: 2.125em 0;
         }
+
+        .social-link-hero {
+            margin-top: $gutter * 5;
+            margin-bottom: $gutter * 3;
+        }
+
+        .newsletter-signup-row,
+        .events-press-releases-hero {
+            margin-top: $gutter * 4;
+            margin-bottom: $gutter * 3;
+        }
     }
     
     /* medium desktops, large desktops */
     @include at-query ($min, $large){
         .featured-press-hero {
             margin: 3.125em 0;
-        }
-    }
-
-    @include at-query( $min, $postSmall ){
-        .social-link-hero {
-            margin-top: $gutter * 7;
-            margin-bottom: $gutter * 4;
         }
 
         .newsletter-signup-hero {
@@ -7234,6 +7246,14 @@ address {
             margin-top: $gutter * 6.5;
             margin-bottom: $gutter * 8;
         }
+
+        .social-link-hero {
+            margin-top: $gutter * 7;
+            margin-bottom: $gutter * 4;
+        }
+    }
+
+    @include at-query( $min, $postSmall ){
     }
 }
 
