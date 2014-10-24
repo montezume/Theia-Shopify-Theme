@@ -861,8 +861,12 @@ html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abb
 .wrapper-10-col {
     @extend %wrapper-base;
 
+    @include at-query($max, $preLarge){
+        margin: 0 $gutter;
+    }
+
     /* Desktop */
-    @include at-query ($min, $postSmall) {
+    @include at-query ($min, $large) {
         max-width: $siteWidth10Col;
     }
 }
@@ -985,23 +989,34 @@ html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abb
 %nav-menu-base {
     @extend %inline-list-base;
 
-    @include at-query ($min, $postSmall) {
+    @include at-query ($min, $postLarge) {
         ul {
             height: 21px;
         }
     }
 
     .site-footer & {
-        @include at-query ($max, $small) {
+        @include at-query ($max, $large) {
             ul {
                 @include clearfix();
             }
 
             li {
                 display: block;
-                width: 50%;
                 float: left;
                 padding: 0 $gutter/2;
+            }
+        }
+
+        @include at-query ($max, $medium) {
+            li {
+                width: 50%;
+            }
+        }
+
+        @include at-query(null, $postMedium, $large){
+            li {
+                width: percentage(1/3);
             }
         }
     }
@@ -1097,7 +1112,13 @@ h2 a, h3 a, h4 a, h5 a, h6 a,
   - http://pxtoem.com/
   ==============================================================================*/
 
-h2, .h2 { font-size: 3.75em; }    // 60px
+h2, .h2 {
+    font-size: 3.75em; // 60px
+    /* portrait tablet, landscape phones, landscape tablet, small desktops */
+    @include at-query (null, $postSmall, $large) {
+        font-size: 3.25em; // 52px
+    }
+}   
 h3, .h3 { font-size: 2.25em; }    // 36px
 h4, .h4 { font-size: 1.5em; }     // 24px
 h5, .h5 { font-size: 1.143em; }   // ? get these values from the PSD
@@ -4453,14 +4474,14 @@ address {
     @extend .wrapper-10-col;
 
     /* Desktop */
-    @include at-query ($min, $postSmall) {
+    @include at-query ($min, $postLarge) {
         .first-column {
             @include verticalCenterChildElements();
         }
     }
 
     /* Mobile */
-    @include at-query ($max, $small) {
+    @include at-query ($max, $large) {
         > div {
             display: block;
             padding: 0 $gutter;
@@ -4472,7 +4493,7 @@ address {
         padding: $gutter * 2 0;
 
         /* Desktop */
-        @include at-query ($min, $postSmall) {
+        @include at-query ($min, $postLarge) {
 
             border-top: 1px solid $borderColor;
 
@@ -4492,7 +4513,7 @@ address {
         }
 
         /* Mobile */
-        @include at-query ($max, $small) {
+        @include at-query ($max, $large) {
             padding: 0;
 
             .first-column,
@@ -4500,6 +4521,14 @@ address {
                 border-top: 1px solid $borderColor;
                 margin: 0 16px;
                 padding: 20px 0;
+            }
+
+            .last-column {
+                li {
+                    width: 100%;
+                    text-align: right;
+                    padding: 0;
+                }
             }
         }
     }
@@ -5029,16 +5058,6 @@ address {
             top: 118px;
             max-width: 352px;
         }
-    }
-    
-    /* Large, landscape tablet, small desktops */
-    @include at-query (null, $postMedium, $large) {
-        
-    }
-    
-    /* Extra Large, most desktops */
-    @include at-query ($min, $xlarge) {
-        
     }
 }
 
