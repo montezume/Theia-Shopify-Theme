@@ -6862,6 +6862,7 @@ address {
     }
 }
 
+/* **todo** clean the newsletter block up. Do we need two different layouts for the interior pages vs. the home page? */
 .newsletter-signup-block {
     @extend %gold-outline-block-large;
 
@@ -6934,17 +6935,8 @@ address {
     .template-list-collections & {
         padding: 0 5px;
 
-        h4 {
-            @extend %medium-arial-text;
-            line-height: 68px;
-        }
-
-        .header-block {
-
-        }
-
         /* Desktop */
-        @include at-query ($min, $postSmall) {
+        @include at-query ($min, $large) {
             > * {
                 display: inline-block;
                 height: 68px;
@@ -6955,6 +6947,40 @@ address {
             .form-block {
                 width: 300px;
                 padding-top: 10px;
+            }
+
+            h4 {
+                line-height: 68px;
+                font-family: $arialFontStack;
+            }
+        }
+
+        @include at-query( null, $postSmall, $preLarge ){
+            width: 608px;
+            padding: $gutter * 1.75;
+
+            h4 {
+                font-size: 1.75em;
+                line-height: 1.25;
+                font-weight: 300;
+            }
+
+            .header-block {
+                max-width: 416px;
+                margin: 0 auto ( $gutter / 2 );
+            }
+
+            .form-block {
+                max-width: 352px;
+                margin: 0 auto;
+            }
+        }
+
+        @include at-query( null, $postSmall, $medium) {
+            max-width: $small - $gutter;
+
+            h4 {
+                font-size: 1.5em;
             }
         }
 
@@ -6969,7 +6995,6 @@ address {
             }
 
             h4 {
-                font-family: $helveticaFontStack;
                 font-weight: 300;
                 font-size: 1.25em;
                 line-height: 1.1;
