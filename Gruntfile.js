@@ -29,7 +29,7 @@ module.exports = function(grunt) {
                 tasks: ["sass:dist"]
             },
             concat: {
-                files: ["src/checkout.css", "src/checkout.css.liquid"],
+                files: ["src/*.css", "src/*.css.liquid"],
                 tasks: ["concat"]
             }
         },
@@ -39,7 +39,8 @@ module.exports = function(grunt) {
                     style: 'compressed'
                 },
                 files: {
-                    'src/checkout.css': 'src/sass/checkout.scss'
+                    'src/checkout.css': 'src/sass/checkout.scss',
+                    'src/checkout.mobile.css': 'src/sass/checkout.mobile.scss'
                 }
             }
         },
@@ -47,9 +48,13 @@ module.exports = function(grunt) {
             options: {
 
             },
-            dist: {
+            desktop: {
                 src: ['src/checkout.css', 'src/checkout.css.liquid'],
                 dest: 'dist/assets/checkout.css.liquid'
+            },
+            mobile: {
+                src: ['src/checkout.mobile.css', 'src/checkout.mobile.css.liquid'],
+                dest: 'dist/assets/checkout.mobile.css.liquid'
             }
         }
         
