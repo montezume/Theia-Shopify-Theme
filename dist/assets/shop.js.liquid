@@ -83,7 +83,7 @@ timber.mobileProductInfoBlock = function(){
         // flip the arrow icon
         timber.switchClass( $icon, 'up', 'down' );
 
-        $infoBlock.toggleClass('hidden-on-mobile');
+        $infoBlock.toggleClass('expanded');
     });
 };
 
@@ -184,7 +184,6 @@ timber.loginFormInit = function(){
 timber.carouselInit = function () {
     $('.carousel').slick({
         dots: true,
-        appendArrows: '.carousel-nav',
         prevArrow: '<a href="#" class="slick-prev"></a>',
         nextArrow: '<a href="#" class="slick-next"></a>',
         customPaging: function(slider, i) {
