@@ -895,7 +895,17 @@ html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abb
 .wrapper-8-col {
     @extend %wrapper-base;
 
-    max-width: $siteWidth8Col;
+    $breakPoint: $siteWidth8Col + ($gutter * 2);
+    $preBreakPoint: $breakPoint - 1px;
+
+    @include at-query($max, $preBreakPoint){
+        margin: 0 $gutter;
+    }
+
+    /* Desktop */
+    @include at-query ($min, $breakPoint) {
+        max-width: $siteWidth8Col;
+    }
 }
 
 %row-base {
@@ -904,7 +914,7 @@ html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abb
     position: relative;
 
     /* Desktop */
-    @include at-query ($min, $postSmall) {
+    @include at-query ($min, $postMedium) {
         .divider {
             height: 100%;
             width: 0;
@@ -917,26 +927,37 @@ html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abb
         }
     }
 
+    @include at-query( $max, $small ){
+        .divider {
+            margin: ($gutter * 2) $gutter;
+        }
+    }
+
+    @include at-query( null, $postSmall, $medium ){
+        .divider {
+            max-width: $small - ($gutter * 2);
+            margin: ($gutter * 2) auto;
+        }
+    }
+
     /* Mobile */
-    @include at-query ($max, $small) {
+    @include at-query ($max, $medium) {
         .divider {
             width: auto;
             height: 0;
             position: relative;
             border-bottom: 1px solid $colorLightestGray;
-            margin: {
-                left: $gutter;
-                right: $gutter;
-            }
         }
 
         .col {
             width: auto;
+            max-width: $small;
             float: none;
-            padding: {
-                left: $gutter;
-                right: $gutter;
-            }
+            margin: 0 auto;
+            /* padding: { */
+            /*     left: $gutter; */
+            /*     right: $gutter; */
+            /* } */
         }
     }
 }
@@ -945,7 +966,7 @@ html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abb
     @extend %row-base;
 
    /* Desktop */
-    @include at-query ($min, $postSmall) {
+    @include at-query ($min, $postMedium) {
         .divider {
             left: 50%;
         }
@@ -960,17 +981,13 @@ html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abb
             }
         }
     }
-
-    /* Mobile */
-    @include at-query ($max, $small) {
-    }
 }
 
 .row-3-col {
     @extend %row-base;
 
     /* Desktop */
-    @include at-query ($min, $postSmall) {
+    @include at-query ($min, $postMedium) {
         .divider {
             left: percentage(1/3);
 
@@ -986,7 +1003,7 @@ html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abb
     }
 
     /* Mobile */
-    @include at-query ($max, $small) {
+    @include at-query ($max, $medium) {
     }
 }
 
@@ -1056,6 +1073,7 @@ body {
 .text-center { text-align: center; }
 .text-right { text-align: right; }
 .hidden { display: none; }
+.show { display: initial !important; }
 
 /* Desktop */
 @include at-query ($min, $postSmall) {
@@ -1407,6 +1425,17 @@ hr {
     font-weight: 700;
 }
 
+%mini-button-base {
+    font-family: $helveticaFontStack;
+    font-weight: 700;
+    font-size: 0.5625em;
+    
+    height: 26px;
+    padding: 7px 12px 0;
+    text-transform: uppercase;
+    font-weight: 700;
+}
+
 
 %gold-button-base {
     @extend %gold-outline-block-small;
@@ -1548,6 +1577,18 @@ hr {
     @extend %gold-button-base;
 }
 
+%small-gold-button {
+    @extend %button-base;    
+    @extend %small-button-base;
+    @extend %gold-button-base;
+}
+
+%mini-gold-button {
+    @extend %button-base;    
+    @extend %mini-button-base;
+    @extend %gold-button-base;
+    @extend %rsaquo-button-base;
+}
 
 /* custom buttons */
 
@@ -1702,6 +1743,10 @@ hr {
 %hero-large {
     @extend %hero-base;
 
+    background-size: auto 100%;
+    background-position: top center;
+    background-repeat: repeat-x;
+
     h2 {
         line-height: 1;
     }
@@ -1739,8 +1784,44 @@ hr {
         }
     }
 
+    @include at-query( null, $postSmall, $large ){
+
+    }
+
+    @include at-query( null, $postMedium, $large ){
+        h2 {
+            font-size: 4.6875em;
+            margin: 0 0 ( $gutter * 3.75 );
+        }
+
+        [class*='wrapper'] {
+            height: 532px;
+        }
+
+        .content {
+            top: $gutter * 6.75;
+            width: 544px;
+        }
+
+        .logo {
+            bottom: $gutter * 5;
+        }
+    }
+
+    @include at-query( null, $postSmall, $medium ){
+        h2 {
+            font-size: 3.75em;
+        }
+
+        [class*='wrapper'] {
+            height: 476px;
+        }
+    }
+
     /* Mobile */
     @include at-query ($max, $small) {
+        background-position: 90% 0%;
+
         h2 {
             font-size: 2.8125em;
             margin: 0;
@@ -3054,7 +3135,7 @@ $smallSocialIconRatio: (2.66/3.375);
 
     /* Mobile */
     @include at-query ($max, $small) {
-        border-top: 1px solid $colorLightGray;
+        // border-top: 1px solid $colorLightGray;
         height: 35px;
         padding: 0 $gutter;
 
@@ -3080,8 +3161,7 @@ $smallSocialIconRatio: (2.66/3.375);
         height: 100%;
     }
 
-    /* Desktop */
-    @include at-query ($min, $postSmall) {
+    @include at-query( $min, $postMedium ){
         height: 692px;
 
         .product-gallery-block,
@@ -3102,12 +3182,21 @@ $smallSocialIconRatio: (2.66/3.375);
         }
     }
 
-    /* Mobile */
-    @include at-query ($max, $small) {
+    /* Desktop */
+    @include at-query ($min, $postLarge) {
 
-        .product-info-block {
-
+        .product-gallery-block {
+            right: 368px;
         }
+
+    }
+
+    @include at-query( null, $postMedium, $large ){
+
+        .product-gallery-block {
+            right: 278px;
+        }
+
     }
 }
 
@@ -3115,17 +3204,34 @@ $smallSocialIconRatio: (2.66/3.375);
     height: 44px;
     width: 100%;
     background: $colorPaleGray;
-    border-top: 1px solid $colorLighterGray;
-    padding: 9px $gutter;
+    border-bottom: 1px solid $colorLighterGray;
+    padding: ($gutter / 2) $gutter;
+    position: relative;
 
     .expand-detail-link {
+        text-decoration: none;
+        display: block;
+        position: relative;
+        height: 100%;
+        width: 100%;
+    }
+
+    .buy-now-button {
+        @extend %mini-gold-button;
+
+        position: absolute;
+        top: 0;
+        right: 0;
+    }
+
+    .expand-detail-link-text {
         position: relative;
         color: $colorWarmDarkGray;
         font-size: 0.9375em;
         font-weight: 300;
         font-family: $helveticaFontStack;
-        text-decoration: none;
         line-height: 1;
+        padding-top: 2px;
         padding-right: $gutter;
     }
 
@@ -3133,7 +3239,7 @@ $smallSocialIconRatio: (2.66/3.375);
         @extend %icon-base;
 
         position: absolute;
-        top: 1px;
+        top: 3px;
         right: 0;
         height: 15px;
         width: 15px;
@@ -3150,13 +3256,8 @@ $smallSocialIconRatio: (2.66/3.375);
     }
 
     /* Desktop */
-    @include at-query ($min, $postSmall) {
+    @include at-query ($min, $postMedium) {
         display: none;
-    }
-    
-    /* Mobile */
-    @include at-query ($max, $small) {
-        
     }
 }
 
@@ -3166,9 +3267,8 @@ $smallSocialIconRatio: (2.66/3.375);
 .product-gallery-block {
     position: relative;
 
-    /* Desktop */
-    @include at-query ($min, $postSmall) {
-        width: 768px;
+    @include at-query( null, $postSmall, $medium ){
+        height: 692px;
     }
     
     /* Mobile */
@@ -3195,7 +3295,7 @@ $smallSocialIconRatio: (2.66/3.375);
     $thumbMobileMargin: $gutter / 4;
 
     position: absolute;
-    left: $gutter;
+    left: 0;
 
     a {
         display: block;
@@ -3210,14 +3310,17 @@ $smallSocialIconRatio: (2.66/3.375);
     }
 
     /* Desktop */
-    @include at-query ($min, $postSmall) {
+    @include at-query ($min, $postMedium) {
         top: $gutter * 2;
-        width: $thumbDesktopSize;
-        height: ($thumbDesktopSize * 6) + (5 * $thumbDesktopMargin);
 
         li {
             margin: 0 0 $thumbDesktopMargin;
         }
+    }
+
+    @include at-query( $min, $postLarge ){
+        width: $thumbDesktopSize;
+        height: ($thumbDesktopSize * 6) + (5 * $thumbDesktopMargin);
 
         a {
             height: $thumbDesktopSize;
@@ -3225,8 +3328,18 @@ $smallSocialIconRatio: (2.66/3.375);
         }
     }
 
+    @include at-query( null, $postMedium, $large ){
+        width: $thumbMobileSize;
+        height: ($thumbMobileSize * 6) + (5 * $thumbMobileMargin);
+
+        a {
+            height: $thumbMobileSize;
+            width: $thumbMobileSize;
+        }
+    }
+
     /* Mobile */
-    @include at-query ($max, $small) {
+    @include at-query ($max, $medium) {
         bottom: $gutter;
         height: $thumbMobileSize;
         right: $gutter;
@@ -3249,24 +3362,30 @@ $smallSocialIconRatio: (2.66/3.375);
     @extend .clearfix;
 
     /* Desktop */
-    @include at-query ($min, $postSmall) {
+    @include at-query ($min, $postMedium) {
         margin: 20px;
     }
     
     /* Mobile */
-    @include at-query ($max, $small) {
+    @include at-query ($max, $medium) {
         margin: $gutter;
     }
 }
 
 .product-info-block {
 
-    /* Desktop */
-    @include at-query ($min, $postSmall) {
-        background: #fff;
-        width: 448px;
-        height: 628px;
+    &.expanded {
+        display: block;
+    }
 
+    .tablet-column-row {
+        @extend .clearfix;
+    }
+
+    /* Desktop */
+    @include at-query ($min, $postMedium) {
+        background: #fff;
+        height: 628px;
         border: 1px solid $colorLightGray;
 
         /* expanded product description state */
@@ -3291,8 +3410,27 @@ $smallSocialIconRatio: (2.66/3.375);
         }
     }
 
+    @include at-query( $min, $postLarge ){
+        width: 448px;
+
+    }
+
+    @include at-query( null, $postMedium, $large ){
+        width: 326px;
+
+    }
+
+    @include at-query( null, $postSmall, $medium ){
+        .tablet-column {
+            float: right;
+            width: 50%;
+        }
+    }
+
     /* Mobile */
-    @include at-query ($max, $small) {
+    @include at-query ($max, $medium) {
+        display: none;
+        
         background: $colorPaleGray;
         border-bottom: 1px solid $colorLightGray;
     }
@@ -3334,6 +3472,18 @@ $smallSocialIconRatio: (2.66/3.375);
             margin-bottom: 8px;
         }
     }
+
+    @include at-query( null, $postMedium, $large ){
+        h2 {
+            font-size: 2em;
+        }
+    }
+
+    @include at-query( null, $postSmall, $medium ){
+        h2 {
+            font-size: 1.75em;
+        }
+    }
     
     /* Mobile */
     @include at-query ($max, $small) {
@@ -3364,12 +3514,12 @@ $smallSocialIconRatio: (2.66/3.375);
     }
 
     /* Desktop */
-    @include at-query ($min, $postSmall) {
+    @include at-query ($min, $postMedium) {
         
     }
     
     /* Mobile */
-    @include at-query ($max, $small) {
+    @include at-query ($max, $medium) {
         button {
             display: block;
             width: 100%;
@@ -3415,7 +3565,7 @@ $smallSocialIconRatio: (2.66/3.375);
     }
     
     /* Desktop */
-    @include at-query ($min, $postSmall) {
+    @include at-query ($min, $postMedium) {
         margin-bottom: 20px;
 
         label, legend {
@@ -3446,7 +3596,7 @@ $smallSocialIconRatio: (2.66/3.375);
     }
     
     /* Mobile */
-    @include at-query ($max, $small) {
+    @include at-query ($max, $medium) {
         .selector-wrapper {
             $height: 44px;
             margin-bottom: $gutter;
@@ -3490,12 +3640,12 @@ $smallSocialIconRatio: (2.66/3.375);
     }
 
     /* Desktop */
-    @include at-query ($min, $postSmall) {
+    @include at-query ($min, $postMedium) {
         
     }
     
     /* Mobile */
-    @include at-query ($max, $small) {
+    @include at-query ($max, $medium) {
         display: none;
     }
 }
@@ -3537,12 +3687,12 @@ $smallSocialIconRatio: (2.66/3.375);
     }
 
     /* Desktop */
-    @include at-query ($min, $postSmall) {
+    @include at-query( $min, $postMedium ){
         
     }
     
     /* Mobile */
-    @include at-query ($max, $small) {
+    @include at-query ($max, $large) {
         .label {
             display: none;
         }
@@ -3609,14 +3759,14 @@ $smallSocialIconRatio: (2.66/3.375);
     }
 
     /* Desktop */
-    @include at-query ($min, $postSmall) {
+    @include at-query ($min, $postMedium) {
         position: absolute;
         bottom: 0;
         left: 0;
     }
     
     /* Mobile */
-    @include at-query ($max, $small) {
+    @include at-query ($max, $medium) {
         padding-bottom: 0;
 
         p {
@@ -4497,6 +4647,8 @@ address {
 
     /* Mobile */
     @include at-query ($max, $large) {
+        margin: 0;
+        
         > div {
             display: block;
             padding: 0 $gutter;
@@ -4713,23 +4865,10 @@ address {
 .collection-page-hero {
     @extend %hero-large;
 
-    background: url({{ 'collection-page-hero-bg-DELETE.jpg' | asset_url}}) top center repeat-x;
+    background-image: url({{ 'collection-page-hero-bg-DELETE.jpg' | asset_url }});
 
     .content {
         top: $gutter * 3.75;
-    }
-
-    /* Desktop */
-    @include at-query ($min, $postSmall) {
-
-    }
-
-    /* Mobile */
-    @include at-query ($max, $small) {
-        background: {
-            size: cover;
-            position: 58% 50%;
-        }
     }
 }
 
@@ -6040,13 +6179,30 @@ address {
     }
 
     /* Desktop */
-    @include at-query ($min, $postSmall) {
+    @include at-query ($min, $postMedium) {
         header {
+            padding: 0 $gutter;
             margin: 0 auto ($gutter * 2.5);
 
             p {
                 font-size: 1.25em;
                 line-height: 1.3;
+            }
+        }
+    }
+
+    @include at-query( $max, $medium ){
+        header {
+            max-width: $small;
+        }
+    }
+
+    @include at-query( null, $postSmall, $medium ){
+        header {
+            margin: 0 auto ($gutter * 2.5);
+
+            p {
+                font-size: 1.125em;
             }
         }
     }
@@ -6302,6 +6458,12 @@ address {
     form {
         input[type="radio"], input[type="checkbox"] {
             @extend %checkbox-radio-icon;
+        }
+    }
+
+    @include at-query( $max, $medium ){
+        ul {
+            padding-left: $gutter;
         }
     }
 }
@@ -8147,20 +8309,17 @@ $opacity-not-active: .25;
 /* Arrows */
 
 %carousel-arrow-base {
+    @extend %icon-base;
+
     position: absolute;
     display: block;
     height: 20px;
     width: 20px;
     cursor: pointer;
-    top: 50%;
     padding: 0;
     text-decoration: none;
     color: $colorLightGray;
-
-    @extend %icon-base;
-
     opacity: $opacity-default;
-
 
     &:hover, &:focus {
         outline: none;
@@ -8175,19 +8334,11 @@ $opacity-not-active: .25;
     &.slick-disabled:before {
         opacity: $opacity-not-active;
     }
-
-    &:before {
-        font-size: 110px;
-        /* correct for the whitespace on either side of the icon */
-        margin: 0 -27px;
-    }
-
 }
 
 /* Dots */
 
 .slick-dots {
-
     $diameter: 18px;
     $radius: $diameter / 2;
 
@@ -8284,48 +8435,19 @@ $opacity-not-active: .25;
 
     .slick-slide {
         position: relative;
-
-    }
-
-    .carousel-nav {
-        position: absolute;
-        top: 0;
-        width: 100%;
-
-        .wrapper {
-
-        }
     }
 
     .slick-next,
     .slick-prev {
         @extend %carousel-arrow-base;
-
-        width: 56px;
-        height: 110px;
-        top: 260px;
     }
 
-    .slick-prev {
-        @extend .icon-arrow-left-xlarge;
-
-        left: -170px;
-    }
-
-    .slick-next {
-        @extend .icon-arrow-right-xlarge;
-
-        right: -56px;
-    }
-
-    /* Desktop */
-    @include at-query ($min, $postSmall) {
+    @include at-query( $min, $postLarge ){
         .wrapper {
             height: 698px;
         }
 
         .content {
-            position: absolute;
             top: $gutter * 6;
             left: $gutter * 7;
             width: $gutter * 34;
@@ -8334,22 +8456,193 @@ $opacity-not-active: .25;
         header {
             p {
                 font-size: 20px;
-                line-height: 1.3;
             }
         }
 
         .carousel {
+            width: 394px + ($gutter * 2);
             height: 256px;
-            width: 394px + 32px;
         }
 
-        .slide {
-            padding-right: 32px;
+        $slickNextPrevWidth: 56px;
+
+        .slick-next,
+        .slick-prev {
+            width: $slickNextPrevWidth;
+            height: 110px;
+            top: 70px;
+
+            &:before {
+                font-size: 110px;
+                /* correct for the whitespace on either side of the icon */
+                margin: 0 -27px;
+            }
+        }
+
+        .slick-prev {
+            left: -$slickNextPrevWidth - ($gutter * 2);
+        }
+
+        .slick-next {
+            right: -$slickNextPrevWidth - ($gutter * 2);
+        }
+
+        .slick-prev:before {
+            /* .icon-arrow-left-xlarge:before */
+            content: "\e608";
+        }
+
+        .slick-next:before {
+            /* .icon-arrow-right-xlarge:before */
+            content: "\e607";
+        }
+    }
+
+    /* small desktops */
+    @include at-query( null, $postLarge, $xlarge){
+        header {
+            width: 480px;
+
+            p {
+                font-size: 18px;
+            }
+        }
+    }
+
+    /* landscape tablets */
+    @include at-query( null, $postMedium, $large ){
+        .wrapper {
+            height: 620px;
+            max-width: (($large - $medium)/2) + $medium;
+        }
+
+        .content {
+            top: $gutter * 3.5;
+            left: $gutter * 2;
+            width: $gutter * 34;
+        }
+
+        header {
+            width: 368px;
+
+            p {
+                font-size: 15px;
+            }
+        }
+
+        .slide p {
+            font-size: 13px;
+        }
+
+        .carousel {
+            width: 336px;
+        }
+
+        .slick-next,
+        .slick-prev {
+            width: 20px;
+            height: 40px;
+            bottom: -60px;
+
+            &:before {
+                font-size: 40px;
+                /* correct for the whitespace on either side of the icon */
+                margin: 0 -10px;
+            }
+        }
+
+        .slick-prev {
+            left: $gutter;
+        }
+
+        .slick-next {
+            right: $gutter;
+        }
+
+        .slick-prev:before {
+            /* .icon-arrow-left-large:before */
+            content: "\e61e";
+        }
+
+        .slick-next:before {
+            /* .icon-arrow-right-large:before */
+            content: "\e621";
+        }
+    }
+
+    @include at-query( $min, $postMedium ){
+        img {
+            right: -96px;
+            height: 100%;
+        }
+    }
+
+    /* portrait tablets, landscape phones */
+    @include at-query( null, $postSmall, $medium ){
+
+        .wrapper {
+            max-width: $small;
+            height: 712px;
+        }
+
+        .content {
+            width: 100%;
+        }
+
+        header {
+            text-align: center;
+            max-width: $small;
+            padding: 0 $gutter;
+            margin: 64px auto 32px;
+
+            p {
+                font-size: 16px;
+            }
+        }
+
+        .carousel {
+            width: 50%;
+            height: 346px;
+        }
+        
+        .slide p {
+            font-size: 14px;
         }
 
         img {
-            right: -96px;
-            top: 0;
+            right: -106px;
+            height: 63%;
+        }
+    }
+
+    /* portrait phones */
+    @include at-query( $max, $small ){
+
+        .slick-next,
+        .slick-prev {
+            display: none;
+        }
+        
+    }
+
+    /* Desktop */
+    @include at-query ($min, $postSmall) {
+        .content {
+            position: absolute;
+        }
+
+        header {
+            p {
+                line-height: 1.3;
+            }
+        }
+
+        .slide {
+            padding: 0 $gutter;
+        }
+
+        img {
+            bottom: 0;
         }
     }
 
@@ -8357,6 +8650,7 @@ $opacity-not-active: .25;
     @include at-query ($max, $small) {
         .wrapper {
             height: 620px;
+            max-width: 320px;
         }
 
         .content {

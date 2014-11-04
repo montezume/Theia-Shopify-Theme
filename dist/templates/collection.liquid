@@ -11,9 +11,14 @@
   <style>
     .collection-page-hero {
       background-image: url('{{ other_images.desktop_hero }}');
-      background-position: top center !important;
     }
 
+    @media screen and (min-width: 481px) and (max-width: 1024px){
+      .collection-page-hero {
+        background-image: url('{{ other_images.tablet_hero }}');
+      }
+    }
+    
     @media screen and (max-width: 480px){
       .collection-page-hero {
         background-image: url('{{ other_images.mobile_hero }}');
