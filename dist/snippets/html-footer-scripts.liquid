@@ -36,7 +36,8 @@ Ajaxify Cart Documentation:
               moneyFormat: {{ shop.money_format | json }}, // Your shop money format, defined in liquid.
               disableAjaxCart: false, // If for some reason you want to disable the cart, set to true. Default is false.
               enableQtySelectors: true, // Enable the quantity selectors on your templates, even if disableAjaxCart is false. Default is true.
-              prependDrawerTo: '.container' // The element selector where the cart is prepended. This is used for the drawer and flip methods. Default is 'body'.
+              prependDrawerTo: '.container', // The element selector where the cart is prepended. This is used for the drawer and flip methods. Default is 'body'.
+              onToggleCallback: null
           });
       });
   </script>

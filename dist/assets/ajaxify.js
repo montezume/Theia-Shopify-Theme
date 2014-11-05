@@ -342,10 +342,10 @@ var ajaxifyShopify = (function(module, $) {
                 }
             });
 
-            $('.container').click(function(e){
+            // hide drawer when clicking on the body or the footer.
+            $('.main-content, .site-footer').click(function(e){
                 hideDrawer();
             });
-
 
             if ( $addToCart.length ) {
                 // Take over the add to cart form submit
@@ -854,6 +854,13 @@ var ajaxifyShopify = (function(module, $) {
             case 'drawer':
                 if (cart.item_count > 0) {
                     loadCartImages();
+
+                    $('#cartContinueShoppingLink').click(function(e){
+                        e.preventDefault();
+
+                        hideDrawer();
+                    });
+
                 } else {
                     sizeDrawer(true);
                 }
