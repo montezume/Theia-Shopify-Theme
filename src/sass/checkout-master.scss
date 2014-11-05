@@ -522,7 +522,13 @@ table.form {
 
     label {
 
+        &[for="billing_address_company"]:after {
+            content: ' (optional)';
+            font-weight: 400;
+        }
     }
+
+    
 
     ul.inline {
         li {
@@ -807,6 +813,7 @@ input[type="submit"] {
         width: 430px;
         marign: 0;
         padding: 0;
+        background: none;
     }
 
     #overview {
@@ -836,4 +843,400 @@ input[type="submit"] {
 #footer {
     clear: both;
     padding: 15px 0;
+}
+
+
+
+%inline-list-base {
+    ul, li {
+        margin: 0;
+    }
+
+    li {
+        display: inline-block;
+        vertical-align: top;
+    }
+}
+
+
+%social-hero-base {
+    text-align: center;
+
+    h2 {
+        letter-spacing: -1px;
+    }
+
+    @include at-query( $min, $postSmall ){
+        h2 {
+            margin: 0 0 $gutter;
+        }
+    }
+
+    @include at-query( $max, $small ){
+        h2 {
+            font-size: 35px;
+            margin-bottom: $gutter * 2;
+        }
+    }
+}
+
+.social-link-hero {
+    @extend %social-hero-base;
+
+    h2 {
+        font-size: 3em;
+        border-bottom: 0;
+    }
+}
+
+.social-link-block {
+    @extend %inline-list-base;
+
+    ul {
+        padding-left: 0;
+        text-align: center;
+    }
+
+    a {
+        position: relative;
+        display: block;
+        text-decoration: none;
+
+        [class$='-icon'] {
+            height: 100%;
+            width: 100%;
+            border-color: $colorMidGray;
+            color: $colorMidGray;
+            transition: all 0.3s;
+
+            &:hover {
+                @include prefix('transform', 'scale( 1.1 )');
+
+                color: $colorGold;
+                border-color: $colorGold;
+            }
+        }
+    }
+
+    li {
+        margin: 0 6px;
+    }
+
+    @include at-query( $min, $postSmall ){
+        a {
+            $desktopCircumfrence: 3.375em;
+
+            height: $desktopCircumfrence;
+            width: $desktopCircumfrence;
+        }        
+    }
+
+    @include at-query( $max, $small ){
+        margin: 0 8px;
+
+        a {
+            $smallCircumfrence: 2.66em;
+
+            height: $smallCircumfrence;
+            width: $smallCircumfrence;
+        }
+    }
+}
+
+
+$iconSelector: '[class^="icon-"], [class*=" icon-"]';
+#{$iconSelector},
+%icon-base {
+
+    .icon-fallback-text & {
+        display: none;
+
+        .supports-fontface & {
+            display: inline-block;
+        }
+    }
+
+    &:before {
+
+        display: inline;
+        font-family: $socialIconFontStack;
+        speak: none;
+        font-style: normal;
+        font-weight: normal;
+        font-variant: normal;
+        text-transform: none;
+        line-height: 1;
+
+        /* Better Font Rendering =========== */
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+}
+
+.icon-box-checked:before {
+    content: "\f046";
+}
+
+.icon-box-unchecked:before {
+    content: "\f096";
+}
+
+.icon-menu:before {
+    content: "\e60c";
+}
+
+.icon-telephone-handset:before {
+    content: "\e600";
+}
+
+.icon-map-pin:before {
+    content: "\e601";
+}
+
+.icon-stamp:before {
+    content: "\e602";
+}
+
+.icon-arrow-right-solid:before {
+    content: "\e603";
+}
+
+.icon-facebook-f:before {
+    content: "\e604";
+}
+
+.icon-instagram:before {
+    content: "\e605";
+}
+
+.icon-pinterest-p:before {
+    content: "\e606";
+}
+
+.icon-arrow-right-xlarge:before {
+    content: "\e607";
+}
+
+.icon-arrow-left-xlarge:before {
+    content: "\e608";
+}
+
+.icon-search:before {
+    content: "\e609";
+}
+
+.icon-store:before {
+    content: "\e60a";
+}
+
+.icon-safe:before {
+    content: "\e60b";
+}
+
+.icon-fancy:before {
+    content: "\46";
+}
+
+.icon-twitter:before {
+    content: "\54";
+}
+
+.icon-facebook:before {
+    content: "\66";
+}
+
+.icon-pinterest:before {
+    content: "\70";
+}
+
+.icon-tumblr:before {
+    content: "\74";
+}
+
+.icon-vimeo:before {
+    content: "\76";
+}
+
+.icon-youtube:before {
+    content: "\79";
+}
+
+.icon-gift:before {
+    content: "\e60e";
+}
+
+.icon-calendar:before {
+    content: "\e60f";
+}
+
+.icon-arrow-left-curved:before {
+    content: "\e610";
+}
+
+.icon-arrow-right-curved:before {
+    content: "\e611";
+}
+
+.icon-cross:before {
+    content: "\e612";
+}
+
+.icon-cross-circle:before {
+    content: "\e613";
+}
+
+.icon-info:before {
+    content: "\e614";
+}
+
+.icon-info-circle:before {
+    content: "\e615";
+}
+
+.icon-arrow-left:before {
+    content: "\e616";
+}
+
+.icon-arrow-down:before {
+    content: "\e617";
+}
+
+.icon-arrow-up:before {
+    content: "\e618";
+}
+
+.icon-arrow-right:before {
+    content: "\e619";
+}
+
+.icon-arrow-left-small:before {
+    content: "\e61a";
+}
+
+.icon-arrow-down-small:before {
+    content: "\e61b";
+}
+
+.icon-arrow-up-small:before {
+    content: "\e61c";
+}
+
+.icon-arrow-right-small:before {
+    content: "\e61d";
+}
+
+.icon-arrow-left-large:before {
+    content: "\e61e";
+}
+
+.icon-arrow-down-large:before {
+    content: "\e61f";
+}
+
+.icon-arrow-up-large:before {
+    content: "\e620";
+}
+
+.icon-arrow-right-large:before {
+    content: "\e621";
+}
+
+
+$smallSocialIconRatio: (2.66/3.375);
+
+@mixin socialIconResponsiveSizes( $iconSize, $paddingTop, $paddingRight: false, $paddingLeft: false ){
+    @include at-query( $min, $postSmall ){
+        padding-top: $paddingTop;
+
+        @if $paddingRight {
+            padding-right: $paddingRight;
+        }
+
+        @if $paddingLeft {
+            padding-left: $paddingLeft;
+        }
+
+        &:before {
+            font-size: $iconSize
+        }
+    }
+
+    @include at-query( $max, $small ){
+        padding-top: $paddingTop * $smallSocialIconRatio;
+        @if $paddingRight {
+            padding-right: $paddingRight * $smallSocialIconRatio;
+        }
+
+        @if $paddingLeft {
+            padding-left: $paddingLeft * $smallSocialIconRatio;
+        }
+
+        &:before {
+            font-size: $iconSize * $smallSocialIconRatio;
+        }
+    }
+}
+
+%social-icon-base {
+    @extend %icon-base;
+
+    position: absolute;
+    border-style: solid;
+    text-align: center;
+
+    @include at-query( $min, $postSmall ){
+        $desktopCircumfrence: 3.375em;
+
+        @include prefix( 'border-radius', $desktopCircumfrence / 2 );
+
+        height: $desktopCircumfrence;
+        width: $desktopCircumfrence;
+        border-width: 0.15626em;
+    }
+
+    @include at-query( $max, $small ){
+        $smallCircumfrence: 2.66em;
+
+        @include prefix( 'border-radius', $smallCircumfrence / 2 );
+
+        height: $smallCircumfrence;
+        width: $smallCircumfrence;
+        border-width: 0.125em;
+    }
+}
+
+
+.pinterest-icon {
+    @extend %social-icon-base;
+    @extend .icon-pinterest-p;
+
+    @include socialIconResponsiveSizes( $iconSize: 2.5em, $paddingTop: 0.625em, $paddingRight: 0.125em );
+}
+
+.twitter-icon {
+    @extend %social-icon-base;
+    @extend .icon-twitter;
+
+    @include socialIconResponsiveSizes( $iconSize: 1.9375em, $paddingTop: 0.5em, $paddingLeft: 0.125em );
+}
+
+.instagram-icon {
+    @extend %social-icon-base;
+    @extend .icon-instagram;
+
+    @include socialIconResponsiveSizes( $iconSize: 1.5625em, $paddingTop: 0.75em );
+}
+
+.tumblr-icon {
+    @extend %social-icon-base;
+    @extend .icon-tumblr;
+
+    @include socialIconResponsiveSizes( $iconSize: 2.0625em, $paddingTop: 0.375em, $paddingLeft: 0.0625em );
+}
+
+.facebook-icon {
+    @extend %social-icon-base;
+    @extend .icon-facebook-f;
+
+    @include socialIconResponsiveSizes( $iconSize: 2.125em, $paddingTop: 0.4375em, $paddingRight: 0.0625em );
 }
