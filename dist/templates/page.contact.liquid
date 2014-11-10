@@ -19,7 +19,7 @@
   </div>
 </div>
 
-<div class="content-hero">
+<div class="contact-page-form-hero">
   <div class="wrapper-8-col">
     <h2>{{ page.title }}</h2>
 
@@ -43,6 +43,7 @@
         <div class="col">
       
           <fieldset class="contact-form-title">
+            <legend>Title</legend>
             <input type="radio" id="contactFormTitleMr" name="contact[title]" value="Mr." {% if form.title == "Mr." %}checked="checked"{% endif %}>
             <label for="contactFormTitleMr">Mr.</label>
 
@@ -56,6 +57,26 @@
             <label for="contactFormTitleNone">None</label>
           </fieldset>
 
+        </div>
+        <div class="col">
+
+          <fieldset class="contact-form-sender-type">
+            <legend>Status</legend>
+            <input type="radio" id="contactFormSenderTypeCustomer" name="contact[senderType]" value="Customer" {% if form.senderType == "Customer" %}checked="checked"{% endif %}>
+            <label for="contactFormSenderTypeCustomer">Customer</label>
+
+            <input type="radio" id="contactFormSenderTypeRetailer" name="contact[senderType]" value="Retailer" {% if form.senderType == "Retailer" %}checked="checked"{% endif %}>
+            <label for="contactFormSenderTypeRetailer">Retailer</label>
+
+            <input type="radio" id="contactFormSenderTypeOther" name="contact[senderType]" value="Other" {% if form.senderType == "Other" %}checked="checked"{% endif %}>
+            <label for="contactFormSenderTypeOther">Other</label>
+          </fieldset>
+
+        </div>
+      </div>
+
+      <div class="row-2-col">
+        <div class="col">
 
           {% assign formFieldKey = 'firstName' %}
           {% assign formFieldLabel = 'First Name' %}
@@ -122,21 +143,8 @@
 
 
         </div>
-        <div class="vr"></div>
+        <div class="divider"></div>
         <div class="col">
-
-
-          <fieldset class="contact-form-sender-type">
-            <input type="radio" id="contactFormSenderTypeCustomer" name="contact[senderType]" value="Customer" {% if form.senderType == "Customer" %}checked="checked"{% endif %}>
-            <label for="contactFormSenderTypeCustomer">Customer</label>
-
-            <input type="radio" id="contactFormSenderTypeRetailer" name="contact[senderType]" value="Retailer" {% if form.senderType == "Retailer" %}checked="checked"{% endif %}>
-            <label for="contactFormSenderTypeRetailer">Retailer</label>
-
-            <input type="radio" id="contactFormSenderTypeOther" name="contact[senderType]" value="Other" {% if form.senderType == "Other" %}checked="checked"{% endif %}>
-            <label for="contactFormSenderTypeOther">Other</label>
-          </fieldset>
-
 
           {% assign formFieldKey = 'email' %}
           {% assign formFieldLabel = 'Email Address' %}
@@ -200,7 +208,7 @@
     </address>
 
       </div>
-      <div class="vr"></div>
+      <div class="divider"></div>
       <div class="col">
         
     <h4>THEIA Corporate</h4>
@@ -218,7 +226,7 @@
     </address>
 
       </div>
-      <div class="vr"></div>
+      <div class="divider"></div>
       <div class="col">
         
     <h4>Press</h4>

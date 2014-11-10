@@ -20,15 +20,21 @@
 
     {% include 'html-body-top-scripts' %}
 
-    {% include 'header' %}
+    {% include 'mobile-side-nav' %}
 
-    <main class="main-content" role="main">
+    <div class="container">
 
-      {{ content_for_layout }}
+      {% include 'header' %}
 
-    </main>
+      <main class="main-content" role="main">
 
-    {% include 'footer' %}
+        {{ content_for_layout }}
+
+      </main>
+
+      {% include 'footer' %}
+
+    </div>
 
     {% include 'html-footer-scripts' %}
 

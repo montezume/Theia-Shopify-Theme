@@ -7,6 +7,26 @@
 {% endcomment %}
 
 {% if linklists.featured-collections.links.size > 0 %}
+
+  {% assign hero_collection = linklists.featured-collections.links.first.object %}
+
+  <!-- {% if hero_collection.metafields.other_images.desktop_hero != blank %}
+  {% assign hero_collection_other_images = hero_collection.metafields.other_images %}
+
+  <style>
+  .collections-hero {
+  background-image: url('{{ hero_collection_other_images.desktop_hero }}');
+  background-position: top center !important;
+  }
+
+  @media screen and (max-width: 480px){
+  .collections-hero {
+  background-image: url('{{ hero_collection_other_images.mobile_hero }}');
+  }
+  }
+  </style>
+  {% endif %} -->
+
   <div class="collections-hero">
     <div class="wrapper">
 
@@ -35,16 +55,22 @@
               {% endcomment %}
               {% capture collection_title %}{{ collection.title | escape }}{% endcapture %}
 
+              {% if collection.metafields.other_images.featured_menu_thumb != blank %}
+                {% assign featured_menu_thumb_url = collection.metafields.other_images.featured_menu_thumb %}
+              {% else %}
+                {% capture featured_menu_thumb_url %}{{ collection.image.src | collection_img_url: 'large' }}{% endcapture %}
+              {% endif %}
+
               <li>
                 <style style="text/css" scoped>
 
                   #collection-{{ collection.id }}:before {
-                    background-image: url('{{ collection.image.src | collection_img_url: 'large' }}');
+                    background-image: url('{{ featured_menu_thumb_url }}');
                   }
 
                 </style>
                 <a id="collection-{{ collection.id }}" class="latest-collections-link" href="{{ collection.url }}" title="Browse our {{ collection_title }} collection">
-                  {{ collection.image.src | collection_img_url: 'large' | img_tag: collection_title }}
+                  <img src="{{ featured_menu_thumb_url }}" alt="{{ collection_title }}" />
                   <div class="overlay"></div>
                   <span>{{ collection_title }}</span>
                 </a>
@@ -70,7 +96,8 @@
         <h2>Celebs in Theia</h2>
 
         <div id="carrieUnderwood" class="slide active">
-          {{ 'carrie-underwood.jpg' | asset_url | img_tag }}
+          {{ 'carrie-underwood-main-desktop.jpg' | asset_url | img_tag: 'Carrie Underwood', 'hidden-on-mobile' }}
+          {{ 'carrie-underwood-main-mobile.jpg' | asset_url | img_tag: 'Carrie Underwood', 'hidden-on-desktop' }}
           <div class="content">
             <h3>Carrie Underwood</h3>
             <p>Worn at the Grammy Awards</p>
@@ -79,7 +106,8 @@
         </div>
 
         <div id="taylorSwift" class="slide">
-          {{ 'taylor-swift.jpg' | asset_url | img_tag }}
+          {{ 'taylor-swift-main-desktop.jpg' | asset_url | img_tag: 'Taylor Swift', 'hidden-on-mobile' }}
+          {{ 'taylor-swift-main-mobile.jpg' | asset_url | img_tag: 'Taylor Swift', 'hidden-on-desktop' }}
           <div class="content">
             <h3>Taylor Swift</h3>
             <p>Worn at the MTV Awards</p>
@@ -88,7 +116,8 @@
         </div>
 
         <div id="oprahWinfrey" class="slide">
-          {{ 'oprah-winfrey.jpg' | asset_url | img_tag }}
+          {{ 'oprah-winfrey-main-desktop.jpg' | asset_url | img_tag: 'Oprah Winfrey', 'hidden-on-mobile' }}
+          {{ 'oprah-winfrey-main-mobile.jpg' | asset_url | img_tag: 'Oprah Winfrey', 'hidden-on-desktop' }}
           <div class="content">
             <h3>Oprah Winfrey</h3>
             <p>Worn on her show</p>
@@ -100,17 +129,20 @@
       <div class="thumbs-block">
 
         <a href="#carrieUnderwood" class="thumb active">
-          {{ 'carrie-underwood-thumb.jpg' | asset_url | img_tag }}
+          {{ 'carrie-underwood-thumb-desktop.jpg' | asset_url | img_tag: 'Carrie Underwood Thumb', 'hidden-on-mobile' }}
+          {{ 'carrie-underwood-thumb-mobile.jpg' | asset_url | img_tag: 'Carrie Underwood Thumb', 'hidden-on-desktop' }}
           <h3>Carrie Underwood</h3>
         </a>
 
         <a href="#taylorSwift" class="thumb">
-          {{ 'taylor-swift-thumb.jpg' | asset_url | img_tag }}
+          {{ 'taylor-swift-thumb-desktop.jpg' | asset_url | img_tag: 'Taylor Swift', 'hidden-on-mobile' }}
+          {{ 'taylor-swift-thumb-mobile.jpg' | asset_url | img_tag: 'Taylor Swift', 'hidden-on-desktop' }}
           <h3>Taylor Swift</h3>
         </a>
 
         <a href="#oprahWinfrey" class="thumb">
-          {{ 'oprah-winfrey-thumb.jpg' | asset_url | img_tag }}
+          {{ 'oprah-winfrey-thumb-desktop.jpg' | asset_url | img_tag: 'Oprah Winfrey', 'hidden-on-mobile' }}
+          {{ 'oprah-winfrey-thumb-mobile.jpg' | asset_url | img_tag: 'Oprah Winfrey', 'hidden-on-desktop' }}
           <h3>Oprah Winfrey</h3>
         </a>
 
@@ -129,13 +161,12 @@
   </div>
 </div>
 
-    {% comment %}
-      **todo** add this post launch
-      <div class="social-media-feed-row">
-        {% include 'social-media-feed-block' %}
-      </div>
-    {% endcomment %}
-
+{% comment %}
+**todo** add this post launch
+<div class="social-media-feed-row">
+{% include 'social-media-feed-block' %}
+</div>
+{% endcomment %}
 
 <div class="newsletter-signup-hero">
 
