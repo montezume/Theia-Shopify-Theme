@@ -1,0 +1,12 @@
+<script>
+    var user = '{{customer.id}}';
+    if ({{ shop.metafields.wishlist_settings.wishlist_customer_checkout }} && user == '') {
+        window.location = '/account/login';
+    }
+</script>
+<div id="col-main" class="wishlist-page">
+  <div id="wishlist-page-title">
+    <h2>{{ page.title }}</h2>	
+  </div>
+  {% include 'wishlist-viewed' %}
+</div>

@@ -1,0 +1,512 @@
+{{ 'jquery.simplemodal.js' | asset_url | script_tag }}
+<script type="text/javascript">
+    var buttonElementProduct = jQuery('<input />').attr({
+        'class': 'add-to-wishlist-btn',
+        'type': 'button',
+        'name': '{{product.id}}',
+        'id': 'add-to-wishlist',
+        'value': 'Add to Wishlist',
+        'rel': '{{product.handle}}'
+    });
+
+    var buttonElement = jQuery('<input />').attr({
+        'class': 'add-to-wishlist-btn-image',
+        'type': 'button',
+        'name': 'wishlist',
+        'id': 'add-to-wishlist',
+        'value': '',
+        'title': 'Add to Wishlist'
+    });
+
+    //My Wishlist Link
+    var linkWishlist = '{{pages.wishlist.url}}';
+    var customerId = '{{customer.id}}';
+
+    if ({{ shop.metafields.wishlist_settings.wishlist_customer_checkout }} && customerId == '') {
+        linkWishlist = '/account';
+    }
+
+    var linkElement = jQuery('<a>').attr({
+        'id': 'my-wishlist-count',
+        'href': linkWishlist
+    }).html('My Wishlist'); 
+
+    if (jQuery('#wishlist-link').length > 0) {
+        jQuery('#wishlist-link').append(linkElement);
+    } else {
+        if (jQuery("li.cart-link").length > 0) {
+            var li = jQuery('<li>').attr({
+                'id': 'wishlist-link'
+            });
+            li.append(linkElement);
+            jQuery("li.cart-link").before(li);
+        }
+    }
+
+    //Product Page
+    if (jQuery('#p-wishlist-product').length > 0) {
+        jQuery('#p-wishlist-product').append(buttonElementProduct);
+    } else {
+        if (jQuery("form#product-actions").length > 0) {
+            var pElementProduct = jQuery('<p>').attr({
+                'class': 'p-float',
+                'id': 'p-wishlist-product'
+            });
+            jQuery("form#product-actions").after(pElementProduct);
+            jQuery(pElementProduct).append(buttonElementProduct);
+        }
+    }
+
+    //Other Page
+    if ({{ shop.metafields.wishlist_settings.wishlist_add_button }}) {
+        if (jQuery('p#p-wishlist').length > 0) {
+            jQuery('p#p-wishlist').append(buttonElement);
+        } else {
+            if (jQuery("div.product-information").length > 0) {
+                var pElement = jQuery('<p>').attr({
+                    'class': 'p-float',
+                    'id': 'p-wishlist',
+                });
+                jQuery("div.product-information").prepend(pElement);
+                jQuery("p#p-wishlist").append(buttonElement);
+            }
+        }
+    }
+
+    var appDomain = 'http://wishlist.shopfrogs.com/wishlist/call/';
+    var userId = 0;
+    var customerFN='';
+    var customerLN='';
+    var checkout = '{{ shop.metafields.wishlist_settings.wishlist_customer_checkout }}';
+    var customer = '{{customer.id}}';
+    var productId = 0;
+    var currency = "{{shop.money_format | strip_html}}";
+
+    jQuery(function ($) {
+        // Load dialog on click
+        $('input#add-to-wishlist').click(function (e) {
+
+            if ({{ shop.metafields.wishlist_settings.wishlist_customer_checkout }} && customer == '') {
+                window.location = '/account/login';
+            } else {
+
+                if ($(this).attr('name') == 'wishlist') {
+                    productId = $(this).prev().val();
+                    productHandle = $(this).prev().attr('id');
+                } else {
+                    productId = $(this).attr('name');
+                    productHandle = $(this).attr('rel');
+                }
+
+                $('input#productId').val(productId);
+                $('input#productId').attr('class', productHandle);
+                loadCategories(userId, $('div#categories'), 0);
+            }
+            return false;
+        });
+    });
+
+    function showModalForm() {
+        $('#basic-modal-content').modal({overlayClose:true});
+    }
+
+    function closeModalForm() {
+        $.modal.close();
+    }
+
+    function loadCategories(user, object, type) {
+        loading('show');
+        var categories;
+        var json = $.getJSON(
+            appDomain + "getcategories?jsoncallback=?",
+            {
+                format: 'json',
+                customer: user,
+                fn: customerFN,
+                ln: customerLN,
+                product: productId,
+                shop: '{{shop.permanent_domain}}',
+                type: type
+            },
+            function(data) {
+                object.html('');
+                loading('hide');
+
+                if (data.status == 200) {
+                    object.append(data.value);
+
+                    if (!type) {
+                        showModalForm();
+                    } else {
+                        $('ul#navlist-wishlist a#current').click();
+                        $("span.delete-wishlist").click(function(event){
+                            event.stopPropagation();
+
+                            //delete wishlist
+                            if (confirm("Do you want to delete this wishlist?")) {
+                                deleteWishlist($(this).attr('id'));
+	                    } else {
+	                        return;
+	                    }                        
+                        });                     
+                    }
+
+                } else if (data.status == 300) {
+                    alert(data.message);
+                    return;
+
+                } else {
+                    object.html('Categories not found');
+                    if (!type) {
+                        showModalForm();
+                    }
+                }
+            }
+        );
+    }
+
+    function setCookie(name, value, expires, path, domain, secure) {
+
+        if (!name || !value) {
+            return false;
+        }
+
+        var str = name + '=' + encodeURIComponent(value);
+        
+        if (expires) str += '; expires=' + expires.toGMTString();
+        if (path)    str += '; path=' + path;
+        if (domain)  str += '; domain=' + domain;
+        if (secure)  str += '; secure';
+        
+        document.cookie = str;
+        return true;
+    }
+
+    function getCookie(name) {
+        var pattern = "(?:; )?" + name + "=([^;]*);?";
+        var regexp  = new RegExp(pattern);
+        
+        if (regexp.test(document.cookie)) {
+            return decodeURIComponent(RegExp["$1"]);
+        }
+        
+        return false;
+    }
+
+    if ({{ shop.metafields.wishlist_settings.wishlist_customer_checkout  }} == 0) {
+        userId = getCookie('questId');
+        customerFN = '';
+        customerLN = 'Guest';            
+
+        if (!userId) {
+            var domain = '{{shop.permanent_domain}}';
+            $.getJSON(
+                appDomain + "cookie?format=json&shop="+domain+"&jsoncallback=?",
+                function(data){
+                    var today = new Date();
+                    var days = 365*2; //Two year
+                    today.setTime(today.getTime()+(days*24*60*60*1000));
+                    setCookie('questId', data.id, today, '/', '{{shop.domain}}');
+		    userId = getCookie('questId');
+                }
+            );
+        }
+    } else {
+        userId = '{{ customer.id }}';
+        customerFN = '{{ customer.first_name }}';
+        customerLN = '{{ customer.last_name }}';
+    }
+
+    function createWishlist(title){
+        closeMessage();
+        $.getJSON(
+            appDomain + "createwishlist?jsoncallback=?",
+            {
+                format: 'json',
+                title: title,
+                customer: userId,
+                fn: customerFN,
+                ln: customerLN,
+                shop: '{{shop.permanent_domain}}'
+            },
+            function(data){
+                if (data.status == 200) {
+                    loadCategories(userId, $('div#nav-wishlist'), 1);
+                } else if (data.status == 300) {
+                    $('p#add-to-cart-msg-wishlist').hide().addClass('success').html(data.message + '<span style="float: right"><a href="javascript:void(0)" onclick="closeMessage()">close</a></span>').fadeIn();
+                }
+            }
+        );
+    }
+
+    function deleteWishlist(wishlistId) {
+        $.getJSON(
+            appDomain + "deletewishlist?jsoncallback=?",
+            {
+                format: 'json',
+                wishlist: wishlistId,
+                customer: userId,
+                shop: '{{shop.permanent_domain}}'
+            },
+            function(data){
+                if (data.status == 200) {
+                    loadCategories(userId, $('div#nav-wishlist'), 1);
+                } else if (data.status == 300) {
+                    $('p#add-to-cart-msg-wishlist').hide().addClass('success').html(data.message + '<span style="float: right"><a href="javascript:void(0)" onclick="closeMessage()">close</a></span>').fadeIn();
+                }
+            }
+        );
+    }
+
+    function deleteSelected(wishlist) {
+        var selected = new Array();
+        $("input:checkbox.checkbox:checked").each(function() {
+            selected.push($(this).val());
+        });    
+        if (selected.length) {
+            if (confirm("Do you want to delete selected items?")) {
+                deleteProduct(selected, wishlist);
+            } else {
+                return;
+            }         
+        } else 
+        return;
+    }
+
+    function deleteItem(productId, wishlist) {
+        //delete Product
+        if (confirm("Do you want to delete this product?")) {
+            var selected = new Array();
+            selected.push(productId);
+            deleteProduct(selected, wishlist);
+        } else {
+            return;
+        }     
+    }
+
+    function deleteProduct(productId, wishlist) {
+        $.getJSON(
+            appDomain + "deleteproduct?jsoncallback=?",
+            {
+                format: 'json',
+                wishlist: wishlist.attr('class'),
+                product: productId,
+                customer: userId,
+                shop: '{{shop.permanent_domain}}'
+            },
+            function(data){
+                if (data.status == 200) {
+                    loadTabProducts(wishlist);
+                } else if (data.status == 300) {
+                    $('p#add-to-cart-msg-wishlist').hide().addClass('success').html(data.message + '<span style="float: right"><a href="javascript:void(0)" onclick="closeMessage()">close</a></span>').fadeIn();
+                }
+            }
+        );    
+    }
+
+    function moveSelected(wishlist) {
+        var selected = new Array();
+        $("input:checkbox.checkbox:checked").each(function() {
+            selected.push($(this).val());
+        });    
+        if (selected.length) {
+            if (confirm("Do you want to move selected items?")) {
+                loading('show');
+                $.getJSON(
+                    appDomain + "moveproduct?jsoncallback=?",
+                    {
+                        format: 'json',
+                        wishlist: wishlist.attr('class'),
+                        product: selected,
+                        customer: userId,
+                        shop: '{{shop.permanent_domain}}',
+                        wishlistNew: $('select[id=all-items]').val()
+                    },
+                    function(data){
+                        if (data.status == 200) {
+                            loadTabProducts(wishlist);
+                        } else {
+                            $('p#add-to-cart-msg-wishlist').hide().addClass('success').html(data.message + '<span style="float: right"><a href="javascript:void(0)" onclick="closeMessage()">close</a></span>').fadeIn();
+                            loading('hide');
+                        }
+                    }
+                );
+            } else {
+                return;
+            }         
+        } else 
+        return;
+    }
+
+    function move(productId, wishlist) {
+        loading('show');
+        $.getJSON(
+            appDomain + "moveproduct?jsoncallback=?",
+            {
+                format: 'json',
+                wishlist: wishlist.attr('class'),
+                product: productId,
+                customer: userId,
+                shop: '{{shop.permanent_domain}}',
+                wishlistNew: $('select[id='+productId+']').val()
+            },
+            function(data){
+                if (data.status == 200) {
+                    loadTabProducts(wishlist);
+                } else {
+                    $('p#add-to-cart-msg-wishlist').hide().addClass('success').html(data.message + '<span style="float: right"><a href="javascript:void(0)" onclick="closeMessage()">close</a></span>').fadeIn();
+                    loading('hide');
+                }
+            }
+        );    
+    }
+
+    function copySelected(wishlist) {
+        var selected = new Array();
+        $("input:checkbox.checkbox:checked").each(function() {
+            selected.push($(this).val());
+        });    
+        if (selected.length) {
+            if (confirm("Do you want to copy selected items?")) {
+                loading('show');
+                $.getJSON(
+                    appDomain + "copyproduct?jsoncallback=?",
+                    {
+                        format: 'json',
+                        wishlist: wishlist.attr('class'),
+                        product: selected,
+                        customer: userId,
+                        shop: '{{shop.permanent_domain}}',
+                        wishlistNew: $('select[id=all-items]').val()
+                    },
+                    function(data){
+                        if (data.status) {
+                            $('p#add-to-cart-msg-wishlist').hide().addClass('success').html(data.message + '<span style="float: right"><a href="javascript:void(0)" onclick="closeMessage()">close</a></span>').fadeIn();
+                        }
+                        loading('hide');
+                    }
+                ); 
+            } else {
+                return;
+            }         
+        } else 
+        return;
+    }
+
+    function copy(productId, wishlist) {
+        loading('show');
+        $.getJSON(
+            appDomain + "copyproduct?jsoncallback=?",
+            {
+                format: 'json',
+                wishlist: wishlist.attr('class'),
+                product: productId,
+                customer: userId,
+                shop: '{{shop.permanent_domain}}',
+                wishlistNew: $('select[id='+productId+']').val()
+            },
+            function(data){
+                if (data.status) {
+                    $('p#add-to-cart-msg-wishlist').hide().addClass('success').html(data.message + '<span style="float: right"><a href="javascript:void(0)" onclick="closeMessage()">close</a></span>').fadeIn();
+                }
+                loading('hide');
+            }
+        );    
+    }
+
+    function addNote(el, wishlistId){
+        loading('show');
+        var element = $(el);
+        closeMessage();
+        $.getJSON(
+            appDomain + "addnote?jsoncallback=?",
+            {
+                format: 'json',
+                text: $('#'+element.attr('id')).val(),
+                customer: userId,
+                product: element.attr('id'),
+                wishlist: wishlistId,
+                shop: '{{shop.permanent_domain}}'
+            },
+            function(data){
+                if (data.status == 200) {
+                } else if (data.status == 300) {
+                    $('p#add-to-cart-msg-wishlist').hide().addClass('success').html(data.message + '<span style="float: right"><a href="javascript:void(0)" onclick="closeMessage()">close</a></span>').fadeIn();
+                }
+                loading('hide');
+            }
+        );
+    }
+
+    function addToWishlist(){
+        $.getJSON(
+            appDomain + "addtowishlist?jsoncallback=?",
+            {
+                format: 'json',
+                category: $('form.select-form input:checked').val(),
+                title: $('input#category-name').val(),
+                customer: userId,
+                fn: customerFN,
+                ln: customerLN,
+                product: $('input#productId').val(),
+                handle: $('input#productId').attr('class'),
+                shop: '{{shop.permanent_domain}}'
+            },
+            function(data){
+                if (data.status == 200) {
+                    if ({{ shop.metafields.wishlist_settings.wishlist_redirect  }})
+                    window.location = '/pages/wishlist';
+                    else 
+                        closeModalForm();
+                } else if (data.status == 300) {
+                    $('span#resultMessage').html(data.message);
+                }
+            }
+        );
+    }
+    /*Loading Block*/
+    function loading(type) {
+        switch (type) {
+            case 'show':
+                $('div.wl_loading').show().fadeIn();
+                break;
+            case 'hide':
+                $('div.wl_loading').hide().fadeOut();
+                break;            
+        }
+    }
+</script>
+
+<div id="basic-modal-content">
+  <h2>Please select a wishlist category</h2>
+  
+  <form class="select-form" onsubmit="javascript: return true;" accept-charset="utf-8" method="post" action="cart.php">
+    <input type="hidden" value="0" id="productId" class="" />
+    <div id="categories"></div>
+    <table class="category_wishlist">
+      <tr>
+        <td width="40%">
+          <input id="category-new" type="radio" size="45" value="0" name="category">
+          <b><label for="category-new">or create a new wishlist</label></b>
+        </td>
+        <td>
+          <input id="category-name" type="text" size="45" name="categoryName">
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <input onclick="addToWishlist()" class="add-to-wishlist-btn" type="button" name="add-wishlist" value="Add to Wishlist" />
+        </td>
+        <td>
+          <span id="resultMessage"></span>
+        </td>                
+      </tr>
+    </table>
+  </form>
+  <div id="images">
+  </div>
+</div>
+<div class="wl_loading"></div>
+
+{{ 'http://ajax.microsoft.com/ajax/jquery.templates/beta1/jquery.tmpl.min.js' | script_tag }}
+{{ 'jquery.products.min.js' | asset_url | script_tag }}

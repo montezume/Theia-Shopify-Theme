@@ -1,0 +1,226 @@
+<div class="create-wishlist">
+  <label for="wishlist-title">Enter the Category name of wishlist:</label>
+  <input id="wishlist-title" type="text" />
+  <input onclick="createWishlist($('input#wishlist-title').val())" class="add-to-wishlist-btn" type="button" name="create-wishlist" value="Create Wishlist" />
+</div>
+<p id="add-to-cart-msg-wishlist"></p>
+<div id="nav-wishlist"></div>
+<table id="wishlist-table" class="wishlist-products" cellspacing="0" cellpadding="0">
+  <thead>
+    <tr>
+      <th width="3%" style="text-align: center; padding: 6px 8px;">
+        <input class="check-all" type="checkbox" checked="" />
+      </th>            
+      <th width="22%">Product</th>
+      <th width="48%">Note</th>
+      <th width="27%"></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td colspan="4" class="main">
+        <div id="wishlist-viewed-products" style="padding-top: 0px; display:block"></div>
+      </td>                
+    </tr>
+  </tbody>
+</table>
+<div id="all-actions">
+  <div class="copy-move">
+    <div class="move-copy-block"></div>
+    <input class="add-to-wishlist-btn" type="button" value="Move" onclick="moveSelected($('a#current'))" />
+    <input class="add-to-wishlist-btn" type="button" value="Copy" onclick="copySelected($('a#current'))" />
+  </div>        
+  <div class="delete-block">
+    <input class="add-to-wishlist-btn" type="button" value="Delete Selected" onclick="deleteSelected($('a#current'))" />
+  </div>        
+</div>
+{% raw %}
+<script id="wishlist-viewed-product-template"  type="text/x-jquery-tmpl">
+    <table class="wishlist-products-list">
+    <tbody class="ssb">
+    <tr>
+    <td width="3%" style="text-align: center; padding: 7px;"><input id="checkbox-${id}" class="checkbox" type="checkbox" value="${id}" /></td>
+    <td width="15%">
+    <div id="product-${handle}" class="product-wishlist">
+    <div class="image">
+    <a href="${url}">
+    <img src="${Shopify.resizeImage((featured_image ? featured_image : "http://cdn.shopify.com/s/images/admin/no-image-medium.gif"), "medium")}" class="product-photo" />
+             </a>
+    </div>
+    <div class="details">
+    <a href="${url}">
+    <span class="title">${title}</span>
+    </a>
+    <span class="price">{{if price_varies}}From {{/if}}${Shopify.formatMoney(price, currency)}</span>
+    </div>
+    </div>                
+    </td>
+    <td width="55%">
+    <textarea id="${id}" class="wishlit_comment" name="wcomment"></textarea>
+    <p class="clearfix-button"><input id="${id}" class="add-to-wishlist-btn" type="button" value="Add note" onclick="addNote(this, $('a#current').attr('class'))" /></p>
+    </td>
+    <td width="27%">
+    <form method="post" action="/cart/add">
+    <input type="hidden" name="id" value="${variants[0].id}" />
+    <input type="hidden" name="quantity" value="1" />
+    <input id="add-to-cart-wishlist" class="add-to-wishlist-btn" type="submit" value="Add to Cart" name="add" onclick="addToCartWishlist(this); return false;" />
+    </form>
+    <div class="wishlist-categories-select">
+    <hr />
+    <label for="wishlistBox">Copy/Move to Wishlist:</label>
+    <div id="wishlistBox" class="cm-${id}"></div>
+    <p class="clearfix-button">
+    <input id="${id}" class="add-to-wishlist-btn" type="button" value="Move" onclick="move(${id}, $('a#current'))" />
+    <input id="${id}" class="add-to-wishlist-btn" type="button" value="Copy" onclick="copy(${id}, $('a#current'))" />
+    </p>
+    </div>
+    <hr />
+    <div class="item_trash">
+    <b>Delete:</b>
+    <span onclick="deleteItem(${id}, $('a#current'))" title="Delete item"></span>
+    </div>
+    </td>                
+    </tr>
+    </tbody>
+    </table>
+</script>
+{% endraw %}
+
+<script type="text/javascript">
+    // Including api.jquery.js conditionnally.
+    if (typeof Shopify.resizeImage === 'undefined') {
+        document.write({{ "api.jquery.js" | shopify_asset_url | script_tag | json }});
+    }
+
+    // Check all checkboxes in list
+    function checkAll(hand) {
+        return jQuery('table.wishlist-products-list').find('input:checkbox.checkbox').attr('checked', jQuery(hand).attr('checked') ? true : false);
+    }
+
+    /** 
+     * Ajaxy add-to-cart 
+     */
+    function addToCartWishlist(e){
+        var id        = $(e).parents('form').find('input[name="id"]').val();
+        var quantity  = $(e).parents('form').find('input[name="quantity"]').val() || 1;
+        loading('show');
+        $.ajax({ 
+            type: 'POST',
+            url: '/cart/add.js',
+            cache: false, 
+            data: 'quantity=' + quantity + '&id=' + id,
+            dataType: 'json',
+            error: addToCartFailWishlist,
+            success: addToCartSuccessWishlist
+        });
+        
+    }
+
+    function updateCartDesc(data){
+        var $cartLinkText = $('.cart-link .icon:first');
+        
+        switch(data.item_count){
+            case 0: 
+                $cartLinkText.text('0 items');
+                break;
+            case 1:
+                $cartLinkText.text('1 item');
+                break;
+            default:
+                $cartLinkText.text(data.item_count+' items');
+                break;
+        }
+    }
+
+    function addToCartSuccessWishlist (jqXHR, textStatus, errorThrown){
+        $.ajax({ 
+            type: 'GET',
+            url: '/cart.js',
+            async: false, 
+            cache: false, 
+            dataType: 'json',
+            success: updateCartDesc  
+        });
+        loading('hide');
+        $('#add-to-cart-msg-wishlist').hide().addClass('success').html('Item added to cart! <a href="/cart" title="view cart">View cart and check out &raquo;</a><span style="float: right"><a href="javascript:void(0)" onclick="closeMessage()">close</a></span>').fadeIn();   
+    }
+
+    function closeMessage() {
+        $('#add-to-cart-msg-wishlist').hide();
+    }
+
+    function addToCartFailWishlist(jqXHR, textStatus, errorThrown){
+        var response = $.parseJSON(jqXHR.responseText);
+        loading('hide');
+        console.error('PROBLEM ADDING TO CART!', response.description);  
+        $('#add-to-cart-msg-wishlist').addClass('error').text(response.description);
+    }
+
+    var recentlyViewed;
+
+    //getCategories
+    jQuery(document).ready(function($) {
+        loadCategories(userId, $('div#nav-wishlist'), 1);
+        jQuery('input:checkbox.check-all').click(
+            function() {
+                return checkAll(this);
+            }
+        );    
+    });
+
+    function loadTabProducts(el) {
+
+        $('div#all-actions').css('display', 'none');
+        $('input:checkbox.check-all').attr('checked', false);
+
+        closeMessage();
+        loading('show');
+
+        $('div#wishlist-viewed-products').html('<p class="clearfix-button">Loading...</p>');
+        $('ul#navlist-wishlist a').attr('id', '');
+
+        $(el).attr('id', 'current');
+
+        $('span.delete-wishlist').css('visibility', 'hidden');
+
+        $('a.' + $(el).attr('class') + ' span').css('visibility', 'visible');
+
+        $.getJSON(
+            appDomain + "getproducts?jsoncallback=?", {
+                format: 'json',
+                customer: userId,
+                category: $(el).attr('class'),
+                shop: '{{shop.permanent_domain}}'
+            },
+            function(data) {
+                $('div#categories').html('');
+
+                loading('hide');
+
+                if (data.status == 200) {
+
+                    if (data.values.length) {
+
+                        recentlyViewed = data.values;
+
+                        if (recentlyViewed.length) {
+
+                            $('div#all-actions').css('display', 'block');
+                            $('div.copy-move').css('display', 'none');
+                            $('div.move-copy-block').empty();
+                            createCategorySelectBox('all-items', 'all');
+
+                        }
+
+                        Shopify.Products.showRecentlyViewed( { howManyToShow:recentlyViewed.length } );
+
+                    } else {
+
+                        $('div#wishlist-viewed-products').html('<p class="clearfix-button">Products have not been added to this wishlist</p>');
+
+                    }
+                }
+            }
+        );
+    }
+</script>
