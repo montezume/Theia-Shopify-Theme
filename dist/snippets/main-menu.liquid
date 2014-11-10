@@ -1,5 +1,8 @@
 <nav class="main-menu" role="navigation">
   <ul>
+    {% if show_home_link %}
+      <li><a class="main-menu-link" href="/">Home</a></li>
+    {% endif %}
     {% for link in linklists.main-menu.links %}
       <li><a class="main-menu-link" href="{{ link.url }}">{{ link.title }}</a></li>
     {% endfor %}
