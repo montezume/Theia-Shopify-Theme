@@ -1,27 +1,19 @@
 {{ 'jquery.simplemodal.js' | asset_url | script_tag }}
 <script type="text/javascript">
-    var buttonElementProduct = jQuery('<input />').attr({
-        'class': 'add-to-wishlist-btn',
-        'type': 'button',
-        'name': '{{product.id}}',
-        'id': 'add-to-wishlist',
-        'value': 'Add to Wishlist',
-        'rel': '{{product.handle}}'
-    });
 
-    var buttonElement = jQuery('<input />').attr({
-        'class': 'add-to-wishlist-btn-image',
-        'type': 'button',
-        'name': 'wishlist',
-        'id': 'add-to-wishlist',
-        'value': '',
-        'title': 'Add to Wishlist'
-    });
-
-    //My Wishlist Link
     var linkWishlist = '{{pages.wishlist.url}}';
     var customerId = '{{customer.id}}';
 
+    var appDomain = 'http://wishlist.shopfrogs.com/wishlist/call/';
+    var userId = 0;
+    var customerFN='';
+    var customerLN='';
+    var checkout = '{{ shop.metafields.wishlist_settings.wishlist_customer_checkout }}';
+    var customer = '{{customer.id}}';
+    var productId = 0;
+    var currency = "{{shop.money_format | strip_html}}";
+
+    //My Wishlist Link
     if ({{ shop.metafields.wishlist_settings.wishlist_customer_checkout }} && customerId == '') {
         linkWishlist = '/account';
     }
@@ -44,6 +36,15 @@
     }
 
     //Product Page
+    var buttonElementProduct = jQuery('<input />').attr({
+        'class': 'add-to-wishlist-btn',
+        'type': 'button',
+        'name': '{{product.id}}',
+        'id': 'add-to-wishlist',
+        'value': 'Add to Wishlist',
+        'rel': '{{product.handle}}'
+    });
+
     if (jQuery('#p-wishlist-product').length > 0) {
         jQuery('#p-wishlist-product').append(buttonElementProduct);
     } else {
@@ -58,6 +59,15 @@
     }
 
     //Other Page
+    var buttonElement = jQuery('<input />').attr({
+        'class': 'add-to-wishlist-btn-image',
+        'type': 'button',
+        'name': 'wishlist',
+        'id': 'add-to-wishlist',
+        'value': '',
+        'title': 'Add to Wishlist'
+    });
+
     if ({{ shop.metafields.wishlist_settings.wishlist_add_button }}) {
         if (jQuery('p#p-wishlist').length > 0) {
             jQuery('p#p-wishlist').append(buttonElement);
@@ -73,17 +83,8 @@
         }
     }
 
-    var appDomain = 'http://wishlist.shopfrogs.com/wishlist/call/';
-    var userId = 0;
-    var customerFN='';
-    var customerLN='';
-    var checkout = '{{ shop.metafields.wishlist_settings.wishlist_customer_checkout }}';
-    var customer = '{{customer.id}}';
-    var productId = 0;
-    var currency = "{{shop.money_format | strip_html}}";
-
+    // Load dialog on click
     jQuery(function ($) {
-        // Load dialog on click
         $('input#add-to-wishlist').click(function (e) {
 
             if ({{ shop.metafields.wishlist_settings.wishlist_customer_checkout }} && customer == '') {
@@ -105,6 +106,33 @@
             return false;
         });
     });
+
+    if ({{ shop.metafields.wishlist_settings.wishlist_customer_checkout  }} == 0) {
+        userId = getCookie('questId');
+        customerFN = '';
+        customerLN = 'Guest';
+
+        if (!userId) {
+            var domain = '{{shop.permanent_domain}}';
+            $.getJSON(
+                appDomain + "cookie?format=json&shop="+domain+"&jsoncallback=?",
+                function(data){
+                    var today = new Date();
+                    var days = 365*2; //Two year
+                    today.setTime(today.getTime()+(days*24*60*60*1000));
+                    setCookie('questId', data.id, today, '/', '{{shop.domain}}');
+		    userId = getCookie('questId');
+                }
+            );
+        }
+    } else {
+        userId = '{{ customer.id }}';
+        customerFN = '{{ customer.first_name }}';
+        customerLN = '{{ customer.last_name }}';
+    }
+
+
+    /* Functions */
 
     function showModalForm() {
         $('#basic-modal-content').modal({overlayClose:true});
@@ -191,30 +219,6 @@
         }
         
         return false;
-    }
-
-    if ({{ shop.metafields.wishlist_settings.wishlist_customer_checkout  }} == 0) {
-        userId = getCookie('questId');
-        customerFN = '';
-        customerLN = 'Guest';            
-
-        if (!userId) {
-            var domain = '{{shop.permanent_domain}}';
-            $.getJSON(
-                appDomain + "cookie?format=json&shop="+domain+"&jsoncallback=?",
-                function(data){
-                    var today = new Date();
-                    var days = 365*2; //Two year
-                    today.setTime(today.getTime()+(days*24*60*60*1000));
-                    setCookie('questId', data.id, today, '/', '{{shop.domain}}');
-		    userId = getCookie('questId');
-                }
-            );
-        }
-    } else {
-        userId = '{{ customer.id }}';
-        customerFN = '{{ customer.first_name }}';
-        customerLN = '{{ customer.last_name }}';
     }
 
     function createWishlist(title){
@@ -464,6 +468,7 @@
             }
         );
     }
+
     /*Loading Block*/
     function loading(type) {
         switch (type) {
