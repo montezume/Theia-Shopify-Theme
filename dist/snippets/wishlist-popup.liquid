@@ -1,4 +1,5 @@
 {{ 'jquery.simplemodal.js' | asset_url | script_tag }}
+{{ 'jquery.cookie-1.4.1.min.js' | asset_url | script_tag }}
 {{ 'http://ajax.microsoft.com/ajax/jquery.templates/beta1/jquery.tmpl.min.js' | script_tag }}
 {{ 'jquery.products.min.js' | asset_url | script_tag }}
 {{ 'wishlist.js' | asset_url | script_tag }}
@@ -117,7 +118,7 @@
     });
 
     if (wishlistSettingCustomerCheckout == false) {
-        userId = getCookie('questId');
+        userId = $.cookie('questId');
         customerFN = '';
         customerLN = 'Guest';
 
@@ -126,11 +127,8 @@
             $.getJSON(
                 appDomain + "cookie?format=json&shop="+domain+"&jsoncallback=?",
                 function(data){
-                    var today = new Date();
-                    var days = 365*2; //Two year
-                    today.setTime(today.getTime()+(days*24*60*60*1000));
-                    setCookie('questId', data.id, today, '/', shopDomain);
-		    userId = getCookie('questId');
+                    $.cookie('questId', data.id, { expires: 365*2, path: '/', domain: shopDomain });
+                    userId = $.cookie('questId');
                 }
             );
         }
