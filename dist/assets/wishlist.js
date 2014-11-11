@@ -121,324 +121,344 @@ function loadTabProducts(el) {
 
 
 
-    /* Functions */
+/* Functions */
 
-    function showModalForm() {
-        $('#basic-modal-content').modal({overlayClose:true});
-    }
+function showModalForm() {
+    $('#basic-modal-content').modal({overlayClose:true});
+}
 
-    function closeModalForm() {
-        $.modal.close();
-    }
+function closeModalForm() {
+    $.modal.close();
+}
 
-    function loadCategories(user, object, type) {
-        loading('show');
-        var categories;
-        var json = $.getJSON(
-            appDomain + "getcategories?jsoncallback=?",
-            {
-                format: 'json',
-                customer: user,
-                fn: customerFN,
-                ln: customerLN,
-                product: productId,
-                shop: shopPermanentDomain,
-                type: type
-            },
-            function(data) {
-                object.html('');
-                loading('hide');
+function loadCategories(user, object, type) {
+    loading('show');
+    var categories;
+    var json = $.getJSON(
+        appDomain + "getcategories?jsoncallback=?",
+        {
+            format: 'json',
+            customer: user,
+            fn: customerFN,
+            ln: customerLN,
+            product: productId,
+            shop: shopPermanentDomain,
+            type: type
+        },
+        function(data) {
+            object.html('');
+            loading('hide');
 
-                if (data.status == 200) {
-                    object.append(data.value);
+            if (data.status == 200) {
+                object.append(data.value);
 
-                    if (!type) {
-                        showModalForm();
-                    } else {
-                        $('ul#navlist-wishlist a#current').click();
-                        $("span.delete-wishlist").click(function(event){
-                            event.stopPropagation();
-
-                            //delete wishlist
-                            if (confirm("Do you want to delete this wishlist?")) {
-                                deleteWishlist($(this).attr('id'));
-	                    } else {
-	                        return;
-	                    }                        
-                        });                     
-                    }
-
-                } else if (data.status == 300) {
-                    alert(data.message);
-                    return;
-
+                if (!type) {
+                    showModalForm();
                 } else {
-                    object.html('Categories not found');
-                    if (!type) {
-                        showModalForm();
-                    }
-                }
-            }
-        );
-    }
+                    $('ul#navlist-wishlist a#current').click();
+                    $("span.delete-wishlist").click(function(event){
+                        event.stopPropagation();
 
-    function createWishlist(title){
-        closeMessage();
-        $.getJSON(
-            appDomain + "createwishlist?jsoncallback=?",
-            {
-                format: 'json',
-                title: title,
-                customer: userId,
-                fn: customerFN,
-                ln: customerLN,
-                shop: shopPermanentDomain
-            },
-            function(data){
-                if (data.status == 200) {
-                    loadCategories(userId, $('div#nav-wishlist'), 1);
-                } else if (data.status == 300) {
-                    $('p#add-to-cart-msg-wishlist').hide().addClass('success').html(data.message + '<span style="float: right"><a href="javascript:void(0)" onclick="closeMessage()">close</a></span>').fadeIn();
+                        //delete wishlist
+                        if (confirm("Do you want to delete this wishlist?")) {
+                            deleteWishlist($(this).attr('id'));
+	                } else {
+	                    return;
+	                }
+                    });
                 }
-            }
-        );
-    }
 
-    function deleteWishlist(wishlistId) {
-        $.getJSON(
-            appDomain + "deletewishlist?jsoncallback=?",
-            {
-                format: 'json',
-                wishlist: wishlistId,
-                customer: userId,
-                shop: shopPermanentDomain
-            },
-            function(data){
-                if (data.status == 200) {
-                    loadCategories(userId, $('div#nav-wishlist'), 1);
-                } else if (data.status == 300) {
-                    $('p#add-to-cart-msg-wishlist').hide().addClass('success').html(data.message + '<span style="float: right"><a href="javascript:void(0)" onclick="closeMessage()">close</a></span>').fadeIn();
-                }
-            }
-        );
-    }
-
-    function deleteSelected(wishlist) {
-        var selected = new Array();
-        $("input:checkbox.checkbox:checked").each(function() {
-            selected.push($(this).val());
-        });    
-        if (selected.length) {
-            if (confirm("Do you want to delete selected items?")) {
-                deleteProduct(selected, wishlist);
-            } else {
+            } else if (data.status == 300) {
+                alert(data.message);
                 return;
-            }         
-        } else 
-        return;
-    }
 
-    function deleteItem(productId, wishlist) {
-        //delete Product
-        if (confirm("Do you want to delete this product?")) {
-            var selected = new Array();
-            selected.push(productId);
+            } else {
+                object.html('Categories not found');
+                if (!type) {
+                    showModalForm();
+                }
+            }
+        }
+    );
+}
+
+function createWishlist(title){
+    closeMessage();
+    $.getJSON(
+        appDomain + "createwishlist?jsoncallback=?",
+        {
+            format: 'json',
+            title: title,
+            customer: userId,
+            fn: customerFN,
+            ln: customerLN,
+            shop: shopPermanentDomain
+        },
+        function(data){
+            if (data.status == 200) {
+                loadCategories(userId, $('div#nav-wishlist'), 1);
+            } else if (data.status == 300) {
+                $('p#add-to-cart-msg-wishlist').hide().addClass('success').html(data.message + '<span style="float: right"><a href="javascript:void(0)" onclick="closeMessage()">close</a></span>').fadeIn();
+            }
+        }
+    );
+}
+
+function deleteWishlist(wishlistId) {
+    $.getJSON(
+        appDomain + "deletewishlist?jsoncallback=?",
+        {
+            format: 'json',
+            wishlist: wishlistId,
+            customer: userId,
+            shop: shopPermanentDomain
+        },
+        function(data){
+            if (data.status == 200) {
+                loadCategories(userId, $('div#nav-wishlist'), 1);
+            } else if (data.status == 300) {
+                $('p#add-to-cart-msg-wishlist').hide().addClass('success').html(data.message + '<span style="float: right"><a href="javascript:void(0)" onclick="closeMessage()">close</a></span>').fadeIn();
+            }
+        }
+    );
+}
+
+function deleteSelected(wishlist) {
+    var selected = new Array();
+    $("input:checkbox.checkbox:checked").each(function() {
+        selected.push($(this).val());
+    });
+    if (selected.length) {
+        if (confirm("Do you want to delete selected items?")) {
             deleteProduct(selected, wishlist);
         } else {
             return;
-        }     
-    }
-
-    function deleteProduct(productId, wishlist) {
-        $.getJSON(
-            appDomain + "deleteproduct?jsoncallback=?",
-            {
-                format: 'json',
-                wishlist: wishlist.attr('class'),
-                product: productId,
-                customer: userId,
-                shop: shopPermanentDomain
-            },
-            function(data){
-                if (data.status == 200) {
-                    loadTabProducts(wishlist);
-                } else if (data.status == 300) {
-                    $('p#add-to-cart-msg-wishlist').hide().addClass('success').html(data.message + '<span style="float: right"><a href="javascript:void(0)" onclick="closeMessage()">close</a></span>').fadeIn();
-                }
-            }
-        );    
-    }
-
-    function moveSelected(wishlist) {
-        var selected = new Array();
-        $("input:checkbox.checkbox:checked").each(function() {
-            selected.push($(this).val());
-        });    
-        if (selected.length) {
-            if (confirm("Do you want to move selected items?")) {
-                loading('show');
-                $.getJSON(
-                    appDomain + "moveproduct?jsoncallback=?",
-                    {
-                        format: 'json',
-                        wishlist: wishlist.attr('class'),
-                        product: selected,
-                        customer: userId,
-                        shop: shopPermanentDomain,
-                        wishlistNew: $('select[id=all-items]').val()
-                    },
-                    function(data){
-                        if (data.status == 200) {
-                            loadTabProducts(wishlist);
-                        } else {
-                            $('p#add-to-cart-msg-wishlist').hide().addClass('success').html(data.message + '<span style="float: right"><a href="javascript:void(0)" onclick="closeMessage()">close</a></span>').fadeIn();
-                            loading('hide');
-                        }
-                    }
-                );
-            } else {
-                return;
-            }         
-        } else 
+        }
+    } else {
         return;
     }
+}
 
-    function move(productId, wishlist) {
-        loading('show');
-        $.getJSON(
-            appDomain + "moveproduct?jsoncallback=?",
-            {
-                format: 'json',
-                wishlist: wishlist.attr('class'),
-                product: productId,
-                customer: userId,
-                shop: shopPermanentDomain,
-                wishlistNew: $('select[id='+productId+']').val()
-            },
-            function(data){
-                if (data.status == 200) {
-                    loadTabProducts(wishlist);
-                } else {
-                    $('p#add-to-cart-msg-wishlist').hide().addClass('success').html(data.message + '<span style="float: right"><a href="javascript:void(0)" onclick="closeMessage()">close</a></span>').fadeIn();
-                    loading('hide');
-                }
-            }
-        );    
-    }
-
-    function copySelected(wishlist) {
+function deleteItem(productId, wishlist) {
+    //delete Product
+    if (confirm("Do you want to delete this product?")) {
         var selected = new Array();
-        $("input:checkbox.checkbox:checked").each(function() {
-            selected.push($(this).val());
-        });    
-        if (selected.length) {
-            if (confirm("Do you want to copy selected items?")) {
-                loading('show');
-                $.getJSON(
-                    appDomain + "copyproduct?jsoncallback=?",
-                    {
-                        format: 'json',
-                        wishlist: wishlist.attr('class'),
-                        product: selected,
-                        customer: userId,
-                        shop: shopPermanentDomain,
-                        wishlistNew: $('select[id=all-items]').val()
-                    },
-                    function(data){
-                        if (data.status) {
-                            $('p#add-to-cart-msg-wishlist').hide().addClass('success').html(data.message + '<span style="float: right"><a href="javascript:void(0)" onclick="closeMessage()">close</a></span>').fadeIn();
-                        }
+        selected.push(productId);
+        deleteProduct(selected, wishlist);
+    } else {
+        return;
+    }
+}
+
+function deleteProduct(productId, wishlist) {
+    $.getJSON(
+        appDomain + "deleteproduct?jsoncallback=?",
+        {
+            format: 'json',
+            wishlist: wishlist.attr('class'),
+            product: productId,
+            customer: userId,
+            shop: shopPermanentDomain
+        },
+        function(data){
+            if (data.status == 200) {
+                loadTabProducts(wishlist);
+            } else if (data.status == 300) {
+                $('p#add-to-cart-msg-wishlist').hide().addClass('success').html(data.message + '<span style="float: right"><a href="javascript:void(0)" onclick="closeMessage()">close</a></span>').fadeIn();
+            }
+        }
+    );
+}
+
+function moveSelected(wishlist) {
+    var selected = new Array();
+    $("input:checkbox.checkbox:checked").each(function() {
+        selected.push($(this).val());
+    });
+    if (selected.length) {
+        if (confirm("Do you want to move selected items?")) {
+            loading('show');
+            $.getJSON(
+                appDomain + "moveproduct?jsoncallback=?",
+                {
+                    format: 'json',
+                    wishlist: wishlist.attr('class'),
+                    product: selected,
+                    customer: userId,
+                    shop: shopPermanentDomain,
+                    wishlistNew: $('select[id=all-items]').val()
+                },
+                function(data){
+                    if (data.status == 200) {
+                        loadTabProducts(wishlist);
+                    } else {
+                        $('p#add-to-cart-msg-wishlist').hide().addClass('success').html(data.message + '<span style="float: right"><a href="javascript:void(0)" onclick="closeMessage()">close</a></span>').fadeIn();
                         loading('hide');
                     }
-                ); 
-            } else {
-                return;
-            }         
-        } else 
+                }
+            );
+        } else {
+            return;
+        }
+    } else {
         return;
     }
+}
 
-    function copy(productId, wishlist) {
-        loading('show');
-        $.getJSON(
-            appDomain + "copyproduct?jsoncallback=?",
-            {
-                format: 'json',
-                wishlist: wishlist.attr('class'),
-                product: productId,
-                customer: userId,
-                shop: shopPermanentDomain,
-                wishlistNew: $('select[id='+productId+']').val()
-            },
-            function(data){
-                if (data.status) {
-                    $('p#add-to-cart-msg-wishlist').hide().addClass('success').html(data.message + '<span style="float: right"><a href="javascript:void(0)" onclick="closeMessage()">close</a></span>').fadeIn();
-                }
+function move(productId, wishlist) {
+    loading('show');
+    $.getJSON(
+        appDomain + "moveproduct?jsoncallback=?",
+        {
+            format: 'json',
+            wishlist: wishlist.attr('class'),
+            product: productId,
+            customer: userId,
+            shop: shopPermanentDomain,
+            wishlistNew: $('select[id='+productId+']').val()
+        },
+        function(data){
+            if (data.status == 200) {
+                loadTabProducts(wishlist);
+            } else {
+                $('p#add-to-cart-msg-wishlist').hide().addClass('success').html(data.message + '<span style="float: right"><a href="javascript:void(0)" onclick="closeMessage()">close</a></span>').fadeIn();
                 loading('hide');
             }
-        );    
-    }
-
-    function addNote(el, wishlistId){
-        loading('show');
-        var element = $(el);
-        closeMessage();
-        $.getJSON(
-            appDomain + "addnote?jsoncallback=?",
-            {
-                format: 'json',
-                text: $('#'+element.attr('id')).val(),
-                customer: userId,
-                product: element.attr('id'),
-                wishlist: wishlistId,
-                shop: shopPermanentDomain
-            },
-            function(data){
-                if (data.status == 200) {
-                } else if (data.status == 300) {
-                    $('p#add-to-cart-msg-wishlist').hide().addClass('success').html(data.message + '<span style="float: right"><a href="javascript:void(0)" onclick="closeMessage()">close</a></span>').fadeIn();
-                }
-                loading('hide');
-            }
-        );
-    }
-
-    function addToWishlist(){
-        $.getJSON(
-            appDomain + "addtowishlist?jsoncallback=?",
-            {
-                format: 'json',
-                category: $('form.select-form input:checked').val(),
-                title: $('input#category-name').val(),
-                customer: userId,
-                fn: customerFN,
-                ln: customerLN,
-                product: $('input#productId').val(),
-                handle: $('input#productId').attr('class'),
-                shop: shopPermanentDomain
-            },
-            function(data){
-                if (data.status == 200) {
-                    if ( wishlistSettingRedirectUser ) {
-                        window.location = '/pages/wishlist';
-                    } else {
-                        closeModalForm();
-                    }
-                } else if (data.status == 300) {
-                    $('span#resultMessage').html(data.message);
-                }
-            }
-        );
-    }
-
-    /*Loading Block*/
-    function loading(type) {
-        switch (type) {
-            case 'show':
-                $('div.wl_loading').show().fadeIn();
-                break;
-            case 'hide':
-                $('div.wl_loading').hide().fadeOut();
-                break;            
         }
+    );
+}
+
+function copySelected(wishlist) {
+    var selected = new Array();
+    $("input:checkbox.checkbox:checked").each(function() {
+        selected.push($(this).val());
+    });
+    if (selected.length) {
+        if (confirm("Do you want to copy selected items?")) {
+            loading('show');
+            $.getJSON(
+                appDomain + "copyproduct?jsoncallback=?",
+                {
+                    format: 'json',
+                    wishlist: wishlist.attr('class'),
+                    product: selected,
+                    customer: userId,
+                    shop: shopPermanentDomain,
+                    wishlistNew: $('select[id=all-items]').val()
+                },
+                function(data){
+                    if (data.status) {
+                        $('p#add-to-cart-msg-wishlist').hide().addClass('success').html(data.message + '<span style="float: right"><a href="javascript:void(0)" onclick="closeMessage()">close</a></span>').fadeIn();
+                    }
+                    loading('hide');
+                }
+            ); 
+        } else {
+            return;
+        }         
+    } else 
+        return;
+}
+
+function copy(productId, wishlist) {
+    loading('show');
+    $.getJSON(
+        appDomain + "copyproduct?jsoncallback=?",
+        {
+            format: 'json',
+            wishlist: wishlist.attr('class'),
+            product: productId,
+            customer: userId,
+            shop: shopPermanentDomain,
+            wishlistNew: $('select[id='+productId+']').val()
+        },
+        function(data){
+            if (data.status) {
+                $('p#add-to-cart-msg-wishlist').hide().addClass('success').html(data.message + '<span style="float: right"><a href="javascript:void(0)" onclick="closeMessage()">close</a></span>').fadeIn();
+            }
+            loading('hide');
+        }
+    );    
+}
+
+function addNote(el, wishlistId){
+    loading('show');
+    var element = $(el);
+    closeMessage();
+    $.getJSON(
+        appDomain + "addnote?jsoncallback=?",
+        {
+            format: 'json',
+            text: $('#'+element.attr('id')).val(),
+            customer: userId,
+            product: element.attr('id'),
+            wishlist: wishlistId,
+            shop: shopPermanentDomain
+        },
+        function(data){
+            if (data.status == 200) {
+            } else if (data.status == 300) {
+                $('p#add-to-cart-msg-wishlist').hide().addClass('success').html(data.message + '<span style="float: right"><a href="javascript:void(0)" onclick="closeMessage()">close</a></span>').fadeIn();
+            }
+            loading('hide');
+        }
+    );
+}
+
+function addToWishlist(){
+    $.getJSON(
+        appDomain + "addtowishlist?jsoncallback=?",
+        {
+            format: 'json',
+            category: $('form.select-form input:checked').val(),
+            title: $('input#category-name').val(),
+            customer: userId,
+            fn: customerFN,
+            ln: customerLN,
+            product: $('input#productId').val(),
+            handle: $('input#productId').attr('class'),
+            shop: shopPermanentDomain
+        },
+        function(data){
+            if (data.status == 200) {
+                if ( wishlistSettingRedirectUser ) {
+                    window.location = '/pages/wishlist';
+                } else {
+                    closeModalForm();
+                }
+            } else if (data.status == 300) {
+                $('span#resultMessage').html(data.message);
+            }
+        }
+    );
+}
+
+/*Loading Block*/
+function loading(type) {
+    switch (type) {
+    case 'show':
+        $('div.wl_loading').show().fadeIn();
+        break;
+    case 'hide':
+        $('div.wl_loading').hide().fadeOut();
+        break;
     }
+}
+
+function getGuestId(){
+    var guestId = $.cookie('questId');
+
+    if (!guestId) {
+        var domain = shopPermenantDomain;
+        $.getJSON(
+            appDomain + "cookie?format=json&shop="+domain+"&jsoncallback=?",
+            function(data){
+                $.cookie('questId', data.id, { expires: 365*2, path: '/', domain: shopDomain });
+                guestId = $.cookie('questId');
+            }
+        );
+    }
+
+    return guestId;
+}
+

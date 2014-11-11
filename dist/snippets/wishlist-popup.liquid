@@ -15,13 +15,26 @@
     var shopDomain = '{{shop.domain}}';
 
     var appDomain = 'http://wishlist.shopfrogs.com/wishlist/call/';
-    var userId = 0;
-    var customerFN='';
-    var customerLN='';
     var wishlistSettingCustomerCheckout = !! {{ shop.metafields.wishlist_settings.wishlist_customer_checkout }};
     var customer = '{{customer.id}}';
     var productId = 0;
     var currency = "{{shop.money_format | strip_html}}";
+
+    // Customer info
+    var userId = 0;
+    var customerFN='';
+    var customerLN='';
+    if (wishlistSettingCustomerCheckout == false) {
+        userId = getGuestId();
+        customerFN = '';
+        customerLN = 'Guest';
+
+    } else {
+        userId = '{{ customer.id }}';
+        customerFN = '{{ customer.first_name }}';
+        customerLN = '{{ customer.last_name }}';
+    }
+
 
     //My Wishlist Link
     if (wishlistSettingCustomerCheckout && customerId == '') {
@@ -116,28 +129,6 @@
             return false;
         });
     });
-
-    if (wishlistSettingCustomerCheckout == false) {
-        userId = $.cookie('questId');
-        customerFN = '';
-        customerLN = 'Guest';
-
-        if (!userId) {
-            var domain = shopPermenantDomain;
-            $.getJSON(
-                appDomain + "cookie?format=json&shop="+domain+"&jsoncallback=?",
-                function(data){
-                    $.cookie('questId', data.id, { expires: 365*2, path: '/', domain: shopDomain });
-                    userId = $.cookie('questId');
-                }
-            );
-        }
-    } else {
-        userId = '{{ customer.id }}';
-        customerFN = '{{ customer.first_name }}';
-        customerLN = '{{ customer.last_name }}';
-    }
-
 
 </script>
 
