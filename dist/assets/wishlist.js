@@ -1,3 +1,185 @@
+var wishlist = (function($){
+
+    var self = this,
+        defaults = {
+            addButtonSelector: '#add-to-wishlist-link'
+        },
+        settings = {};
+
+    var wishlists = [],
+        defaultWishlist = {},
+        customer = {},
+        currentProduct = {};
+
+    function init(options, customerData, productData){
+        console.log('init wishlist');
+
+        settings = $.extend({}, defaults, options);
+
+        // load customer data
+        if (settings.customerCheckout === false) {
+            customer = {
+                id: getGuestId(),
+                firstName: '',
+                lastName: 'Guest'
+            };
+        } else {
+            customer = customerData;
+        }
+
+        if (typeof productData.id !== 'undefined'){
+            currentProduct = productData;
+        }
+
+        // wishlist link
+        if (settings.customerCheckout && customer.id == '') {
+            settings.linkWishlist = '/account';
+        }
+
+        // get wishlists from app
+        initWishlists();
+
+        // if the current product is in the wishlist we change the text and the href
+        initAddButton();
+    }
+
+    function initAddButton(){
+
+        isInWishlist( currentProduct.id ).done(function(data){
+
+            if (data.status === 300){
+                currentProduct.isInWishlist = true;
+                $(settings.addButtonSelector)
+                    .text('In your wishlist')
+                    .attr('href', settings.linkWishlist);
+
+            } else {
+                currentProduct.isInWishlist = false;
+                $(settings.addButtonSelector)
+                    .click(addToMainWishlistCallBack);
+            }
+        });
+    }
+
+    function addToMainWishlistCallBack(e){
+        e.preventDefault();
+
+        addToMainWishlist();
+    }
+
+    function addToMainWishlist(){
+        var url = settings.appDomain + "addtowishlist?jsoncallback=?";
+
+        var data = {
+            format: 'json',
+            category: defaultWishlist.id,
+            title: defaultWishlist.name,
+            customer: customer.id,
+            fn: customer.firstName,
+            ln: customer.lastName,
+            product: currentProduct.id,
+            handle: currentProduct.handle,
+            shop: settings.permanentDomain
+        };
+
+        return $.getJSON( url, data )
+            .done(function(data){
+                console.log(data);
+
+                if (data.status === 200){
+                    currentProduct.isInWishlist = true;
+                    $(settings.addButtonSelector)
+                        .text('In your wishlist')
+                        .attr('href', settings.linkWishlist)
+                        .unbind('click', addToMainWishlistCallBack);
+                }
+            });
+    }
+
+    function addButtonCallback(e){
+        e.preventDefault();
+
+        if (settings.customerCheckout && customer == '') {
+            window.location = '/account/login';
+
+        } else {
+            loadCategories(userId, $('div#categories'), 0);
+        }
+    }
+
+    function isInWishlist( prodId ){
+        // if provided a product id then the server will return
+        // a 300 code if the product is already on a wishlist.
+        return getWishlists( 0, prodId );
+    }
+
+    function initWishlists(){
+        getWishlists().done(loadWishlists);
+    }
+
+    function getWishlists( type, prodId ){
+        var url = settings.appDomain + "getcategories?jsoncallback=?";
+        var data = {
+                format: 'json',
+                customer: customer.id,
+                fn: customer.firstName,
+                ln: customer.lastName,
+                shop: settings.permanentDomain
+        };
+
+        if (typeof type !== 'undefined') {
+            data.type = type;
+        }
+
+        if (typeof prodId !== 'undefined') {
+            data.product = prodId;
+        }
+
+        return $.getJSON(url, data)
+            .done(function(r){
+                console.log(r);
+            });
+    }
+
+    function loadWishlists(data){
+        wishlists = parseWishlists( data.value );
+
+        // get the first matching wishlist with the name "Main"
+        defaultWishlist = wishlists.filter(function(el){
+            return el.name === 'Main';
+        })[0];
+     }
+
+    function parseWishlists( html ){
+
+        // data is returned with a status and an html partial
+        // this pulls out the form labels and pulls the data we need.
+        var $labels = $(html).find('label');
+        var categories = [];
+
+        $labels.each(function( i, e ){
+            categories.push({
+                id: $(e).attr('for'),
+                name: $(e).text()
+            });
+        });
+
+        return categories;
+    }
+
+    // expose public methods and properties
+    return {
+        init: init,
+        customer: function(){ return customer; },
+        wishlists: function(){ return wishlists; },
+        defaultWishlist: function(){ return defaultWishlist; },
+        currentProduct: function(){ return currentProduct; }
+    };
+
+})(jQuery);
+
+
+
 /* Functions */
 
 // Check all checkboxes in list
@@ -154,6 +336,7 @@ function loadCategories(user, object, type) {
 
                 if (!type) {
                     showModalForm();
+
                 } else {
                     $('ul#navlist-wishlist a#current').click();
                     $("span.delete-wishlist").click(function(event){
@@ -425,6 +608,7 @@ function addToWishlist(){
                     window.location = '/pages/wishlist';
                 } else {
                     closeModalForm();
+                    alert('added to wishlist');
                 }
             } else if (data.status == 300) {
                 $('span#resultMessage').html(data.message);
@@ -461,4 +645,3 @@ function getGuestId(){
 
     return guestId;
 }
-
