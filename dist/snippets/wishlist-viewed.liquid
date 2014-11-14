@@ -2,28 +2,58 @@
 <div id="wishlist-viewed-products" style="padding-top: 0px; display:block"></div>
 
 <script id="wishlist-viewed-product-template"  type="text/x-jquery-tmpl">
-  <div class="wishlist-product-row">
-    <div id="product-${handle}" class="product-wishlist">
-      <div class="image">
+  <div id="product-${handle}" class="wishlist-item">
+    <div class="image-column">
+      <div class="wishlist-item-image">
         <a href="${url}">
-          <img src="${Shopify.resizeImage((featured_image ? featured_image : "http://cdn.shopify.com/s/images/admin/no-image-medium.gif"), "medium")}" class="product-photo" />
+          <img src="${Shopify.resizeImage((featured_image ? featured_image : "http://cdn.shopify.com/s/images/admin/no-image-medium.gif"), "medium")}" />
         </a>
       </div>
-      <a href="${url}">
-        <span class="title">${title}</span>
-      </a>
-      <span class="price">{{if price_varies}}From {{/if}}${Shopify.formatMoney(price, currency)}</span>
     </div>
+    <div class="info-options-column">
+      <div class="header-row">
+        <h4>
+          <a href="${url}">
+            ${title} &ndash; {{if price_varies}}{{/if}}${Shopify.formatMoney(price, currency)}
+          </a>
+        </h4>
+      </div>
 
-    <form method="post" action="/cart/add">
-      <input type="hidden" name="id" value="${variants[0].id}" />
-      <input type="hidden" name="quantity" value="1" />
-      <input id="add-to-cart-wishlist" class="add-to-wishlist-btn" type="submit" value="Add to Cart" name="add" onclick="addToCartWishlist(this); return false;" />
-    </form>
+      <div class="options-row">
+        <div class="info-column">
 
-    <div class="item_trash">
-      <b>Delete:</b>
-      <span onclick="deleteItem(${id}, $('a#current'))" title="Delete item"></span>
+          {{if hasStyleNumber}}
+          <div class="style-number">
+            <span class="icon"></span>
+            <span class="label">Style #: ${styleNumber}</span>
+          </div>
+          {{/if}}
+
+          <a class="remove-item-link" onclick="deleteItem(${id}, $('a#current'))" title="Delete item" href="#">
+            <span class="icon"></span>
+            <span class="label">Remove from my favorites</span>
+          </a>
+
+        </div>
+        <div class="size-column">
+        </div>
+        <div class="color-column">
+        </div>
+        <div class="button-column">
+
+          <form method="post" action="/cart/add">
+            <input type="hidden" name="id" value="${variants[0].id}" />
+            <input type="hidden" name="quantity" value="1" />
+
+            <button id="add-to-cart-wishlist" name="add" class="button" onclick="addToCartWishlist(this); return false;">
+              <span class="label">Add to cart</span>
+              <span class="icon"></span>
+            </button>
+
+          </form>
+
+        </div>
+      </div>
     </div>
   </div>
 </script>

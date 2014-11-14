@@ -161,34 +161,3 @@
     });
 
 </script>
-
-<div id="basic-modal-content">
-  <h2>Please select a wishlist category</h2>
-  
-  <form class="select-form" onsubmit="javascript: return true;" accept-charset="utf-8" method="post" action="cart.php">
-    <input type="hidden" value="0" id="productId" class="" />
-    <div id="categories"></div>
-    <table class="category_wishlist">
-      <tr>
-        <td width="40%">
-          <input id="category-new" type="radio" size="45" value="0" name="category">
-          <b><label for="category-new">or create a new wishlist</label></b>
-        </td>
-        <td>
-          <input id="category-name" type="text" size="45" name="categoryName">
-        </td>
-      </tr>
-      <tr>
-        <td>
-          <input onclick="addToWishlist()" class="add-to-wishlist-btn" type="button" name="add-wishlist" value="Add to Wishlist" />
-        </td>
-        <td>
-          <span id="resultMessage"></span>
-        </td>
-      </tr>
-    </table>
-  </form>
-  <div id="images">
-  </div>
-</div>
-<div class="wl_loading"></div>
