@@ -1,7 +1,6 @@
 {{ 'jquery.simplemodal.js' | asset_url | script_tag }}
 {{ 'jquery.cookie-1.4.1.min.js' | asset_url | script_tag }}
 {{ 'http://ajax.microsoft.com/ajax/jquery.templates/beta1/jquery.tmpl.min.js' | script_tag }}
-{{ 'jquery.products.min.js' | asset_url | script_tag }}
 {{ 'wishlist.js' | asset_url | script_tag }}
 
 <script type="text/javascript">
@@ -126,19 +125,19 @@
     }
     {% endif %}
 
-    wishlist.init({
-        permanentDomain: '{{shop.permanent_domain}}',
-        redirectUser: '{{ shop.metafields.wishlist_settings.wishlist_redirect }}' != '0',
-        linkWishlist: '{{pages.wishlist.url}}',
-        addButton: '{{ shop.metafields.wishlist_settings.wishlist_add_button }}' != '0',
-        shopDomain: '{{shop.domain}}',
-        appDomain: 'http://wishlist.shopfrogs.com/wishlist/call/',
-        customerCheckout: '{{ shop.metafields.wishlist_settings.wishlist_customer_checkout }}' != '0',
-        currency: "{{shop.money_format | strip_html}}"
-    }, customer, currentProduct);
-
     // Load dialog on click
     jQuery(function ($) {
+        wishlist.init({
+            permanentDomain: '{{shop.permanent_domain}}',
+            redirectUser: '{{ shop.metafields.wishlist_settings.wishlist_redirect }}' != '0',
+            linkWishlist: '{{pages.wishlist.url}}',
+            addButton: '{{ shop.metafields.wishlist_settings.wishlist_add_button }}' != '0',
+            shopDomain: '{{shop.domain}}',
+            appDomain: 'http://wishlist.shopfrogs.com/wishlist/call/',
+            customerCheckout: '{{ shop.metafields.wishlist_settings.wishlist_customer_checkout }}' != '0',
+            currency: "{{shop.money_format | strip_html}}"
+        }, customer, currentProduct);
+
         $('input#add-to-wishlist').click(function (e) {
 
             if (wishlistSettingCustomerCheckout && customer == '') {

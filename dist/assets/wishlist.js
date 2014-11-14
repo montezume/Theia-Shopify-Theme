@@ -2,12 +2,17 @@ var wishlist = (function($){
 
     var self = this,
         defaults = {
-            addButtonSelector: '#add-to-wishlist-link'
+            addButtonSelector: '#add-to-wishlist-link',
+            wrapperSelector: 'wishlist-viewed-products',
+            productTemplateSelector: 'wishlist-viewed-product-template'
         },
         settings = {};
 
     var wishlists = [],
-        defaultWishlist = {},
+        defaultWishlist = {
+            products: [],
+            productsLoaded: false
+        },
         customer = {},
         currentProduct = {};
 
@@ -37,10 +42,96 @@ var wishlist = (function($){
         }
 
         // get wishlists from app
+        // also renders the wishlist if we are on the wishlists page.
         initWishlists();
 
-        // if the current product is in the wishlist we change the text and the href
+        // init the add to wishlist link
         initAddButton();
+    }
+
+    function renderWishlistTemplate() {
+
+        // If we have any to show.
+        if ( defaultWishlist.products.length ) {
+            var template = jQuery('#' + settings.productTemplateSelector);
+            var wrapper = jQuery('#' + settings.wrapperSelector);
+
+            // If we have a template and a div on a page to add the recently viewed products in.
+            if (template.length && wrapper.length) {
+
+                var clear = true;
+
+                // Getting each product with an Ajax call and rendering it on the page.
+                for (var i=0; i<defaultWishlist.products.length; i++) {
+                    if ( clear ) {
+                        wrapper.html('');
+                        clear = false;
+                    }
+
+                    $.getJSON('/products/' + defaultWishlist.products[i].handle + '.js', function(product) {
+
+                        // Render template with product and append to wrapper.
+                        template.tmpl(product).appendTo(wrapper);
+
+                        // append Note Text
+                        // jQuery('#' + product.id).val(recentlyViewed[searchNote(recentlyViewed, product.handle)].note);
+
+                        // append select box category
+                        // createCategorySelectBox(product.id, 'item');
+
+                        // Have we done them all? If so, let's do the post-treatment.
+                        if (i === (defaultWishlist.products.length - 1)) {
+                            // If wrapper had been hidden.
+                            wrapper.show();
+                        }
+                    });
+                }
+            }
+        }
+    }
+
+    function getWishlistProducts() {
+
+        var url = settings.appDomain + "getproducts?jsoncallback=?";
+        var data = {
+            format: 'json',
+            customer: customer.id,
+            category: defaultWishlist.id,
+            shop: settings.permanentDomain
+        };
+
+        return $.getJSON( url, data ).done(function(r){
+            console.log(r);
+        });
+    };
+
+    function loadWishlistProducts(data) {
+
+        console.log('loading wishlist products');
+
+        if (data.status == 200) {
+            if (data.values.length) {
+
+                // Getting each product with an Ajax call and rendering it on the page.
+                for (var i=0; i<data.values.length; i++) {
+                    $.getJSON('/products/' + data.values[i].handle + '.js', function(product) {
+
+                        defaultWishlist.products.push(product);
+
+                        if ( data.values.length === defaultWishlist.products.length ) {
+                            defaultWishlist.productsLoaded = true;
+                            renderWishlistTemplate();
+                        }
+
+                    });
+                }
+
+            } else {
+
+                $('div#wishlist-viewed-products').html('<p class="clearfix-button">Products have not been added to this wishlist</p>');
+
+            }
+        }
     }
 
     function initAddButton(){
@@ -96,17 +187,6 @@ var wishlist = (function($){
             });
     }
 
-    function addButtonCallback(e){
-        e.preventDefault();
-
-        if (settings.customerCheckout && customer == '') {
-            window.location = '/account/login';
-
-        } else {
-            loadCategories(userId, $('div#categories'), 0);
-        }
-    }
-
     function isInWishlist( prodId ){
         // if provided a product id then the server will return
         // a 300 code if the product is already on a wishlist.
@@ -144,10 +224,16 @@ var wishlist = (function($){
     function loadWishlists(data){
         wishlists = parseWishlists( data.value );
 
+        var tmp;
         // get the first matching wishlist with the name "Main"
-        defaultWishlist = wishlists.filter(function(el){
+        tmp  = wishlists.filter(function(el){
             return el.name === 'Main';
         })[0];
+
+        defaultWishlist.name = tmp.name;
+        defaultWishlist.id = tmp.id;
+
+        getWishlistProducts().done(loadWishlistProducts);
      }
 
     function parseWishlists( html ){
@@ -170,6 +256,7 @@ var wishlist = (function($){
     // expose public methods and properties
     return {
         init: init,
+        render: renderWishlistTemplate,
         customer: function(){ return customer; },
         wishlists: function(){ return wishlists; },
         defaultWishlist: function(){ return defaultWishlist; },
@@ -270,6 +357,9 @@ function loadTabProducts(el) {
             shop: shopPermanentDomain
         },
         function(data) {
+
+            console.log(data);
+
             $('div#categories').html('');
 
             loading('hide');
@@ -316,6 +406,7 @@ function closeModalForm() {
 function loadCategories(user, object, type) {
     loading('show');
     var categories;
+
     var json = $.getJSON(
         appDomain + "getcategories?jsoncallback=?",
         {
@@ -360,47 +451,6 @@ function loadCategories(user, object, type) {
                 if (!type) {
                     showModalForm();
                 }
-            }
-        }
-    );
-}
-
-function createWishlist(title){
-    closeMessage();
-    $.getJSON(
-        appDomain + "createwishlist?jsoncallback=?",
-        {
-            format: 'json',
-            title: title,
-            customer: userId,
-            fn: customerFN,
-            ln: customerLN,
-            shop: shopPermanentDomain
-        },
-        function(data){
-            if (data.status == 200) {
-                loadCategories(userId, $('div#nav-wishlist'), 1);
-            } else if (data.status == 300) {
-                $('p#add-to-cart-msg-wishlist').hide().addClass('success').html(data.message + '<span style="float: right"><a href="javascript:void(0)" onclick="closeMessage()">close</a></span>').fadeIn();
-            }
-        }
-    );
-}
-
-function deleteWishlist(wishlistId) {
-    $.getJSON(
-        appDomain + "deletewishlist?jsoncallback=?",
-        {
-            format: 'json',
-            wishlist: wishlistId,
-            customer: userId,
-            shop: shopPermanentDomain
-        },
-        function(data){
-            if (data.status == 200) {
-                loadCategories(userId, $('div#nav-wishlist'), 1);
-            } else if (data.status == 300) {
-                $('p#add-to-cart-msg-wishlist').hide().addClass('success').html(data.message + '<span style="float: right"><a href="javascript:void(0)" onclick="closeMessage()">close</a></span>').fadeIn();
             }
         }
     );
