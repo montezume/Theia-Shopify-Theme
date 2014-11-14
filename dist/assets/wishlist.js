@@ -50,6 +50,8 @@ var wishlist = (function($){
     }
 
     function renderWishlistTemplate() {
+        // **todo** replace the templating plugin with something that is currently supported.
+        // the if statements in the template don't seem to be working correctly.
 
         // If we have any to show.
         if ( defaultWishlist.products.length ) {
@@ -68,23 +70,14 @@ var wishlist = (function($){
                         clear = false;
                     }
 
-                    $.getJSON('/products/' + defaultWishlist.products[i].handle + '.js', function(product) {
+                    // Render template with product and append to wrapper.
+                    template.tmpl(defaultWishlist.products[i]).appendTo(wrapper);
 
-                        // Render template with product and append to wrapper.
-                        template.tmpl(product).appendTo(wrapper);
-
-                        // append Note Text
-                        // jQuery('#' + product.id).val(recentlyViewed[searchNote(recentlyViewed, product.handle)].note);
-
-                        // append select box category
-                        // createCategorySelectBox(product.id, 'item');
-
-                        // Have we done them all? If so, let's do the post-treatment.
-                        if (i === (defaultWishlist.products.length - 1)) {
-                            // If wrapper had been hidden.
-                            wrapper.show();
-                        }
-                    });
+                    // Have we done them all? If so, let's do the post-treatment.
+                    if (i === (defaultWishlist.products.length - 1)) {
+                        // If wrapper had been hidden.
+                        wrapper.show();
+                    }
                 }
             }
         }
@@ -112,11 +105,28 @@ var wishlist = (function($){
         if (data.status == 200) {
             if (data.values.length) {
 
+                var sixDigits = /^\d{6}$/,
+                    styleNumber;
+
                 // Getting each product with an Ajax call and rendering it on the page.
                 for (var i=0; i<data.values.length; i++) {
                     $.getJSON('/products/' + data.values[i].handle + '.js', function(product) {
 
+                        // get style number from tags
+                        styleNumber = product.tags.filter(function(e){
+                            return sixDigits.test(e);
+                        });
+
+                        if ( styleNumber.length > 0 ) {
+                            product.styleNumber = styleNumber[0];
+                            product.hasStyleNumber = true;
+                        } else {
+                            product.hasStyleNumber = false;
+                        }
+
                         defaultWishlist.products.push(product);
+
+                        styleNumber = null;
 
                         if ( data.values.length === defaultWishlist.products.length ) {
                             defaultWishlist.productsLoaded = true;
