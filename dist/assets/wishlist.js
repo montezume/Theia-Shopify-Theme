@@ -49,6 +49,36 @@ var wishlist = (function($){
         initAddButton();
     }
 
+    function requestRemoveProduct(productIds){
+        console.log('removing product');
+
+        console.log( productIds );
+
+        var url = settings.appDomain + "deleteproduct?jsoncallback=?",
+            data = {
+                format: 'json',
+                wishlist: defaultWishlist.id,
+                product: productIds,
+                customer: customer.id,
+                shop: settings.permanentDomain
+            };
+
+        return $.getJSON( url, data).done(function(r){
+            console.log(r);
+        });
+    }
+
+    function responseRemoveProduct(r){
+        if (r.status == 200) {
+            // success
+
+        } else if (r.status == 300) {
+            // fail
+
+            $('p#add-to-cart-msg-wishlist').hide().addClass('success').html(r.message + '<span style="float: right"><a href="javascript:void(0)" onclick="closeMessage()">close</a></span>').fadeIn();
+        }
+    }
+
     function renderWishlistTemplate() {
         // **todo** replace the templating plugin with something that is currently supported.
         // the if statements in the template don't seem to be working correctly.
@@ -76,12 +106,22 @@ var wishlist = (function($){
                     // Have we done them all? If so, let's do the post-treatment.
                     if (i === (defaultWishlist.products.length - 1)) {
                         // If wrapper had been hidden.
+
+                        // wire the click events for the products.
+                        $('.remove-item-link').click(function(e){
+                            e.preventDefault();
+
+                            var productIds = [$(this).data('productId')];
+                            requestRemoveProduct(productIds).done(responseRemoveProduct);
+                        });
+
                         wrapper.show();
                     }
                 }
             }
         }
     }
+
 
     function getWishlistProducts() {
 
