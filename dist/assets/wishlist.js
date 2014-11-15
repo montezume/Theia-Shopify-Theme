@@ -6,15 +6,15 @@ var wishlist = (function($){
             wrapperSelector: 'wishlist-viewed-products',
             productTemplateSelector: 'wishlist-viewed-product-template'
         },
-        settings = {};
-
-    var wishlists = [],
+        settings = {},
+        wishlists = [],
         defaultWishlist = {
             products: [],
             productsLoaded: false
         },
         customer = {},
-        currentProduct = {};
+        currentProduct = {},
+        requestCache = {};
 
     function init(options, customerData, productData){
         console.log('init wishlist');
@@ -49,16 +49,20 @@ var wishlist = (function($){
         initAddButton();
     }
 
-    function requestRemoveProduct(productIds){
-        console.log('removing product');
+    function requestRemoveProduct(productId){
+        // cache the product id of the deleted product
+        requestCache.removeProduct = {
+            productId: productId
+        };
 
-        console.log( productIds );
+        // the api requires an array of product ids to delete
+        var prodIds = [productId];
 
         var url = settings.appDomain + "deleteproduct?jsoncallback=?",
             data = {
                 format: 'json',
                 wishlist: defaultWishlist.id,
-                product: productIds,
+                product: prodIds,
                 customer: customer.id,
                 shop: settings.permanentDomain
             };
@@ -69,14 +73,36 @@ var wishlist = (function($){
     }
 
     function responseRemoveProduct(r){
+        // get the cache data
+        var removedProductId = requestCache.removeProduct.productId;
+        var removedProduct = defaultWishlist.products.filter(function(e){
+            return e.id === removedProductId;
+        })[0];
+
         if (r.status == 200) {
             // success
+
+            // remove the product element from the wishlist
+            $( '#product-' + removedProduct.handle ).remove();
+
+            // remove the product from defaultWishlist.products array
+            defaultWishlist.products = defaultWishlist.products.filter(function(e){
+                return e.id !== removedProduct.id;
+            });
+
+            // show user a success message
+            alert('product removed');
 
         } else if (r.status == 300) {
             // fail
 
+            // show user the error
             $('p#add-to-cart-msg-wishlist').hide().addClass('success').html(r.message + '<span style="float: right"><a href="javascript:void(0)" onclick="closeMessage()">close</a></span>').fadeIn();
         }
+
+        // clear the cache
+        requestCache.removedProduct = {};
+
     }
 
     function renderWishlistTemplate() {
@@ -111,8 +137,8 @@ var wishlist = (function($){
                         $('.remove-item-link').click(function(e){
                             e.preventDefault();
 
-                            var productIds = [$(this).data('productId')];
-                            requestRemoveProduct(productIds).done(responseRemoveProduct);
+                            var productId = $(this).data('productId');
+                            requestRemoveProduct(productId).done(responseRemoveProduct);
                         });
 
                         wrapper.show();
