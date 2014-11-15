@@ -29,7 +29,7 @@
           </div>
           {{/if}}
 
-          <a class="remove-item-link" onclick="deleteItem(${id}, $('a#current'))" title="Delete item" href="#">
+          <a class="remove-item-link" data-product-id="${id}" title="Delete item" href="#">
             <span class="icon"></span>
             <span class="label">Remove from my favorites</span>
           </a>
