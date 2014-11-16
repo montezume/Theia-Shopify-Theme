@@ -8825,6 +8825,17 @@ $opacity-not-active: .25;
   # Wishlist
   ============================================================================*/
 
+.wishlist-block {
+    min-height: 400px;
+
+    .spinner-wrapper {
+        @include verticalCenterChildElements();
+
+        text-align: center;
+        height: 400px;
+    }
+}
+
 .add-to-wishlist-link {
     @extend %gray-underline-hover-gold-link;
     @extend %rsaquo;
@@ -8948,5 +8959,53 @@ span#resultMessage {
         left: 0;
         height: 64px;
         width: 64px;
+    }
+}
+
+/*============================================================================
+  # Loader Animation
+  ============================================================================*/
+
+.spinner {
+    margin: 0 auto;
+    width: $gutter * 10;
+    height: $gutter * 2;
+    text-align: center;
+    background: url({{ 'wishlist-loading.gif' | asset_url }}) no-repeat center;
+
+    > div {
+        display: none;
+    }
+
+    .supports-cssanimations & {
+        background: none;
+
+        > div {
+            @include prefix('animation', 'bouncedelay 1.4s infinite ease-in-out both');
+
+            width: $gutter * 2;
+            height: $gutter * 2;
+            margin: 0 $gutter/2;
+            display: inline-block;
+            border: 1px solid $colorLightGray;
+            border-radius: 100%;
+        }
+
+        .bounce1 {
+            @include prefix('animation-delay', '-0.32s');
+        }
+
+        .bounce2 {
+            @include prefix('animation-delay', '-0.16s');
+        }
+    }
+}
+
+@include keyframes-prefix( bouncedelay ){
+    0%, 80%, 100% {
+        @include prefix( 'transform', 'scale(0.0)' );
+    }
+    40% {
+        @include prefix( 'transform', 'scale(1.0)' );
     }
 }

@@ -119,6 +119,8 @@ var wishlist = (function($){
 
                 var clear = true;
 
+                timber.loader.destroy( '.wishlist-block .spinner-wrapper' );
+
                 // Getting each product with an Ajax call and rendering it on the page.
                 for (var i=0; i<defaultWishlist.products.length; i++) {
                     if ( clear ) {
@@ -141,13 +143,11 @@ var wishlist = (function($){
                             requestRemoveProduct(productId).done(responseRemoveProduct);
                         });
 
-                        wrapper.show();
                     }
                 }
             }
         }
     }
-
 
     function getWishlistProducts() {
 
@@ -158,6 +158,8 @@ var wishlist = (function($){
             category: defaultWishlist.id,
             shop: settings.permanentDomain
         };
+
+        timber.loader.show('.wishlist-block .spinner-wrapper');
 
         return $.getJSON( url, data ).done(function(r){
             console.log(r);
@@ -203,6 +205,8 @@ var wishlist = (function($){
                 }
 
             } else {
+
+                timber.loader.destroy( '.wishlist-block .spinner-wrapper' );
 
                 $('div#wishlist-viewed-products').html('<p class="clearfix-button">Products have not been added to this wishlist</p>');
 
