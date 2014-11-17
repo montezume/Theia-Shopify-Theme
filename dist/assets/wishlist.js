@@ -111,30 +111,35 @@ var wishlist = (function($){
 
         // If we have any to show.
         if ( defaultWishlist.products.length ) {
-            var template = jQuery('#' + settings.productTemplateSelector);
-            var wrapper = jQuery('#' + settings.wrapperSelector);
+            var templateSource = jQuery('#' + settings.productTemplateSelector).html();
+            var template = Handlebars.compile( templateSource );
+            var $wrapper = jQuery('#' + settings.wrapperSelector);
 
             // If we have a template and a div on a page to add the recently viewed products in.
-            if (template.length && wrapper.length) {
+            if (template.length && $wrapper.length) {
 
                 var clear = true;
+                var currentProduct;
 
                 timber.loader.destroy( '.wishlist-block .spinner-wrapper' );
 
                 // Getting each product with an Ajax call and rendering it on the page.
                 for (var i=0; i<defaultWishlist.products.length; i++) {
+                    currentProduct = defaultWishlist.products[i];
+
                     if ( clear ) {
-                        wrapper.html('');
+                        $wrapper.html('');
                         clear = false;
                     }
 
+                    currentProduct.imageSrc = Shopify.resizeImage((currentProduct.featured_image ? currentProduct.featured_image : "http://cdn.shopify.com/s/images/admin/no-image-medium.gif"), "medium");
+                    currentProduct.currency = Shopify.formatMoney(currentProduct.price, currentProduct.currency);
+
                     // Render template with product and append to wrapper.
-                    template.tmpl(defaultWishlist.products[i]).appendTo(wrapper);
+                    $wrapper.append(template(currentProduct));
 
                     // Have we done them all? If so, let's do the post-treatment.
                     if (i === (defaultWishlist.products.length - 1)) {
-                        // If wrapper had been hidden.
-
                         // wire the click events for the products.
                         $('.remove-item-link').click(function(e){
                             e.preventDefault();
