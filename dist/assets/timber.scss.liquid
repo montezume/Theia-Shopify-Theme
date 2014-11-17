@@ -3527,6 +3527,8 @@ $smallSocialIconRatio: (2.66/3.375);
 
     button {
         @extend %large-gold-arrow-button;
+
+        margin-right: $gutter;
     }
 
     /* Desktop */
@@ -3557,6 +3559,12 @@ $smallSocialIconRatio: (2.66/3.375);
 
     .selector-wrapper {
         @extend .clearfix;
+
+        margin-top: $gutter/2;
+
+        &:first-child {
+            margin-top: 0;
+        }
 
         label {
             margin: 0;
