@@ -74,20 +74,12 @@ var wishlist = (function($){
             },
             'renderedWishlistTemplate.wishlist': function(e){
                 // wire the click events for the products.
-<<<<<<< HEAD
                 $('.remove-item-link').click( removeProductClickCallback );
-=======
-                $('.remove-item-link').click( removeProduct );
->>>>>>> 670598266eb502b341b2bfef7e49bbbcc3a802c6
             }
         });
     }
 
-<<<<<<< HEAD
     function removeProductClickCallback(e){
-=======
-    function removeProduct(e){
->>>>>>> 670598266eb502b341b2bfef7e49bbbcc3a802c6
         e.preventDefault();
 
         var productId = $(this).data('productId');
@@ -301,12 +293,6 @@ var wishlist = (function($){
         return getWishlists( 0, prodId );
     }
 
-<<<<<<< HEAD
-=======
-    function initWishlists(){
-    }
-
->>>>>>> 670598266eb502b341b2bfef7e49bbbcc3a802c6
     function getWishlists( type, prodId ){
         var url = settings.appDomain + "getcategories?jsoncallback=?";
         var data = {
@@ -344,10 +330,6 @@ var wishlist = (function($){
         defaultWishlist.id = tmp.id;
 
         $(document).trigger('wishlistsLoaded.wishlist');
-<<<<<<< HEAD
-=======
-
->>>>>>> 670598266eb502b341b2bfef7e49bbbcc3a802c6
      }
 
     function parseWishlists( html ){
