@@ -3,130 +3,25 @@
 {{ 'wishlist.js' | asset_url | script_tag }}
 
 <script type="text/javascript">
-
-    var shopPermanentDomain = '{{shop.permanent_domain}}';
-    var wishlistSettingRedirectUser = '{{ shop.metafields.wishlist_settings.wishlist_redirect }}' != '0';
-    var linkWishlist = '{{pages.wishlist.url}}';
-    var customerId = '{{customer.id}}';
-    var wishlistSettingAddButton = '{{ shop.metafields.wishlist_settings.wishlist_add_button }}' != '0';
-    var shopDomain = '{{shop.domain}}';
-
-    var appDomain = 'http://wishlist.shopfrogs.com/wishlist/call/';
-    var wishlistSettingCustomerCheckout = '{{ shop.metafields.wishlist_settings.wishlist_customer_checkout }}' != '0';
-    var customer = '{{customer.id}}';
-    var productId = 0;
-    var currency = "{{shop.money_format | strip_html}}";
-
-    // Customer info
-    var userId = 0;
-    var customerFN='';
-    var customerLN='';
-    if (wishlistSettingCustomerCheckout == false) {
-        userId = getGuestId();
-        customerFN = '';
-        customerLN = 'Guest';
-    } else {
-        userId = '{{ customer.id }}';
-        customerFN = '{{ customer.first_name }}';
-        customerLN = '{{ customer.last_name }}';
-    }
-
-    //My Wishlist Link
-    if (wishlistSettingCustomerCheckout && customerId == '') {
-        linkWishlist = '/account';
-    }
-
-    // not using this portion of code
-    // the link to the wishlist is only in the customer account section.
-    // not using guest wishlists.
-    var linkElement = jQuery('<a>').attr({
-        'id': 'my-wishlist-count',
-        'href': linkWishlist
-    }).html('My Wishlist'); 
-
-    if (jQuery('#wishlist-link').length > 0) {
-        jQuery('#wishlist-link').append(linkElement);
-
-    } else {
-        if (jQuery("li.cart-link").length > 0) {
-            var li = jQuery('<li>').attr({
-                'id': 'wishlist-link'
-            });
-            li.append(linkElement);
-            jQuery("li.cart-link").before(li);
-        }
-    }
-
-    //Product Page
-    var buttonElementProduct = jQuery('<input />').attr({
-        'class': 'add-to-wishlist-btn',
-        'type': 'button',
-        'name': '{{product.id}}',
-        'id': 'add-to-wishlist',
-        'value': 'Add to Wishlist',
-        'rel': '{{product.handle}}'
-    });
-
-    if (jQuery('#p-wishlist-product').length > 0) {
-        jQuery('#p-wishlist-product').append(buttonElementProduct);
-
-    } else {
-        if (jQuery("form#product-actions").length > 0) {
-            var pElementProduct = jQuery('<p>').attr({
-                'class': 'p-float',
-                'id': 'p-wishlist-product'
-            });
-            jQuery("form#product-actions").after(pElementProduct);
-            jQuery(pElementProduct).append(buttonElementProduct);
-        }
-    }
-
-    //Other Page
-    var buttonElement = jQuery('<input />').attr({
-        'class': 'add-to-wishlist-btn-image',
-        'type': 'button',
-        'name': 'wishlist',
-        'id': 'add-to-wishlist',
-        'value': '',
-        'title': 'Add to Wishlist'
-    });
-
-    if (wishlistSettingAddButton) {
-        if (jQuery('p#p-wishlist').length > 0) {
-            jQuery('p#p-wishlist').append(buttonElement);
-
-        } else {
-            if (jQuery("div.product-information").length > 0) {
-                var pElement = jQuery('<p>').attr({
-                    'class': 'p-float',
-                    'id': 'p-wishlist',
-                });
-                jQuery("div.product-information").prepend(pElement);
-                jQuery("p#p-wishlist").append(buttonElement);
-            }
-        }
-    }
-
-    var currentProduct = {};
-    {% if product %}
-    currentProduct = {
-        id: {{ product.id }},
-        handle: '{{ product.handle }}'
-    };
-    {% endif %}
-
-    var customer = {};
-    {% if customer %}
-    customer = {
-        id: {{ customer.id }},
-        firstName: '{{ customer.first_name }}',
-        lastName: '{{ customer.last_name }}'
-    }
-    {% endif %}
-
-    // Load dialog on click
     jQuery(function ($) {
-        wishlist.init({
+        var currentProduct = {};
+        {% if product %}
+        currentProduct = {
+            id: {{ product.id }},
+            handle: '{{ product.handle }}'
+        };
+        {% endif %}
+
+        var customer = {};
+        {% if customer %}
+        customer = {
+            id: {{ customer.id }},
+            firstName: '{{ customer.first_name }}',
+            lastName: '{{ customer.last_name }}'
+        }
+        {% endif %}
+
+        var options = {
             permanentDomain: '{{shop.permanent_domain}}',
             redirectUser: '{{ shop.metafields.wishlist_settings.wishlist_redirect }}' != '0',
             linkWishlist: '{{pages.wishlist.url}}',
@@ -135,28 +30,8 @@
             appDomain: 'http://wishlist.shopfrogs.com/wishlist/call/',
             customerCheckout: '{{ shop.metafields.wishlist_settings.wishlist_customer_checkout }}' != '0',
             currency: "{{shop.money_format | strip_html}}"
-        }, customer, currentProduct);
+        };
 
-        $('input#add-to-wishlist').click(function (e) {
-
-            if (wishlistSettingCustomerCheckout && customer == '') {
-                window.location = '/account/login';
-            } else {
-
-                if ($(this).attr('name') == 'wishlist') {
-                    productId = $(this).prev().val();
-                    productHandle = $(this).prev().attr('id');
-                } else {
-                    productId = $(this).attr('name');
-                    productHandle = $(this).attr('rel');
-                }
-
-                $('input#productId').val(productId);
-                $('input#productId').attr('class', productHandle);
-                loadCategories(userId, $('div#categories'), 0);
-            }
-            return false;
-        });
+        wishlist.init( options, customer, currentProduct );
     });
-
 </script>

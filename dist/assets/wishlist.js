@@ -9,8 +9,7 @@ var wishlist = (function($){
         settings = {},
         wishlists = [],
         defaultWishlist = {
-            products: [],
-            productsLoaded: false
+            products: []
         },
         customer = {},
         currentProduct = {},
@@ -41,12 +40,51 @@ var wishlist = (function($){
             settings.linkWishlist = '/account';
         }
 
+        initEvents();
+
         // get wishlists from app
-        // also renders the wishlist if we are on the wishlists page.
-        initWishlists();
+        getWishlists().done( loadWishlists );
 
         // init the add to wishlist link
         initAddButton();
+    }
+
+    function initEvents(){
+
+        $(document).on({
+            'wishlistsLoaded.wishlist': function(e){
+                console.log( 'wishlistsLoaded' );
+
+                getWishlistProducts().done( loadWishlistProducts );
+            },
+            'singleProductLoaded.wishlist': function(e){
+                console.log('singleProductLoaded');
+
+                if ( defaultWishlist.productsToLoad === defaultWishlist.products.length ) {
+                    $(document).trigger('allProductsLoaded.wishlist');
+                }
+            },
+            'allProductsLoaded.wishlist': function(e){
+                console.log( 'allProductsLoaded' );
+
+                // if we are on the wishlist page.
+                if ( $('body#wishlist').length ){
+                    renderWishlistTemplate();
+                }
+            },
+            'renderedWishlistTemplate.wishlist': function(e){
+                // wire the click events for the products.
+                $('.remove-item-link').click( removeProduct );
+            }
+        });
+    }
+
+    function removeProduct(e){
+        e.preventDefault();
+
+        var productId = $(this).data('productId');
+
+        requestRemoveProduct(productId).done( responseRemoveProduct );
     }
 
     function requestRemoveProduct(productId){
@@ -106,63 +144,38 @@ var wishlist = (function($){
     }
 
     function renderWishlistTemplate() {
-        // **todo** replace the templating plugin with something that is currently supported.
-        // the if statements in the template don't seem to be working correctly.
+
+        timber.loader.destroy( '.wishlist-block .spinner-wrapper' );
 
         // If we have any to show.
         if ( defaultWishlist.products.length ) {
-            var templateSource = jQuery('#' + settings.productTemplateSelector).html();
-            var template = Handlebars.compile( templateSource );
-            var $wrapper = jQuery('#' + settings.wrapperSelector);
 
-            // If we have a template and a div on a page to add the recently viewed products in.
-            if (template.length && $wrapper.length) {
+            var templateSource = jQuery('#' + settings.productTemplateSelector).html(),
+                template = Handlebars.compile( templateSource ),
+                $wrapper = jQuery('#' + settings.wrapperSelector);
 
-                var clear = true;
-                var currentProduct;
-
-                timber.loader.destroy( '.wishlist-block .spinner-wrapper' );
-
-                // Getting each product with an Ajax call and rendering it on the page.
-                for (var i=0; i<defaultWishlist.products.length; i++) {
-                    currentProduct = defaultWishlist.products[i];
-
-                    if ( clear ) {
-                        $wrapper.html('');
-                        clear = false;
-                    }
-
-                    currentProduct.imageSrc = Shopify.resizeImage((currentProduct.featured_image ? currentProduct.featured_image : "http://cdn.shopify.com/s/images/admin/no-image-medium.gif"), "medium");
-                    currentProduct.currency = Shopify.formatMoney(currentProduct.price, currentProduct.currency);
-
-                    // Render template with product and append to wrapper.
-                    $wrapper.append(template(currentProduct));
-
-                    // Have we done them all? If so, let's do the post-treatment.
-                    if (i === (defaultWishlist.products.length - 1)) {
-                        // wire the click events for the products.
-                        $('.remove-item-link').click(function(e){
-                            e.preventDefault();
-
-                            var productId = $(this).data('productId');
-                            requestRemoveProduct(productId).done(responseRemoveProduct);
-                        });
-
-                    }
-                }
+            // Getting each product with an Ajax call and rendering it on the page.
+            for (var i=0; i<defaultWishlist.products.length; i++) {
+                // Render template with product and append to wrapper.
+                $wrapper.append(template(defaultWishlist.products[i]));
             }
+
+        } else {
+            $wrapper.html('<p>Products have not been added to this wishlist</p>');
         }
+
+        $(document).trigger('renderedWishlistTemplate.wishlist');
     }
 
     function getWishlistProducts() {
 
-        var url = settings.appDomain + "getproducts?jsoncallback=?";
-        var data = {
-            format: 'json',
-            customer: customer.id,
-            category: defaultWishlist.id,
-            shop: settings.permanentDomain
-        };
+        var url = settings.appDomain + "getproducts?jsoncallback=?",
+            data = {
+                format: 'json',
+                customer: customer.id,
+                category: defaultWishlist.id,
+                shop: settings.permanentDomain
+            };
 
         timber.loader.show('.wishlist-block .spinner-wrapper');
 
@@ -173,51 +186,51 @@ var wishlist = (function($){
 
     function loadWishlistProducts(data) {
 
-        console.log('loading wishlist products');
-
-        if (data.status == 200) {
-            if (data.values.length) {
-
-                var sixDigits = /^\d{6}$/,
-                    styleNumber;
-
-                // Getting each product with an Ajax call and rendering it on the page.
-                for (var i=0; i<data.values.length; i++) {
-                    $.getJSON('/products/' + data.values[i].handle + '.js', function(product) {
-
-                        // get style number from tags
-                        styleNumber = product.tags.filter(function(e){
-                            return sixDigits.test(e);
-                        });
-
-                        if ( styleNumber.length > 0 ) {
-                            product.styleNumber = styleNumber[0];
-                            product.hasStyleNumber = true;
-                        } else {
-                            product.hasStyleNumber = false;
-                        }
-
-                        defaultWishlist.products.push(product);
-
-                        styleNumber = null;
-
-                        if ( data.values.length === defaultWishlist.products.length ) {
-                            defaultWishlist.productsLoaded = true;
-                            renderWishlistTemplate();
-                        }
-
-                    });
-                }
-
-            } else {
-
-                timber.loader.destroy( '.wishlist-block .spinner-wrapper' );
-
-                $('div#wishlist-viewed-products').html('<p class="clearfix-button">Products have not been added to this wishlist</p>');
-
-            }
+        // other statuses are error conditions, no values mean nothing in the wishlist
+        if (data.status !== 200 || data.values.length === 0) {
+            return;
         }
+
+        // store the number of products to load for checking in the loadProduct callback.
+        defaultWishlist.productsToLoad = data.values.length;
+
+        // get the product details for each product in the wishlist.
+        $.map( data.values, function(el, i){
+            $.getJSON( '/products/' + el.handle + '.js' ).done( loadProduct );
+        });
     }
+
+    function loadProduct(product){
+
+        var sixDigits = /^\d{6}$/,
+            styleNumber;
+
+        // get style number from tags
+        styleNumber = product.tags.filter(function(e){
+            return sixDigits.test(e);
+        });
+
+        if ( styleNumber.length > 0 ) {
+            product.styleNumber = styleNumber[0];
+            product.hasStyleNumber = true;
+        } else {
+            product.hasStyleNumber = false;
+        }
+
+        // format price of the first variant.
+        product.currency = Shopify.formatMoney(product.variants[0].price, settings.currency);
+
+        product.imageSrc = Shopify.resizeImage((product.featured_image ? product.featured_image : "http://cdn.shopify.com/s/images/admin/no-image-medium.gif"), "medium");
+
+        for (var j=0; j<product.variants.length; j++) {
+            product.variants[j].currency = Shopify.formatMoney(product.variants[j].price, settings.currency);
+        }
+
+        defaultWishlist.products.push(product);
+
+        $(document).trigger('singleProductLoaded.wishlist');
+    }
+
 
     function initAddButton(){
 
@@ -279,7 +292,6 @@ var wishlist = (function($){
     }
 
     function initWishlists(){
-        getWishlists().done(loadWishlists);
     }
 
     function getWishlists( type, prodId ){
@@ -318,7 +330,8 @@ var wishlist = (function($){
         defaultWishlist.name = tmp.name;
         defaultWishlist.id = tmp.id;
 
-        getWishlistProducts().done(loadWishlistProducts);
+        $(document).trigger('wishlistsLoaded.wishlist');
+
      }
 
     function parseWishlists( html ){
@@ -341,7 +354,7 @@ var wishlist = (function($){
     // expose public methods and properties
     return {
         init: init,
-        render: renderWishlistTemplate,
+        settings: function(){ return settings; },
         customer: function(){ return customer; },
         wishlists: function(){ return wishlists; },
         defaultWishlist: function(){ return defaultWishlist; },
