@@ -218,7 +218,7 @@ var ajaxifyShopify = (function(module, $) {
     'use strict';
 
     // Public functions
-    var init;
+    var init, selectDOMElements, formOverride;
 
     // Private general variables
     var settings, cartInit, $drawerHeight, $cssTransforms, $cssTransforms3d, $nojQueryLoad, $w, $body, $html;
@@ -227,7 +227,7 @@ var ajaxifyShopify = (function(module, $) {
     var $formContainer, $btnClass, $wrapperClass, $addToCart, $flipClose, $flipCart, $flipContainer, $cartCountSelector, $cartCostSelector, $toggleCartButton, $modal, $cartContainer, $drawerCaret, $modalContainer, $modalOverlay, $closeCart, $drawerContainer, $prependDrawerTo, $callbackData={};
 
     // Private functions
-    var updateCountPrice, flipSetup, revertFlipButton, modalSetup, showModal, sizeModal, hideModal, drawerSetup, showDrawer, hideDrawer, sizeDrawer, loadCartImages, formOverride, itemAddedCallback, itemErrorCallback, cartUpdateCallback, setToggleButtons, flipCartUpdateCallback, buildCart, cartTemplate, adjustCart, adjustCartCallback, createQtySelectors, qtySelectors, scrollTop, toggleCallback;
+    var updateCountPrice, flipSetup, revertFlipButton, modalSetup, showModal, sizeModal, hideModal, drawerSetup, showDrawer, hideDrawer, sizeDrawer, loadCartImages, itemAddedCallback, itemErrorCallback, cartUpdateCallback, setToggleButtons, flipCartUpdateCallback, buildCart, cartTemplate, adjustCart, adjustCartCallback, createQtySelectors, qtySelectors, scrollTop, toggleCallback;
 
     /*============================================================================
      Initialise the plugin and define global options
@@ -259,17 +259,7 @@ var ajaxifyShopify = (function(module, $) {
         settings.method = settings.method.toLowerCase();
 
         // Select DOM elements
-        $formContainer     = $(settings.formSelector);
-        $btnClass          = settings.btnClass;
-        $wrapperClass      = settings.wrapperClass;
-        $addToCart         = $formContainer.find(settings.addToCartSelector);
-        $flipContainer     = null;
-        $flipClose         = null;
-        $cartCountSelector = $(settings.cartCountSelector);
-        $cartCostSelector  = $(settings.cartCostSelector);
-        $toggleCartButton  = $(settings.toggleCartButton);
-        $modal             = null;
-        $prependDrawerTo   = $(settings.prependDrawerTo);
+        selectDOMElements();
 
         // CSS Checks
         $cssTransforms   = Modernizr.csstransforms;
@@ -336,6 +326,20 @@ var ajaxifyShopify = (function(module, $) {
 
         // Run this function in case we're using the quantity selector outside of the cart
         adjustCart();
+    };
+
+    selectDOMElements = function (){
+        $formContainer     = $(settings.formSelector);
+        $btnClass          = settings.btnClass;
+        $wrapperClass      = settings.wrapperClass;
+        $addToCart         = $formContainer.find(settings.addToCartSelector);
+        $flipContainer     = null;
+        $flipClose         = null;
+        $cartCountSelector = $(settings.cartCountSelector);
+        $cartCostSelector  = $(settings.cartCostSelector);
+        $toggleCartButton  = $(settings.toggleCartButton);
+        $modal             = null;
+        $prependDrawerTo   = $(settings.prependDrawerTo);
     };
 
     updateCountPrice = function (cart) {
@@ -1092,7 +1096,9 @@ var ajaxifyShopify = (function(module, $) {
     };
 
     module = {
-        init: init
+        init: init,
+        formOverride: formOverride,
+        selectDOMElements: selectDOMElements
     };
 
     return module;
