@@ -1,71 +1,4 @@
 {{ 'option_selection.js' | shopify_asset_url | script_tag }}
-<script type="text/javascript">
-
-    var selectCallback = function(variant, selector) {
-
-        var addToCart = $('#addToCart'),
-        productPrice = $('#productPrice'),
-        comparePrice = $('#comparePrice');
-
-        if (variant) {
-            if (variant.available) {
-                // We have a valid product variant, so enable the submit button
-                addToCart.removeClass('disabled').prop('disabled', false).val('Add to Cart');
-
-            } else {
-                // Variant is sold out, disable the submit button
-                addToCart.val('Sold Out').addClass('disabled').prop('disabled', true);
-            }
-
-            // Regardless of stock, update the product price
-            productPrice.html(Shopify.formatMoney(variant.price, "{{ shop.money_format }}"));
-
-            // Also update and show the product's compare price if necessary
-            if ( variant.compare_at_price > variant.price ) {
-                comparePrice.html(
-                    'Compare at: ' + Shopify.formatMoney(variant.compare_at_price, "{{ shop.money_format }}")
-                ).show();
-            } else {
-                comparePrice.hide();
-            }
-
-        } else {
-            // The variant doesn't exist, disable submit button.
-            // This may be an error or notice that a specific variant is not available.
-            // To only show available variants, implement linked product options:
-            //   - http://docs.shopify.com/manual/configuration/store-customization/advanced-navigation/linked-product-options
-            addToCart.val('Unavailable').addClass('disabled').prop('disabled', true);
-        }
-    };
-
-    jQuery(function($) {
-
-        // merge this js code into the wishlist.js file after the wishlist html is rendered.
-        
-        /* // Add label if only one product option and it isn't 'Title'. Could be 'Size'.
-           {% if product.options.size == 1 and product.options.first != 'Title' %}
-           $('.selector-wrapper:eq(0)').prepend('<label>{{ product.options.first | escape }}</label>');
-           {% endif %}
-
-           // Hide selectors if we only have 1 variant and its title contains 'Default'.
-           {% if product.variants.size == 1 and product.variants.first.title contains 'Default' %}
-           $('.selector-wrapper').hide();
-           {% endif %}
-
-           // Auto-select first available variant on page load. Otherwise the product looks sold out.
-           {% assign found_one_in_stock = false %}
-           {% for variant in product.variants %}
-           {% if variant.available and found_one_in_stock == false %}
-           {% assign found_one_in_stock = true %}
-           {% for option in product.options %}
-           $('.single-option-selector:eq({{ forloop.index0 }})').val({{ variant.options[forloop.index0] | json }}).trigger('change');
-           {% endfor %}
-           {% endif %}
-           {% endfor %} */
-
-    });
-</script>
-
 <p id="add-to-cart-msg-wishlist"></p>
 
 <div class="wishlist-block">
@@ -87,7 +20,7 @@
       <div class="header-row">
         <h4>
           <a href="{{url}}">
-            {{title}} &ndash; {{currency}}
+            {{title}} &ndash; <span class="price">{{currency}}</span>
           </a>
         </h4>
       </div>
@@ -145,4 +78,3 @@
   </div>
   {% endraw %}
 </script>
-
