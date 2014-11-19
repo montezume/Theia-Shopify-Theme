@@ -75,6 +75,23 @@ var wishlist = (function($){
             'renderedWishlistTemplate.wishlist': function(e){
                 // wire the click events for the products.
                 $('.remove-item-link').click( removeProductClickCallback );
+
+                // run option selectors for each of the products in the wishlist
+                $.each( defaultWishlist.products, function(i, el){
+
+                    new Shopify.OptionSelectors('productSelect-' + el.id, {
+                        product: el,
+                        onVariantSelected: function(){
+                            return;
+                        }
+                    });
+
+                });
+
+                // refresh the selectors for the ajaxify cart plugin.
+                ajaxifyShopify.selectDOMElements();
+                // override the default add to cart actions for each wishlist item.
+                ajaxifyShopify.formOverride();
             }
         });
     }
@@ -195,7 +212,7 @@ var wishlist = (function($){
         defaultWishlist.productsToLoad = data.values.length;
 
         // get the product details for each product in the wishlist.
-        $.map( data.values, function(el, i){
+        $.each( data.values, function(i, el){
             $.getJSON( '/products/' + el.handle + '.js' ).done( loadProduct );
         });
     }
@@ -216,6 +233,11 @@ var wishlist = (function($){
         } else {
             product.hasStyleNumber = false;
         }
+
+        // format the product options so that Shopify product_options.js works.
+        product.options = $.map( product.options, function(el, i){
+            return el.name;
+        });
 
         // format price of the first variant.
         product.currency = Shopify.formatMoney(product.variants[0].price, settings.currency);
@@ -374,7 +396,7 @@ function checkAll(hand) {
  * Ajaxy add-to-cart 
  */
 function addToCartWishlist(e){
-    var id        = $(e).parents('form').find('input[name="id"]').val();
+    var id        = $(e).parents('form').find('select[name="id"]').val();
     var quantity  = $(e).parents('form').find('input[name="quantity"]').val() || 1;
     loading('show');
     $.ajax({ 
