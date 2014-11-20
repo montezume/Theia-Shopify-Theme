@@ -3416,9 +3416,11 @@ $smallSocialIconRatio: (2.66/3.375);
                 border-bottom: 0;
             }
 
-            .product-description-block .content {
-                height: 282px;
-                overflow-y: scroll;
+            .product-description-block {
+                .content {
+                    height: 282px;
+                    overflow-y: scroll;
+                }
             }
         }
     }
@@ -3454,6 +3456,8 @@ $smallSocialIconRatio: (2.66/3.375);
         border-bottom: 1px solid $colorLightGray;
     }
 }
+
+
 
 .product-meta-block {
     @extend %product-info-block-row;
@@ -3782,37 +3786,7 @@ $smallSocialIconRatio: (2.66/3.375);
         overflow-y: hidden;
     }
 
-    .expand {
-        @extend %gray-hover-gold-link;
-        
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        color: $colorWarmLightGray;
 
-        .label {
-            @extend %smaller-arial-text;
-
-            font-weight: 700;
-            text-transform: uppercase;
-            text-decoration: underline;
-        }
-
-        .icon {
-            @extend %icon-base;
-
-            font-size: 11px;
-            color: $colorDarkGray;
-
-            &.up {
-                @extend .icon-arrow-up-small;
-            }
-                
-            &.down {
-                @extend .icon-arrow-down-small;
-            }
-        }
-    }
 
     /* Desktop */
     @include at-query ($min, $postMedium) {
@@ -3840,6 +3814,57 @@ $smallSocialIconRatio: (2.66/3.375);
         .expand {
             display: none;
         }
+    }
+}
+
+.product-description-expand-link {
+    @extend %gray-hover-gold-link;
+
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    color: $colorWarmLightGray;
+
+    .label {
+        @extend %smaller-arial-text;
+
+        font-weight: 700;
+        text-transform: uppercase;
+        text-decoration: underline;
+    }
+
+    .collapse-text {
+        display: none;
+    }
+
+    .description-expanded & {
+        .collapse-text {
+            display: inline;
+        }
+
+        .expand-text{
+            display: none;
+        }
+    }
+
+    .icon {
+        @extend %icon-base;
+
+        font-size: 11px;
+        color: $colorDarkGray;
+
+        &.up {
+            @extend .icon-arrow-up-small;
+        }
+
+        &.down {
+            @extend .icon-arrow-down-small;
+        }
+    }
+
+    /* Mobile */
+    @include at-query ($max, $medium) {
+        display: none;
     }
 }
 
