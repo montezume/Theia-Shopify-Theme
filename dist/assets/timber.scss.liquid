@@ -3394,14 +3394,15 @@ $smallSocialIconRatio: (2.66/3.375);
         display: block;
     }
 
-    .tablet-column-row {
+    .tablet-column-row,
+    .tablet-column {
         @extend .clearfix;
     }
 
     /* Desktop */
     @include at-query ($min, $postMedium) {
         background: #fff;
-        height: 628px;
+        height: 639px;
         border: 1px solid $colorLightGray;
 
         /* expanded product description state */
@@ -3413,10 +3414,6 @@ $smallSocialIconRatio: (2.66/3.375);
             .product-meta-block {
                 margin-bottom: 0;
                 border-bottom: 0;
-            }
-
-            .product-share-block {
-                margin-top: 0;
             }
 
             .product-description-block .content {
@@ -3434,6 +3431,12 @@ $smallSocialIconRatio: (2.66/3.375);
     @include at-query( null, $postMedium, $large ){
         width: 326px;
 
+        /* expanded product description state */
+        &.description-expanded {
+            .product-description-block .content {
+                height: 358px;
+            }
+        }
     }
 
     @include at-query( null, $postSmall, $medium ){
@@ -3461,7 +3464,7 @@ $smallSocialIconRatio: (2.66/3.375);
         font-weight: 300;
         color: $colorWarmDarkGray;
         line-height: 1;
-        margin: 0 0 12px;
+        margin: 0 0 11px;
     }
 
     .product-price {
@@ -3473,6 +3476,7 @@ $smallSocialIconRatio: (2.66/3.375);
     .product-style-number {
         @extend %smallish-arial-text;
 
+        text-transform: uppercase;
         color: $colorLightGray;
         font-weight: 700;
         line-height: 1;
@@ -3485,7 +3489,7 @@ $smallSocialIconRatio: (2.66/3.375);
 
         .product-price {
             font-size: 1.875em;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
         }
     }
 
@@ -3531,11 +3535,27 @@ $smallSocialIconRatio: (2.66/3.375);
         margin-right: $gutter;
     }
 
+    .add-to-wishlist-link {
+        @extend %gray-underline-hover-gold-link;
+        @extend %rsaquo;
+        @extend %smallish-arial-text;
+
+        text-transform: uppercase;
+    }
+
     /* Desktop */
     @include at-query ($min, $postMedium) {
-        
+        margin-bottom: 22px;
     }
     
+    @include at-query (null, $postMedium, $large) {
+
+        .add-to-wishlist-link {
+            display: block;
+            margin: $gutter 0;
+        }
+    }
+
     /* Mobile */
     @include at-query ($max, $medium) {
         button {
@@ -3549,18 +3569,21 @@ $smallSocialIconRatio: (2.66/3.375);
                 top: -1px;
             }
         }
+
+        .add-to-wishlist-link {
+            display: block;
+            margin: $gutter 0;
+        }
     }
 }
 
 .product-options-block {
     @extend .clearfix;
 
-    margin-bottom: 0px;
-
     .selector-wrapper {
         @extend .clearfix;
 
-        margin-top: $gutter/2;
+        margin-top: 10px;
 
         &:first-child {
             margin-top: 0;
@@ -3590,7 +3613,7 @@ $smallSocialIconRatio: (2.66/3.375);
     
     /* Desktop */
     @include at-query ($min, $postMedium) {
-        margin-bottom: 20px;
+        margin-bottom: 27px;
 
         label, legend {
             width: 72px;
@@ -3643,7 +3666,7 @@ $smallSocialIconRatio: (2.66/3.375);
 
 .product-offer-block {
     color: $colorWarmLightGray;
-    margin: 20px 0 0;
+    margin: 18px 0 0;
 
     span {
         vertical-align: middle;
@@ -3679,7 +3702,8 @@ $smallSocialIconRatio: (2.66/3.375);
 
     border-top: 1px solid $colorLightestGray;
     border-bottom: 1px solid $colorLightestGray;
-    padding: $gutter 0 14px;
+    padding: 12px 0 14px;
+    margin-top: 0px;
 
     > div {
         display: inline-block;
@@ -3714,6 +3738,10 @@ $smallSocialIconRatio: (2.66/3.375);
     @include at-query( $min, $postMedium ){
         
     }
+
+    @include at-query( null, $postMedium, $large ){
+        display: none;
+    }
     
     /* Mobile */
     @include at-query ($max, $large) {
@@ -3726,14 +3754,18 @@ $smallSocialIconRatio: (2.66/3.375);
 .product-description-block {
     @extend %product-info-block-row;
 
-    padding-bottom: $gutter * 3; /* room for the more details expand link */
+    padding-bottom: 44px; /* room for the more details expand link */
     position: relative;
+    margin-bottom: 23px;
+    margin-top: 0;
+    padding-top: 19px;
 
     h6 {
         @extend %smallish-arial-text;
 
         text-transform: uppercase;
         margin-top: 0;
+        margin-bottom: 9px;
         font-weight: 700;
         color: $colorWarmLightGray;
     }
@@ -3746,7 +3778,7 @@ $smallSocialIconRatio: (2.66/3.375);
     }
 
     .content {
-        height: 87px; /* height of the header and 3 lines of text. */
+        height: 64px; /* height of the header and 3 lines of text. */
         overflow-y: hidden;
     }
 
@@ -3789,6 +3821,10 @@ $smallSocialIconRatio: (2.66/3.375);
         left: 0;
     }
     
+    @include at-query( null, $postMedium, $large ){
+        border-top: 1px solid $colorLightestGray;
+    }
+
     /* Mobile */
     @include at-query ($max, $medium) {
         padding-bottom: 0;
@@ -8842,14 +8878,6 @@ $opacity-not-active: .25;
         text-align: center;
         height: 400px;
     }
-}
-
-.add-to-wishlist-link {
-    @extend %gray-underline-hover-gold-link;
-    @extend %rsaquo;
-    @extend %smallish-arial-text;
-
-    text-transform: uppercase;
 }
 
 /*Notice Message*/
