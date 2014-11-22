@@ -384,13 +384,16 @@ var ajaxifyShopify = (function(module, $) {
     };
 
     updateCountPrice = function (cart) {
+        var positiveCountClassName = 'positive-count';
+
         if ($cartCountSelector) {
-            $cartCountSelector.html(cart.item_count).removeClass('hidden-count');
+            $cartCountSelector.html(cart.item_count).addClass( positiveCountClassName );
 
             if (cart.item_count === 0) {
-                $cartCountSelector.addClass('hidden-count');
+                $cartCountSelector.removeClass( positiveCountClassName );
             }
         }
+
         if ($cartCostSelector) {
             $cartCostSelector.html(Shopify.formatMoney(cart.total_price, settings.moneyFormat));
         }
@@ -752,9 +755,7 @@ var ajaxifyShopify = (function(module, $) {
                     }
                     break;
                 }
-
             });
-
         }
     };
 
