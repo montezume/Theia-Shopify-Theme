@@ -166,14 +166,55 @@ Shopify.addItemFromForm = function(form, callback, errorCallback) {
 
 // Get from cart.js returns the cart in JSON
 Shopify.getCart = function(callback) {
-    jQuery.getJSON('/cart.js', function (cart, textStatus) {
+
+    var cart,
+        cartItemIndexByProductId = [],
+        requestCounter = 0;
+
+    jQuery.getJSON('/cart.js', getCartCallback);
+
+    function getCartCallback(data, textStatus) {
+
+        cart = data;
+
+        // if we have items start getting their associated products
+        if ( cart.items.length > 0 ){
+            jQuery.each( cart.items, eachCartItemCallback);
+
+        } else {
+            runPassedCallback();
+        }
+    }
+
+    function eachCartItemCallback( i, item ){
+
+        // save the current index by product_id to match the returned product to the correct cart item
+        cartItemIndexByProductId[ item.product_id ] = i;
+
+        Shopify.getProduct( item.handle, getProductCallback );
+    }
+
+    function getProductCallback( product ){
+
+        requestCounter++;
+
+        // save the product to the correct cart item
+        cart.items[ cartItemIndexByProductId[ product.id ] ].product = product;
+
+        // have we recieved products for all the cart items?
+        if ( requestCounter === cart.items.length ){
+            runPassedCallback();
+        }
+    }
+
+    function runPassedCallback(){
         if ((typeof callback) === 'function') {
             callback(cart);
         }
         else {
             Shopify.onCartUpdate(cart);
         }
-    });
+    }
 };
 
 // GET products/<product-handle>.js returns the product in JSON
@@ -772,9 +813,22 @@ var ajaxifyShopify = (function(module, $) {
              *   - Remove file extension, add _small, and re-add extension
              *   - Create server relative link
              */
-            var prodImg = cartItem.image.replace(/(\.[^.]*)$/, "_small$1").replace('http:', '');
-            var prodName = cartItem.title.replace(/(\-[^-]*)$/, "");
-            var prodVariation = cartItem.title.replace(/^[^\-]*/, "").replace(/-/, "");
+            var prodImg = cartItem.image.replace(/(\.[^.]*)$/, "_small$1").replace('http:', ''),
+                prodName = cartItem.title.replace(/(\-[^-]*)$/, ""),
+                prodVariation = cartItem.title.replace(/^[^\-]*/, "").replace(/-/, "");
+
+            // get the style number for this dress
+            // find the product tag with six digits only
+            var sixDigits = /^\d{6}$/;
+            var styleNumber = 0;
+            $.each( cartItem.product.tags, function( j, tag ){
+                if ( sixDigits.test(tag) ){
+                    styleNumber = tag;
+                    return false;
+                }
+
+                return true;
+            });
 
             // Create item's data object and add to 'items' array
             item = {
@@ -786,17 +840,23 @@ var ajaxifyShopify = (function(module, $) {
                 itemAdd: itemAdd,
                 itemMinus: itemMinus,
                 itemQty: itemQty,
-                price: Shopify.formatMoney(cartItem.price, settings.moneyFormat)
+                price: Shopify.formatMoney(cartItem.price, '{{amount}}').toString().replace(/\.00$/g,''),
+                styleNumber: styleNumber
             };
 
             items.push(item);
         });
 
+        // shipped by date
+        var today = new Date(),
+            sevenDaysFromToday = today.setDate(today.getDate()+7);
+
         // Gather all cart data and add to DOM
         data = {
             items: items,
-            totalPrice: Shopify.formatMoney(cart.total_price, settings.moneyFormat),
-            btnClass: $btnClass
+            totalPrice: Shopify.formatMoney(cart.total_price, '{{amount}}'),
+            btnClass: $btnClass,
+            sevenDaysFromToday: sevenDaysFromToday
         };
         $cartContainer.append(template(data));
 
@@ -944,11 +1004,12 @@ var ajaxifyShopify = (function(module, $) {
         });
 
         function updateQuantity(id, qty) {
+            var row;
             // Add activity classes when changing cart quantities
             if (!settings.useCartTemplate) {
-                var row = $('.ajaxifyCart--row[data-id="' + id + '"]').addClass('ajaxifyCart--is-loading');
+                row = $('.ajaxifyCart--row[data-id="' + id + '"]').addClass('ajaxifyCart--is-loading');
             } else {
-                var row = $('.cart-row[data-id="' + id + '"]').addClass('ajaxifyCart--is-loading');
+                row = $('.cart-row[data-id="' + id + '"]').addClass('ajaxifyCart--is-loading');
             }
 
             if ( qty === 0 ) {
