@@ -857,16 +857,12 @@ var ajaxifyShopify = (function(module, $) {
             items.push(item);
         });
 
-        // shipped by date
-        var today = new Date(),
-            sevenDaysFromToday = today.setDate(today.getDate()+7);
-
         // Gather all cart data and add to DOM
         data = {
             items: items,
             totalPrice: Shopify.formatMoney(cart.total_price, '{{amount}}'),
             btnClass: $btnClass,
-            sevenDaysFromToday: sevenDaysFromToday
+            sevenDaysFromToday: moment().add(7, 'days').format('MMM Do')
         };
         $cartContainer.append(template(data));
 
