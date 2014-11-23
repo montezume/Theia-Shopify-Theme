@@ -13,7 +13,7 @@
       {% endcomment %}
       <a id="cartToggle" class="customer-menu-link cart-count-link" href="/cart">
         <span class="icon-store">
-          <span id="cartCount" class="count{% if cart.item_count == 0 %} hidden-count{% endif %}">{{ cart.item_count }}</span>          
+          <span id="cartCount" class="count{% if cart.item_count > 0 %} positive-count{% endif %}">{{ cart.item_count }}</span>
         </span>
         <span class="label">Cart</span>
       </a>
