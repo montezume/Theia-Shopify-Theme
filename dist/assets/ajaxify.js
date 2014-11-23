@@ -182,29 +182,37 @@ Shopify.getCart = function(callback) {
             jQuery.each( cart.items, eachCartItemCallback);
 
         } else {
-            runPassedCallback();
+            end();
         }
     }
 
     function eachCartItemCallback( i, item ){
 
-        // save the current index by product_id to match the returned product to the correct cart item
-        cartItemIndexByProductId[ item.product_id ] = i;
+        Shopify.getProduct( item.handle, function( product ){
+            // format the product options so that Shopify product_options.js works.
+            product.options = $.map( product.options, function(el, i){
+                return el.name;
+            });
 
-        Shopify.getProduct( item.handle, getProductCallback );
+            requestCounter++;
+
+            // save the product to the correct cart item
+            cart.items[ i ].product = product;
+
+            // have we recieved products for all the cart items?
+            if ( requestCounter === cart.items.length ){
+                end();
+            }
+        });
     }
 
-    function getProductCallback( product ){
+    function end(){
+        saveCart();
+        runPassedCallback();
+    }
 
-        requestCounter++;
-
-        // save the product to the correct cart item
-        cart.items[ cartItemIndexByProductId[ product.id ] ].product = product;
-
-        // have we recieved products for all the cart items?
-        if ( requestCounter === cart.items.length ){
-            runPassedCallback();
-        }
+    function saveCart(){
+        ajaxifyShopify.setCart( cart );
     }
 
     function runPassedCallback(){
@@ -259,10 +267,10 @@ var ajaxifyShopify = (function(module, $) {
     'use strict';
 
     // Public functions
-    var init, selectDOMElements, formOverride;
+    var init, selectDOMElements, formOverride, setCart, getCart;
 
     // Private general variables
-    var settings, cartInit, $drawerHeight, $cssTransforms, $cssTransforms3d, $nojQueryLoad, $w, $body, $html;
+    var cart, settings, cartInit, $drawerHeight, $cssTransforms, $cssTransforms3d, $nojQueryLoad, $w, $body, $html;
 
     // Private plugin variables
     var $formContainer, $btnClass, $wrapperClass, $addToCart, $flipClose, $flipCart, $flipContainer, $cartCountSelector, $cartCostSelector, $toggleCartButton, $modal, $cartContainer, $drawerCaret, $modalContainer, $modalOverlay, $closeCart, $drawerContainer, $prependDrawerTo, $callbackData={};
@@ -838,6 +846,7 @@ var ajaxifyShopify = (function(module, $) {
                 img: prodImg,
                 name: prodName,
                 variation: prodVariation,
+                product: cartItem.product,
                 itemAdd: itemAdd,
                 itemMinus: itemMinus,
                 itemQty: itemQty,
@@ -1157,10 +1166,20 @@ var ajaxifyShopify = (function(module, $) {
         }
     };
 
+    setCart = function (c){
+        cart = c;
+    };
+
+    getCart = function(){
+        return cart;
+    };
+
     module = {
         init: init,
         formOverride: formOverride,
-        selectDOMElements: selectDOMElements
+        selectDOMElements: selectDOMElements,
+        setCart: setCart,
+        getCart: getCart
     };
 
     return module;

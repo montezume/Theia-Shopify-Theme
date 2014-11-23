@@ -79,7 +79,9 @@ var wishlist = (function($){
                 // run option selectors for each of the products in the wishlist
                 $.each( defaultWishlist.products, function(i, product){
 
+                    // get the option selector ID for passing to the OptionSelector constructor
                     var currentOptionSelectId = 'productSelect-' + product.id,
+                        // find the wishlist element associated with the current wishlist product.
                         wishlistItem = $('#' + currentOptionSelectId).parents('.wishlist-item');
 
                     new Shopify.OptionSelectors( currentOptionSelectId, {
@@ -98,11 +100,11 @@ var wishlist = (function($){
                     }
 
                     // Auto-select first available variant on page load. Otherwise the product looks sold out.
-                    $.each( product.variants, function(i, variant){
+                    $.each( product.variants, function(j, variant){
                         if ( variant.available ){
-                            $.each( product.options, function( i, option ){
-                                var optionSelector = wishlistItem.find('.single-option-selector:eq(' + i + ')');
-                                optionSelector.val( variant.options[i] ).trigger('change');
+                            $.each( product.options, function( j, option ){
+                                var optionSelector = wishlistItem.find('.single-option-selector:eq(' + j + ')');
+                                optionSelector.val( variant.options[j] ).trigger('change');
                             });
 
                             // return from $.each() early once we select the first available variant
