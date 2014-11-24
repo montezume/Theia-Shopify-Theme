@@ -48,3 +48,5 @@ node_modules/
 /src/checkout-master.css
 /src/checkout-master.css.liquid
 /src/checkout-master.css.map
+.#*
+*~
