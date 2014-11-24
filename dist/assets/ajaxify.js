@@ -298,7 +298,9 @@ var ajaxifyShopify = (function(module, $) {
             disableAjaxCart: false,
             enableQtySelectors: true,
             prependDrawerTo: 'body',
-            onToggleCallback: null
+            onToggleCallback: null,
+            cartContainerSelector: '#ajax-cart-container',
+            drawerContainerSelector: '#ajax-drawer-container'
         };
 
         // Override defaults with arguments
@@ -465,7 +467,7 @@ var ajaxifyShopify = (function(module, $) {
         // Modal selectors
         $modalContainer = $('#ajaxifyModal');
         $modalOverlay   = $('#ajaxifyCart-overlay');
-        $cartContainer  = $('#ajaxifyCart');
+        $cartContainer  = $(settings.cartContainerSelector);
 
         // Close modal when clicking the overlay
         $modalOverlay.on('click', hideModal);
@@ -561,8 +563,8 @@ var ajaxifyShopify = (function(module, $) {
         $prependDrawerTo.prepend(template(data));
 
         // Drawer selectors
-        $drawerContainer = $('#ajaxifyDrawer');
-        $cartContainer   = $('#ajaxifyCart');
+        $drawerContainer = $(settings.drawerContainerSelector);
+        $cartContainer   = $(settings.cartContainerSelector);
         $drawerCaret     = $('.ajaxifyDrawer-caret > span');
 
         // Toggle drawer with cart button

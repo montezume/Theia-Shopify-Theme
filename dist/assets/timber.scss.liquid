@@ -8027,7 +8027,7 @@ This file includes
 /*============================================================================
   Ajaxify Cart - General
   ==============================================================================*/
-.ajaxifyCart--content {
+.ajax-cart-container {
     @include perspective(1000px);
     @include transform-style(preserve-3d);
     @include transition(all 450ms cubic-bezier(0.57,.06,.05,.95));
@@ -8254,7 +8254,7 @@ This file includes
 /*============================================================================
   Ajaxify Drawer
   ==============================================================================*/
-#ajaxifyDrawer {
+.ajax-drawer-container {
     background-color: $drawerBackgroundColor;
     height: 0px;
     overflow: hidden;
@@ -8271,7 +8271,7 @@ This file includes
     }
 
     // Drawer colors and general styles
-    .ajaxifyCart--content {
+    .ajax-cart-container {
         margin: 0 auto;
         opacity: 0;
         overflow: hidden;
@@ -8282,7 +8282,7 @@ This file includes
         @include rotateX(-90deg);
     }
 
-    &.is-visible .ajaxifyCart--content {
+    &.is-visible .ajax-cart-container {
         opacity: 1;
         @include rotateX(0deg);
     }
