@@ -761,6 +761,19 @@ html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abb
     }
 }
 
+%darkerGray-hover-underline-link {
+    @extend %link-base;
+
+    color: $colorDarkerGray;
+    text-decoration: none;
+
+    &:hover,
+    &:active,
+    &:focus {
+        text-decoration: underline;
+    }
+}
+
 
 /* gray underline, gold on hover */
 %gray-underline-hover-gold-link {
@@ -3270,6 +3283,10 @@ $smallSocialIconRatio: (2.66/3.375);
 .product-gallery-block {
     position: relative;
 
+    @include at-query( $min, $postMedium ){
+        height: 100%;
+    }
+
     @include at-query( null, $postSmall, $medium ){
         height: 692px;
     }
@@ -3381,14 +3398,15 @@ $smallSocialIconRatio: (2.66/3.375);
         display: block;
     }
 
-    .tablet-column-row {
+    .tablet-column-row,
+    .tablet-column {
         @extend .clearfix;
     }
 
     /* Desktop */
     @include at-query ($min, $postMedium) {
         background: #fff;
-        height: 628px;
+        height: 639px;
         border: 1px solid $colorLightGray;
 
         /* expanded product description state */
@@ -3402,13 +3420,11 @@ $smallSocialIconRatio: (2.66/3.375);
                 border-bottom: 0;
             }
 
-            .product-share-block {
-                margin-top: 0;
-            }
-
-            .product-description-block .content {
-                height: 282px;
-                overflow-y: scroll;
+            .product-description-block {
+                .content {
+                    height: 282px;
+                    overflow-y: scroll;
+                }
             }
         }
     }
@@ -3421,6 +3437,12 @@ $smallSocialIconRatio: (2.66/3.375);
     @include at-query( null, $postMedium, $large ){
         width: 326px;
 
+        /* expanded product description state */
+        &.description-expanded {
+            .product-description-block .content {
+                height: 358px;
+            }
+        }
     }
 
     @include at-query( null, $postSmall, $medium ){
@@ -3439,6 +3461,8 @@ $smallSocialIconRatio: (2.66/3.375);
     }
 }
 
+
+
 .product-meta-block {
     @extend %product-info-block-row;
     @extend .clearfix;
@@ -3448,7 +3472,7 @@ $smallSocialIconRatio: (2.66/3.375);
         font-weight: 300;
         color: $colorWarmDarkGray;
         line-height: 1;
-        margin: 0 0 12px;
+        margin: 0 0 11px;
     }
 
     .product-price {
@@ -3460,6 +3484,7 @@ $smallSocialIconRatio: (2.66/3.375);
     .product-style-number {
         @extend %smallish-arial-text;
 
+        text-transform: uppercase;
         color: $colorLightGray;
         font-weight: 700;
         line-height: 1;
@@ -3472,7 +3497,7 @@ $smallSocialIconRatio: (2.66/3.375);
 
         .product-price {
             font-size: 1.875em;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
         }
     }
 
@@ -3514,13 +3539,31 @@ $smallSocialIconRatio: (2.66/3.375);
 
     button {
         @extend %large-gold-arrow-button;
+
+        margin-right: $gutter;
+    }
+
+    .add-to-wishlist-link {
+        @extend %gray-underline-hover-gold-link;
+        @extend %rsaquo;
+        @extend %smallish-arial-text;
+
+        text-transform: uppercase;
     }
 
     /* Desktop */
     @include at-query ($min, $postMedium) {
-        
+        margin-bottom: 22px;
     }
     
+    @include at-query (null, $postMedium, $large) {
+
+        .add-to-wishlist-link {
+            display: block;
+            margin: $gutter 0;
+        }
+    }
+
     /* Mobile */
     @include at-query ($max, $medium) {
         button {
@@ -3534,16 +3577,25 @@ $smallSocialIconRatio: (2.66/3.375);
                 top: -1px;
             }
         }
+
+        .add-to-wishlist-link {
+            display: block;
+            margin: $gutter 0;
+        }
     }
 }
 
 .product-options-block {
     @extend .clearfix;
 
-    margin-bottom: 0px;
-
     .selector-wrapper {
         @extend .clearfix;
+
+        margin-top: 10px;
+
+        &:first-child {
+            margin-top: 0;
+        }
 
         label {
             margin: 0;
@@ -3569,7 +3621,7 @@ $smallSocialIconRatio: (2.66/3.375);
     
     /* Desktop */
     @include at-query ($min, $postMedium) {
-        margin-bottom: 20px;
+        margin-bottom: 27px;
 
         label, legend {
             width: 72px;
@@ -3622,7 +3674,7 @@ $smallSocialIconRatio: (2.66/3.375);
 
 .product-offer-block {
     color: $colorWarmLightGray;
-    margin: 20px 0 0;
+    margin: 18px 0 0;
 
     span {
         vertical-align: middle;
@@ -3658,7 +3710,8 @@ $smallSocialIconRatio: (2.66/3.375);
 
     border-top: 1px solid $colorLightestGray;
     border-bottom: 1px solid $colorLightestGray;
-    padding: $gutter 0 14px;
+    padding: 12px 0 14px;
+    margin-top: 0px;
 
     > div {
         display: inline-block;
@@ -3693,6 +3746,10 @@ $smallSocialIconRatio: (2.66/3.375);
     @include at-query( $min, $postMedium ){
         
     }
+
+    @include at-query( null, $postMedium, $large ){
+        display: none;
+    }
     
     /* Mobile */
     @include at-query ($max, $large) {
@@ -3705,14 +3762,18 @@ $smallSocialIconRatio: (2.66/3.375);
 .product-description-block {
     @extend %product-info-block-row;
 
-    padding-bottom: $gutter * 3; /* room for the more details expand link */
+    padding-bottom: 44px; /* room for the more details expand link */
     position: relative;
+    margin-bottom: 23px;
+    margin-top: 0;
+    padding-top: 19px;
 
     h6 {
         @extend %smallish-arial-text;
 
         text-transform: uppercase;
         margin-top: 0;
+        margin-bottom: 9px;
         font-weight: 700;
         color: $colorWarmLightGray;
     }
@@ -3725,41 +3786,11 @@ $smallSocialIconRatio: (2.66/3.375);
     }
 
     .content {
-        height: 87px; /* height of the header and 3 lines of text. */
+        height: 64px; /* height of the header and 3 lines of text. */
         overflow-y: hidden;
     }
 
-    .expand {
-        @extend %gray-hover-gold-link;
-        
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        color: $colorWarmLightGray;
 
-        .label {
-            @extend %smaller-arial-text;
-
-            font-weight: 700;
-            text-transform: uppercase;
-            text-decoration: underline;
-        }
-
-        .icon {
-            @extend %icon-base;
-
-            font-size: 11px;
-            color: $colorDarkGray;
-
-            &.up {
-                @extend .icon-arrow-up-small;
-            }
-                
-            &.down {
-                @extend .icon-arrow-down-small;
-            }
-        }
-    }
 
     /* Desktop */
     @include at-query ($min, $postMedium) {
@@ -3768,6 +3799,10 @@ $smallSocialIconRatio: (2.66/3.375);
         left: 0;
     }
     
+    @include at-query( null, $postMedium, $large ){
+        border-top: 1px solid $colorLightestGray;
+    }
+
     /* Mobile */
     @include at-query ($max, $medium) {
         padding-bottom: 0;
@@ -3783,6 +3818,57 @@ $smallSocialIconRatio: (2.66/3.375);
         .expand {
             display: none;
         }
+    }
+}
+
+.product-description-expand-link {
+    @extend %gray-hover-gold-link;
+
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    color: $colorWarmLightGray;
+
+    .label {
+        @extend %smaller-arial-text;
+
+        font-weight: 700;
+        text-transform: uppercase;
+        text-decoration: underline;
+    }
+
+    .collapse-text {
+        display: none;
+    }
+
+    .description-expanded & {
+        .collapse-text {
+            display: inline;
+        }
+
+        .expand-text{
+            display: none;
+        }
+    }
+
+    .icon {
+        @extend %icon-base;
+
+        font-size: 11px;
+        color: $colorDarkGray;
+
+        &.up {
+            @extend .icon-arrow-up-small;
+        }
+
+        &.down {
+            @extend .icon-arrow-down-small;
+        }
+    }
+
+    /* Mobile */
+    @include at-query ($max, $medium) {
+        display: none;
     }
 }
 
@@ -3998,7 +4084,7 @@ $smallSocialIconRatio: (2.66/3.375);
     }
 
     /* Desktop */
-    @include at-query ($min, $postSmall) {
+    @include at-query ($min, $postMedium) {
 
         h4 {
             font-size: 1.25em; /* ~20px */
@@ -4039,8 +4125,14 @@ $smallSocialIconRatio: (2.66/3.375);
 
     }
 
+    @include at-query (null, $postMedium, $xlarge) {
+        .main-col {
+            width: 528px;
+        }
+    }
+
     /* Mobile */
-    @include at-query ($max, $small) {
+    @include at-query ($max, $medium) {
 
         .main-col, .side-col {
             padding: 0 $gutter;
@@ -4130,6 +4222,17 @@ $smallSocialIconRatio: (2.66/3.375);
             color: $colorDarkGray;
             margin: 0;
             line-height: 18px;
+        }
+    }
+
+    .remove-item-link {
+        @extend %item-info-icon-text;
+        @extend %warmLightGray-hover-red-link;
+
+        display: block;
+
+        .icon {
+            @extend .icon-cross-circle;
         }
     }
 
@@ -4230,15 +4333,6 @@ $smallSocialIconRatio: (2.66/3.375);
             padding-left: 64px + 20px;
         }
 
-        /*
-          Hiding these since I can't have an add to cart box in the search results.
-          They were also messing up spacing on mobile.
-          */
-        .size-column,
-        .color-column {
-            display: none;
-        }
-
         .info-column {
             margin-bottom: $gutter;
         }
@@ -4271,17 +4365,6 @@ $smallSocialIconRatio: (2.66/3.375);
     border-bottom: 1px solid $colorLighterGray;
     margin-bottom: $gutter;
 
-    .remove-item-link {
-        @extend %item-info-icon-text;
-        @extend %warmLightGray-hover-red-link;
-
-        display: block;
-
-        .icon {
-            @extend .icon-cross-circle;
-        }
-    }
-
     .line-price {
         @extend %money-format;
 
@@ -4293,7 +4376,7 @@ $smallSocialIconRatio: (2.66/3.375);
     }
 
     /* Desktop */
-    @include at-query ($min, $postSmall) {
+    @include at-query ($min, $postMedium) {
 
         /* layout */
 
@@ -4306,8 +4389,6 @@ $smallSocialIconRatio: (2.66/3.375);
             padding: 0 0 0 32px;
         }
 
-        .size-column,
-        .color-column,
         .quantity-column {
             width: 128px;
             margin-right: 16px;
@@ -4315,16 +4396,26 @@ $smallSocialIconRatio: (2.66/3.375);
         }
 
         .info-column {
-            width: 176px;
+            width: 464px;
         }
 
         .price-column {
             width: 112px;
         }
     }
+
+    @include at-query (null, $postMedium, $xlarge) {
+        .info-options-column {
+            width: 384px;
+        }
+
+        .info-column {
+            margin-bottom: $gutter;
+        }
+    }
     
     /* Mobile */
-    @include at-query ($max, $small) {
+    @include at-query ($max, $medium) {
 
         h4 {
             font-size: 25px;
@@ -4369,13 +4460,13 @@ $smallSocialIconRatio: (2.66/3.375);
     @extend %line-item-image-base;
 
     /* Desktop */
-    @include at-query ($min, $postSmall) {
+    @include at-query ($min, $postMedium) {
         height: 96px;
         width: 96px;
     }
 
     /* Mobile */
-    @include at-query ($max, $small) {
+    @include at-query ($max, $medium) {
         height: 64px;
         width: 64px;
     }
@@ -6760,7 +6851,11 @@ address {
 
     .count {
         @extend %smaller-arial-text;
+        @include prefix(border-radius, 2px);
+        @include transform('scale(0)');
+        @include transition();
 
+        opacity: 0;
         display: block;
         position: absolute;
         top: -10px;
@@ -6771,7 +6866,6 @@ address {
         width: 16px;
         padding-top: 1px;
         line-height: 15px;
-        @include prefix(border-radius, 2px);
         text-align: center;
 
         &:before {
@@ -6785,10 +6879,12 @@ address {
             left: 1px;
             @include prefix(border-radius, 1px);
         }
-    }
 
-    .hidden-count {
-        display: none;
+        &.positive-count {
+            @include transform('scale(1)');
+
+            opacity: 1;
+        }
     }
 }
 
@@ -7940,10 +8036,12 @@ This file includes
 /*============================================================================
   Ajaxify Cart - General
   ==============================================================================*/
-.ajaxifyCart--content {
+.ajax-cart-container {
     @include perspective(1000px);
     @include transform-style(preserve-3d);
     @include transition(all 450ms cubic-bezier(0.57,.06,.05,.95));
+
+    @extend %wrapper-base;
 
     position: relative;
     padding-top: $gutter;
@@ -7965,9 +8063,22 @@ This file includes
         padding-bottom: $gutter;
     }
 
-    /* Mobile */
-    @include at-query ($max, $small) {
+    /* most phones in portrait */
+    /* portrait tablet, landscape phones */
+    @include at-query ($max, $medium) {
         border-bottom: 1px solid $colorLighterGray;
+        max-width: $small;
+    }
+
+    /* landscape tablet, small desktops */
+    /* medium desktops */
+    @include at-query (null, $postMedium, $xlarge) {
+        max-width: $medium;
+    }
+
+    /* large desktops */
+    @include at-query ($min, $xlarge) {
+        max-width: $siteWidth;
     }
 }
 
@@ -8167,7 +8278,7 @@ This file includes
 /*============================================================================
   Ajaxify Drawer
   ==============================================================================*/
-#ajaxifyDrawer {
+.ajax-drawer-container {
     background-color: $drawerBackgroundColor;
     height: 0px;
     overflow: hidden;
@@ -8184,7 +8295,7 @@ This file includes
     }
 
     // Drawer colors and general styles
-    .ajaxifyCart--content {
+    .ajax-cart-container {
         margin: 0 auto;
         opacity: 0;
         overflow: hidden;
@@ -8195,7 +8306,7 @@ This file includes
         @include rotateX(-90deg);
     }
 
-    &.is-visible .ajaxifyCart--content {
+    &.is-visible .ajax-cart-container {
         opacity: 1;
         @include rotateX(0deg);
     }
@@ -8805,5 +8916,221 @@ $opacity-not-active: .25;
 
     .customer-account-menu-row {
 
+    }
+}
+
+/*============================================================================
+  # Wishlist
+  ============================================================================*/
+
+.wishlist-block {
+    min-height: 400px;
+
+    .spinner-wrapper {
+        @include verticalCenterChildElements();
+
+        text-align: center;
+        height: 400px;
+    }
+}
+
+/*Notice Message*/
+span#resultMessage {
+    color: #ff0000;
+}
+
+
+.wishlist-item {
+    @extend %line-item-base;
+
+    padding-bottom: $gutter*2;
+    border-bottom: 1px solid $colorLighterGray;
+    margin: 0 0 $gutter*2;
+
+    .header-row {
+        a {
+            @extend %darkerGray-hover-underline-link;
+        }
+
+        h4 {
+            font-weight: 300;
+            margin-bottom: 0;
+        }
+    }
+
+    .info-column,
+    .option-column {
+        margin-right: $gutter;
+        min-height: 10px;
+    }
+
+    .info-column {
+        width: 144px;
+    }
+
+    .option-column {
+        @extend .clearfix;
+
+        width: 288px;
+    }
+
+    .selector-wrapper {
+        float: left;
+    }
+
+    .single-option-selector {
+        @extend %smaller-arial-text;
+
+        color: $colorDarkGray;
+        background: $colorLightestGray;
+        text-transform: uppercase;
+        height: 30px;
+        line-height: 28px;
+        padding-top: 0;
+        padding-bottom: 0;
+    }
+    
+    .button-column {
+        width: 160px;
+    }
+
+    .button-label-row {
+        height: 30px;
+    }
+
+    .button-label {
+        @extend %smallish-arial-text;
+
+        text-transform: uppercase;
+        text-align: center;
+        padding: 8px 0 0;
+    }
+
+    .remove-item-link {
+        white-space: normal;
+    }
+
+    .add-to-cart-button {
+        @extend %small-gold-arrow-button;
+
+        text-align: center;
+        width: 160px;
+        padding-top: 0;
+    }
+
+    /* Desktop */
+    @include at-query ($min, $postSmall) {
+        h4 {
+            font-size: 1.25em;
+        }
+
+        .info-options-column {
+            width: 672px;
+            padding: 0 0 0 32px;
+        }
+
+        .selector-wrapper {
+            width: 136px;
+            margin-left: $gutter;
+
+            &:first-child {
+                margin-left: 0;
+            }
+        }
+    }
+
+    /* Mobile */
+    @include at-query ($max, $small) {
+        h4 {
+            padding-top: 4px;
+            font-size: 1.5em;
+            line-height: 1.3333;
+            height: 64px;
+            overflow: hidden;
+        }
+
+        .header-row {
+            padding-left: 64px + 20px;
+        }
+
+        /*
+          Hiding these since I can't have an add to cart box in the search results.
+          They were also messing up spacing on mobile.
+          */
+        .size-column,
+        .color-column {
+            display: none;
+        }
+
+        .info-column {
+            margin-bottom: $gutter;
+        }
+    }
+}
+
+.wishlist-item-image {
+    @extend %line-item-image-base;
+
+    /* Desktop */
+    @include at-query ($min, $postSmall) {
+        height: 96px;
+        width: 96px;
+    }
+
+    /* Mobile */
+    @include at-query ($max, $small) {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 64px;
+        width: 64px;
+    }
+}
+
+/*============================================================================
+  # Loader Animation
+  ============================================================================*/
+
+.spinner {
+    margin: 0 auto;
+    width: $gutter * 10;
+    height: $gutter * 2;
+    text-align: center;
+    background: url({{ 'wishlist-loading.gif' | asset_url }}) no-repeat center;
+
+    > div {
+        display: none;
+    }
+
+    .supports-cssanimations & {
+        background: none;
+
+        > div {
+            @include prefix('animation', 'bouncedelay 1.4s infinite ease-in-out both');
+
+            width: $gutter * 2;
+            height: $gutter * 2;
+            margin: 0 $gutter/2;
+            display: inline-block;
+            border: 1px solid $colorLightGray;
+            border-radius: 100%;
+        }
+
+        .bounce1 {
+            @include prefix('animation-delay', '-0.32s');
+        }
+
+        .bounce2 {
+            @include prefix('animation-delay', '-0.16s');
+        }
+    }
+}
+
+@include keyframes-prefix( bouncedelay ){
+    0%, 80%, 100% {
+        @include prefix( 'transform', 'scale(0.0)' );
+    }
+    40% {
+        @include prefix( 'transform', 'scale(1.0)' );
     }
 }

@@ -5,6 +5,9 @@ module.exports = function(grunt) {
         pkg: grunt.file.readJSON('package.json')
     });
 
+    // Private variables
+    var private = grunt.file.readJSON('private.json');
+
     grunt.loadNpmTasks('grunt-shopify');
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-contrib-sass');
@@ -14,8 +17,8 @@ module.exports = function(grunt) {
     grunt.initConfig({
         shopify: {
             options: {
-                api_key: "ff34c2c6098db58552ac8caf712aa73b",
-                password: "a5b420c9fefd67719847beee5f82caa4",
+                api_key: private.shopify.api_key,
+                password: private.shopify.password,
                 url: "theia.myshopify.com",
                 base: "dist/"
             }

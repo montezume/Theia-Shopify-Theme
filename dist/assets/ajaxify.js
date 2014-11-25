@@ -38,25 +38,6 @@ function attributeToString(attribute) {
     }
     return jQuery.trim(attribute);
 }
-function getCookie(c_name) {
-    var c_value = document.cookie;
-    var c_start = c_value.indexOf(" " + c_name + "=");
-    if (c_start == -1) {
-        c_start = c_value.indexOf(c_name + "=");
-    }
-    if (c_start == -1) {
-        c_value = null;
-    }
-    else {
-        c_start = c_value.indexOf("=", c_start) + 1;
-        var c_end = c_value.indexOf(";", c_start);
-        if (c_end == -1) {
-            c_end = c_value.length;
-        }
-        c_value = unescape(c_value.substring(c_start,c_end));
-    }
-    return c_value;
-}
 
 /*============================================================================
  API Functions
@@ -185,14 +166,63 @@ Shopify.addItemFromForm = function(form, callback, errorCallback) {
 
 // Get from cart.js returns the cart in JSON
 Shopify.getCart = function(callback) {
-    jQuery.getJSON('/cart.js', function (cart, textStatus) {
+
+    var cart,
+        cartItemIndexByProductId = [],
+        requestCounter = 0;
+
+    jQuery.getJSON('/cart.js', getCartCallback);
+
+    function getCartCallback(data, textStatus) {
+
+        cart = data;
+
+        // if we have items start getting their associated products
+        if ( cart.items.length > 0 ){
+            jQuery.each( cart.items, eachCartItemCallback);
+
+        } else {
+            end();
+        }
+    }
+
+    function eachCartItemCallback( i, item ){
+
+        Shopify.getProduct( item.handle, function( product ){
+            // format the product options so that Shopify product_options.js works.
+            product.options = $.map( product.options, function(el, i){
+                return el.name;
+            });
+
+            requestCounter++;
+
+            // save the product to the correct cart item
+            cart.items[ i ].product = product;
+
+            // have we recieved products for all the cart items?
+            if ( requestCounter === cart.items.length ){
+                end();
+            }
+        });
+    }
+
+    function end(){
+        saveCart();
+        runPassedCallback();
+    }
+
+    function saveCart(){
+        ajaxifyShopify.setCart( cart );
+    }
+
+    function runPassedCallback(){
         if ((typeof callback) === 'function') {
             callback(cart);
         }
         else {
             Shopify.onCartUpdate(cart);
         }
-    });
+    }
 };
 
 // GET products/<product-handle>.js returns the product in JSON
@@ -237,16 +267,16 @@ var ajaxifyShopify = (function(module, $) {
     'use strict';
 
     // Public functions
-    var init;
+    var init, selectDOMElements, formOverride, setCart, getCart;
 
     // Private general variables
-    var settings, cartInit, $drawerHeight, $cssTransforms, $cssTransforms3d, $nojQueryLoad, $w, $body, $html;
+    var cart, settings, cartInit, $drawerHeight, $cssTransforms, $cssTransforms3d, $nojQueryLoad, $w, $body, $html;
 
     // Private plugin variables
     var $formContainer, $btnClass, $wrapperClass, $addToCart, $flipClose, $flipCart, $flipContainer, $cartCountSelector, $cartCostSelector, $toggleCartButton, $modal, $cartContainer, $drawerCaret, $modalContainer, $modalOverlay, $closeCart, $drawerContainer, $prependDrawerTo, $callbackData={};
 
     // Private functions
-    var updateCountPrice, flipSetup, revertFlipButton, modalSetup, showModal, sizeModal, hideModal, drawerSetup, showDrawer, hideDrawer, sizeDrawer, loadCartImages, formOverride, itemAddedCallback, itemErrorCallback, cartUpdateCallback, setToggleButtons, flipCartUpdateCallback, buildCart, cartTemplate, adjustCart, adjustCartCallback, createQtySelectors, qtySelectors, scrollTop, toggleCallback;
+    var updateCountPrice, flipSetup, revertFlipButton, modalSetup, showModal, sizeModal, hideModal, drawerSetup, showDrawer, hideDrawer, sizeDrawer, loadCartImages, itemAddedCallback, itemErrorCallback, cartUpdateCallback, setToggleButtons, flipCartUpdateCallback, buildCart, cartTemplate, adjustCart, adjustCartCallback, createQtySelectors, qtySelectors, scrollTop, toggleCallback;
 
     /*============================================================================
      Initialise the plugin and define global options
@@ -268,7 +298,9 @@ var ajaxifyShopify = (function(module, $) {
             disableAjaxCart: false,
             enableQtySelectors: true,
             prependDrawerTo: 'body',
-            onToggleCallback: null
+            onToggleCallback: null,
+            cartContainerSelector: '#ajax-cart-container',
+            drawerContainerSelector: '#ajax-drawer-container'
         };
 
         // Override defaults with arguments
@@ -278,17 +310,7 @@ var ajaxifyShopify = (function(module, $) {
         settings.method = settings.method.toLowerCase();
 
         // Select DOM elements
-        $formContainer     = $(settings.formSelector);
-        $btnClass          = settings.btnClass;
-        $wrapperClass      = settings.wrapperClass;
-        $addToCart         = $formContainer.find(settings.addToCartSelector);
-        $flipContainer     = null;
-        $flipClose         = null;
-        $cartCountSelector = $(settings.cartCountSelector);
-        $cartCostSelector  = $(settings.cartCostSelector);
-        $toggleCartButton  = $(settings.toggleCartButton);
-        $modal             = null;
-        $prependDrawerTo   = $(settings.prependDrawerTo);
+        selectDOMElements();
 
         // CSS Checks
         $cssTransforms   = Modernizr.csstransforms;
@@ -357,14 +379,31 @@ var ajaxifyShopify = (function(module, $) {
         adjustCart();
     };
 
+    selectDOMElements = function (){
+        $formContainer     = $(settings.formSelector);
+        $btnClass          = settings.btnClass;
+        $wrapperClass      = settings.wrapperClass;
+        $addToCart         = $formContainer.find(settings.addToCartSelector);
+        $flipContainer     = null;
+        $flipClose         = null;
+        $cartCountSelector = $(settings.cartCountSelector);
+        $cartCostSelector  = $(settings.cartCostSelector);
+        $toggleCartButton  = $(settings.toggleCartButton);
+        $modal             = null;
+        $prependDrawerTo   = $(settings.prependDrawerTo);
+    };
+
     updateCountPrice = function (cart) {
+        var positiveCountClassName = 'positive-count';
+
         if ($cartCountSelector) {
-            $cartCountSelector.html(cart.item_count).removeClass('hidden-count');
+            $cartCountSelector.html(cart.item_count).addClass( positiveCountClassName );
 
             if (cart.item_count === 0) {
-                $cartCountSelector.addClass('hidden-count');
+                $cartCountSelector.removeClass( positiveCountClassName );
             }
         }
+
         if ($cartCostSelector) {
             $cartCostSelector.html(Shopify.formatMoney(cart.total_price, settings.moneyFormat));
         }
@@ -428,7 +467,7 @@ var ajaxifyShopify = (function(module, $) {
         // Modal selectors
         $modalContainer = $('#ajaxifyModal');
         $modalOverlay   = $('#ajaxifyCart-overlay');
-        $cartContainer  = $('#ajaxifyCart');
+        $cartContainer  = $(settings.cartContainerSelector);
 
         // Close modal when clicking the overlay
         $modalOverlay.on('click', hideModal);
@@ -524,8 +563,8 @@ var ajaxifyShopify = (function(module, $) {
         $prependDrawerTo.prepend(template(data));
 
         // Drawer selectors
-        $drawerContainer = $('#ajaxifyDrawer');
-        $cartContainer   = $('#ajaxifyCart');
+        $drawerContainer = $(settings.drawerContainerSelector);
+        $cartContainer   = $(settings.cartContainerSelector);
         $drawerCaret     = $('.ajaxifyDrawer-caret > span');
 
         // Toggle drawer with cart button
@@ -726,9 +765,7 @@ var ajaxifyShopify = (function(module, $) {
                     }
                     break;
                 }
-
             });
-
         }
     };
 
@@ -787,9 +824,22 @@ var ajaxifyShopify = (function(module, $) {
              *   - Remove file extension, add _small, and re-add extension
              *   - Create server relative link
              */
-            var prodImg = cartItem.image.replace(/(\.[^.]*)$/, "_small$1").replace('http:', '');
-            var prodName = cartItem.title.replace(/(\-[^-]*)$/, "");
-            var prodVariation = cartItem.title.replace(/^[^\-]*/, "").replace(/-/, "");
+            var prodImg = cartItem.image.replace(/(\.[^.]*)$/, "_small$1").replace('http:', ''),
+                prodName = cartItem.title.replace(/(\-[^-]*)$/, ""),
+                prodVariation = cartItem.title.replace(/^[^\-]*/, "").replace(/-/, "");
+
+            // get the style number for this dress
+            // find the product tag with six digits only
+            var sixDigits = /^\d{6}$/;
+            var styleNumber = 0;
+            $.each( cartItem.product.tags, function( j, tag ){
+                if ( sixDigits.test(tag) ){
+                    styleNumber = tag;
+                    return false;
+                }
+
+                return true;
+            });
 
             // Create item's data object and add to 'items' array
             item = {
@@ -798,10 +848,12 @@ var ajaxifyShopify = (function(module, $) {
                 img: prodImg,
                 name: prodName,
                 variation: prodVariation,
+                product: cartItem.product,
                 itemAdd: itemAdd,
                 itemMinus: itemMinus,
                 itemQty: itemQty,
-                price: Shopify.formatMoney(cartItem.price, settings.moneyFormat)
+                price: Shopify.formatMoney(cartItem.price, '{{amount}}').toString().replace(/\.00$/g,''),
+                styleNumber: styleNumber
             };
 
             items.push(item);
@@ -810,8 +862,9 @@ var ajaxifyShopify = (function(module, $) {
         // Gather all cart data and add to DOM
         data = {
             items: items,
-            totalPrice: Shopify.formatMoney(cart.total_price, settings.moneyFormat),
-            btnClass: $btnClass
+            totalPrice: Shopify.formatMoney(cart.total_price, '{{amount}}'),
+            btnClass: $btnClass,
+            sevenDaysFromToday: moment().add(7, 'days').format('MMM Do')
         };
         $cartContainer.append(template(data));
 
@@ -959,11 +1012,12 @@ var ajaxifyShopify = (function(module, $) {
         });
 
         function updateQuantity(id, qty) {
+            var row;
             // Add activity classes when changing cart quantities
             if (!settings.useCartTemplate) {
-                var row = $('.ajaxifyCart--row[data-id="' + id + '"]').addClass('ajaxifyCart--is-loading');
+                row = $('.ajaxifyCart--row[data-id="' + id + '"]').addClass('ajaxifyCart--is-loading');
             } else {
-                var row = $('.cart-row[data-id="' + id + '"]').addClass('ajaxifyCart--is-loading');
+                row = $('.cart-row[data-id="' + id + '"]').addClass('ajaxifyCart--is-loading');
             }
 
             if ( qty === 0 ) {
@@ -1110,8 +1164,20 @@ var ajaxifyShopify = (function(module, $) {
         }
     };
 
+    setCart = function (c){
+        cart = c;
+    };
+
+    getCart = function(){
+        return cart;
+    };
+
     module = {
-        init: init
+        init: init,
+        formOverride: formOverride,
+        selectDOMElements: selectDOMElements,
+        setCart: setCart,
+        getCart: getCart
     };
 
     return module;

@@ -42,7 +42,7 @@ timber.init = function () {
     timber.mobileSideNav();
     timber.mobileProductInfoBlock();
     timber.productDescriptionBlock();
-
+    timber.loader.init();
 };
 
 timber.switchClass = function( $el, c1, c2){
@@ -269,7 +269,7 @@ timber.accessibleNav = function () {
     function removeFocus ($el) {
         $el.removeClass(focusClass);
     }
-}
+};
 
 timber.productImageSwitch = function () {
     if ( !timber.cache.productPage.$thumbImages.length ) {
@@ -283,7 +283,47 @@ timber.productImageSwitch = function () {
         timber.cache.productPage.$newImage = $(this).attr('href');
         timber.cache.productPage.$mainImage.attr({ src: timber.cache.productPage.$newImage });
     });
-}
+};
+
+timber.loader = {
+    element: '',
+    selector: '.spinner',
+
+    init: function(){
+        // get loader template
+        timber.loader.element = $('#loaderAnimationTemplate').html();
+    },
+
+    show: function( target ){
+        // append the loader element to the target element and show it
+
+        if ( typeof target === 'undefined' ) {
+            return;
+        }
+
+        $( target ).append( timber.loader.element );
+    },
+
+    hide: function( target ){
+        // hide the loader element in the target
+
+        if ( typeof target === 'undefined' ) {
+            return;
+        } else {
+            $( target ).hide();
+        }
+    },
+
+    destroy: function( target ){
+        if( typeof target === 'undefined' ){
+            // no target element, hide and destroy all loader animations
+            return;
+        } else {
+            // hide and destroy the loader in the target element
+            $( target ).remove();
+        }
+    }
+};
 
 // Initialize Timber's JS on docready
 $(function() {
