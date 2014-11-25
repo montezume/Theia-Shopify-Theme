@@ -3283,6 +3283,10 @@ $smallSocialIconRatio: (2.66/3.375);
 .product-gallery-block {
     position: relative;
 
+    @include at-query( $min, $postMedium ){
+        height: 100%;
+    }
+
     @include at-query( null, $postSmall, $medium ){
         height: 692px;
     }
@@ -4080,7 +4084,7 @@ $smallSocialIconRatio: (2.66/3.375);
     }
 
     /* Desktop */
-    @include at-query ($min, $postSmall) {
+    @include at-query ($min, $postMedium) {
 
         h4 {
             font-size: 1.25em; /* ~20px */
@@ -4121,8 +4125,14 @@ $smallSocialIconRatio: (2.66/3.375);
 
     }
 
+    @include at-query (null, $postMedium, $xlarge) {
+        .main-col {
+            width: 528px;
+        }
+    }
+
     /* Mobile */
-    @include at-query ($max, $small) {
+    @include at-query ($max, $medium) {
 
         .main-col, .side-col {
             padding: 0 $gutter;
@@ -4323,15 +4333,6 @@ $smallSocialIconRatio: (2.66/3.375);
             padding-left: 64px + 20px;
         }
 
-        /*
-          Hiding these since I can't have an add to cart box in the search results.
-          They were also messing up spacing on mobile.
-          */
-        .size-column,
-        .color-column {
-            display: none;
-        }
-
         .info-column {
             margin-bottom: $gutter;
         }
@@ -4375,7 +4376,7 @@ $smallSocialIconRatio: (2.66/3.375);
     }
 
     /* Desktop */
-    @include at-query ($min, $postSmall) {
+    @include at-query ($min, $postMedium) {
 
         /* layout */
 
@@ -4388,8 +4389,6 @@ $smallSocialIconRatio: (2.66/3.375);
             padding: 0 0 0 32px;
         }
 
-        .size-column,
-        .color-column,
         .quantity-column {
             width: 128px;
             margin-right: 16px;
@@ -4397,16 +4396,26 @@ $smallSocialIconRatio: (2.66/3.375);
         }
 
         .info-column {
-            width: 176px;
+            width: 464px;
         }
 
         .price-column {
             width: 112px;
         }
     }
+
+    @include at-query (null, $postMedium, $xlarge) {
+        .info-options-column {
+            width: 384px;
+        }
+
+        .info-column {
+            margin-bottom: $gutter;
+        }
+    }
     
     /* Mobile */
-    @include at-query ($max, $small) {
+    @include at-query ($max, $medium) {
 
         h4 {
             font-size: 25px;
@@ -4451,13 +4460,13 @@ $smallSocialIconRatio: (2.66/3.375);
     @extend %line-item-image-base;
 
     /* Desktop */
-    @include at-query ($min, $postSmall) {
+    @include at-query ($min, $postMedium) {
         height: 96px;
         width: 96px;
     }
 
     /* Mobile */
-    @include at-query ($max, $small) {
+    @include at-query ($max, $medium) {
         height: 64px;
         width: 64px;
     }
@@ -8027,10 +8036,12 @@ This file includes
 /*============================================================================
   Ajaxify Cart - General
   ==============================================================================*/
-.ajaxifyCart--content {
+.ajax-cart-container {
     @include perspective(1000px);
     @include transform-style(preserve-3d);
     @include transition(all 450ms cubic-bezier(0.57,.06,.05,.95));
+
+    @extend %wrapper-base;
 
     position: relative;
     padding-top: $gutter;
@@ -8052,9 +8063,22 @@ This file includes
         padding-bottom: $gutter;
     }
 
-    /* Mobile */
-    @include at-query ($max, $small) {
+    /* most phones in portrait */
+    /* portrait tablet, landscape phones */
+    @include at-query ($max, $medium) {
         border-bottom: 1px solid $colorLighterGray;
+        max-width: $small;
+    }
+
+    /* landscape tablet, small desktops */
+    /* medium desktops */
+    @include at-query (null, $postMedium, $xlarge) {
+        max-width: $medium;
+    }
+
+    /* large desktops */
+    @include at-query ($min, $xlarge) {
+        max-width: $siteWidth;
     }
 }
 
@@ -8254,7 +8278,7 @@ This file includes
 /*============================================================================
   Ajaxify Drawer
   ==============================================================================*/
-#ajaxifyDrawer {
+.ajax-drawer-container {
     background-color: $drawerBackgroundColor;
     height: 0px;
     overflow: hidden;
@@ -8271,7 +8295,7 @@ This file includes
     }
 
     // Drawer colors and general styles
-    .ajaxifyCart--content {
+    .ajax-cart-container {
         margin: 0 auto;
         opacity: 0;
         overflow: hidden;
@@ -8282,7 +8306,7 @@ This file includes
         @include rotateX(-90deg);
     }
 
-    &.is-visible .ajaxifyCart--content {
+    &.is-visible .ajax-cart-container {
         opacity: 1;
         @include rotateX(0deg);
     }
