@@ -50,3 +50,4 @@ node_modules/
 /src/checkout-master.css.map
 .#*
 *~
+/private.json
