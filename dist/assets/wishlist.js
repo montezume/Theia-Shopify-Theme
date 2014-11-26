@@ -287,7 +287,7 @@ var wishlist = (function($){
             if (data.status === 300){
                 currentProduct.isInWishlist = true;
                 $(settings.addButtonSelector)
-                    .text('In your wishlist')
+                    .text('View in your wishlist')
                     .attr('href', settings.linkWishlist);
 
             } else {
