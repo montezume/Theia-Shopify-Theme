@@ -54,14 +54,14 @@ $viewportIncrement: 1px;
 $small: 480px;
 $medium: 768px;
 $large: 1024px;
-$xlarge: 1152px;
+$xLarge: 1152px;
 
 $postSmall: $small + $viewportIncrement;
 $preMedium: $medium - $viewportIncrement;
 $postMedium: $medium + $viewportIncrement;
 $preLarge: $large - $viewportIncrement;
 $postLarge: $large + $viewportIncrement;
-$preXLarge: $xlarge - $viewportIncrement;
+$preXLarge: $xLarge - $viewportIncrement;
 
 /*================ The following are dependencies of csswizardry grid ================*/
 $breakpoints: (
@@ -4125,7 +4125,7 @@ $smallSocialIconRatio: (2.66/3.375);
 
     }
 
-    @include at-query (null, $postMedium, $xlarge) {
+    @include at-query (null, $postMedium, $xLarge) {
         .main-col {
             width: 528px;
         }
@@ -4404,7 +4404,7 @@ $smallSocialIconRatio: (2.66/3.375);
         }
     }
 
-    @include at-query (null, $postMedium, $xlarge) {
+    @include at-query (null, $postMedium, $xLarge) {
         .info-options-column {
             width: 384px;
         }
@@ -4642,7 +4642,7 @@ address {
         }
 
         /* Desktop */
-        @include at-query ($min, $xlarge) {
+        @include at-query ($min, $xLarge) {
 
             padding: $gutter 0;
             height: $desktopHeaderHeight;
@@ -4879,9 +4879,9 @@ address {
     $collectionMobileRatio: (85/162);
 
     /* ratios based on breakpoints for defaults */
-    $smallLogoRatio: ($small/$xlarge);
-    $mediumLogoRatio: ($medium/$xlarge);
-    $largeLogoRatio: ($large/$xlarge);
+    $smallLogoRatio: ($small/$xLarge);
+    $mediumLogoRatio: ($medium/$xLarge);
+    $largeLogoRatio: ($large/$xLarge);
 
     /* Small, most phones in landscape */
     @include at-query ($max, $small) {
@@ -5641,12 +5641,12 @@ address {
     }
     
     /* medium desktops */
-    @include at-query (null, $large, $xlarge) {
+    @include at-query (null, $large, $xLarge) {
         
     }
     
     /* large desktops */
-    @include at-query ($min, $xlarge) {
+    @include at-query ($min, $xLarge) {
         
     }
 
@@ -6694,7 +6694,7 @@ address {
     @extend %inline-list-base;
 
     /* Desktop */
-    @include at-query ($min, $xlarge) {
+    @include at-query ($min, $xLarge) {
         @include verticalCenterChildElements();
 
         height: 41px;
@@ -6778,7 +6778,7 @@ address {
         }
 
         /* Desktop */
-        @include at-query ($min, $xlarge) {
+        @include at-query ($min, $xLarge) {
             @include customerLoginLink();
             
             padding: 3px $gutter/2 2px;
@@ -7074,7 +7074,7 @@ address {
     }
     
     /* Extra Large, most desktops */
-    @include at-query ($min, $xlarge) {
+    @include at-query ($min, $xLarge) {
         
     }
 }
@@ -8072,12 +8072,12 @@ This file includes
 
     /* landscape tablet, small desktops */
     /* medium desktops */
-    @include at-query (null, $postMedium, $xlarge) {
+    @include at-query (null, $postMedium, $xLarge) {
         max-width: $medium;
     }
 
     /* large desktops */
-    @include at-query ($min, $xlarge) {
+    @include at-query ($min, $xLarge) {
         max-width: $siteWidth;
     }
 }
@@ -8467,6 +8467,7 @@ $opacity-not-active: .25;
     text-decoration: none;
     color: $colorLightGray;
     opacity: $opacity-default;
+    z-index: 1;
 
     &:hover, &:focus {
         outline: none;
@@ -8498,6 +8499,7 @@ $opacity-not-active: .25;
     padding: 0;
     margin: 0;
     width: 100%;
+    z-index: 0;
 
     li {
         position: relative;
@@ -8595,7 +8597,7 @@ $opacity-not-active: .25;
         }
 
         .content {
-            top: $gutter * 6;
+            top: $gutter * 3.5;
             left: $gutter * 7;
             width: $gutter * 34;
         }
@@ -8646,7 +8648,7 @@ $opacity-not-active: .25;
     }
 
     /* small desktops */
-    @include at-query( null, $postLarge, $xlarge){
+    @include at-query( null, $postLarge, $xLarge){
         header {
             width: 480px;
 
@@ -8664,13 +8666,14 @@ $opacity-not-active: .25;
         }
 
         .content {
-            top: $gutter * 3.5;
+            top: $gutter * 2;
             left: $gutter * 2;
             width: $gutter * 34;
         }
 
         header {
             width: 368px;
+            margin-bottom: $gutter / 2;
 
             p {
                 font-size: 15px;
@@ -8685,11 +8688,15 @@ $opacity-not-active: .25;
             width: 336px;
         }
 
+        .slick-dots {
+            bottom: -40px;
+        }
+
         .slick-next,
         .slick-prev {
             width: 20px;
             height: 40px;
-            bottom: -60px;
+            bottom: -50px;
 
             &:before {
                 font-size: 40px;
@@ -8740,15 +8747,20 @@ $opacity-not-active: .25;
             text-align: center;
             max-width: $small;
             padding: 0 $gutter;
-            margin: 64px auto 32px;
+            margin: ($gutter*2.5) auto $gutter;
+
+            h2 {
+                margin-bottom: $gutter/2;
+            }
 
             p {
                 font-size: 16px;
+                margin: $gutter/2 0;
             }
         }
 
         .carousel {
-            width: 50%;
+            width: 55%;
             height: 346px;
         }
         
@@ -8802,15 +8814,20 @@ $opacity-not-active: .25;
 
         .content {
             position: relative;
-            padding: ($gutter * 3) $gutter 0;
+            padding: ($gutter * 2) $gutter 0;
         }
 
         header {
             text-align: center;
 
+            h2 {
+                margin-bottom: $gutter/2;
+            }
+
             p {
-                font-size: 15px;
+                font-size: 13px;
                 line-height: 1.4;
+                margin: $gutter/2 0;
             }
         }
 
@@ -8824,7 +8841,7 @@ $opacity-not-active: .25;
         }
 
         .slick-dots {
-            bottom: -82px;
+            bottom: -90px;
             left: 0;
         }
 
@@ -8923,6 +8940,17 @@ $opacity-not-active: .25;
   # Wishlist
   ============================================================================*/
 
+.wishlist-hero {
+    @extend .customer-account-content-hero;
+
+    @include at-query( null, $small, $medium + 32px ){
+        [class^="wrapper"] {
+            max-width: $small - 32px;
+            margin: 0 auto;
+        }
+    }
+}
+
 .wishlist-block {
     min-height: 400px;
 
@@ -8932,6 +8960,7 @@ $opacity-not-active: .25;
         text-align: center;
         height: 400px;
     }
+
 }
 
 /*Notice Message*/
@@ -8964,14 +8993,8 @@ span#resultMessage {
         min-height: 10px;
     }
 
-    .info-column {
-        width: 144px;
-    }
-
     .option-column {
         @extend .clearfix;
-
-        width: 288px;
     }
 
     .selector-wrapper {
@@ -9019,7 +9042,7 @@ span#resultMessage {
     }
 
     /* Desktop */
-    @include at-query ($min, $postSmall) {
+    @include at-query ($min, $postMedium + 32px) {
         h4 {
             font-size: 1.25em;
         }
@@ -9029,6 +9052,14 @@ span#resultMessage {
             padding: 0 0 0 32px;
         }
 
+        .info-column {
+            width: 144px;
+        }
+
+        .option-column {
+            width: 288px;
+        }
+
         .selector-wrapper {
             width: 136px;
             margin-left: $gutter;
@@ -9036,6 +9067,46 @@ span#resultMessage {
             &:first-child {
                 margin-left: 0;
             }
+        }
+    }
+
+    @include at-query( null, $postSmall, $medium + 32px ){
+        .info-options-column {
+            width: 352px;
+        }
+
+        .header-row {
+            margin-bottom: $gutter / 2;
+
+            a {
+                white-space: normal;
+            }
+        }
+
+        .info-column,
+        .option-column {
+            width: 100%;
+        }
+
+        .selector-wrapper {
+            width: 168px;
+
+            &:first-child {
+                margin-right: $gutter;
+            }
+        }
+
+        .button-column {
+            width: 100%;
+            text-align: right;
+        }
+
+        .button-label-row {
+            display: none;
+        }
+
+        .add-to-cart-button {
+            width: 168px;
         }
     }
 
@@ -9051,19 +9122,47 @@ span#resultMessage {
 
         .header-row {
             padding-left: 64px + 20px;
+
+            a {
+                white-space: normal;
+            }
         }
 
-        /*
-          Hiding these since I can't have an add to cart box in the search results.
-          They were also messing up spacing on mobile.
-          */
-        .size-column,
-        .color-column {
-            display: none;
+        .option-column {
+            width: 100%;
+            margin-right: 0;
+        }
+
+        .selector-wrapper {
+            width: 50%;
+            padding-right: $gutter/2;
+
+            & + .selector-wrapper {
+                padding-left: $gutter/2;
+                padding-right: 0;
+            }
         }
 
         .info-column {
             margin-bottom: $gutter;
+            width: 100%;
+            margin-right: 0;
+
+            > * {
+                display: inline-block;
+
+                &:first-child {
+                    margin-right: $gutter/2;
+                }
+            }
+        }
+
+        .button-column {
+            text-align: center;
+        }
+
+        .button-label-row {
+            display: none;
         }
     }
 }
