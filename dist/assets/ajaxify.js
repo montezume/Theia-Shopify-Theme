@@ -688,6 +688,8 @@ var ajaxifyShopify = (function(module, $) {
     itemAddedCallback = function (product) {
         $addToCart.removeClass('is-adding').addClass('is-added');
 
+        $(document).trigger('productAddedToCart.ajaxifyShopify', product);
+
         // Slight delay of flip to mimic a longer load
         switch (settings.method) {
         case 'flip':

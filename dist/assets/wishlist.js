@@ -16,7 +16,6 @@ var wishlist = (function($){
         requestCache = {};
 
     function init(options, customerData, productData){
-        console.log('init wishlist');
 
         settings = $.extend({}, defaults, options);
 
@@ -53,20 +52,14 @@ var wishlist = (function($){
 
         $(document).on({
             'wishlistsLoaded.wishlist': function(e){
-                console.log( 'wishlistsLoaded' );
-
                 getWishlistProducts().done( loadWishlistProducts );
             },
             'singleProductLoaded.wishlist': function(e){
-                console.log('singleProductLoaded');
-
                 if ( defaultWishlist.productsToLoad === defaultWishlist.products.length ) {
                     $(document).trigger('allProductsLoaded.wishlist');
                 }
             },
             'allProductsLoaded.wishlist': function(e){
-                console.log( 'allProductsLoaded' );
-
                 // if we are on the wishlist page.
                 if ( $('body#wishlist').length ){
                     renderWishlistTemplate();
@@ -78,47 +71,93 @@ var wishlist = (function($){
 
                 // run option selectors for each of the products in the wishlist
                 $.each( defaultWishlist.products, function(i, product){
-
-                    // get the option selector ID for passing to the OptionSelector constructor
-                    var currentOptionSelectId = 'productSelect-' + product.id,
-                        // find the wishlist element associated with the current wishlist product.
-                        wishlistItem = $('#' + currentOptionSelectId).parents('.wishlist-item');
-
-                    new Shopify.OptionSelectors( currentOptionSelectId, {
-                        product: product,
-                        onVariantSelected: wishlistSelectCallback
-                    });
-
-                    // Add label if only one product option and it isn't 'Title'. Could be 'Size'.
-                    if ( product.options.length === 1 && product.options[0] !== 'Title' ){
-                        wishlistItem.find('.selector-wrapper:eq(0)').prepend('<label>' + product.options[0] + '</label>');
-                    }
-
-                    // Hide selectors if we only have 1 variant and its title contains 'Default'.
-                    if ( product.variants.length === 1 && product.variants[0].title.indexOf('Default') > -1 ) {
-                        $('.selector-wrapper').hide();
-                    }
-
-                    // Auto-select first available variant on page load. Otherwise the product looks sold out.
-                    $.each( product.variants, function(j, variant){
-                        if ( variant.available ){
-                            $.each( product.options, function( j, option ){
-                                var optionSelector = wishlistItem.find('.single-option-selector:eq(' + j + ')');
-                                optionSelector.val( variant.options[j] ).trigger('change');
-                            });
-
-                            // return from $.each() early once we select the first available variant
-                            return false;
-                        }
-                        return true;
-                    });
+                    wireWishlistOptionSelectors( product );
                 });
 
                 // refresh the selectors for the ajaxify cart plugin.
                 ajaxifyShopify.selectDOMElements();
                 // override the default add to cart actions for each wishlist item.
                 ajaxifyShopify.formOverride();
+            },
+            'productAddedToCart.ajaxifyShopify': function(e, product){
+                console.log(product);
+
+                // remove product from the wishlist
+                // requestRemoveProduct(product.product_id).done(responseRemoveProduct);
+
+                // if the user is on the wishlist page
+                var $wrapper = $(settings.wrapperSelector);
+
+                requestRemoveProduct( product.product_id, {
+                    beforeSend: function(){
+
+                        var $productToRemove = $( '#product-' + product.product_id );
+                        $productToRemove.attr('style', 'opacity: 0.33');
+
+                    }
+                }).done([ responseRemoveProduct, function(r){
+
+                    // get the cache data
+                    var $removedProduct = $( '#product-' + product.product_id ),
+                        $wrapper = $('#' + settings.wrapperSelector);
+
+                    if (r.status === 200) {
+                        // success
+
+                        // remove the product element from the wishlist
+                        $removedProduct.remove();
+
+                        // is the wishlist empty?
+                        if ( defaultWishlist.products.length === 0 ){
+                            $wrapper.html('<p style="text-align: center;">Your wishlist is empty. Time to <a href="/collections">start shopping!</a></p>');
+                        }
+                    } else {
+                        // fail
+
+                        $removedProduct.attr('style', '');
+
+                        // show user the error
+                        $('#add-to-cart-msg-wishlist').hide().addClass('success').html(r.message + '<span><a href="#" onclick="closeMessage()">close</a></span>').fadeIn();
+                    }
+
+                }]);
             }
+        });
+    }
+
+    function wireWishlistOptionSelectors( product ){
+        // get the option selector ID for passing to the OptionSelector constructor
+        var currentOptionSelectId = 'productSelect-' + product.id,
+            // find the wishlist element associated with the current wishlist product.
+            wishlistItem = $('#' + currentOptionSelectId).parents('.wishlist-item');
+
+        new Shopify.OptionSelectors( currentOptionSelectId, {
+            product: product,
+            onVariantSelected: wishlistSelectCallback
+        });
+
+        // Add label if only one product option and it isn't 'Title'. Could be 'Size'.
+        if ( product.options.length === 1 && product.options[0] !== 'Title' ){
+            wishlistItem.find('.selector-wrapper:eq(0)').prepend('<label>' + product.options[0] + '</label>');
+        }
+
+        // Hide selectors if we only have 1 variant and its title contains 'Default'.
+        if ( product.variants.length === 1 && product.variants[0].title.indexOf('Default') > -1 ) {
+            $('.selector-wrapper').hide();
+        }
+
+        // Auto-select first available variant on page load. Otherwise the product looks sold out.
+        $.each( product.variants, function(j, variant){
+            if ( variant.available ){
+                $.each( product.options, function( j, option ){
+                    var optionSelector = wishlistItem.find('.single-option-selector:eq(' + j + ')');
+                    optionSelector.val( variant.options[j] ).trigger('change');
+                });
+
+                // return from $.each() early once we select the first available variant
+                return false;
+            }
+            return true;
         });
     }
 
@@ -127,19 +166,53 @@ var wishlist = (function($){
 
         var productId = $(this).data('productId');
 
-        requestRemoveProduct(productId).done( responseRemoveProduct );
+        // assumed we are on the view wishlist page.
+
+        requestRemoveProduct( productId, {
+            beforeSend: function(){
+
+                var $productToRemove = $( '#product-' + productId );
+                $productToRemove.attr('style', 'opacity: 0.33');
+
+            }
+        }).done([ responseRemoveProduct, function(r){
+
+            // get the cache data
+            var removedProductId = requestCache.removeProduct.productId,
+                $removedProduct = $( '#product-' + removedProductId ),
+                $wrapper = $('#' + settings.wrapperSelector);
+
+            if (r.status === 200) {
+                // success
+
+                // remove the product element from the wishlist
+                $removedProduct.remove();
+
+                // is the wishlist empty?
+                if ( defaultWishlist.products.length === 0 ){
+                    $wrapper.html('<p style="text-align: center;">Your wishlist is empty. Time to <a href="/collections">start shopping!</a></p>');
+                }
+            } else {
+                // fail
+
+                $removedProduct.attr('style', '');
+
+                // show user the error
+                $('#add-to-cart-msg-wishlist').hide().addClass('success').html(r.message + '<span><a href="#" onclick="closeMessage()">close</a></span>').fadeIn();
+            }
+
+        }]);
     }
 
-    function requestRemoveProduct(productId){
+    function requestRemoveProduct(productId, requestOptions){
+
         // cache the product id of the deleted product
         requestCache.removeProduct = {
             productId: productId
         };
 
         // the api requires an array of product ids to delete
-        var prodIds = [productId];
-
-        var url = settings.appDomain + "deleteproduct?jsoncallback=?",
+        var prodIds = [productId],
             data = {
                 format: 'json',
                 wishlist: defaultWishlist.id,
@@ -148,54 +221,55 @@ var wishlist = (function($){
                 shop: settings.permanentDomain
             };
 
-        return $.getJSON( url, data).done(function(r){
-            console.log(r);
-        });
+        var requestDefaults = {
+            dataType: 'json',
+            url: settings.appDomain + "deleteproduct?jsoncallback=?",
+            data: data
+        };
+
+        var args = {};
+        if ( typeof options !== 'undefined' ){
+            args = $.extend({}, requestDefaults, requestOptions);
+        } else {
+            args = requestDefaults;
+        }
+
+        return $.ajax( args );
     }
 
     function responseRemoveProduct(r){
         // get the cache data
-        var removedProductId = requestCache.removeProduct.productId;
-        var removedProduct = defaultWishlist.products.filter(function(e){
-            return e.id === removedProductId;
-        })[0];
+        var removedProductId = requestCache.removeProduct.productId,
+            removedProduct = defaultWishlist.products.filter(function(e){
+                return e.id === removedProductId;
+            })[0];
 
-        if (r.status == 200) {
+        if (r.status === 200) {
             // success
-
-            // remove the product element from the wishlist
-            $( '#product-' + removedProduct.handle ).remove();
 
             // remove the product from defaultWishlist.products array
             defaultWishlist.products = defaultWishlist.products.filter(function(e){
                 return e.id !== removedProduct.id;
             });
 
-            // show user a success message
-            alert('product removed');
-
-        } else if (r.status == 300) {
+           requestCache.removeProduct.wasRemoved = true;
+        } else {
             // fail
-
-            // show user the error
-            $('#add-to-cart-msg-wishlist').hide().addClass('success').html(r.message + '<span><a href="#" onclick="closeMessage()">close</a></span>').fadeIn();
+            console.log('product not removed from wishlist.');
+            requestCache.removeProduct.wasRemoved = false;
         }
-
-        // clear the cache
-        requestCache.removedProduct = {};
-
     }
 
     function renderWishlistTemplate() {
+
+        var templateSource = jQuery('#' + settings.productTemplateSelector).html(),
+            template = Handlebars.compile( templateSource ),
+            $wrapper = jQuery('#' + settings.wrapperSelector);
 
         timber.loader.destroy( '.wishlist-block .spinner-wrapper' );
 
         // If we have any to show.
         if ( defaultWishlist.products.length ) {
-
-            var templateSource = jQuery('#' + settings.productTemplateSelector).html(),
-                template = Handlebars.compile( templateSource ),
-                $wrapper = jQuery('#' + settings.wrapperSelector);
 
             // Getting each product with an Ajax call and rendering it on the page.
             for (var i=0; i<defaultWishlist.products.length; i++) {
@@ -204,7 +278,7 @@ var wishlist = (function($){
             }
 
         } else {
-            $wrapper.html('<p>Products have not been added to this wishlist</p>');
+            $wrapper.html('<p style="text-align: center;">Your wishlist is empty. Time to <a href="/collections">start shopping!</a></p>');
         }
 
         $(document).trigger('renderedWishlistTemplate.wishlist');
@@ -222,15 +296,15 @@ var wishlist = (function($){
 
         timber.loader.show('.wishlist-block .spinner-wrapper');
 
-        return $.getJSON( url, data ).done(function(r){
-            console.log(r);
-        });
+        return $.getJSON( url, data );
     };
 
     function loadWishlistProducts(data) {
 
         // other statuses are error conditions, no values mean nothing in the wishlist
         if (data.status !== 200 || data.values.length === 0) {
+            $(document).trigger('allProductsLoaded.wishlist');
+
             return;
         }
 
@@ -321,12 +395,10 @@ var wishlist = (function($){
 
         return $.getJSON( url, data )
             .done(function(data){
-                console.log(data);
-
                 if (data.status === 200){
                     currentProduct.isInWishlist = true;
                     $(settings.addButtonSelector)
-                        .text('In your wishlist')
+                        .text('View in your wishlist')
                         .attr('href', settings.linkWishlist)
                         .unbind('click', addToMainWishlistCallBack);
                 }
@@ -359,10 +431,7 @@ var wishlist = (function($){
             data.product = prodId;
         }
 
-        return $.getJSON(url, data)
-            .done(function(r){
-                console.log(r);
-            });
+        return $.getJSON(url, data);
     }
 
     function loadWishlists(data){
@@ -438,9 +507,6 @@ var wishlist = (function($){
     };
 
 })(jQuery);
-
-
-
 
 
 /* Functions */
