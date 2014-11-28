@@ -1180,7 +1180,6 @@ p {
 }
 
 
-
 @include at-query ($max, $small) {
 
     p {
@@ -4092,7 +4091,6 @@ $smallSocialIconRatio: (2.66/3.375);
 
     /* Desktop */
     @include at-query ($min, $postMedium) {
-
         h4 {
             font-size: 1.25em; /* ~20px */
         }
@@ -4140,7 +4138,6 @@ $smallSocialIconRatio: (2.66/3.375);
 
     /* Mobile */
     @include at-query ($max, $medium) {
-
         .main-col, .side-col {
             padding: 0 $gutter;
         }
@@ -4384,7 +4381,6 @@ $smallSocialIconRatio: (2.66/3.375);
 
     /* Desktop */
     @include at-query ($min, $postMedium) {
-
         /* layout */
 
         .image-column {
@@ -4423,7 +4419,6 @@ $smallSocialIconRatio: (2.66/3.375);
     
     /* Mobile */
     @include at-query ($max, $medium) {
-
         h4 {
             font-size: 25px;
         }
@@ -4650,7 +4645,6 @@ address {
 
         /* Desktop */
         @include at-query ($min, $xLarge) {
-
             padding: $gutter 0;
             height: $desktopHeaderHeight;
 
@@ -5647,16 +5641,6 @@ address {
         }
     }
     
-    /* medium desktops */
-    @include at-query (null, $large, $xLarge) {
-        
-    }
-    
-    /* large desktops */
-    @include at-query ($min, $xLarge) {
-        
-    }
-
     /* two col gallery layout */
     @include at-query( $min, $postSmall ){
         width: 100%;
@@ -7074,16 +7058,6 @@ address {
             width: 37px;
         }        
     }
-    
-    /* Large, landscape tablet, small desktops */
-    @include at-query (null, $postMedium, $large) {
-        
-    }
-    
-    /* Extra Large, most desktops */
-    @include at-query ($min, $xLarge) {
-        
-    }
 }
 
 .customer-account-menu {
@@ -8047,7 +8021,6 @@ This file includes
     @include perspective(1000px);
     @include transform-style(preserve-3d);
     @include transition(all 450ms cubic-bezier(0.57,.06,.05,.95));
-
     @extend %wrapper-base;
 
     position: relative;
@@ -8967,7 +8940,6 @@ $opacity-not-active: .25;
         text-align: center;
         height: 400px;
     }
-
 }
 
 /*Notice Message*/

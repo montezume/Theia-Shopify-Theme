@@ -842,6 +842,9 @@ var ajaxifyShopify = (function(module, $) {
 
                 return true;
             });
+            var prodImg = cartItem.image.replace(/(\.[^.]*)$/, "_small$1").replace('http:', '');
+            var prodName = cartItem.title.replace(/(\-[^-]*)$/, "");
+            var prodVariation = cartItem.title.replace(/^[^\-]*/, "").replace(/-/, "");
 
             // Create item's data object and add to 'items' array
             item = {

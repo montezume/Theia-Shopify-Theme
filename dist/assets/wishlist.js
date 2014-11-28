@@ -16,7 +16,6 @@ var wishlist = (function($){
         requestCache = {};
 
     function init(options, customerData, productData){
-
         settings = $.extend({}, defaults, options);
 
         // load customer data
@@ -207,7 +206,6 @@ var wishlist = (function($){
     }
 
     function requestRemoveProduct(productId, requestOptions){
-
         // cache the product id of the deleted product
         requestCache.removeProduct = {
             productId: productId
@@ -299,7 +297,7 @@ var wishlist = (function($){
         timber.loader.show('.wishlist-block .spinner-wrapper');
 
         return $.getJSON( url, data );
-    };
+   };
 
     function loadWishlistProducts(data) {
 
