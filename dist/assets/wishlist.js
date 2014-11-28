@@ -39,13 +39,15 @@ var wishlist = (function($){
             settings.linkWishlist = '/account';
         }
 
-        initEvents();
+        if( customer.id ){
+            initEvents();
 
-        // get wishlists from app
-        getWishlists().done( loadWishlists );
+            // get wishlists from app
+            getWishlists().done( loadWishlists );
 
-        // init the add to wishlist link
-        initAddButton();
+            // init the add to wishlist link
+            initAddButton();
+        }
     }
 
     function initEvents(){
@@ -342,7 +344,7 @@ var wishlist = (function($){
         // format price of the first variant.
         product.currency = Shopify.formatMoney(product.variants[0].price, settings.currency);
 
-        product.imageSrc = Shopify.resizeImage((product.featured_image ? product.featured_image : "http://cdn.shopify.com/s/images/admin/no-image-medium.gif"), "medium");
+        product.imageSrc = Shopify.resizeImage((product.featured_image ? product.featured_image : "//cdn.shopify.com/s/images/admin/no-image-medium.gif"), "medium");
 
         for (var j=0; j<product.variants.length; j++) {
             product.variants[j].currency = Shopify.formatMoney(product.variants[j].price, settings.currency);
