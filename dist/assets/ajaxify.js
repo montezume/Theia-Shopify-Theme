@@ -822,14 +822,6 @@ var ajaxifyShopify = (function(module, $) {
                 itemMinus = cartItem.quantity - 1,
                 itemQty = cartItem.quantity + ' x';
 
-            /* Hack to get product image thumbnail
-             *   - Remove file extension, add _small, and re-add extension
-             *   - Create server relative link
-             */
-            var prodImg = cartItem.image.replace(/(\.[^.]*)$/, "_small$1").replace('http:', ''),
-                prodName = cartItem.title.replace(/(\-[^-]*)$/, ""),
-                prodVariation = cartItem.title.replace(/^[^\-]*/, "").replace(/-/, "");
-
             // get the style number for this dress
             // find the product tag with six digits only
             var sixDigits = /^\d{6}$/;
@@ -842,7 +834,16 @@ var ajaxifyShopify = (function(module, $) {
 
                 return true;
             });
-            var prodImg = cartItem.image.replace(/(\.[^.]*)$/, "_small$1").replace('http:', '');
+            /* Hack to get product image thumbnail
+             *   - Remove file extension, add _small, and re-add extension
+             *   - Create server relative link
+             */
+            var prodImg;
+            if (cartItem.image){
+                prodImg = cartItem.image.replace(/(\.[^.]*)$/, "_large$1").replace('http:', '');
+            } else {
+                prodImg = false;
+            }
             var prodName = cartItem.title.replace(/(\-[^-]*)$/, "");
             var prodVariation = cartItem.title.replace(/^[^\-]*/, "").replace(/-/, "");
 
