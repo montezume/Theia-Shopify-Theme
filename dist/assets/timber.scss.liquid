@@ -102,7 +102,6 @@ $colorDarkGold: #a98741;
 $colorDarkerGold: #896e35;
 
 $colorGreen: #29c050;
-
 $colorRed: #cf5b31;
 
 /*============================================================================
@@ -794,6 +793,19 @@ html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abb
     @extend %link-base;
 
     color: $colorGold;
+    text-decoration: none;
+
+    &:hover,
+    &:active,
+    &:focus {
+        text-decoration: underline;
+    }
+}
+
+%darkGold-hover-underline-link {
+    @extend %link-base;
+
+    color: $colorDarkGold;
     text-decoration: none;
 
     &:hover,
@@ -1922,14 +1934,35 @@ hr {
 %hero-small {
     @extend %hero-base;
 
+    h2 {
+        position: relative;
+        margin: 0;
+        text-align: center;
+        color: $colorOffWhite;
+        text-shadow: 0 0 $colorOffWhite;
+    }
+
     /* Desktop */
     @include at-query ($min, $postSmall) {
         height: 168px;
+
+        h2 {
+            top: 42px;
+        }
     }
 
     /* Mobile */
     @include at-query ($max, $small) {
         height: 131px;
+
+        .wrapper {
+            margin: 0 $gutter;
+        }
+
+        h2 {
+            top: 17px;
+            font-size: 45px;
+        }
     }
 }
 
@@ -3467,14 +3500,12 @@ $smallSocialIconRatio: (2.66/3.375);
     }
 }
 
-
-
 .product-meta-block {
     @extend %product-info-block-row;
     @extend .clearfix;
 
     h2 {
-        font-size: 2.5em;
+        font-size: 1.8em;
         font-weight: 300;
         color: $colorWarmDarkGray;
         line-height: 1;
@@ -3499,10 +3530,10 @@ $smallSocialIconRatio: (2.66/3.375);
     /* Desktop */
     @include at-query ($min, $postSmall) {
         border-bottom: 1px solid $colorLightestGray;
-        padding: 8px 0 $gutter;
+        padding: 0 0 $gutter/2;
 
         .product-price {
-            font-size: 1.875em;
+            font-size: 1.5em;
             margin-bottom: 6px;
         }
     }
@@ -5077,35 +5108,8 @@ address {
 
     background: $heroBgColor url({{ 'customer-account-page-hero-bg.jpg' | asset_url}}) top center no-repeat;
 
-    h2 {
-        position: relative;
-        margin: 0;
-        text-align: center;
-        color: $colorOffWhite;
-        text-shadow: 0 0 $colorOffWhite;
-    }
-
     .wrapper {
         @include heroEdgeFade( $heroBgColor, $width: 160px, $offset: 99px );
-    }
-
-    /* Desktop */
-    @include at-query ($min, $postSmall) {
-        h2 {
-            top: 42px;
-        }
-    }
-
-    /* Mobile */
-    @include at-query ($max, $small) {
-        .wrapper {
-            margin: 0 $gutter;
-        }
-
-        h2 {
-            top: 17px;
-            font-size: 45px;
-        }
     }
 }
 
@@ -5434,7 +5438,7 @@ address {
     $desktopMainWidth: 968px;
     $desktopSideWidth: 382px;
     $desktopMainLeftMargin: 115px;
-    $desktopMainContentTop: 272px;
+    $desktopMainContentTop: 92px;
     $desktopThumbHeaderTop: 152px;
     $desktopThumbHeight: 220px;
     $desktopThumbLeftMargin: 16px;
@@ -5444,12 +5448,6 @@ address {
     height: 0;
     color: #fff;
     background: #000;
-
-    h2 {
-        position: absolute;
-        z-index: 1;
-        text-shadow: 0 0 $colorOffWhite;
-    }
 
     img {
         display: block;
@@ -5492,7 +5490,6 @@ address {
         h3 {
             font-size: 2.5em;
             font-weight: 300;
-            text-shadow: 0 0 $colorOffWhite;
         }
 
         p {
@@ -5503,11 +5500,69 @@ address {
         }
 
         a {
-            @extend %gold-hover-underline-link;
             @extend %rsaquo;
             @extend %small-arial-text;
 
             text-transform: uppercase;
+        }
+    }
+
+    /* Color schemes */
+    .scheme-dark {
+
+        &.thumb {
+            text-shadow: 0 0 $colorOffWhite;            
+        }
+
+        .content {
+            h3 {
+                text-shadow: 0 0 white;
+            }
+
+            a {
+                @extend %gold-hover-underline-link;
+            }
+        }
+    }
+
+    .scheme-light {
+
+        h2, h3, p {
+            color: $colorDarkGray;
+        }
+        
+        &.thumb {
+            text-shadow: 0 0 $colorOffWhite;
+
+            h3 {
+                color: white;
+            }
+
+            &:hover {
+                text-shadow: 0 0 $colorDarkGray;
+
+                h3 {
+                    color: $colorDarkGray;
+                }
+            }
+
+            &.active {
+                text-shadow: 0 0 $colorDarkGray;
+
+                h3 {
+                    color: $colorDarkGray;
+                }
+            }
+        }
+
+        .content {
+            h3 {
+                text-shadow: 0 0 rgba(0,0,0,0.18);
+            }
+
+            a {
+                @extend %darkGold-hover-underline-link;
+            }
         }
     }
 
@@ -5521,22 +5576,22 @@ address {
             display: block;
             height: 33.3333%;
             color: #fff;
+            @include transition(0.2s all ease );
         }
 
         h3 {
             position: absolute;
             line-height: 1;
             margin: 0;
-            text-shadow: 0 0 $colorOffWhite;            
         }
 
         img {
-            opacity: 0.3;
+            opacity: 0.6;
             @include transition(0.2s opacity ease );
         }
 
         a:hover img {
-            opacity: 0.7;
+            opacity: 0.75;
         }
 
         .active, a:active, a.active:hover {
@@ -5647,8 +5702,7 @@ address {
         padding-bottom: percentage( $desktopTotalHeight / $desktopTotalWidth );
         
         h2 {
-            top: percentage( 156px / $desktopTotalHeight );
-            left: percentage( $desktopMainLeftMargin / $desktopMainWidth );
+            width: 220px;
         }
 
         .main {
@@ -5673,6 +5727,7 @@ address {
             h3 {
                 bottom: percentage( 24px / $desktopThumbHeight );
                 left: percentage( $desktopThumbLeftMargin / $desktopSideWidth );
+                width: 126px;
             }
         }        
     }
@@ -5689,11 +5744,6 @@ address {
         width: 100%;
         padding-bottom: percentage( $smallTotalHeight / $smallTotalWidth );
         
-        h2 {
-            top: percentage( 156px / $smallTotalHeight );
-            left: percentage( $smallLeftMargin / $smallTotalWidth );
-        }
-
         .main {
             width: 100%;
             height: percentage( $smallMainHeight / $smallTotalHeight );
@@ -5939,6 +5989,7 @@ address {
 
     .image-row {
         overflow: hidden;
+        border: 1px solid $colorLightGray;
     }
 
     img {
@@ -9210,5 +9261,114 @@ span#resultMessage {
     }
     40% {
         @include prefix( 'transform', 'scale(1.0)' );
+    }
+}
+
+
+.sizing-page-hero {
+    @extend %hero-small;
+    $heroBgColor: #7f8a8d;
+
+    background: $heroBgColor url({{ 'customer-account-page-hero-bg.jpg' | asset_url}}) top center no-repeat;
+
+    .wrapper {
+        @include heroEdgeFade( $heroBgColor, $width: 160px, $offset: 99px );
+    }
+}
+
+%size-table {
+    border: 1px solid $colorGold;
+    margin: $gutter*2 auto;
+
+    td {
+        border: 0;
+    }
+
+    thead {
+        td {
+            background: $colorWarmGray;
+            color: #fff;
+        }
+    }
+
+    tbody {
+        td {
+            text-align: center;
+            width: $gutter * 4;
+        }
+    }
+}
+
+.size-table-desktop {
+    @extend %size-table;
+
+    tbody {
+        tr {
+            &:nth-child(odd) {
+                background: $colorLightestGray;
+            }
+
+            &:nth-child(2) {
+                border-bottom: 1px solid $colorMidGray;
+            }
+        }
+        
+        td {
+            &:first-child {
+                text-align: left;
+                width: $gutter * 8;
+                border-right: 1px solid $colorMidGray;
+            }
+        }
+    }
+
+    @include at-query( $max, $medium ){
+        display: none;
+    }
+}
+
+.size-table-mobile {
+    @extend %size-table;
+    
+    tbody {
+        tr {
+            &:nth-child(odd) {
+                background: $colorLightestGray;
+            }
+
+            &:nth-child(1) {
+                border-bottom: 1px solid $colorMidGray;
+
+                td {
+                    vertical-align: middle;
+                }
+            }
+        }
+        
+        tr {
+            &:nth-child(even) {
+                td {
+                    &:first-child {
+                        vertical-align: middle;
+                    }
+
+                    &:nth-child(2) {
+                        border-right: 1px solid $colorMidGray;
+                    }
+                }
+            }
+
+            &:nth-child(odd) {
+                td {
+                    &:first-child {
+                        border-right: 1px solid $colorMidGray;
+                    }
+                }
+            }
+        }
+    }
+
+    @include at-query( $min, $postMedium ){
+        display: none;
     }
 }

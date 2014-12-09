@@ -84,9 +84,11 @@ For more information on these Scheme.org tags, visit:
               {% endcomment %}
 
               <div class="product-options-block">
+                {% comment %}
                 {% if product.available and product.variants.size > 1 %}
-                  {% include 'swatch' with 'Color' %}
+                {% include 'swatch' with 'Color' %}
                 {% endif %}
+                {% endcomment %}
 
                 <select name="id" id="productSelect" class="product-variants">
                   {% for variant in product.variants %}
