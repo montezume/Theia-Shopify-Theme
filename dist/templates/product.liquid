@@ -108,6 +108,7 @@ For more information on these Scheme.org tags, visit:
                     {% endif %}
                   {% endfor %}
                 </select>
+
               </div>
 
               <button type="submit" name="add" class="add-to-cart-button" id="addToCart">
@@ -246,10 +247,9 @@ in the URL, we can show next/previous links to other products in the collection.
     
   </div>
 
+  <hr class="hr-4-col" />
+
 {% endif %}
-
-
-<hr class="hr-4-col" />
 
 <div class="newsletter-signup-hero">
 
@@ -263,4 +263,10 @@ in the URL, we can show next/previous links to other products in the collection.
 
   {% include 'social-link-block' %}
 
+</div>
+
+<div style="display: none;" id="dress-sizing-modal-content" class="modal">
+  {{ pages['dress-sizes'].content }}
+
+  <a href="#" class="modal-close-link">close</a>
 </div>

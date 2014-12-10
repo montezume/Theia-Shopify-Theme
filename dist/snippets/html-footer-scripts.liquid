@@ -8,6 +8,7 @@ JS Plugins
 {{ 'handlebars.min.js' | asset_url | script_tag }}
 {{ 'jquery.loupe.min.js' | asset_url | script_tag }}
 {{ 'smooth-scroll.min.js' | asset_url | script_tag }}
+{{ 'jquery.leanModal.min.js' | asset_url | script_tag }}
 
 {% comment %}
 An (almost) empty JS file for you to place your code
@@ -48,24 +49,6 @@ Ajaxify Cart Documentation:
 {% endif %}
 
 
-{% comment %}
-For product swatches
-{% endcomment %}
-<script>
-    jQuery(function() {
-        jQuery('.swatch :radio').change(function() {
-            var optionIndex = jQuery(this).closest('.swatch').attr('data-option-index');
-            var optionValue = jQuery(this).val();
-            jQuery(this)
-      .closest('form')
-      .find('.single-option-selector')
-      .eq(optionIndex)
-      .val(optionValue)
-      .trigger('change');
-        });
-    });
-</script>
-
 <!-- SpurIT_Wishlist_Include -->
 {% include 'wishlist-popup' %}
 <!-- /SpurIT_Wishlist_Include -->
@@ -73,6 +56,25 @@ For product swatches
 {% include 'loader-animation-template' %}
 
 {% if template contains 'product' %}
+
+  {% comment %}
+  For product swatches
+  {% endcomment %}
+  <script>
+      jQuery(function() {
+          jQuery('.swatch :radio').change(function() {
+              var optionIndex = jQuery(this).closest('.swatch').attr('data-option-index');
+              var optionValue = jQuery(this).val();
+              jQuery(this)
+      .closest('form')
+      .find('.single-option-selector')
+      .eq(optionIndex)
+      .val(optionValue)
+      .trigger('change');
+          });
+      });
+  </script>
+
   {% comment %}
   To take advantage of a callback on the select dropdown, add option_selection.js
   and customize the JS below as you need. This is only needed on pages where
@@ -171,6 +173,17 @@ For product swatches
           {% for option in product.options %}
           $('.single-option-selector:eq({{ forloop.index0 }})').val({{ variant.options[forloop.index0] | json }}).trigger('change');
           {% endfor %}
+          {% endif %}
+          {% endfor %}
+
+
+          {% comment %}dress sizes popup.{% endcomment %}
+          {% for option in product.options %}
+          {% if option == 'Size' %}
+          var colorOptionIndex =  {{ forloop.index0 }};
+          $('.selector-wrapper:eq(' + colorOptionIndex + ')').append('<a href="#dress-sizing-modal-content" id="dress-sizes-link" class="js-open-modal dress-sizing-link">Size Chart</a>');
+          $('.js-open-modal').leanModal({closeButton: '.modal-close-link'});
+          
           {% endif %}
           {% endfor %}
 
