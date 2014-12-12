@@ -1045,6 +1045,12 @@ var ajaxifyShopify = (function(module, $) {
             // Simply updating the cart note in case they don't click update/checkout
             Shopify.updateCartNote(newNote, function(cart) {});
         });
+
+        $('#cartContinueShoppingLink').click(function(e){
+            e.preventDefault();
+
+            hideDrawer();
+        });
     };
 
     adjustCartCallback = function (cart) {
