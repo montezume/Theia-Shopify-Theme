@@ -5441,11 +5441,10 @@ address {
 }
 
 .celebrity-gallery-hero {
-    background: #000;
+    @include transition(0.1s background-color ease);
 }
 
 .celebrity-gallery {
-    background: #000;
 
     /*
       these are based off the PSD, not what we are using for the max-width.
@@ -5465,7 +5464,6 @@ address {
     position: relative;
     height: 0;
     color: #fff;
-    background: #000;
 
     img {
         display: block;
@@ -5586,6 +5584,7 @@ address {
 
     .thumbs-block {
         position: absolute;
+        background-color: #000;
 
         > a {
             @extend .clearfix;

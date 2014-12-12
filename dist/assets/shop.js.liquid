@@ -19,7 +19,7 @@ timber.cache = {
     },
 
     // Celebrity Gallery
-    $celebrityGallery: $('.celebrity-gallery'),
+    $celebrityGallery: $('.celebrity-gallery-hero'),
     $celebritySlides: $('.celebrity-gallery .slide'),
     $celebrityThumbs: $('.celebrity-gallery .thumb'),
 
@@ -136,13 +136,15 @@ timber.celebrityGallery = function(){
         e.preventDefault();
 
         var $this = $(this),
-            $targetSlide = $( $this.attr('href') );
+            $targetSlide = $( $this.attr('href') ),
+            bgColor = $targetSlide.data('bgColor');
 
         $thumbs.removeClass('active');
         $slides.removeClass('active');
 
         $this.addClass('active');
         $targetSlide.addClass('active');
+        $gallery.css('backgroundColor', bgColor);
 
     });
 };

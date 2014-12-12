@@ -88,12 +88,12 @@
 
 {% include 'featured-press-hero' %}
 
-<div class="celebrity-gallery-hero">
+<div style="background-color: #000;" class="celebrity-gallery-hero">
   <div class="wrapper-14-col">
     <div class="celebrity-gallery">
       <div class="main">
 
-        <div id="carrieUnderwood" class="slide scheme-dark active">
+        <div id="carrieUnderwood" data-bg-color="#000" style="background-color: #000;" class="slide scheme-dark active">
           {{ 'carrie-underwood-main-desktop.jpg' | asset_url | img_tag: 'Carrie Underwood', 'hidden-on-mobile' }}
           {{ 'carrie-underwood-main-mobile.jpg' | asset_url | img_tag: 'Carrie Underwood', 'hidden-on-desktop' }}
           <div class="content">
@@ -104,7 +104,7 @@
           </div>
         </div>
 
-        <div id="amyPoehler" class="slide scheme-light">
+        <div id="amyPoehler" data-bg-color="#ecebe8" style="background-color: #ecebe8;" class="slide scheme-light">
           {{ 'amy-poehler-main-desktop.jpg' | asset_url | img_tag: 'Amy Poehler', 'hidden-on-mobile' }}
           {{ 'amy-poehler-main-mobile.jpg' | asset_url | img_tag: 'Amy Poehler', 'hidden-on-desktop' }}
           <div class="content">
@@ -115,13 +115,13 @@
           </div>
         </div>
 
-        <div id="oprahWinfrey" class="slide scheme-light">
+        <div id="oprahWinfrey" data-bg-color="#f1f3f8" style="background-color: #f1f3f8;" class="slide scheme-light">
           {{ 'oprah-winfrey-main-desktop.jpg' | asset_url | img_tag: 'Oprah Winfrey', 'hidden-on-mobile' }}
           {{ 'oprah-winfrey-main-mobile.jpg' | asset_url | img_tag: 'Oprah Winfrey', 'hidden-on-desktop' }}
           <div class="content">
             <h2>Celebs in Theia</h2>
             <h3>Oprah Winfrey</h3>
-            <p>Worn on her show</p>
+            <p>Worn at the The Butler premier</p>
             <a href="#">Shop this look</a>
           </div>
         </div>
