@@ -1820,10 +1820,6 @@ hr {
         }
     }
 
-    @include at-query( null, $postSmall, $large ){
-
-    }
-
     @include at-query( null, $postMedium, $large ){
         h2 {
             font-size: 4.6875em;
@@ -1847,6 +1843,10 @@ hr {
     @include at-query( null, $postSmall, $medium ){
         h2 {
             font-size: 3.75em;
+        }
+
+        .content {
+            width: 466px;
         }
 
         [class*='wrapper'] {
@@ -7050,7 +7050,7 @@ address {
         position: absolute;
         top: 46px;
         left: 20px;
-        width: 64px;
+        width: 82px;
         white-space: normal;
     }
 
