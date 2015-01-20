@@ -59,7 +59,6 @@ Ajaxify Cart Documentation:
 
   {% comment %}
   For product swatches
-  {% endcomment %}
   <script>
       jQuery(function() {
           jQuery('.swatch :radio').change(function() {
@@ -74,6 +73,7 @@ Ajaxify Cart Documentation:
           });
       });
   </script>
+  {% endcomment %}
 
   {% comment %}
   To take advantage of a callback on the select dropdown, add option_selection.js
@@ -97,18 +97,24 @@ Ajaxify Cart Documentation:
       var selectCallback = function(variant, selector) {
 
           var addToCart = $('#addToCart'),
-          productPrice = $('#productPrice'),
-          comparePrice = $('#comparePrice');
+              productPrice = $('#productPrice'),
+              comparePrice = $('#comparePrice'),
+              showProductWaitlist = false;
 
-          if (variant) {
+          {% if product.tags contains 'waitlist' and product.available == false %}
+          showProductWaitlist = true;
+          {% endif %}
+
+          if (showProductWaitlist) {
+              addToCart.addClass('disabled').prop('disabled', true);
+              addToCart.find('.label').text('Coming Soon');
+          } else if (variant) {
               if (variant.available) {
                   // We have a valid product variant, so enable the submit button
                   addToCart.removeClass('disabled').prop('disabled', false);
                   addToCart.find('.label').text('Add to Cart');
 
               } else {
-                  console.log('sold out');
-
                   // Variant is sold out, disable the submit button
                   addToCart.addClass('disabled').prop('disabled', true);
                   addToCart.find('.label').text('Sold Out');
@@ -126,25 +132,25 @@ Ajaxify Cart Documentation:
           }
 
           // BEGIN SWATCHES
-          if (variant) {
-              var form = jQuery('#' + selector.domIdPrefix).closest('form'),
-              length = variant.options.length, 
-              radioButton, 
-              radioSelector;
+          /* if (variant) {
+             var form = jQuery('#' + selector.domIdPrefix).closest('form'),
+             length = variant.options.length, 
+             radioButton, 
+             radioSelector;
 
-              for (var i = 0; i < length; i++) {
+             for (var i = 0; i < length; i++) {
 
-                  radioSelector = '.swatch[data-option-index="';
-                  radioSelector += i + '"] :radio[value="';
-                  radioSelector += variant.options[i] +'"]';
+             radioSelector = '.swatch[data-option-index="';
+             radioSelector += i + '"] :radio[value="';
+             radioSelector += variant.options[i] +'"]';
 
-                  radioButton = form.find(radioSelector);
+             radioButton = form.find(radioSelector);
 
-                  if (radioButton.size()) {
-                      radioButton.get(0).checked = true;
-                  }
-              }
-          }
+             if (radioButton.size()) {
+             radioButton.get(0).checked = true;
+             }
+             }
+             } */
           // END SWATCHES
       };
 
@@ -183,10 +189,8 @@ Ajaxify Cart Documentation:
           var colorOptionIndex =  {{ forloop.index0 }};
           $('.selector-wrapper:eq(' + colorOptionIndex + ')').append('<a href="#dress-sizing-modal-content" id="dress-sizes-link" class="js-open-modal dress-sizing-link">Size Chart</a>');
           $('.js-open-modal').leanModal({closeButton: '.modal-close-link'});
-          
           {% endif %}
           {% endfor %}
-
       });
 
       // Initialize image zoom on the product page.

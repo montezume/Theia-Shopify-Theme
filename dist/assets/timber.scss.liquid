@@ -3579,30 +3579,51 @@ $smallSocialIconRatio: (2.66/3.375);
 .product-purchase-block {
     @extend %product-info-block-row;
 
-    button {
-        @extend %large-gold-arrow-button;
+    /* Layout */
 
+    form {
+        @extend .clearfix;
+    }
+
+    .add-to-cart-block {
         margin-right: $gutter;
     }
 
-    .add-to-wishlist-link {
-        @extend %gray-underline-hover-gold-link;
-        @extend %rsaquo;
-        @extend %smallish-arial-text;
-
-        text-transform: uppercase;
+    .product-offer-block {
+        margin: 18px 0 0;
     }
 
     /* Desktop */
+    @include at-query ($min, $postLarge) {
+        .add-to-wishlist-link,
+        .add-to-waitlist-link {
+            line-height: 50px;
+        }
+
+        .add-to-cart-block,
+        .add-to-lists-block {
+            float: left;
+        }
+    }
+
+    /* Desktop and Portrait Tablets */
     @include at-query ($min, $postMedium) {
         margin-bottom: 22px;
-    }
-    
-    @include at-query (null, $postMedium, $large) {
 
-        .add-to-wishlist-link {
+        .product-options-block {
+            margin-bottom: 27px;
+        }
+    }
+
+
+    @include at-query (null, $postMedium, $large) {
+        .add-to-lists-block {
             display: block;
-            margin: $gutter 0;
+            margin: $gutter/2 0;
+        }
+
+        .product-offer-block {
+            margin: 8px 0 0;
         }
     }
 
@@ -3611,6 +3632,36 @@ $smallSocialIconRatio: (2.66/3.375);
         button {
             display: block;
             width: 100%;
+        }
+
+        .add-to-lists-block {
+            display: block;
+            margin: $gutter 0;
+        }
+
+        .product-offer-block {
+            display: none;
+        }
+    }
+    
+    /* Style */
+
+    button {
+        @extend %large-gold-arrow-button;
+    }
+
+    .add-to-wishlist-link,
+    .add-to-waitlist-link {
+        @extend %gray-underline-hover-gold-link;
+        @extend %rsaquo;
+        @extend %smallish-arial-text;
+
+        text-transform: uppercase;
+    }
+
+    /* Mobile */
+    @include at-query ($max, $medium) {
+        button {
             font-size: 1.25em;
             height: 44px;
 
@@ -3618,11 +3669,6 @@ $smallSocialIconRatio: (2.66/3.375);
                 font-size: 0.625em;
                 top: -1px;
             }
-        }
-
-        .add-to-wishlist-link {
-            display: block;
-            margin: $gutter 0;
         }
     }
 }
@@ -3663,8 +3709,6 @@ $smallSocialIconRatio: (2.66/3.375);
     
     /* Desktop */
     @include at-query ($min, $postMedium) {
-        margin-bottom: 27px;
-
         label, legend {
             width: 72px;
         }
@@ -3729,7 +3773,6 @@ $smallSocialIconRatio: (2.66/3.375);
 
 .product-offer-block {
     color: $colorWarmLightGray;
-    margin: 18px 0 0;
 
     span {
         vertical-align: middle;
@@ -3747,16 +3790,6 @@ $smallSocialIconRatio: (2.66/3.375);
 
         font-weight: 700;
         text-transform: uppercase;
-    }
-
-    /* Desktop */
-    @include at-query ($min, $postMedium) {
-        
-    }
-    
-    /* Mobile */
-    @include at-query ($max, $medium) {
-        display: none;
     }
 }
 
@@ -9401,10 +9434,40 @@ span#resultMessage {
     text-transform: uppercase;
 }
 
+.modal-content-block {
+    padding: $gutter $gutter 0;
+}
+
+.modal-controls-block {
+    padding: $gutter $gutter 0;
+}
+
 .modal-close-link {
     margin: $gutter auto 0;
     text-align: center;
 }
+
+.add-to-waitlist-modal {
+    max-width: 640px;
+
+    h3,
+    p {
+        text-align: center;
+    }
+}
+
+.waitlist-signup-form-block {
+    max-width: 360px;
+    margin: 0 auto;
+    padding: $gutter $gutter 0;
+
+    button {
+        @extend %medium-gold-rsaquo-button;
+        
+        width: 208px;
+    }
+}
+
 
 // modal
 #lean_overlay {
@@ -9422,6 +9485,6 @@ span#resultMessage {
 
 .modal {
     background: #fff;
-    padding: $gutter;
+    padding-bottom: $gutter;
 }
 
