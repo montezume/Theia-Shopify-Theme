@@ -1,7 +1,7 @@
-{% assign top-level-layout = 'customer-account' %}<!doctype html>
-<!--[if lt IE 9]><html class="no-js lt-ie9" lang="en"> <![endif]-->
-<!--[if IE 9 ]><html class="ie9 no-js"> <![endif]-->
-<!--[if (gt IE 9)|!(IE)]><!--> <html class="no-js"> <!--<![endif]-->
+{% assign top-level-layouts = 'customer-account,main' | split: ',' %}<!doctype html>
+<!--[if lt IE 9]><html class="no-js lt-ie9{% if template contains 'index' %} full-viewport-height{% endif %}" lang="en"> <![endif]-->
+<!--[if IE 9 ]><html class="ie9 no-js{% if template contains 'index' %} full-viewport-height{% endif %}"> <![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!--> <html class="no-js{% if template contains 'index' %} full-viewport-height{% endif %}"> <!--<![endif]-->
   <head>
 
     {% include 'html-head-common' %}
@@ -22,9 +22,13 @@
 
     {% include 'mobile-side-nav' %}
 
-    <div class="container">
+    <div data-headroom data-offset="160" id="header-container" class="header-container">
 
       {% include 'header' %}
+
+    </div>
+
+    <div class="body-container">
 
       <main class="main-content" role="main">
 

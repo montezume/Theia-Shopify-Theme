@@ -1,1 +1,4 @@
-id="{{ page_title | handle }}" class="{% if customer %}customer-logged-in {% endif %}template-{{ template | replace: '.', ' ' | truncatewords: 1, '' | handle }} layout-{{ top-level-layout }}"
+id="{{ page_title | handle }}"
+class="{% if customer %}customer-logged-in{% endif %}
+template-{{ template | replace: '.', ' ' | truncatewords: 1, '' | handle }}
+{% for layout in top-level-layouts %} layout-{{ layout }}{% endfor %}"

@@ -25,7 +25,9 @@ timber.cache = {
 
     // Mobile Slide Out Navigation
     mobileSideNav: {
-        $container: $('.container'),
+        $bodyContainer: $('#body-container'),
+        $headerContainer: $('#header-container'),
+        $bothContainers: $('#body-container, #header-container'),
         $toggle: $('#sideNavToggle'),
         $nav: $( '#mobileSideNav' )
     }
@@ -92,35 +94,44 @@ timber.mobileProductInfoBlock = function(){
 
 timber.mobileSideNav = function(){
 
-    var $container = timber.cache.mobileSideNav.$container,
+    var $bodyContainer = timber.cache.mobileSideNav.$bodyContainer,
+        $headerContainer = timber.cache.mobileSideNav.$headerContainer,
+        $bothContainers = timber.cache.mobileSideNav.$bothContainers,
         $toggle = timber.cache.mobileSideNav.$toggle,
-        $nav = timber.cache.mobileSideNav.$nav;
+        $nav = timber.cache.mobileSideNav.$nav,
+        isOpen = false;
 
     $toggle.click(function(e) {
         e.preventDefault();
         e.stopPropagation();
 
-        if ( $container.hasClass('menu-open') ){
+        console.log($bothContainers);
+
+        if (isOpen){
             timber.mobileSideNav.close();
         } else {
             timber.mobileSideNav.open();
         }
     });
 
-    $container.click(function(e){
-        if ( $container.hasClass('menu-open') ){
+    // close the side menu when user clicks on the body or the header when open.
+    $bothContainers.click(function(e){
+        console.log(isOpen);
+        if ( isOpen ){
             timber.mobileSideNav.close();
         }
     });
 
     this.mobileSideNav.open = function(){
-        $container.addClass( 'menu-open' );
+        $bothContainers.addClass( 'menu-open' );
         $nav.addClass( 'open' );
+        isOpen = true;
     };
 
     this.mobileSideNav.close = function(){
-        $container.removeClass( 'menu-open' );
+        $bothContainers.removeClass( 'menu-open' );
         $nav.removeClass( 'open' );
+        isOpen = false;
     };
 };
 

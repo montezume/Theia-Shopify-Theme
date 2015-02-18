@@ -9,6 +9,8 @@ JS Plugins
 {{ 'jquery.loupe.min.js' | asset_url | script_tag }}
 {{ 'smooth-scroll.min.js' | asset_url | script_tag }}
 {{ 'jquery.leanModal.min.js' | asset_url | script_tag }}
+{{ 'headroom.min.js' | asset_url | script_tag }}
+{{ 'jQuery.headroom.min.js' | asset_url | script_tag }}
 
 {% comment %}
 An (almost) empty JS file for you to place your code
@@ -41,7 +43,7 @@ Ajaxify Cart Documentation:
               moneyFormat: {{ shop.money_format | json }}, // Your shop money format, defined in liquid.
               disableAjaxCart: false, // If for some reason you want to disable the cart, set to true. Default is false.
               enableQtySelectors: true, // Enable the quantity selectors on your templates, even if disableAjaxCart is false. Default is true.
-              prependDrawerTo: '.container', // The element selector where the cart is prepended. This is used for the drawer and flip methods. Default is 'body'.
+              prependDrawerTo: '.header-container', // The element selector where the cart is prepended. This is used for the drawer and flip methods. Default is 'body'.
               onToggleCallback: null
           });
       });

@@ -4707,6 +4707,26 @@ address {
 }
 
 /* Header */
+.header-container {
+    @include transition(all 0.3s);
+
+    position: fixed;
+    z-index: 1000;
+    top: 0;
+    left: 0;
+    box-shadow: 0 2px 3px rgba(0,0,0,0.05);
+    width: 100%;
+
+    &.headroom--pinned {
+        @include transform(translateY(0%));
+        opacity: 1;
+    }
+
+    &.headroom--unpinned {
+        @include transform(translateY(-100%));
+        opacity: 0;
+    }
+}
 
 .site-header {
     /* Using a mixin here since this is shared between media queries */
@@ -4719,8 +4739,9 @@ address {
         float: left;
     }
 
-    .layout-theme &,
-    .layout-customer-account &{
+    .layout-main & {
+        background: white;
+
         .wrapper > div {
             @extend %column-base;
         }
@@ -4860,18 +4881,18 @@ address {
         }
     }
 
-    .layout-theme &,
-    .layout-customer-account & {
-        padding: $gutter * 2 0;
-
+    .layout-main & {
         /* Desktop */
         @include at-query ($min, $postLarge) {
 
             border-top: 1px solid $borderColor;
+            height: 120px;
 
             > div {
                 @include verticalCenterChildElements();
+
                 float: left;
+                height: 100%;
             }
 
             .first-column {
@@ -4886,8 +4907,6 @@ address {
 
         /* Mobile */
         @include at-query ($max, $large) {
-            padding: 0;
-
             .first-column,
             .last-column {
                 border-top: 1px solid $borderColor;
@@ -4930,8 +4949,38 @@ address {
   # Blocks
   ================================================================================*/
 
+/*
+    {{ 'theia-logo.svg' | asset_url | img_tag: shop.name }}
+    {{ 'theia-logo.png' | asset_url | img_tag: shop.name }}
+*/
+
 .site-logo {
-    @extend %logo-base;
+
+    text-align: center;
+    margin: 0;
+
+    a {
+        display: block;
+        height: 100%;
+        width: 100%;
+
+        &,
+        &:hover,
+        &:focus {
+            text-decoration: none;
+        }
+
+        /* hide the text */
+        text-indent: 100%;
+        white-space: nowrap;
+        overflow: hidden;
+        background: transparent url({{ 'theia-logo.png' | asset_url }}) no-repeat center center;
+        background-size: contain;
+        
+        .supports-svg & {
+            background-image: url({{ 'theia-logo.svg' | asset_url }});
+        }
+    }
 
     .layout-simplified & {
         height: 40px;
@@ -4943,8 +4992,7 @@ address {
         }
     }
 
-    .layout-theme &,
-    .layout-customer-account & {
+    .layout-main & {
         height: 40px;
         width: 154px;
 
@@ -5304,79 +5352,66 @@ address {
     @extend %order-info-block-base;
 }
 
-.collections-hero {
-    background: #000;
+// for the full height/width image on the homepage.
+html.full-viewport {
+    &,
+    body,
+    .body-container,
+    .full-viewport {
+        height: 100%;
+        // needed to allow headroom.js to detect page scroll with the 100% height
+        // overflow: visible;
+    }
 
-    > div {
-        height: 616px;
+    // remove the padding added to make room for the headers.
+    .body-container {
+        padding-top: 0;
+    }
+}
+
+.homepage-hero {
+    position: relative;
+    height: 100%;
+    width: 100%;
+    padding-top: $desktopHeaderHeight;
+
+    .image {
+        position: absolute;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+
         /* uploaded through the settings page. */
         background: {
-            image: url({{ 'homepage-hero-desktop-img.jpg' | asset_url }});
-            position: center top;
+            image: url({{ 'homepage-hero.jpg' | file_url }});
+            position: 0% 67%;
             repeat: no-repeat;
-            size: auto 100%;
-        }
-        position: relative;
-    }
-
-    .content {
-        margin: 0 $gutter;
-        position: absolute;
-        top: 176px;
-        left: 0;
-        max-width: 576px;
-
-        h2 {
-            color: $colorOffWhite;
-            margin-top: 0;
-            margin-bottom: 24px;
-            text-shadow: 0 0 $colorOffWhite;
-            letter-spacing: -1px;
+            size: cover;
         }
 
-        a {
-            @extend %small-arial-text;
-            @extend %rsaquo;
-            @extend %gold-hover-underline-link;
-
-            text-transform: uppercase;
+        @media screen and (max-aspect-ratio: 1400/945){
+            background-image: url({{ 'homepage-hero-1400x945.jpg' | asset_url }});
         }
     }
 
-    .latest-collections-menu-row {
-        position: absolute;
-        bottom: $gutter * 2.875;
-        left: 0;
-        right: 0;
-    }
+    /* /\* Small, most phones in landscape *\/ */
+    /* @include at-query ($max, $small) { */
+    /*     > div { */
+    /*         height: 524px; */
+    /*         /\* uploaded through the settings page. *\/ */
+    /*         background: { */
+    /*             image: url({{ 'homepage-hero-mobile-img.jpg' | asset_url }}); */
+    /*         } */
+    /*     } */
+    /* } */
+}
 
-    /* Small, most phones in landscape */
-    @include at-query ($max, $small) {
-        > div {
-            height: 524px;
-            /* uploaded through the settings page. */
-            background: {
-                image: url({{ 'homepage-hero-mobile-img.jpg' | asset_url }});
-            }
-        }
+.latest-collections-hero {
+    margin: ($gutter * 2.875) 0;
 
-        .content {
-            top: 136px;
-
-            h2 {
-                font-size: 45px;
-                line-height: 48px;
-                margin-bottom: 2px;
-            }
-        }
-    }
-    
-    /* Medium, portrait tablet */
-    @include at-query (null, $postSmall, $medium) {
-        .content {
-            top: 118px;
-            max-width: 352px;
-        }
+    h2 {
+        text-align: center;
     }
 }
 
@@ -8973,15 +9008,27 @@ $opacity-not-active: .25;
 }
 
 /* Push classes applied to the body */
-.container {
+.body-container,
+.header-container {
     @extend %mobile-side-nav-transitions;
 
     overflow-x: hidden;
-    position: relative;
     left: 0;
 
     &.menu-open {
         left: -$mobileNavMenuWidth;
+    }
+}
+.body-container {
+    position: relative;
+
+    // add padding to get the page content right
+    @include at-query($max, $preXLarge){
+        padding-top: 44px;
+    }
+
+    @include at-query($min, $xLarge){
+        padding-top: 85px;
     }
 }
 

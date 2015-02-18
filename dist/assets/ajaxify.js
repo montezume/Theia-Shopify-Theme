@@ -615,7 +615,7 @@ var ajaxifyShopify = (function(module, $) {
         // Show the drawer
         $drawerContainer.addClass('is-visible');
 
-        scrollTop();
+        // scrollTop();
 
         toggleCallback({
             'is_visible': true
@@ -625,7 +625,7 @@ var ajaxifyShopify = (function(module, $) {
     hideDrawer = function () {
         if ( $drawerContainer.hasClass('is-visible') ){
             $drawerContainer.removeAttr('style').removeClass('is-visible');
-            scrollTop();
+            // scrollTop();
             toggleCallback({
                 'is_visible': false
             });
@@ -732,7 +732,7 @@ var ajaxifyShopify = (function(module, $) {
             if ( !$drawerContainer.hasClass('is-visible') ) {
                 showDrawer();
             } else {
-                scrollTop();
+                // scrollTop();
             }
             break;
         }

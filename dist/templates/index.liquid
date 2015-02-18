@@ -1,3 +1,4 @@
+{% layout 'full-viewport' %}
 {% comment %}
 
   This is the homepage of your site.
@@ -8,41 +9,9 @@
 
 {% if linklists.featured-collections.links.size > 0 %}
 
-  {% assign hero_collection = linklists.featured-collections.links.first.object %}
+  <div class="latest-collections-hero">
 
-  <!-- {% if hero_collection.metafields.other_images.desktop_hero != blank %}
-  {% assign hero_collection_other_images = hero_collection.metafields.other_images %}
-
-  <style>
-  .collections-hero {
-  background-image: url('{{ hero_collection_other_images.desktop_hero }}');
-  background-position: top center !important;
-  }
-
-  @media screen and (max-width: 480px){
-  .collections-hero {
-  background-image: url('{{ hero_collection_other_images.mobile_hero }}');
-  }
-  }
-  </style>
-  {% endif %} -->
-
-  <div class="collections-hero">
-    <div class="wrapper">
-
-      <div class="content">
-
-        <h2>
-          Theia, Let your
-          <br />
-          inner goddess shine.
-        </h2>
-
-        <a href="{{ linklists.featured-collections.links.first.url }}">View Latest Collection</a>
-
-      </div>
-
-      <div class="latest-collections-menu-row">
+    <h2>Latest Collections</h2>
 
         <nav class="latest-collections-menu" role="navigation">
           <ul>
@@ -64,15 +33,19 @@
               <li>
                 <style style="text/css" scoped>
 
-                  #collection-{{ collection.id }}:before {
-                    background-image: url('{{ featured_menu_thumb_url }}');
-                  }
+                    #collection-{{ collection.id }}:before {
+                        background-image: url('{{ featured_menu_thumb_url }}');
+                    }
 
                 </style>
                 <a id="collection-{{ collection.id }}" class="latest-collections-link" href="{{ collection.url }}" title="Browse our {{ collection_title }} collection">
                   <img src="{{ featured_menu_thumb_url }}" alt="{{ collection_title }}" />
                   <div class="overlay"></div>
-                  <span>{{ collection_title }}</span>
+                  {% if collection.handle == 'ready-to-purchase' %}
+                    <span>Visit our Boutique</span>
+                  {% else %}
+                    <span>{{ collection_title }}</span>
+                  {% endif %}
                 </a>
               </li>
 
@@ -80,13 +53,9 @@
           </ul>
         </nav>
 
-      </div>
-
-    </div>
   </div>
-{% endif %}
 
-{% include 'featured-press-hero' %}
+{% endif %}
 
 <div style="background-color: #000;" class="celebrity-gallery-hero">
   <div class="wrapper-14-col">
@@ -97,10 +66,8 @@
           {{ 'carrie-underwood-main-desktop.jpg' | asset_url | img_tag: 'Carrie Underwood', 'hidden-on-mobile' }}
           {{ 'carrie-underwood-main-mobile.jpg' | asset_url | img_tag: 'Carrie Underwood', 'hidden-on-desktop' }}
           <div class="content">
-            <h2>Celebs in Theia</h2>
             <h3>Carrie Underwood</h3>
             <p>Worn at the Grammy Awards</p>
-            <a href="#">Shop this look</a>
           </div>
         </div>
 
@@ -108,10 +75,8 @@
           {{ 'amy-poehler-main-desktop.jpg' | asset_url | img_tag: 'Amy Poehler', 'hidden-on-mobile' }}
           {{ 'amy-poehler-main-mobile.jpg' | asset_url | img_tag: 'Amy Poehler', 'hidden-on-desktop' }}
           <div class="content">
-            <h2>Celebs in Theia</h2>
             <h3>Amy Poehler</h3>
             <p>Worn at the Emmys</p>
-            <a href="#">Shop this look</a>
           </div>
         </div>
 
@@ -119,10 +84,8 @@
           {{ 'oprah-winfrey-main-desktop.jpg' | asset_url | img_tag: 'Oprah Winfrey', 'hidden-on-mobile' }}
           {{ 'oprah-winfrey-main-mobile.jpg' | asset_url | img_tag: 'Oprah Winfrey', 'hidden-on-desktop' }}
           <div class="content">
-            <h2>Celebs in Theia</h2>
             <h3>Oprah Winfrey</h3>
             <p>Worn at the The Butler premier</p>
-            <a href="#">Shop this look</a>
           </div>
         </div>
 
