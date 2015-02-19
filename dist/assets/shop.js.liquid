@@ -30,7 +30,10 @@ timber.cache = {
         $bothContainers: $('#body-container, #header-container'),
         $toggle: $('#sideNavToggle'),
         $nav: $( '#mobileSideNav' )
-    }
+    },
+
+    homepageHeroScroller: $('#homepage-hero-scroller'),
+    homepageHero: $('#homepage-hero')
 };
 
 timber.init = function () {
@@ -45,9 +48,35 @@ timber.init = function () {
     timber.mobileProductInfoBlock();
     timber.productDescriptionBlock();
     timber.loader.init();
+    timber.homepageHero();
 
     // initialize smooth scroll
     smoothScroll.init();
+};
+
+timber.homepageHero = function(){
+    var scroll = timber.cache.homepageHeroScroller,
+        hero = timber.cache.homepageHero;
+
+    scroll.click(function(e){
+        e.preventDefault();
+        
+        var height = hero.outerHeight();
+        $('#body-container').animate({scrollTop: height}, 300, 'swing');
+    });
+
+
+    hero.addClass('loading');
+    timber.loader.show(hero[0]);
+
+    $(window).load(function(){
+        hero.removeClass('loading');
+        scroll.addClass('out');
+        scroll.removeClass('initial');
+        setTimeout(function(){
+            scroll.removeClass('out');
+        }, 600);
+    });
 };
 
 timber.switchClass = function( $el, c1, c2){

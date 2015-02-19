@@ -30,11 +30,12 @@
 
     <div id="body-container" class="body-container">
 
-      <div class="full-viewport homepage-hero">
+      <div id="homepage-hero" class="full-viewport homepage-hero">
         <div class="image"></div>
+        <a href="#main-content" id="homepage-hero-scroller" class="scroll initial"></a>
       </div>
 
-      <main class="main-content" role="main">
+      <main id="main-content" class="main-content" role="main">
 
         {{ content_for_layout }}
 
