@@ -6159,6 +6159,30 @@ html.full-viewport {
     }
 }
 
+%grid-item-4-col {
+    @extend %grid-item-base;
+
+    /* Desktop */
+    @include at-query ($min, $postMedium) {
+        width: 160px*2;
+        height: 264px*2;
+
+        .image-row {
+            height: 122px*2;
+        }
+    }
+
+    /* Mobile */
+    @include at-query ($max, $medium) {
+        width: 135px*2;
+        height: auto;
+
+        .image-row {
+            height: 204px;
+        }
+    }
+}
+
 %grid-item-3-col {
     @extend %grid-item-base;
 
@@ -6208,8 +6232,6 @@ html.full-viewport {
 
 .product-grid-item,
 .collection-grid-item {
-    @extend %grid-item-3-col;
-
     /* Mobile */
     @include at-query ($max, $small) {
         .button {
@@ -6228,6 +6250,8 @@ html.full-viewport {
 }
 
 .collection-grid-item {
+    @extend %grid-item-4-col;
+
     .button {
         @extend %small-gold-arrow-button;
     }
@@ -6248,6 +6272,8 @@ html.full-viewport {
 }
 
 .product-grid-item {
+    @extend %grid-item-3-col;
+
     .header-row {
         text-align: left;
     }
@@ -7101,7 +7127,7 @@ html.full-viewport {
     text-align: center;
 
     li {
-        margin: 0 5px - 2px; /* taking off the 2px for the extra spacing from the inline-block display type. */
+        margin: 0 $gutter - 2px; /* taking off the 2px for the extra spacing from the inline-block display type. */
         text-align: left;   /* undo the centering for child elements */
     }
 
@@ -7129,10 +7155,10 @@ html.full-viewport {
 
 .latest-collections-link {
     @extend %white-hover-gray-link;
-    @extend %small-arial-text;
+    @extend %medium-arial-text;
 
-    $height: 117px;
-    $width: 173px;
+    $height: 190px;
+    $width: 254px;
 
     text-transform: uppercase;
     display: block;
@@ -7162,9 +7188,9 @@ html.full-viewport {
 
         line-height: 1.15;
         position: absolute;
-        top: 46px;
-        left: 20px;
-        width: 82px;
+        bottom: $gutter;
+        left: $gutter;
+        width: ($width*2/3);
         white-space: normal;
     }
 
