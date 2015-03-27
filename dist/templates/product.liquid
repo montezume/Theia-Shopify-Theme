@@ -9,6 +9,13 @@ For more information on these Scheme.org tags, visit:
 {% endcomment %}
 
 {% include 'capture-style-number' %}
+{% for collection in product.collections %}
+  {% assign collection_type = collection.metafields.collection.type %}
+  {% if collection_type == 'exclusive' %}
+    {% assign is_exclusive = true %}
+  {% endif %}
+{% endfor %}
+
 
 <div class="product-detail-hero" itemscope itemtype="http://schema.org/Product">
 
@@ -112,10 +119,14 @@ For more information on these Scheme.org tags, visit:
               </div>
               <div class="add-to-cart-block">
 
+                {% unless is_exclusive %}
                 <button type="submit" name="add" class="add-to-cart-button" id="addToCart">
                   <span class="label">Add to cart</span>
                   <span class="icon"></span>
                 </button>
+                {% else %}
+                <p>exclusive</p>
+                {% endunless %}
 
               </div>
 

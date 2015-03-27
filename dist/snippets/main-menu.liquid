@@ -4,7 +4,22 @@
       <li><a class="main-menu-link" href="/">Home</a></li>
     {% endif %}
     {% for link in linklists.main-menu.links %}
-      <li><a class="main-menu-link" href="{{ link.url }}">{{ link.title }}</a></li>
+      <li><a class="main-menu-link" href="{{ link.url }}">{{ link.title }}</a>
+        {% if link.title == 'Shop' or link.title == 'Collections' %}
+
+          {% if link.title == 'Shop' %}
+            {% assign sublinklist = linklists.available-online %}
+          {% elsif link.title == 'Collections' %}
+            {% assign sublinklist = linklists.exclusive %}
+          {% endif %}
+
+          <ul>
+            {% for sublink in sublinklist.links %}
+              <li><a class="main-menu-sublink" href="{{ sublink.url }}">{{ sublink.title }}</a></li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+      </li>
     {% endfor %}
   </ul>
 </nav>
