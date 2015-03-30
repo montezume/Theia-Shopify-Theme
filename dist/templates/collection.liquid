@@ -56,7 +56,9 @@
 
     <h2>In this collection:</h2>
 
-    {% paginate collection.products by 24 %}
+    {% paginate collection.products by 48 %}
+
+    {% include 'product-grid-filters' %}
 
     {% comment %}
     Use class grid-uniform to have evenly sized columns clear

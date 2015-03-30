@@ -4709,7 +4709,6 @@ address {
 /* Header */
 .header-container {
     @include transition(all 0.3s);
-    @include box-shadow(0 2px 3px rgba(0,0,0,0.05));
 
     position: fixed;
     z-index: 1000;
@@ -4729,6 +4728,29 @@ address {
 }
 
 .site-header {
+    position: relative;
+    
+    .layout-simplified & {
+        padding: $gutter * 2 0 $gutter;
+
+        /* center all child elements */
+        > * {
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        @include at-query ($max, $small) {
+            padding: ( $gutter * 1.5 ) 0 ( $gutter * 2 )
+        }
+    }
+}
+
+.site-header-top-row {
+    @include box-shadow(0 2px 3px rgba(0,0,0,0.05));
+
+    position: relative;
+    z-index: 100;
+
     /* Using a mixin here since this is shared between media queries */
     @mixin header-column() {
         @include verticalCenterChildElements();
@@ -4825,19 +4847,60 @@ address {
             }
         }
     }
+}
+
+.site-header-sub-row {
+    position: relative;
+    z-index: 0;
+    
+    .layout-main & {
+
+        %sub-menu-base {
+            position: absolute;
+            bottom: 0px;
+            background: rgba($colorLightGray, 0.37);
+
+            &.js-open {
+                bottom: auto;
+                top: 0px;
+            }
+        }
+
+        .sub-menu-available-online {
+            @extend %sub-menu-base;
+
+        }
+
+        .sub-menu-exclusive {
+            @extend %sub-menu-base;
+            
+        }
+
+        .sub-menu-header {
+            @extend %smallArialText;
+            @extend %warmGray-hover-underline-link;
+
+            text-transform: uppercase;
+            font-weight: 700;
+        }
+
+        .sub-menu-link {
+            @extend %smallArialText;
+            @extend %warmGray-hover-underline-link;
+        }
+
+        /* Desktop */
+        @include at-query ($min, $xLarge) {
+        }
+
+        /* Mobile */
+        @include at-query ($max, $preXLarge) {
+        }
+        
+    }
 
     .layout-simplified & {
-        padding: $gutter * 2 0 $gutter;
-
-        /* center all child elements */
-        > * {
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        @include at-query ($max, $small) {
-            padding: ( $gutter * 1.5 ) 0 ( $gutter * 2 )
-        }
+        display: none;
     }
 }
 
@@ -9083,16 +9146,17 @@ $opacity-not-active: .25;
 .body-container,
 .header-container {
     @extend %mobile-side-nav-transitions;
-
-    overflow-x: hidden;
+    
     left: 0;
 
     &.menu-open {
         left: -$mobileNavMenuWidth;
+        overflow-y: hidden; // disables scroll when menu open
     }
 }
 .body-container {
     position: relative;
+    overflow-x: hidden;
 
     // add padding to get the page content right
     @include at-query($max, $preXLarge){

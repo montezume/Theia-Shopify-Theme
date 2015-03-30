@@ -33,7 +33,13 @@ timber.cache = {
     },
 
     homepageHeroScroller: $('#homepage-hero-scroller'),
-    homepageHero: $('#homepage-hero')
+    homepageHero: $('#homepage-hero'),
+
+    headerSubNav: {
+        $row: $('.site-header-sub-row'),
+        $subMenus: $('.js-header-sub-menu'),
+        $mainMenu: $('.site-header')
+    }
 };
 
 timber.init = function () {
@@ -49,6 +55,7 @@ timber.init = function () {
     timber.productDescriptionBlock();
     timber.loader.init();
     timber.homepageHero();
+    timber.headerSubNav();
 
     // initialize smooth scroll
     smoothScroll.init();
@@ -134,8 +141,6 @@ timber.mobileSideNav = function(){
         e.preventDefault();
         e.stopPropagation();
 
-        console.log($bothContainers);
-
         if (isOpen){
             timber.mobileSideNav.close();
         } else {
@@ -186,6 +191,38 @@ timber.celebrityGallery = function(){
         $targetSlide.addClass('active');
         $gallery.css('backgroundColor', bgColor);
 
+    });
+};
+
+timber.headerSubNav = function(){
+
+    // get elements
+    var $subNavRow = timber.cache.headerSubNav.$row,
+        $subMenus = timber.cache.headerSubNav.$subMenus,
+        $availableOnlineSubMenu = $('#sub-menu-available-online'),
+        $exclusiveSubMenu = $('#sub-menu-exclusive'),
+        $mainMenu = timber.cache.headerSubNav.$mainMenu,
+        $subMenuLinks = $mainMenu.find('#available-online-main-menu-link, #exclusive-main-menu-link'),
+        $shopLink = $mainMenu.find('#available-online-main-menu-link'),
+        $collectionsLink = $mainMenu.find('#exclusive-main-menu-link'),
+        shopLinkLeftOffset = $shopLink.offset().left,
+        collectionsLinkLeftOffset = $collectionsLink.offset().left;
+
+    // set the sub menu left offset to be the same as the link
+    $availableOnlineSubMenu.css('left', shopLinkLeftOffset);
+    $exclusiveSubMenu.css('left', collectionsLinkLeftOffset);
+
+    $subMenuLinks.click(function(event){
+        event.preventDefault();
+
+        // get the target name, format the id, get the element
+        var $this = $(this),
+            target = $this.data('target'),
+            targetIdSelector = '#sub-menu-' + target,
+            $targetMenu = $(targetIdSelector);
+        
+        // toggle the open menu class of the target menu
+        $targetMenu.toggleClass('js-open');
     });
 };
 

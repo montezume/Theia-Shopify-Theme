@@ -117,16 +117,15 @@ For more information on these Scheme.org tags, visit:
                 </select>
 
               </div>
+
+              {% unless is_exclusive %}
+
               <div class="add-to-cart-block">
 
-                {% unless is_exclusive %}
                 <button type="submit" name="add" class="add-to-cart-button" id="addToCart">
                   <span class="label">Add to cart</span>
                   <span class="icon"></span>
                 </button>
-                {% else %}
-                <p>exclusive</p>
-                {% endunless %}
 
               </div>
 
@@ -140,7 +139,14 @@ For more information on these Scheme.org tags, visit:
                 {% endif %}
               </div>
 
+                {% else %}
+              <p>exclusive</p>
+              {% endunless %}
+
+
             </form>
+
+              {% unless is_exclusive %}
 
             <div class="product-offer-block">
 
@@ -148,6 +154,8 @@ For more information on these Scheme.org tags, visit:
               <span class="text">Free shipping available on all orders.</span>
 
             </div>
+
+            {% endunless %}
           </div>
 
         </div>

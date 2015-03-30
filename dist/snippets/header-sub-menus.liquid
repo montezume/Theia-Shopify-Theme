@@ -1,0 +1,21 @@
+{% assign sub-menu-categories = 'Testing Tag, oyster, gold, nickel, black, blonde, silver, cerise, watermelon, coral, ' | split: ',' %}
+<!-- Shop - available-online -->
+<div id="sub-menu-available-online" class="js-header-sub-menu sub-menu-available-online">
+  <ul>
+    {% for coll in collections %}
+      {% if coll.metafields.collection.type == 'available-online' %}
+        {% include 'header-sub-menu' %}
+      {% endif %}
+    {% endfor %}
+  </ul>
+</div>
+<!-- Collections - exclusive -->
+<div id="sub-menu-exclusive" class="js-header-sub-menu sub-menu-exclusive">
+  <ul>
+    {% for coll in collections %}
+      {% if coll.metafields.collection.type == 'exclusive' %}
+        {% include 'header-sub-menu' %}
+      {% endif %}
+    {% endfor %}
+  </ul>
+</div>
