@@ -665,6 +665,7 @@ html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abb
 
     &:hover,
     &:active,
+    &.active,
     &:focus {
         color: $colorGold;
     }
@@ -683,6 +684,7 @@ html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abb
 
     &:hover,
     &:active,
+    &.active,
     &:focus {
         color: $colorGold;
     }
@@ -697,6 +699,7 @@ html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abb
 
     &:hover,
     &:active,
+    &.active,
     &:focus {
         text-decoration: underline;
     }
@@ -709,6 +712,7 @@ html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abb
 
     &:hover,
     &:active,
+    &.active,
     &:focus {
         color: $colorGold;
     }
@@ -722,6 +726,7 @@ html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abb
 
     &:hover,
     &:active,
+    &.active,
     &:focus {
         color: $colorGold;
     }
@@ -736,6 +741,7 @@ html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abb
 
     &:hover,
     &:active,
+    &.active,
     &:focus {
         color: $colorGold;
     }
@@ -749,6 +755,7 @@ html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abb
 
     &:hover,
     &:active,
+    &.active,
     &:focus {
         color: $colorRed;
     }
@@ -767,6 +774,7 @@ html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abb
 
     &:hover,
     &:active,
+    &.active,
     &:focus {
         text-decoration: underline;
         color: $colorGold;
@@ -782,6 +790,7 @@ html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abb
 
     &:hover,
     &:active,
+    &.active,
     &:focus {
         text-decoration: underline;
     }
@@ -795,6 +804,7 @@ html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abb
 
     &:hover,
     &:active,
+    &.active,
     &:focus {
         text-decoration: underline;
     }
@@ -810,6 +820,7 @@ html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abb
 
     &:hover,
     &:active,
+    &.active,
     &:focus {
         color: $colorGold;
     }
@@ -824,6 +835,7 @@ html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abb
 
     &:hover,
     &:active,
+    &.active,
     &:focus {
         text-decoration: underline;
     }
@@ -837,6 +849,7 @@ html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abb
 
     &:hover,
     &:active,
+    &.active,
     &:focus {
         text-decoration: underline;
     }
@@ -851,6 +864,7 @@ html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abb
 
     &:hover,
     &:active,
+    &.active,
     &:focus {
         color: $colorGray;
         text-decoration: underline;
@@ -867,6 +881,7 @@ html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abb
 
     &:hover,
     &:active,
+    &.active,
     &:focus {
         color: $colorWarmDarkGray;
     }
@@ -880,6 +895,22 @@ html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abb
 
     &:hover,
     &:active,
+    &.active,
+    &:focus {
+        color: $colorGold;
+    }
+}
+
+/* white, gold on hover */
+%white-hover-gold-link {
+    @extend %link-base;
+
+    color: #fff;
+    text-decoration: none;
+
+    &:hover,
+    &:active,
+    &.active,
     &:focus {
         color: $colorGold;
     }
@@ -4878,17 +4909,21 @@ address {
     position: relative;
     z-index: 0;
     
-    %sub-menu-base {
+    .sub-menu-available-online,
+    .sub-menu-exclusive {
         @extend %clearfix;
+        @include transform(translateY(0%));
         
         position: absolute;
         bottom: 0px;
-        background: rgba($colorLightGray, 0.37);
-        padding: 8px 10px;
+        background: rgba($colorDarkGray, 0.80);
+        padding: 16px 10px;
+        opacity: 0;
+        transition: all 0.3s;
 
         &.js-open {
-            bottom: auto;
-            top: 0px;
+            @include transform(translateY(100%));
+            opacity: 1;
         }
 
         .sub-menu-column {
@@ -4903,17 +4938,9 @@ address {
         }
     }
 
-    .sub-menu-available-online {
-        @extend %sub-menu-base;
-
-    }
-
-    .sub-menu-exclusive {
-        @extend %sub-menu-base;
-        
-    }
-
     %sub-menu-link-base {
+        @extend %white-hover-gold-link;
+
         white-space: normal;
         display: block;
         line-height: (20/13);
@@ -4921,15 +4948,16 @@ address {
 
     .sub-menu-header {
         @extend %small-bold-arial-text;
-        @extend %warmGray-hover-gold-link;
         @extend %sub-menu-link-base;
 
         text-transform: uppercase;
+        padding-bottom: 4px;
+        border-bottom: 1px solid $colorWarmGray;
+        margin-bottom: 4px;
     }
 
     .sub-menu-link {
         @extend %small-arial-text;
-        @extend %warmGray-hover-gold-link;
         @extend %sub-menu-link-base;
     }
 

@@ -235,10 +235,13 @@ timber.headerSubNav = function(){
         // if another menu is open
         if ($subMenus.hasClass('js-open') && !$targetMenu.hasClass('js-open')){
             $subMenus.removeClass('js-open');
+            $subMenuLinks.removeClass('active');
             $targetMenu.addClass('js-open');
+            $this.addClass('active');
         } else if (!$subMenus.hasClass('js-open')) {
             // no menus are open, so open the target
             $targetMenu.addClass('js-open');
+            $this.addClass('active');
         }
     });
 
@@ -259,6 +262,7 @@ timber.headerSubNav = function(){
 
     function closeSubMenus(){
         $subMenus.removeClass('js-open');
+        $subMenuLinks.removeClass('active');
     }
 };
 
