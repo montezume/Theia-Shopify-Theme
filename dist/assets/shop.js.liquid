@@ -38,7 +38,7 @@ timber.cache = {
     headerSubNav: {
         $row: $('.site-header-sub-row'),
         $subMenus: $('.js-header-sub-menu'),
-        $mainMenu: $('.site-header')
+        $mainMenu: $('.site-header .main-menu')
     }
 };
 
@@ -205,25 +205,61 @@ timber.headerSubNav = function(){
         $subMenuLinks = $mainMenu.find('#available-online-main-menu-link, #exclusive-main-menu-link'),
         $shopLink = $mainMenu.find('#available-online-main-menu-link'),
         $collectionsLink = $mainMenu.find('#exclusive-main-menu-link'),
-        shopLinkLeftOffset = $shopLink.offset().left,
-        collectionsLinkLeftOffset = $collectionsLink.offset().left;
+        menuClosetimeoutId;
 
     // set the sub menu left offset to be the same as the link
-    $availableOnlineSubMenu.css('left', shopLinkLeftOffset);
-    $exclusiveSubMenu.css('left', collectionsLinkLeftOffset);
+    function setMenuHorizontalPositions(){
+        var shopLinkLeftOffset = $shopLink.offset().left,
+            collectionsLinkLeftOffset = $collectionsLink.offset().left;
 
-    $subMenuLinks.click(function(event){
-        event.preventDefault();
+        $availableOnlineSubMenu.css('left', shopLinkLeftOffset);
+        $exclusiveSubMenu.css('left', collectionsLinkLeftOffset);
+        console.log('setting positions');
+    }
+    setMenuHorizontalPositions();
+
+    // and set them anytime the window is resized.
+    $(window).resize(function(event){
+        setMenuHorizontalPositions();
+    });
+
+    // when the user mouses over a sub menu link
+    $subMenuLinks.mouseenter(function(event){
 
         // get the target name, format the id, get the element
         var $this = $(this),
             target = $this.data('target'),
             targetIdSelector = '#sub-menu-' + target,
             $targetMenu = $(targetIdSelector);
-        
-        // toggle the open menu class of the target menu
-        $targetMenu.toggleClass('js-open');
+
+        // if another menu is open
+        if ($subMenus.hasClass('js-open') && !$targetMenu.hasClass('js-open')){
+            $subMenus.removeClass('js-open');
+            $targetMenu.addClass('js-open');
+        } else if (!$subMenus.hasClass('js-open')) {
+            // no menus are open, so open the target
+            $targetMenu.addClass('js-open');
+        }
     });
+
+    // when the user mouses away from the main nav or the open sub nav menu start a timeout
+    // when the time out finishes
+    $mainMenu.mouseleave(function(event){
+        menuClosetimeoutId = window.setTimeout(closeSubMenus, 600);
+    });
+    $subMenus.mouseleave(function(event){
+        menuClosetimeoutId = window.setTimeout(closeSubMenus, 300);
+    });
+    $mainMenu.mouseenter(function(event){
+        window.clearTimeout(menuClosetimeoutId);
+    });
+    $subMenus.mouseenter(function(event){
+        window.clearTimeout(menuClosetimeoutId);
+    });
+
+    function closeSubMenus(){
+        $subMenus.removeClass('js-open');
+    }
 };
 
 timber.loginFormInit = function(){

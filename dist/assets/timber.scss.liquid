@@ -517,9 +517,21 @@ html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abb
     }
 }    
 
-%small-arial-text {
+%small-bold-arial-text {
     font-family: $arialFontStack;
     font-weight: 700;
+
+    @include at-query ($min, $postSmall) {
+        font-size: 0.8125em; /* ~13px */
+    }
+
+    @include at-query ($max, $small) {
+        font-size: 0.625em; /* ~10px */
+    }
+}    
+
+%small-arial-text {
+    font-family: $arialFontStack;
 
     @include at-query ($min, $postSmall) {
         font-size: 0.8125em; /* ~13px */
@@ -694,6 +706,19 @@ html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abb
     @extend %link-base;
 
     color: $colorWarmGray;
+
+    &:hover,
+    &:active,
+    &:focus {
+        color: $colorGold;
+    }
+}
+
+%warmGray-hover-gold-link {
+    @extend %link-base;
+
+    color: $colorWarmGray;
+    text-decoration: none;
 
     &:hover,
     &:active,
@@ -3694,7 +3719,7 @@ $smallSocialIconRatio: (2.66/3.375);
         }
 
         select {
-            @extend %small-arial-text;
+            @extend %small-bold-arial-text;
 
             background: $colorLightestGray;
             padding: 0 8px;
@@ -4303,7 +4328,7 @@ $smallSocialIconRatio: (2.66/3.375);
         }
 
         p {
-            @extend %small-arial-text;
+            @extend %small-bold-arial-text;
 
             color: $colorDarkGray;
             margin: 0;
@@ -4853,50 +4878,67 @@ address {
     position: relative;
     z-index: 0;
     
-    .layout-main & {
+    %sub-menu-base {
+        @extend %clearfix;
+        
+        position: absolute;
+        bottom: 0px;
+        background: rgba($colorLightGray, 0.37);
+        padding: 8px 10px;
 
-        %sub-menu-base {
-            position: absolute;
-            bottom: 0px;
-            background: rgba($colorLightGray, 0.37);
-
-            &.js-open {
-                bottom: auto;
-                top: 0px;
-            }
+        &.js-open {
+            bottom: auto;
+            top: 0px;
         }
 
-        .sub-menu-available-online {
-            @extend %sub-menu-base;
-
-        }
-
-        .sub-menu-exclusive {
-            @extend %sub-menu-base;
-            
-        }
-
-        .sub-menu-header {
-            @extend %smallArialText;
-            @extend %warmGray-hover-underline-link;
-
-            text-transform: uppercase;
-            font-weight: 700;
-        }
-
-        .sub-menu-link {
-            @extend %smallArialText;
-            @extend %warmGray-hover-underline-link;
-        }
-
-        /* Desktop */
-        @include at-query ($min, $xLarge) {
+        .sub-menu-column {
+            padding: 0 10px;
+            width: 160px;
+            float: left;
         }
 
         /* Mobile */
         @include at-query ($max, $preXLarge) {
+            display: none;
         }
+    }
+
+    .sub-menu-available-online {
+        @extend %sub-menu-base;
+
+    }
+
+    .sub-menu-exclusive {
+        @extend %sub-menu-base;
         
+    }
+
+    %sub-menu-link-base {
+        white-space: normal;
+        display: block;
+        line-height: (20/13);
+    }
+
+    .sub-menu-header {
+        @extend %small-bold-arial-text;
+        @extend %warmGray-hover-gold-link;
+        @extend %sub-menu-link-base;
+
+        text-transform: uppercase;
+    }
+
+    .sub-menu-link {
+        @extend %small-arial-text;
+        @extend %warmGray-hover-gold-link;
+        @extend %sub-menu-link-base;
+    }
+
+    /* Desktop */
+    @include at-query ($min, $xLarge) {
+    }
+
+    /* Mobile */
+    @include at-query ($max, $preXLarge) {
     }
 
     .layout-simplified & {
@@ -5694,7 +5736,7 @@ html.full-viewport {
 
         a {
             @extend %rsaquo;
-            @extend %small-arial-text;
+            @extend %small-bold-arial-text;
 
             text-transform: uppercase;
         }
@@ -6657,7 +6699,7 @@ html.full-viewport {
         }
 
         .or-divider {
-            @extend %small-arial-text;
+            @extend %small-bold-arial-text;
 
             color: $colorWarmLightGray;
         }
@@ -6925,7 +6967,7 @@ html.full-viewport {
 
     .site-header &,
     .site-footer & {
-        @extend %small-arial-text;
+        @extend %small-bold-arial-text;
 
         @include at-query ($min, $postSmall) {
             padding: $gutter/4 $gutter * 1.25;
@@ -6937,7 +6979,7 @@ html.full-viewport {
     }
 
     .mobile-side-nav & {
-        @extend %small-arial-text;
+        @extend %small-bold-arial-text;
         @extend %icon-base;
         @extend .icon-arrow-left;
 
@@ -7039,7 +7081,7 @@ html.full-viewport {
     .site-header & {
 
         .label {
-            @extend %small-arial-text;
+            @extend %small-bold-arial-text;
         }
 
         /* Desktop */
@@ -7159,7 +7201,7 @@ html.full-viewport {
 
 .meta-menu-link {
     @extend %gray-hover-underline-link;
-    @extend %small-arial-text;
+    @extend %small-bold-arial-text;
     @extend %rsaquo;
 
     display: block;
@@ -7177,7 +7219,7 @@ html.full-viewport {
 
 .language-menu-link {
     @extend %gray-hover-underline-link;
-    @extend %small-arial-text;
+    @extend %small-bold-arial-text;
 
     display: block;
     text-transform: uppercase;
@@ -7382,7 +7424,7 @@ html.full-viewport {
     }
 
     .mobile-side-nav & {
-        @extend %small-arial-text;
+        @extend %small-bold-arial-text;
         @extend %icon-base;
         @extend .icon-arrow-left;
 
@@ -7692,7 +7734,7 @@ html.full-viewport {
     }
 
     .read-more {
-        @extend %small-arial-text;
+        @extend %small-bold-arial-text;
         @extend %gold-hover-underline-link;
         @extend %rsaquo;
 
@@ -8124,7 +8166,7 @@ html.full-viewport {
     }
 
     input {
-        @extend %small-arial-text;
+        @extend %small-bold-arial-text;
         margin: 0;
         border: none;
         padding: 0;
