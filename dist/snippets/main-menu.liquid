@@ -10,8 +10,14 @@
         {% capture menu_target %}{{ link_id }}{% endcapture %}
       {% else %}
         {% assign link_id = link.title | handle %}
+        {% assign menu_target = false %}
       {% endif %}
-      <li><a id="{{ link_id }}-main-menu-link" class="main-menu-link" {% if menu_target %}data-target="{{ menu_target }}" {% endif %}href="{{ link.url }}">{{ link.title }}</a></li>
+      <li><a id="{{ link_id }}-main-menu-link" class="main-menu-link" {% if menu_target %}data-target="{{ menu_target }}" {% endif %}href="{{ link.url }}">{{ link.title }}</a>
+        <!-- mobile sub-nav -->
+        {% if menu_target %}
+          {% include 'side-nav-sub-menu' %}
+        {% endif %}
+      </li>
     {% endfor %}
   </ul>
 </nav>

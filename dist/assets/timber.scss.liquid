@@ -4925,8 +4925,8 @@ address {
     position: relative;
     z-index: 0;
     
-    .sub-menu-available-online,
-    .sub-menu-exclusive {
+    .sub-menu-desktop-available-online,
+    .sub-menu-desktop-exclusive {
         @extend %clearfix;
         @include transform(translateY(0%));
         
@@ -4986,6 +4986,13 @@ address {
     }
 
     .layout-simplified & {
+        display: none;
+    }
+}
+
+.sub-menu-mobile {
+    // hide when in main site header
+    .site-header & {
         display: none;
     }
 }

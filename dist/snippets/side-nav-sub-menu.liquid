@@ -1,0 +1,8 @@
+{% include 'sub-menu-categories' %}
+<ul class="sub-menu-mobile">
+  {% for coll in collections %}
+    {% if coll.metafields.collection.type == menu_target %}
+      {% include 'header-sub-menu' %}
+    {% endif %}
+  {% endfor %}
+</ul>
