@@ -4954,29 +4954,6 @@ address {
         }
     }
 
-    %sub-menu-link-base {
-        @extend %white-hover-gold-link;
-
-        white-space: normal;
-        display: block;
-        line-height: (20/13);
-    }
-
-    .sub-menu-header {
-        @extend %small-bold-arial-text;
-        @extend %sub-menu-link-base;
-
-        text-transform: uppercase;
-        padding-bottom: 4px;
-        border-bottom: 1px solid $colorWarmGray;
-        margin-bottom: 4px;
-    }
-
-    .sub-menu-link {
-        @extend %small-arial-text;
-        @extend %sub-menu-link-base;
-    }
-
     /* Desktop */
     @include at-query ($min, $xLarge) {
     }
@@ -4990,10 +4967,70 @@ address {
     }
 }
 
+%sub-menu-link-base {
+    @extend %white-hover-gold-link;
+
+    white-space: normal;
+    display: block;
+    line-height: (20/13);
+
+    @include at-query($max, $preLarge){
+        color: $colorGray;
+    }
+}
+
+.sub-menu-column {
+    .mobile-side-nav & {
+        border-top: {
+            width: 1px;
+            style: solid;
+            color: $colorLightGray;
+        }
+
+        padding: 6px 0;
+    }
+}
+
+.sub-menu-header {
+    @extend %small-bold-arial-text;
+    @extend %sub-menu-link-base;
+
+    text-transform: uppercase;
+
+    .site-header & {
+
+        border-bottom: {
+            width: 1px;
+            style: solid;
+            color: $colorWarmGray;
+        }
+        padding-bottom: 4px;
+        margin-bottom: 4px;
+    }
+
+    .mobile-side-nav & {
+        padding: 6px 4px;
+    }
+}
+
+.sub-menu-link {
+    @extend %small-arial-text;
+    @extend %sub-menu-link-base;
+
+    padding: 4px 4px 4px 16px;
+}
+
 .sub-menu-mobile {
+    margin-right: 0;
+    padding: 0 0 6px 0;
+
     // hide when in main site header
     .site-header & {
         display: none;
+    }
+
+    a {
+        display: block;
     }
 }
 
@@ -9289,10 +9326,6 @@ $opacity-not-active: .25;
     .customer-profile-login-link-row {
         background: #fff;
         border-bottom: 1px solid $colorLightGray;
-    }
-
-    .customer-account-menu-row {
-
     }
 }
 
