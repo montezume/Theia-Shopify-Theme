@@ -182,12 +182,29 @@ timber.mobileSideNav = function(){
             targetIdSelector = '#sub-menu-mobile-' + target,
             $targetMenu = $(targetIdSelector);
 
+        if (isSubMenuOpen($targetMenu)){
+            // close the menu and any others
+            closeSubMenus();
+        } else {
+            // close any menus and open the menu
+            closeSubMenus();
+            openSubMenu($this, $targetMenu);
+        }
+    });
+
+    function isSubMenuOpen($menu){
+        return $menu.hasClass('js-open');
+    }
+
+    function closeSubMenus(){
         $subMenuLinks.removeClass('active');
         $subMenus.removeClass('js-open');
-        $targetMenu.addClass('js-open');
+    }
 
-        console.log('has sub menu');
-    });
+    function openSubMenu($link, $subMenu){
+        $subMenu.addClass('js-open');
+        $link.addClass('active');
+    }
 };
 
 timber.celebrityGallery = function(){

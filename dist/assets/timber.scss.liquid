@@ -7072,6 +7072,8 @@ html.full-viewport {
         @extend %small-bold-arial-text;
         @extend %icon-base;
         @extend .icon-arrow-left;
+        @include transform(rotate(0));
+        @include transition(all 0.3s);
 
         font-weight: 700;
         position: relative;
@@ -7083,6 +7085,12 @@ html.full-viewport {
             font-size: 14px;
             top: 14px;
             left: 0;
+        }
+
+        &.active {
+            &:before {
+                @include transform(rotate(270deg));
+            }
         }
     }
 }
