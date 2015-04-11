@@ -12,12 +12,21 @@
         {% assign link_id = link.title | handle %}
         {% assign menu_target = false %}
       {% endif %}
-      <li><a id="{{ link_id }}-main-menu-link" class="main-menu-link" {% if menu_target %}data-target="{{ menu_target }}" {% endif %}href="{{ link.url }}">{{ link.title }}</a>
+      {% case location %}
+      {% when 'footer' %}
+      <li><a id="{{ link_id }}-footer-main-menu-link" class="main-menu-link" href="{{ link.url }}">{{ link.title }}</a></li>
+      {% when 'header' %}
+      <li><a id="{{ link_id }}-header-main-menu-link" class="main-menu-link{% if menu_target %} js-has-sub-menu{% endif %}" {% if menu_target %}data-target="{{ menu_target }}" {% endif %}href="{{ link.url }}">{{ link.title }}</a></li>
+      {% when 'side-nav' %}
+      <li><a id="{{ link_id }}-side-nav-main-menu-link" class="main-menu-link{% if menu_target %} js-has-sub-menu{% endif %}" {% if menu_target %}data-target="{{ menu_target }}" {% endif %}href="{{ link.url }}">{{ link.title }}</a>
         <!-- mobile sub-nav -->
         {% if menu_target %}
           {% include 'side-nav-sub-menu' %}
         {% endif %}
       </li>
+      {% else %}
+      <li><a class="main-menu-link" href="{{ link.url }}">{{ link.title }}</a></li>
+      {% endcase %}
     {% endfor %}
   </ul>
 </nav>

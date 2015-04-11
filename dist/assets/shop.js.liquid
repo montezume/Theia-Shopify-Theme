@@ -29,7 +29,9 @@ timber.cache = {
         $headerContainer: $('#header-container'),
         $bothContainers: $('#body-container, #header-container'),
         $toggle: $('#sideNavToggle'),
-        $nav: $( '#mobileSideNav' )
+        $nav: $( '#mobileSideNav' ),
+        $subMenuLinks: $('.main-menu-link.js-has-sub-menu'),
+        $subMenus: $('.sub-menu-mobile')
     },
 
     homepageHeroScroller: $('#homepage-hero-scroller'),
@@ -135,6 +137,8 @@ timber.mobileSideNav = function(){
         $bothContainers = timber.cache.mobileSideNav.$bothContainers,
         $toggle = timber.cache.mobileSideNav.$toggle,
         $nav = timber.cache.mobileSideNav.$nav,
+        $subMenuLinks = timber.cache.mobileSideNav.$subMenuLinks,
+        $subMenus = timber.cache.mobileSideNav.$subMenus,
         isOpen = false;
 
     $toggle.click(function(e) {
@@ -167,6 +171,23 @@ timber.mobileSideNav = function(){
         $nav.removeClass( 'open' );
         isOpen = false;
     };
+
+    // side nav sub menus
+    $subMenuLinks.click(function(event){
+        event.preventDefault();
+
+        // get the target name, format the id, get the element
+        var $this = $(this),
+            target = $this.data('target'),
+            targetIdSelector = '#sub-menu-mobile-' + target,
+            $targetMenu = $(targetIdSelector);
+
+        $subMenuLinks.removeClass('active');
+        $subMenus.removeClass('js-open');
+        $targetMenu.addClass('js-open');
+
+        console.log('has sub menu');
+    });
 };
 
 timber.celebrityGallery = function(){
@@ -199,12 +220,12 @@ timber.headerSubNav = function(){
     // get elements
     var $subNavRow = timber.cache.headerSubNav.$row,
         $subMenus = timber.cache.headerSubNav.$subMenus,
-        $availableOnlineSubMenu = $('#sub-menu-available-online'),
-        $exclusiveSubMenu = $('#sub-menu-exclusive'),
+        $availableOnlineSubMenu = $('#sub-menu-desktop-available-online'),
+        $exclusiveSubMenu = $('#sub-menu-desktop-exclusive'),
         $mainMenu = timber.cache.headerSubNav.$mainMenu,
-        $subMenuLinks = $mainMenu.find('#available-online-main-menu-link, #exclusive-main-menu-link'),
-        $shopLink = $mainMenu.find('#available-online-main-menu-link'),
-        $collectionsLink = $mainMenu.find('#exclusive-main-menu-link'),
+        $subMenuLinks = $mainMenu.find('#available-online-header-main-menu-link, #exclusive-header-main-menu-link'),
+        $shopLink = $mainMenu.find('#available-online-header-main-menu-link'),
+        $collectionsLink = $mainMenu.find('#exclusive-header-main-menu-link'),
         menuClosetimeoutId;
 
     // set the sub menu left offset to be the same as the link
@@ -229,7 +250,7 @@ timber.headerSubNav = function(){
         // get the target name, format the id, get the element
         var $this = $(this),
             target = $this.data('target'),
-            targetIdSelector = '#sub-menu-' + target,
+            targetIdSelector = '#sub-menu-desktop-' + target,
             $targetMenu = $(targetIdSelector);
 
         // if another menu is open
@@ -251,7 +272,7 @@ timber.headerSubNav = function(){
         menuClosetimeoutId = window.setTimeout(closeSubMenus, 600);
     });
     $subMenus.mouseleave(function(event){
-        menuClosetimeoutId = window.setTimeout(closeSubMenus, 300);
+        menuClosetimeoutId = window.setTimeout(closeSubMenus, 600);
     });
     $mainMenu.mouseenter(function(event){
         window.clearTimeout(menuClosetimeoutId);

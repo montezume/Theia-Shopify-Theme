@@ -5017,19 +5017,21 @@ address {
     @extend %small-arial-text;
     @extend %sub-menu-link-base;
 
-    padding: 4px 4px 4px 16px;
+    .mobile-side-nav & {
+        padding: 4px 4px 4px 16px;
+    }
 }
 
 .sub-menu-mobile {
     margin-right: 0;
     padding: 0 0 6px 0;
-
-    // hide when in main site header
-    .site-header & {
-        display: none;
-    }
+    display: none;
 
     a {
+        display: block;
+    }
+
+    &.js-open {
         display: block;
     }
 }
