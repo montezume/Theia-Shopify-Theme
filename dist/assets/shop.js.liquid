@@ -154,7 +154,6 @@ timber.mobileSideNav = function(){
 
     // close the side menu when user clicks on the body or the header when open.
     $bothContainers.click(function(e){
-        console.log(isOpen);
         if ( isOpen ){
             timber.mobileSideNav.close();
         }
@@ -173,6 +172,19 @@ timber.mobileSideNav = function(){
     };
 
     // side nav sub menus
+
+    // get the natural hight of the sub menus to allow for the transition animations to work.
+
+    // open the submenus.
+    openSubMenus();
+    $subMenus.each(function(i){
+        var $currMenu = $(this),
+            height = $currMenu.height();
+
+        $currMenu.attr('data-height', height);
+    });
+    closeSubMenus();
+
     $subMenuLinks.click(function(event){
         event.preventDefault();
 
@@ -199,11 +211,18 @@ timber.mobileSideNav = function(){
     function closeSubMenus(){
         $subMenuLinks.removeClass('active');
         $subMenus.removeClass('js-open');
+        $subMenus.css('height', 0);
     }
 
     function openSubMenu($link, $subMenu){
         $subMenu.addClass('js-open');
+        $subMenu.css('height', $subMenu.data('height'));
         $link.addClass('active');
+    }
+
+    function openSubMenus(){
+        $subMenuLinks.addClass('active');
+        $subMenus.addClass('js-open');
     }
 };
 

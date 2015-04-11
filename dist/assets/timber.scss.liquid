@@ -5023,16 +5023,21 @@ address {
 }
 
 .sub-menu-mobile {
-    margin-right: 0;
-    padding: 0 0 6px 0;
-    display: none;
+    @include transition(all 0.3s);
 
+    margin-right: 0;
+    padding: 0;
+    height: 0;
+    opacity: 0;
+    overflow: hidden;
+    
     a {
         display: block;
     }
 
     &.js-open {
-        display: block;
+        opacity: 1;
+        height: auto;
     }
 }
 
@@ -7072,14 +7077,15 @@ html.full-viewport {
         @extend %small-bold-arial-text;
         @extend %icon-base;
         @extend .icon-arrow-left;
-        @include transform(rotate(0));
-        @include transition(all 0.3s);
 
         font-weight: 700;
         position: relative;
         padding: $gutter 0 $gutter 20px;
 
         &:before {
+            @include transform(rotate(0));
+            @include transition(all 0.3s);
+
             display: block !important;
             position: absolute;
             font-size: 14px;
@@ -7089,7 +7095,7 @@ html.full-viewport {
 
         &.active {
             &:before {
-                @include transform(rotate(270deg));
+                @include transform(rotate(-90deg));
             }
         }
     }
