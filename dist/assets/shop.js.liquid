@@ -41,6 +41,11 @@ timber.cache = {
         $row: $('.site-header-sub-row'),
         $subMenus: $('.js-header-sub-menu'),
         $mainMenu: $('.site-header .main-menu')
+    },
+
+    contactForm: {
+        $form: $('.contact-form'),
+        $styleNumber: $('#contactFormStyleNumber')
     }
 };
 
@@ -58,9 +63,24 @@ timber.init = function () {
     timber.loader.init();
     timber.homepageHero();
     timber.headerSubNav();
+    timber.contactForm();
 
     // initialize smooth scroll
     smoothScroll.init();
+};
+
+timber.contactForm = function(){
+    var styleNumber = timber.getUrlVars()['style_number'];
+    timber.cache.contactForm.$styleNumber.val(styleNumber);
+};
+
+timber.getUrlVars = function () {
+    var result = {};
+    var location = window.location.href.split('#');
+    var parts = location[0].replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
+        result [key] = value;
+    });
+    return result ;
 };
 
 timber.homepageHero = function(){

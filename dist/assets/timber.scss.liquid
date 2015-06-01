@@ -3509,6 +3509,19 @@ $smallSocialIconRatio: (2.66/3.375);
         height: 639px;
         border: 1px solid $colorLightGray;
 
+        .product-is-exclusive & {
+            height: auto;
+            max-height: 639px;
+
+            .product-description-block {
+                .content {
+                    height: auto;
+                    max-height: 232px;
+                    overflow-y: scroll;
+                }
+            }
+        }
+
         /* expanded product description state */
         &.description-expanded {
             .product-purchase-block {
@@ -3641,7 +3654,7 @@ $smallSocialIconRatio: (2.66/3.375);
         @extend .clearfix;
     }
 
-    .add-to-cart-block {
+    .call-to-action-block {
         margin-right: $gutter;
     }
 
@@ -3656,7 +3669,7 @@ $smallSocialIconRatio: (2.66/3.375);
             line-height: 50px;
         }
 
-        .add-to-cart-block,
+        .call-to-action-block,
         .add-to-lists-block {
             float: left;
         }
@@ -3702,7 +3715,8 @@ $smallSocialIconRatio: (2.66/3.375);
     
     /* Style */
 
-    button {
+    button,
+    .button {
         @extend %large-gold-arrow-button;
     }
 
@@ -3934,13 +3948,20 @@ $smallSocialIconRatio: (2.66/3.375);
         overflow-y: hidden;
     }
 
-
-
     /* Desktop */
     @include at-query ($min, $postMedium) {
         position: absolute;
         bottom: 0;
         left: 0;
+
+        .product-is-exclusive & {
+            position: relative;
+            padding-bottom: 0;
+
+            .product-description-expand-link {
+                display: none;
+            }
+        }
     }
     
     @include at-query( null, $postMedium, $large ){
