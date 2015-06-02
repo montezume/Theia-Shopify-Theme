@@ -51,14 +51,20 @@
   </div>
 </div>
 
+<div class="page-header">
+  <div class="wrapper">
+    <h2>In this collection:</h2>
+  </div>  
+</div>
+<div class="product-grid-filter-hero">
+  <div class="wrapper">
+    {% include 'product-grid-filters' %}
+  </div>
+</div>
 <div class="product-grid-hero">
   <div class="wrapper">
 
-    <h2>In this collection:</h2>
-
     {% paginate collection.products by 48 %}
-
-    {% include 'product-grid-filters' %}
 
     {% comment %}
     Use class grid-uniform to have evenly sized columns clear

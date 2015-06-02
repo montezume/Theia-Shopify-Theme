@@ -5313,6 +5313,10 @@ address {
 
 /* Heros */
 
+.page-header {
+    text-align: center;
+
+}
 
 .list-collections-page-hero {
     @extend %hero-large;
@@ -6271,6 +6275,31 @@ html.full-viewport {
         color: #fff;
         border-color: #fff;
         border-width: 2px;
+    }
+}
+
+/* Contains the filter elements for the product grid on the collections page. */
+.product-grid-filter-hero {
+    text-align: center;
+}
+
+.product-grid-filter-block {
+    @extend %gold-outline-block-large;
+
+    display: inline-block;
+    padding: 12px 42px;
+
+    %filter-block-column-base {
+        display: inline-block;
+    }
+
+    .label {
+        @extend %filter-block-column-base;
+
+    }
+
+    .filter {
+        @extend %filter-block-column-base;
     }
 }
 
