@@ -79,6 +79,7 @@ $breakpoint-has-pull:  ('medium', 'medium-down', 'large');
   ==============================================================================*/
 
 // Theia Colors
+$colorWhite: #ffffff;
 $colorOffWhite: #fefefe;
 
 $colorPaleGray: #fafafa;
@@ -184,6 +185,10 @@ $desktopHeaderHeight: 85px;
 // moblie side nav
 $mobileNavMenuWidth: 258px;
 
+// Z-Indexes
+// navigation, header and side nav
+// 10000
+$zindexNavigation: 10000;
 
 /*================ Typography ================*/
 
@@ -4788,7 +4793,7 @@ address {
     @include transition(all 0.3s);
 
     position: fixed;
-    z-index: 1000;
+    z-index: $zindexNavigation;
     top: 0;
     left: 0;
     width: 100%;
@@ -4806,6 +4811,7 @@ address {
 
 .site-header {
     position: relative;
+    z-index: $zindexNavigation;
     
     .layout-simplified & {
         padding: $gutter * 2 0 $gutter;
@@ -4826,7 +4832,7 @@ address {
     @include box-shadow(0 2px 3px rgba(0,0,0,0.05));
 
     position: relative;
-    z-index: 100;
+    z-index: $zindexNavigation + 100;
 
     /* Using a mixin here since this is shared between media queries */
     @mixin header-column() {
@@ -6291,15 +6297,92 @@ html.full-viewport {
 
     %filter-block-column-base {
         display: inline-block;
+        margin: 0 5px;
     }
 
-    .label {
+    .block-label {
         @extend %filter-block-column-base;
-
+        @extend %small-bold-arial-text;
+        
+        color: $colorWhite;
+        text-transform: uppercase;
     }
 
     .filter {
         @extend %filter-block-column-base;
+
+        label {
+            @extend %small-bold-arial-text;
+            
+            color: $colorWhite;
+            text-align: left;
+            margin-top: 0;
+        }
+
+        select {
+            @extend %icon-base;
+            @extend .icon-arrow-down-small;
+
+            margin: 0;
+            min-width: 124px;
+            height: 42px;
+            line-height: 40px;
+            padding: 0 10px;
+            background: $colorDarkGold;
+            border: solid 1px $colorDarkerGold;
+            border-bottom-color: $colorLightGold;
+            color: $colorWhite;
+            font-size: 14px;
+            position: relative;
+
+            &:before {
+                position: absolute;
+                top: 0;
+                right: 0;
+                color: $colorWhite;
+            }
+        }
+    }
+
+    @include at-query($max, $medium){
+        .block-label {
+            display: block;
+            margin-bottom: 8px;
+        }
+    }
+
+    @include at-query(null, $postSmall, $medium){
+        padding: 12px;
+
+        .filter {
+            label {
+                text-align: center;
+            }
+        }
+    }
+
+    @include at-query($max, $small){
+        display: block;
+        width: 100%;
+        padding: 20px;
+        border: {
+            left: 0;
+            right: 0;
+        }
+
+        .block-label {
+            margin: 0 0 10px 0;
+            text-align: left;
+        }
+
+        .filter {
+            display: block;
+            margin: 0 0 10px 0;
+
+            select {
+                height: 45px;
+            }
+        }
     }
 }
 
@@ -6415,7 +6498,7 @@ html.full-viewport {
     /* Desktop */
     @include at-query ($min, $postMedium) {
         width: 160px*2;
-        height: 264px*2;
+        height: auto;
 
         .image-row {
             height: 122px*2;
@@ -7686,6 +7769,7 @@ html.full-viewport {
             h4 {
                 line-height: 68px;
                 font-family: $arialFontStack;
+                font-size: 18px;
             }
         }
 
@@ -7730,7 +7814,7 @@ html.full-viewport {
 
             h4 {
                 font-weight: 300;
-                font-size: 1.25em;
+                font-size: 20px;
                 line-height: 1.1;
             }
 
@@ -9356,11 +9440,11 @@ $opacity-not-active: .25;
     overflow-x: hidden;
 
     // add padding to get the page content right
-    @include at-query($max, $preXLarge){
+    @include at-query($max, $preLarge){
         padding-top: 44px;
     }
 
-    @include at-query($min, $xLarge){
+    @include at-query($min, $large){
         padding-top: 85px;
     }
 }

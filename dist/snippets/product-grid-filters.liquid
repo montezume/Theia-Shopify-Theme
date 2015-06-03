@@ -1,9 +1,10 @@
 <div class="product-grid-filter-block">
-  <div class="label">Filter By:</div>
+  <div class="block-label">Filter By:</div>
 
   <div class="filter">
-    {% assign tags = 'oyster, gold, nickel, black, blonde, silver, cerise, watermelon, coral, ' | split: ',' %}
-    <select>
+    {% assign tags = 'oyster, gold, nickel, black, blonde, silver, cerise, watermelon, coral, bottle green, indigo' | split: ',' %}
+    <label for="product-grid-filter-color">Color</label>
+    <select id="product-grid-filter-color" name="color">
       <option selected="selected" disabled="disabled" value="none">Color</option>
       <option value="">All</option>
       {% for t in tags %}
@@ -18,7 +19,8 @@
   </div>
   <div class="filter">
     {% assign tags = 'Small, Medium, Large' | split: ',' %}
-    <select>
+    <label for="product-grid-filter-price">Price</label>
+    <select id="product-grid-filter-price" name="price">
       <option value="">All</option>
       {% for t in tags %}
         {% assign tag = t | strip %}
@@ -32,7 +34,8 @@
   </div>
   <div class="clearfix filter">
     {% assign tags = 'Cotton, Leather, Polyester' | split: ',' %}
-    <select>
+    <label for="product-grid-filter-material">Material</label>
+    <select id="product-grid-filter-material">
       <option value="">All</option>
       {% for t in tags %}
         {% assign tag = t | strip %}
@@ -68,7 +71,7 @@
             location.href = '/collections/all';
         }
     });
-    var collFilters = jQuery('.coll-filter');
+    var collFilters = jQuery('.product-grid-filter-block select');
     collFilters.change(function() {
         console.log('hello');
         delete Shopify.queryParams.page;
