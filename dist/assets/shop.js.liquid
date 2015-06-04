@@ -152,7 +152,8 @@ timber.mobileProductInfoBlock = function(){
 
 timber.mobileSideNav = function(){
 
-    var $bodyContainer = timber.cache.mobileSideNav.$bodyContainer,
+    var $body = timber.cache.$body,
+        $bodyContainer = timber.cache.mobileSideNav.$bodyContainer,
         $headerContainer = timber.cache.mobileSideNav.$headerContainer,
         $bothContainers = timber.cache.mobileSideNav.$bothContainers,
         $toggle = timber.cache.mobileSideNav.$toggle,
@@ -181,12 +182,14 @@ timber.mobileSideNav = function(){
 
     this.mobileSideNav.open = function(){
         $bothContainers.addClass( 'menu-open' );
+        $body.addClass('js-no-scroll');
         $nav.addClass( 'open' );
         isOpen = true;
     };
 
     this.mobileSideNav.close = function(){
         $bothContainers.removeClass( 'menu-open' );
+        $body.removeClass('js-no-scroll');
         $nav.removeClass( 'open' );
         isOpen = false;
     };

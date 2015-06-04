@@ -17,6 +17,7 @@
       {% endfor %}
     </select>
   </div>
+  {% unless is_exclusive %}
   <div class="filter">
     {% assign tags = 'Small, Medium, Large' | split: ',' %}
     <label for="product-grid-filter-price">Price</label>
@@ -32,6 +33,7 @@
       {% endfor %}
     </select>
   </div>
+  {% endunless %}
   <div class="clearfix filter">
     {% assign tags = 'Cotton, Leather, Polyester' | split: ',' %}
     <label for="product-grid-filter-material">Material</label>

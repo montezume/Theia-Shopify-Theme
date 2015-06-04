@@ -5,6 +5,10 @@ For more information on collection tags:
 
 {% endcomment %}
 
+{% if collection.metafields.collection.type == 'exclusive' %}
+  {% assign is_exclusive = true %}
+{% endif %}
+
 <style>
     {% if collection.metafields.other_images.desktop_hero != blank %}
     {% assign other_images = collection.metafields.other_images %}

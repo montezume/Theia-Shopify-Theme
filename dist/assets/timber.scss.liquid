@@ -188,7 +188,9 @@ $mobileNavMenuWidth: 258px;
 // Z-Indexes
 // navigation, header and side nav
 // 10000
+$zindexModal: 11000;
 $zindexNavigation: 10000;
+
 
 /*================ Typography ================*/
 
@@ -6521,11 +6523,11 @@ html.full-viewport {
 
     /* Desktop */
     @include at-query ($min, $postSmall) {
-        height: 312px;
+        height: auto;
         width: 256px;
 
         .image-row {
-            height: 192px;
+            height: auto;
         }
     }
 
@@ -6534,7 +6536,7 @@ html.full-viewport {
         width: 135px;
 
         .image-row {
-            height: 100px;
+            height: auto;
         }
     }
 }
@@ -9932,7 +9934,7 @@ span#resultMessage {
 // modal
 #lean_overlay {
     position: absolute;
-    z-index:100;
+    z-index: $zindexModal;
     top: 0px;
     left: 0px;
     bottom: 0px;
@@ -9944,7 +9946,11 @@ span#resultMessage {
 }
 
 .modal {
+    z-index: $zindexModal + 100;
     background: #fff;
     padding-bottom: $gutter;
 }
 
+.js-no-scroll {
+    overflow: hidden;
+}
