@@ -19,13 +19,13 @@ module.exports = function(grunt) {
             options: {
                 api_key: private.shopify.api_key,
                 password: private.shopify.password,
-                url: "theia.myshopify.com",
-                base: "dist/"
+                url: "theia2.myshopify.com",
+                base: "dist"
             }
         },
         watch: {
             shopify: {
-                files: ["dist/**"],
+                files: ["dist/assets/**"],
                 tasks: ["shopify"]
             },
             sass: {

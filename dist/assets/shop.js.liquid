@@ -484,9 +484,11 @@ timber.productImageSwitch = function () {
         e.preventDefault();
         timber.cache.productPage.$newImage = $(this).attr('href');
         timber.cache.productPage.$mainImage.attr({ src: timber.cache.productPage.$newImage });
-
+       
         // change the loupe image
-        $('.loupe img').attr({ src: timber.cache.productPage.$newImage });
+        //$('.loupe img').attr({ src: timber.cache.productPage.$newImage });
+        // change the background image in the zoom window
+        $('.zoomWindow').css({ backgroundImage: 'url(' + timber.cache.productPage.$newImage + ')' }); 
     });
 };
 

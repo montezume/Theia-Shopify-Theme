@@ -197,7 +197,7 @@ For more information on these Scheme.org tags, visit:
 
       <div class="product-gallery-image-block" id="productPhoto">
         
-        <img src="{{ product.featured_image.src | product_img_url: 'master' }}" alt="{{ product.featured_image.alt | escape }}" id="productPhotoImg">
+        <img src="{{ product.featured_image.src | product_img_url: 'master' }}" alt="{{ product.featured_image.alt | escape }}" id="productPhotoImg" data-zoom-image="{{ product.featured_image.src | product_img_url: 'master' }}" >
 
       </div>
 
