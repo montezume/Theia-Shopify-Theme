@@ -2,6 +2,7 @@ window.timber = window.timber || {};
 
 timber.cache = {
     // General
+    $window: $(window),
     $html: $('html'),
     $body: $('body'),
 
@@ -34,8 +35,13 @@ timber.cache = {
         $subMenus: $('.sub-menu-mobile')
     },
 
-    homepageHeroScroller: $('#homepage-hero-scroller'),
-    homepageHero: $('#homepage-hero'),
+    // homepage
+    homepage: {
+        $body: $('body.template-index'),
+        $heroScroller: $('#homepage-hero-scroller'),
+        $hero: $('#homepage-hero'),
+        $splash: $('#homepage-splash')
+    },
 
     headerSubNav: {
         $row: $('.site-header-sub-row'),
@@ -61,7 +67,7 @@ timber.init = function () {
     timber.mobileProductInfoBlock();
     timber.productDescriptionBlock();
     timber.loader.init();
-    timber.homepageHero();
+    timber.homepageInit();
     timber.headerSubNav();
     timber.contactForm();
 
@@ -83,9 +89,19 @@ timber.getUrlVars = function () {
     return result ;
 };
 
+timber.homepageInit = function(){
+    // if not on the homepage, return
+    if (timber.cache.homepage.$body.length === 0){
+        return;
+    }
+
+    timber.homepageHero();
+    timber.homepageSpash();
+};
+
 timber.homepageHero = function(){
-    var scroll = timber.cache.homepageHeroScroller,
-        hero = timber.cache.homepageHero;
+    var scroll = timber.cache.homepage.$heroScroller,
+        hero = timber.cache.homepage.$hero;
 
     scroll.click(function(e){
         e.preventDefault();
@@ -93,7 +109,6 @@ timber.homepageHero = function(){
         var height = hero.outerHeight();
         $('#body-container').animate({scrollTop: height}, 600, 'swing');
     });
-
 
     hero.addClass('loading');
     timber.loader.show(hero[0]);
@@ -106,6 +121,63 @@ timber.homepageHero = function(){
             scroll.removeClass('out');
         }, 600);
     });
+};
+
+timber.homepageSpash = function(){
+    var $splash = timber.cache.homepage.$splash,
+        $window = timber.cache.$window;
+
+        var threshold = -512;
+        var scrollDelta = 0; // this is the total of how much the user has scrolled so far
+
+    $window.on('mousewheel.homepage-splash', function(event) {
+        // get the delta
+        var deltaY = event.deltaY * event.deltaFactor;
+
+        scrollDelta = scrollDelta + deltaY;
+
+        // scroll ceiling
+        if (scrollDelta > 0){
+            scrollDelta = 0;
+        }
+
+        var opacity = 1 * ((threshold-scrollDelta)/threshold);
+
+        opacity = opacity > 0 ? opacity : 0;
+
+        console.log(opacity);
+
+        console.log($splash);
+        $splash.css('opacity', opacity);
+
+        if (scrollDelta < threshold){
+            console.log('threshold exceeded');
+            $splash.hide();
+            $window.off('mousewheel.homepage-splash');
+        }
+    });
+
+
+    console.log(scrollDelta);
+    // set a scroll threshold for when to get rid of the spash
+
+
+
+    // on scroll down fade the spash and hide it
+
+
+        // once the threshold has been exceeded
+        // opacity of the splash should be zero
+        // set display none to the element
+        // this function should then exit.
+
+        // while (scrollDelta < threshold){
+        //     scrollDelta = scrollDelta - event.deltaY * event.deltaFactor;
+        // }
+
+        // console.log('threshold exceeded');
+
+
 };
 
 timber.switchClass = function( $el, c1, c2){
