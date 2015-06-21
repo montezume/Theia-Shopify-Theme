@@ -25,7 +25,7 @@ module.exports = function(grunt) {
         },
         watch: {
             shopify: {
-                files: ["dist/assets/**"],
+                files: ["dist/**"],
                 tasks: ["shopify"]
             },
             sass: {

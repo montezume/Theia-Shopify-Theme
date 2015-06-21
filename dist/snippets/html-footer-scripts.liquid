@@ -13,6 +13,7 @@ JS Plugins
 {{ 'headroom.min.js' | asset_url | script_tag }}
 {{ 'jQuery.headroom.min.js' | asset_url | script_tag }}
 {{ 'jquery.cookie-1.4.1.min.js' | asset_url | script_tag }}
+{{ 'jquery.waypoints.min.js' | asset_url | script_tag }}
 
 {% comment %}
 An (almost) empty JS file for you to place your code
@@ -138,8 +139,8 @@ Ajaxify Cart Documentation:
           // BEGIN SWATCHES
           /* if (variant) {
              var form = jQuery('#' + selector.domIdPrefix).closest('form'),
-             length = variant.options.length, 
-             radioButton, 
+             length = variant.options.length,
+             radioButton,
              radioSelector;
 
              for (var i = 0; i < length; i++) {
@@ -199,8 +200,8 @@ Ajaxify Cart Documentation:
 
       // Initialize image zoom on the product page.
       //$('#productPhotoImg').loupe();
-      $('#productPhotoImg').elevateZoom({ zoomType : "inner" });
 
+      $('#productPhotoImg').elevateZoom({ zoomType : "inner"});
 
 
 
