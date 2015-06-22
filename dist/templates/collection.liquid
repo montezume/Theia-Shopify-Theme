@@ -108,7 +108,11 @@ For more information on collection tags:
     {% for product in collection.products %}
 
     {% if forloop.last == true %}
-      <span class="last-item"></span>
+      {% assign lastClass = true %}
+
+      {% else %}
+      {% assign lastClass = false %}
+
     {% endif %}
 
 

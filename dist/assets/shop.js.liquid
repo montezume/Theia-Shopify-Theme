@@ -403,7 +403,7 @@ timber.infiniteScroll = function() {
     pInfScrNode = $('.more').last();
     pInfScrURL = $('.more a').last().attr("href");
 
-
+    console.log('shoot');
     $.ajax({
         type: 'GET',
         url: pInfScrURL,
@@ -427,7 +427,7 @@ timber.infiniteScroll = function() {
 
   //  console.log('You have scrolled to my waypoint.');
 }, {
-  offset: '25'
+  offset: 'bottom-in-view'
 });
 };
 
