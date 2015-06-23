@@ -416,6 +416,7 @@ timber.infiniteScroll = function() {
           // remove loading feedback
           pInfScrNode.next().remove();
           var filteredData = $(data).find("#collection-matrix");
+          console.log(filteredData);
           filteredData.insertBefore( $("#product-list-foot") );
           loadingImage.remove();
           waypoint.disable();

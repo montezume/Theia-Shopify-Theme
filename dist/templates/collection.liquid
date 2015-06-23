@@ -127,15 +127,18 @@ For more information on collection tags:
 
     {% endfor %}
 
-<div>
 
-    <ul class="pagination-block">
-    <li class="top"><a href="#collectiontop">Back to Top</a> &uarr;</li>
     {% if paginate.next %}
+    <ul>
+
      <li class="more">&darr; <a href="{{ paginate.next.url }}">More</a></li>
-     {% else %}
-     <li id="end" style="display: none"></li>
    </ul>
+     {% else %}
+     <div style="padding: 0;">
+       <ul class="pagination-block">
+         <li class="top"><a href="#collectiontop">Back to Top</a> &uarr;</li>
+         <li id="end" style="display: none"></li>
+      </ul>
  </div>
     {% endif %}
 
