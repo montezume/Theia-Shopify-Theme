@@ -130,7 +130,9 @@ For more information on collection tags:
 
     {% if paginate.next %}
     <ul>
-
+      {% comment %}
+      li more class is used by infinite scroll to grab the url of next dresses
+      {% endcomment %}
      <li class="more">&darr; <a href="{{ paginate.next.url }}">More</a></li>
    </ul>
      {% else %}

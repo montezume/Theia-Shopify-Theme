@@ -390,11 +390,12 @@ timber.loginFormInit = function(){
 
 
 timber.infiniteScroll = function() {
+  // add a way point to the last item currently shown on the page.
   $('.last-item').last().waypoint(function() {
 
     var waypoint = this;
+    // you're at the end of the page, stop assigning waypoints.
     if (typeof $('#end')[0] != 'undefined') {
-      console.log(this);
       waypoint.disable();
       return;
     }
@@ -403,7 +404,6 @@ timber.infiniteScroll = function() {
     pInfScrNode = $('.more').last();
     pInfScrURL = $('.more a').last().attr("href");
 
-    console.log('shoot');
     $.ajax({
         type: 'GET',
         url: pInfScrURL,
@@ -416,11 +416,10 @@ timber.infiniteScroll = function() {
           // remove loading feedback
           pInfScrNode.next().remove();
           var filteredData = $(data).find("#collection-matrix");
-          console.log(filteredData);
           filteredData.insertBefore( $("#product-list-foot") );
           loadingImage.remove();
           waypoint.disable();
-          // recursively call yourself to attach to next waypoint
+          // recursively call yourself to attach another waypoint to the last item we just received
           timber.infiniteScroll();
         },
         dataType: "html"
